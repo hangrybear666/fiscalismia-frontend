@@ -1,0 +1,19 @@
+      __                   __  ___                     ___    __
+|\ | |__)  |\/|    | |\ | /__`  |   /\  |    |     /\   |  | /  \ |\ |
+| \| |     |  |    | | \| .__/  |  /~~\ |___ |___ /~~\  |  | \__/ | \|
+npm create vite@latest fiscalismia-frontend -- --template react
+cd fiscalismia-frontend
+npm i jotai cors axios @mui/material @emotion/react @emotion/styled @mui/icons-material
+npm i --save @fortawesome/fontawesome-svg-core
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-regular-svg-icons
+npm i --save @fortawesome/react-fontawesome@latest
+npm i
+npm run dev
+        __            __                     __   __        ___    __
+| |\ | |  \ | \  / | |  \ |  |  /\  |       /  ` /  \ |\ | |__  | / _`
+| | \| |__/ |  \/  | |__/ \__/ /~~\ |___    \__, \__/ | \| |    | \__>
+// add Roboto font to index.html
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+// replace index.css font-family with:
+font-family: Roboto;

@@ -1,0 +1,25 @@
+export const resourceProperties = {
+  APP_NAME: "Fiscalismia",
+  APP_URL: 'http://localhost:5173/',
+  OVERVIEW: 'Übersicht',
+  HOME: 'Home',
+  MONTHLY_BUDGET:'Monatliches Budget',
+  SAVINGS: 'Ersparnisse',
+  LIVING_ESSENTIALS:'Wohnen & Essentielles',
+  RECREATION_RELAXATION:'Freizeit & Erholung',
+  STORES: 'Verkaufsplattformen',
+  SENSITIVITIES:'Unverträglichkeiten',
+  COPYRIGHT: 'Copyright ©',
+  VARIABLE_EXPENSES: 'Variable Ausgaben',
+  INCOME: 'Einkommen',
+  FIXED_COSTS: 'Fixkosten',
+  SETTINGS: 'Einstellungen',
+  GITHUB_REPO:'Github Repository',
+  GITHUB_REPOS:'Github Repositories',
+  FRONTEND: 'Frontend',
+  BACKEND: 'Backend',
+  GITHUB_FRONTEND_URL: 'https://github.com/hangrybear666/fiscalismia-frontend',
+  GITHUB_BACKEND_URL: 'https://github.com/hangrybear666/fiscalismia-backend',
+
+
+};
