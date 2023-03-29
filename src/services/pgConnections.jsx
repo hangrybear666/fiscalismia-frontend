@@ -13,15 +13,20 @@ let token = null
 // }
 
 const getTest = async () => {
-  const response = await axios.get(baseUrl)
-  return response.data
+  try {
+    const response = await axios.get(baseUrl)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const postTest = async newObject => {
   const config = {
     headers: { Authorization: token }
   }
-
+  console.log("axios received:")
+  console.log(newObject)
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
@@ -34,11 +39,11 @@ const putTest = async newObject => {
   return response
 }
 
-const deleteTest = async newObject => {
+const deleteTest = async id => {
   const config = {
     headers: { Authorization: token }
   }
-  const response = await axios.delete(`${baseUrl}/${newObject.id}`, config)
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response
 }
 
