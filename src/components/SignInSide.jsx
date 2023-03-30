@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import pgConnections from '../services/pgConnections';
+import Content from './Content';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
 
@@ -35,14 +37,32 @@ const theme = createTheme({
 });
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [signedIn, setSignedIn] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const user = { username:username, password:password }
+    console.log(user)
+    const response = await pgConnections.login(user)
+    console.log(response)
+    if (response && response.startsWith('Bearer')) {
+      setSignedIn(true)
+      window.localStorage.setItem('jwt-token', response);
+    }
   };
+
+  const inputChangeListener = (e) => {
+    switch (e.target.id) {
+      case "username":
+        setUsername(e.target.value)
+        break;
+      case "password":
+        setPassword(e.target.value)
+        break;
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -88,6 +108,8 @@ export default function SignInSide() {
                 label="Username"
                 autoComplete="username"
                 autoFocus
+                value={username}
+                onChange={inputChangeListener}
               />
               <TextField
                 margin="normal"
@@ -97,6 +119,8 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={inputChangeListener}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -112,6 +136,7 @@ export default function SignInSide() {
               </Button>
               <Copyright sx={{ mt: 5 }} />
             </Box>
+            <Content show={signedIn}/>
           </Box>
         </Grid>
       </Grid>

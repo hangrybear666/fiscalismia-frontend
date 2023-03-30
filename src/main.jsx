@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
+import SignInSide from './components/SignInSide';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
 import {
@@ -13,7 +14,8 @@ import {
     createRoutesFromElements(
       <Route
         path="/"
-        element={<Fiscalismia/>}
+        /* element={<Fiscalismia/>} */
+        element={<SignInSide/>}
         // loader={rootLoader}
         // action={rootAction}
         errorElement={<ErrorPage />}

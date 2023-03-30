@@ -20,15 +20,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../services/pgConnections';
 
-const postTest = (e) => {
-  e.preventDefault();
-  console.log("clicked POST")
-  const response = pgConnections.getTest()
-  console.log("response:")
-  console.log(response)
-}
-
-export default function Content() {
+export default function Content({ show }) {
   const [result, setResult] = useState([])
   const [showResult, setShowResult] = useState(false)
   const [postInput, setPostInput] = useState('')
@@ -64,7 +56,7 @@ export default function Content() {
     if (postInput === '') {
       alert(`please provide a value for POST`)
     }
-    const newEntry = {name: postInput}
+    const newEntry = {description: postInput}
     await pgConnections.postTest(newEntry)
     const response = await pgConnections.getTest()
     setResult(response)
@@ -97,7 +89,12 @@ export default function Content() {
     setResult(response)
     setDeleteInput('')
   }
-
+  if (!show) {
+    return (
+    <>
+    </>
+    )
+  }
   return (
     <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
       <AppBar
@@ -143,42 +140,41 @@ export default function Content() {
               <Button  sx={{ width: 1}} variant="contained" size="large" color="primary" onClick={getTest}>GET</Button>
             </Grid>
             <Grid item xs={12}>
-              <form onSubmit={processPost}>
+              <Box component="form" noValidate onSubmit={processPost}>
                 <FormControl sx={{ width: 1}}>
                   <InputLabel htmlFor="postInput">String for INSERT</InputLabel>
                   <FilledInput id="postInput" value={postInput} onChange={inputChangeListener}/>
                   <Button type="submit" variant="contained" size="large" color="info">POST</Button>
                 </FormControl>
-              </form>
+              </Box>
             </Grid>
             <Grid item xs={12}>
-              <form onSubmit={processPut}>
-                <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                  <FormControl sx={{ width: 2/10}}>
-                    <InputLabel htmlFor="putId">ID</InputLabel>
-                    <FilledInput id="putId" type="number" size="small" inputProps={{ min: 0, max: 999 }} value={putId} onChange={inputChangeListener}/>
-                  </FormControl>
-                  <FormControl sx={{ width: 5/10}}>
-                    <InputLabel htmlFor="putInput">String for UPDATE</InputLabel>
-                    <FilledInput id="putInput" size="small" value={putInput} onChange={inputChangeListener}/>
-                  </FormControl>
-                  <Button sx={{ width: 3/10}} type="submit" variant="contained" size="large" color="success">PUT</Button>
-                </Box>
-              </form>
+              <Box component="form" noValidate
+                onSubmit={processPut}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <FormControl sx={{ width: 2/10}}>
+                  <InputLabel htmlFor="putId">ID</InputLabel>
+                  <FilledInput id="putId" type="number" size="small" inputProps={{ min: 0, max: 999 }} value={putId} onChange={inputChangeListener}/>
+                </FormControl>
+                <FormControl sx={{ width: 5/10}}>
+                  <InputLabel htmlFor="putInput">String for UPDATE</InputLabel>
+                  <FilledInput id="putInput" size="small" value={putInput} onChange={inputChangeListener}/>
+                </FormControl>
+                <Button sx={{ width: 3/10}} type="submit" variant="contained" size="large" color="success">PUT</Button>
+              </Box>
             </Grid>
             <Grid item xs={12} >
-              <form onSubmit={processDelete}>
+              <Box component="form" noValidate onSubmit={processDelete}>
                 <FormControl sx={{ width: 1}}>
                   <InputLabel htmlFor="deleteInput">ID for DELETE</InputLabel>
                   <FilledInput id="deleteInput" type="number" size="small" inputProps={{ min: 0, max: 999 }} value={deleteInput} onChange={inputChangeListener}/>
                   <Button type="submit" variant="contained" size="large" color="error">DELETE</Button>
                 </FormControl>
-              </form>
+              </Box>
             </Grid>
             <Divider sx={{ height: 28, m: 0.5 }} orientation="horizontal" />
             <Grid item xs={12}>

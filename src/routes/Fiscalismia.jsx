@@ -42,6 +42,7 @@ export default function Fiscalismia() {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -67,7 +68,7 @@ export default function Fiscalismia() {
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-            <Content />
+            <Content show={true}/>
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />

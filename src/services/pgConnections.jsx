@@ -1,20 +1,30 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3002/api/fiscalismia'
 
-let token = null
+let token = window.localStorage.getItem('jwt-token')
 
-// const login = async credentials => {
-//   const response = await axios.post(baseUrl, credentials)
-//   return response.data
-// }
+const setToken = () => {
+  token = window.localStorage.getItem('jwt-token')
+}
 
-// const setToken = newToken => {
-//   token = `bearer ${newToken}`
-// }
+const login = async credentials => {
+  try {
+    const response = await axios.post(`${baseUrl}/um/login`, credentials)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const getTest = async () => {
+  if (!token) {
+    setToken()
+  }
   try {
-    const response = await axios.get(baseUrl)
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response = await axios.get(baseUrl, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -22,34 +32,52 @@ const getTest = async () => {
 }
 
 const postTest = async newObject => {
-  const config = {
-    headers: { Authorization: token }
+  if (!token) {
+    setToken()
   }
-  console.log("axios received:")
-  console.log(newObject)
-  const response = await axios.post(baseUrl, newObject, config)
-  return response.data
+  try {
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response = await axios.post(baseUrl, newObject, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const putTest = async newObject => {
-  const config = {
-    headers: { Authorization: token }
+  if (!token) {
+    setToken()
   }
-  const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config)
-  return response
+  try {
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const deleteTest = async id => {
-  const config = {
-    headers: { Authorization: token }
+  if (!token) {
+    setToken()
   }
-  const response = await axios.delete(`${baseUrl}/${id}`, config)
-  return response
+  try {
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export default {
-  // login,
-  // setToken,
+  login,
   getTest,
   postTest,
   putTest,
