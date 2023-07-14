@@ -97,44 +97,13 @@ export default function Content({ show }) {
   }
   return (
     <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}
-      >
-        <Toolbar>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item>
-              <SearchIcon color="inherit" sx={{ display: 'block' }} />
-            </Grid>
-            <Grid item xs>
-              <TextField
-                fullWidth
-                placeholder="Search by email address, phone number, or user UID"
-                InputProps={{
-                  disableUnderline: true,
-                  sx: { fontSize: 'default' },
-                }}
-                variant="standard"
-              />
-            </Grid>
-            <Grid item>
-              <Button variant="contained" sx={{ mr: 1 }}>
-                Add user
-              </Button>
-              <Tooltip title="Reload">
-                <IconButton>
-                  <RefreshIcon color="inherit" sx={{ display: 'block' }} />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
       {/* DB REST TESTING */}
-      <Grid sx={{ mt:2 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
+      <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
         <Grid item xs={6}>
+          <Typography color="inherit" variant="h5" align="center">
+            Database Queries
+          </Typography>
+          <Divider sx={{ mb: 2, borderBottomWidth: '1px', borderBottomColor:'#333333'}} orientation="horizontal" role="presentation"/>
           <Grid container spacing={2} direction="column" alignItems="left">
             <Grid item xs={12}>
               <Button  sx={{ width: 1}} variant="contained" size="large" color="primary" onClick={getTest}>GET</Button>
@@ -167,7 +136,7 @@ export default function Content({ show }) {
                 <Button sx={{ width: 3/10}} type="submit" variant="contained" size="large" color="success">PUT</Button>
               </Box>
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12} sx={{ mb:4 }}>
               <Box component="form" noValidate onSubmit={processDelete}>
                 <FormControl sx={{ width: 1}}>
                   <InputLabel htmlFor="deleteInput">ID for DELETE</InputLabel>
@@ -176,18 +145,17 @@ export default function Content({ show }) {
                 </FormControl>
               </Box>
             </Grid>
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="horizontal" />
             <Grid item xs={12}>
+              <Typography color="inherit" variant="h5" align="center">
+                Database Result
+              </Typography>
+              <Divider sx={{  mb:2, borderBottomWidth: '1px', borderBottomColor:'#333333'}} orientation="horizontal" role="presentation"/>
               <TempDeleteTable show={showResult} results={result.results}/>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="horizontal" />
       {/* DB REST TESTING */}
-      <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-        No users for this project yet
-      </Typography>
     </Paper>
   );
 }

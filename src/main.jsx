@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
 import SignInSide from './components/SignInSide';
+import { AuthProvider } from './services/userAuthentication';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
 import {
@@ -14,18 +15,20 @@ import {
     createRoutesFromElements(
       <Route
         path="/"
-        /* element={<Fiscalismia/>} */
-        element={<SignInSide/>}
+        element={<Fiscalismia/>}
+        // element={<SignInSide/>}
         // loader={rootLoader}
         // action={rootAction}
         errorElement={<ErrorPage />}
-      >
+        >
       </Route>
     )
   );
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 )

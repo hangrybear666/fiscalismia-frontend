@@ -1,14 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import HelpIcon from '@mui/icons-material/Help';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Tab from '@mui/material/Tab';
@@ -18,14 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import SettingsIcon from '@mui/icons-material/Settings';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PreviewIcon from '@mui/icons-material/Preview';
-import HubIcon from '@mui/icons-material/Hub';
 import LogoutBtn from './minor/LogoutBtn';
 import { resourceProperties as res } from '../resources/resource_properties'
-
-const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 function Header(props) {
   const { onDrawerToggle } = props;
@@ -35,12 +23,10 @@ function Header(props) {
   const handleGithubMenuDropdown = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <React.Fragment>
+      {/* Header Settings, Link and Logout Btn Toolbar */}
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
@@ -75,22 +61,6 @@ function Header(props) {
                     <GitHubIcon />
                   </IconButton>
                 </Tooltip>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <MenuItem onClick={handleClose} component={Link} href={res.GITHUB_FRONTEND_URL}>
-                    <ListItemIcon sx={{color: '#333', margin:0}}><PreviewIcon/></ListItemIcon>{res.FRONTEND}
-                  </MenuItem>
-                  <MenuItem onClick={handleClose} component={Link} href={res.GITHUB_BACKEND_URL}>
-                    <ListItemIcon sx={{color: '#333', margin:0}}><HubIcon/></ListItemIcon>{res.BACKEND}
-                  </MenuItem>
-                </Menu>
             </Grid>
             <Grid item>
               <Tooltip title={res.SETTINGS}>
@@ -105,6 +75,7 @@ function Header(props) {
           </Grid>
         </Toolbar>
       </AppBar>
+      {/* Content Header Text */}
       <AppBar
         component="div"
         color="primary"
@@ -116,18 +87,18 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Authentication
+                Content Header Placeholer
               </Typography>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+      {/* Content Header relative Tab Navigation */}
       <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0 }}>
         <Tabs value={0} textColor="inherit">
-          <Tab label="Users" />
-          <Tab label="Sign-in method" />
-          <Tab label="Templates" />
-          <Tab label="Usage" />
+          <Tab label="Tab 1" />
+          <Tab label="Tab 2" />
+          <Tab label="Tab 3" />
         </Tabs>
       </AppBar>
     </React.Fragment>

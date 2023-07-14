@@ -18,7 +18,7 @@ export const menuEntries = [
     children: [
       { id: res.OVERVIEW, icon: <AnalyticsIcon />, active: true },
       { id: res.STORES, icon: <StorefrontIcon />},
-      { id: res.SENSITIVITIES, icon: <LiquorIcon /> },
+      { id: res.INDULGENCES, icon: <LiquorIcon /> },
     ],
   },
   {
@@ -34,6 +34,7 @@ export const menuEntries = [
     children: [
       { id: res.OVERVIEW, icon: <AnalyticsIcon /> },
       { id: res.MONTHLY_BUDGET, icon: <EuroIcon />},
+      { id: res.SALES, icon: <CreditScoreIcon /> },
       { id: res.SAVINGS, icon: <SavingsIcon /> },
     ],
   },

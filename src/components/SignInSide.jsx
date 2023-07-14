@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import pgConnections from '../services/pgConnections';
 import Content from './Content';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../services/userAuthentication';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
 
@@ -41,15 +43,15 @@ export default function SignInSide() {
   const [password, setPassword] = useState('')
   const [signedIn, setSignedIn] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const user = { username:username, password:password }
     console.log(user)
     const response = await pgConnections.login(user)
     console.log(response)
     if (response && response.startsWith('Bearer')) {
+      window.localStorage.setItem('jwt-token', response)
       setSignedIn(true)
-      window.localStorage.setItem('jwt-token', response);
     }
   };
 
@@ -99,7 +101,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
