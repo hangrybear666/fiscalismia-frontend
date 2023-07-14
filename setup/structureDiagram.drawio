@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net" modified="2023-07-09T11:42:43.021Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="awV9BWW2oFCa-77l0fnU" version="21.6.1" type="device">
+  <diagram name="Page-1" id="NPhKB_ZJjItZNv75KtdZ">
+    <mxGraphModel dx="2074" dy="1067" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="D0G5IbI8Z8erGw690AwL-1" value="LoginPage" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="170" y="432.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="D0G5IbI8Z8erGw690AwL-4" value="ProtectedRoute" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=2" parent="1" vertex="1">
+          <mxGeometry x="340" y="375" width="290" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="D0G5IbI8Z8erGw690AwL-2" value="Fiscalismia Dashboard&lt;span style=&quot;font-weight: normal;&quot;&gt; (side menu)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="350" y="405" width="270" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="D0G5IbI8Z8erGw690AwL-5" value="Content Header (top bar)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=right;" parent="1" vertex="1">
+          <mxGeometry x="360" y="432.5" width="250" height="97.5" as="geometry" />
+        </mxCell>
+        <mxCell id="D0G5IbI8Z8erGw690AwL-3" value="Dashboard Content&lt;br&gt;e.g. Home index&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="370" y="460" width="230" height="55" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
