@@ -7,31 +7,23 @@ import {
 
 const AuthContext = createContext(null)
 
-export const AuthProvider = ( {children} ) =>  {
-  const [user, setUser] = useState(null)
+export const AuthProvider = ({ children }) => {
 
-  const login = user => {
-    setUser(user)
-  }
-
-  const logout = () => {
-    setUser(null)
-  }
+  const [token, setToken] = useState('jwt-get');
 
   return (
-    <AuthContext.Provider value={{user, login, logout}}>
+    <AuthContext.Provider value={token}>
       {children}
     </AuthContext.Provider>
-  )
-
-}
+  );
+};
 
 export const useAuth = () => {
   return useContext(AuthContext)
 }
 
-const ProtectedRoute = ({
-  redirectPath = '/home',
+export const ProtectedRoute = ({
+  redirectPath = '/login',
   children
 }) => {
   const { token } = useAuth();

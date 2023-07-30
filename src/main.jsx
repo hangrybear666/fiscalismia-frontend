@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
 import SignInSide from './components/SignInSide';
-import { AuthProvider } from './services/userAuthentication';
+import { AuthProvider, ProtectedRoute } from './services/userAuthentication';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
 import {
@@ -13,15 +13,30 @@ import {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        path="/"
-        element={<Fiscalismia/>}
-        // element={<SignInSide/>}
-        // loader={rootLoader}
-        // action={rootAction}
-        errorElement={<ErrorPage />}
-        >
-      </Route>
+      <React.Fragment>
+        <Route
+          path="login"
+          element={<SignInSide/>}
+          // loader={rootLoader}
+          // action={rootAction}
+          errorElement={<ErrorPage />}
+        />
+        <Route element={<ProtectedRoute/>}>
+          <Route
+            path="home"
+            element={<Fiscalismia/>}
+            // loader={rootLoader}
+            // action={rootAction}
+            errorElement={<ErrorPage />}
+          />
+        </Route>
+        <Route
+          path="*"
+          element={<ErrorPage isNoMatch={true}/>}
+          // loader={rootLoader}
+          // action={rootAction}
+        />
+      </React.Fragment>
     )
   );
 
