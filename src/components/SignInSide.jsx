@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import pgConnections from '../services/pgConnections';
 import Content from './Content';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/userAuthentication';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
@@ -41,7 +41,7 @@ const theme = createTheme({
 export default function SignInSide() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [signedIn, setSignedIn] = useState(false)
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export default function SignInSide() {
     console.log(response)
     if (response && response.startsWith('Bearer')) {
       window.localStorage.setItem('jwt-token', response)
-      setSignedIn(true)
+      navigate('/home')
     }
   };
 
@@ -138,7 +138,6 @@ export default function SignInSide() {
               </Button>
               <Copyright sx={{ mt: 5 }} />
             </Box>
-            <Content show={signedIn}/>
           </Box>
         </Grid>
       </Grid>
