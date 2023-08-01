@@ -22,7 +22,7 @@ const getTest = async () => {
   }
   try {
     const config = {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(baseUrl, config)
     return response.data
@@ -37,7 +37,7 @@ const postTest = async newObject => {
   }
   try {
     const config = {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.post(baseUrl, newObject, config)
     return response.data
@@ -52,7 +52,7 @@ const putTest = async newObject => {
   }
   try {
     const config = {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config)
     return response
@@ -67,7 +67,7 @@ const deleteTest = async id => {
   }
   try {
     const config = {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.delete(`${baseUrl}/${id}`, config)
     return response

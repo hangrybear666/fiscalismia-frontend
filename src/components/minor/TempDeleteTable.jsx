@@ -9,9 +9,10 @@ import Paper from '@mui/material/Paper';
 
 export default function TempDeleteTable({ show, results  }) {
   if (!show) {
-    return
-    <>
-    </>
+    return (
+      <>
+      </>
+    )
   }
   return (
     <TableContainer component={Paper} elevation={6} >

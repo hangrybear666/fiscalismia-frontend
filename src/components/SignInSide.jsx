@@ -48,8 +48,7 @@ export default function SignInSide() {
     const user = { username:username, password:password }
     console.log(user)
     const response = await pgConnections.login(user)
-    console.log(response)
-    if (response && response.startsWith('Bearer')) {
+    if (response) { // TODO
       window.localStorage.setItem('jwt-token', response)
       navigate('/home')
     }

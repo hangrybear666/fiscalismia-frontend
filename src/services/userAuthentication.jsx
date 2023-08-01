@@ -4,6 +4,7 @@ import {
   useLocation,
   Outlet
 } from 'react-router-dom';
+import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext(null)
 
@@ -11,8 +12,14 @@ export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(window.localStorage.getItem('jwt-token'));
 
+  const loggedInAs = {
+    userName: 'admin', // TODO
+    userEmail: 'arschfresse1@hotmail.de', // TODO
+    token: token
+  }
+
   return (
-    <AuthContext.Provider value={token}>
+    <AuthContext.Provider value={loggedInAs}>
       {children}
     </AuthContext.Provider>
   );
@@ -24,9 +31,10 @@ export const useAuth = () => {
 
 export const isUserAuthenticated = () => {
 
-  const token = useAuth();
-  if (token?.startsWith('Bearer')) {
-    console.log("User successfully authenticated")
+  const { token } = useAuth();
+  const decodedToken = jwt_decode(token)
+  if (decodedToken?.user?.userName === 'admin') { // TODO
+    console.log(`User [${decodedToken?.user?.userName}] successfully authenticated`)
     return true
   } else {
     console.log('Token Authentication failed. Token is as follows:')
