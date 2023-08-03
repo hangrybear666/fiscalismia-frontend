@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from "react";
+import { useState, useContext, createContext, useEffect} from "react";
 import {
   Navigate,
   useLocation,
@@ -6,16 +6,29 @@ import {
 } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
 
+/**
+ * // TODO
+ */
 const AuthContext = createContext(null)
 
+/**
+ * // TODO
+ * @param {*} param0 
+ * @returns 
+ */
 export const AuthProvider = ({ children }) => {
 
-  const [token, setToken] = useState(window.localStorage.getItem('jwt-token'));
+  const [token, setToken] = useState(window.localStorage.getItem('jwt-token') || null);
+  const [loginUserName, setLoginUserName] = useState(window.localStorage.getItem('loginUserName') || null)
+  const [authenticated, setAuthenticated] = useState(false)
 
   const loggedInAs = {
-    userName: 'admin', // TODO
-    userEmail: 'arschfresse1@hotmail.de', // TODO
-    token: token
+    token: token,
+    setToken: setToken,
+    authenticated: authenticated,
+    setAuthenticated: setAuthenticated,
+    loginUserName: loginUserName,
+    setLoginUserName: setLoginUserName,
   }
 
   return (
@@ -25,31 +38,49 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+/**
+ * // TODO
+ * @returns 
+ */
 export const useAuth = () => {
   return useContext(AuthContext)
 }
 
-export const isUserAuthenticated = () => {
-
-  const { token } = useAuth();
+/**
+ * // TODO
+ * @returns 
+ */
+export const isUserAuthenticated = (token, loginUserName = null) => {
+  if (!token) {
+    console.log("TOKEN UNDEFINED")
+    return false
+  }
   const decodedToken = jwt_decode(token)
-  if (decodedToken?.user?.userName === 'admin') { // TODO
-    console.log(`User [${decodedToken?.user?.userName}] successfully authenticated`)
+  if (decodedToken?.user?.userName === loginUserName) {
+    console.log(`User [${loginUserName}] successfully authenticated`)
     return true
   } else {
-    console.log('Token Authentication failed. Token is as follows:')
-    console.log(token)
+    console.error('Token Authentication failed.')
     return false
   }
 }
 
+/**
+ * // TODO
+ * @param {*} param0 
+ * @returns 
+ */
 export const ProtectedRoute = ({
   redirectPath = '/login',
   children
 }) => {
   const location = useLocation();
+  const { token, loginUserName } = useAuth()
+  // const token = window.localStorage.getItem('jwt-token')
+  // const loginUserName = window.localStorage.getItem('loginUserName')
 
-  if (!isUserAuthenticated()) {
+  if (!isUserAuthenticated(token, loginUserName)) {
+    console.error("PROTECTED ROUTE ACCESS [DENIED]")
     return <Navigate to={redirectPath} replace state={{ from: location }} />;
   }
 

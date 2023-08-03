@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,10 +13,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import pgConnections from '../services/pgConnections';
 import Content from './Content';
+import { IconButton } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import HomeIcon from '@mui/icons-material/Home';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../services/userAuthentication';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
+import { useAuth, isUserAuthenticated } from '../services/userAuthentication';
 
 
 function Copyright(props) {
@@ -38,19 +41,35 @@ const theme = createTheme({
   },
 });
 
+
+
 export default function SignInSide() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false)
+  const navigate = useNavigate()
+  const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
+  useEffect(() => {
+    if (authenticated)
+    navigate('/home', { replace: true })
+    // setLoggedIn(true) // TODO
+  }, [authenticated])
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { username:username, password:password }
-    console.log(user)
+    // console.log(`provideduserdetails: ${JSON.stringify(user)}`)
     const response = await pgConnections.login(user)
+    // console.log(`response from database: ${response}`)
     if (response) { // TODO
       window.localStorage.setItem('jwt-token', response)
-      navigate('/home')
+      window.localStorage.setItem('loginUserName', username)
+      console.log(`jwt-token in localStorage: ${window.localStorage.getItem('jwt-token')}`)
+      setLoginUserName(username)
+      setToken(response)
+      if (isUserAuthenticated(response, username)) {
+        setAuthenticated(true)
+      }
     }
   };
 
@@ -64,6 +83,21 @@ export default function SignInSide() {
         break;
     }
   }
+
+  // if (loggedIn) {
+  //   return (
+  //     <>
+  //       <p>User <b>{loginUserName}</b> is already logged in.</p>
+  //       <IconButton
+  //         color="primary"
+  //         variant="text"
+  //         onClick={() => {navigate('/home')}}>
+  //         <HomeIcon />
+  //         Home
+  //       </IconButton>
+  //     </>
+  //   )
+  // }
 
   return (
     <ThemeProvider theme={theme}>

@@ -7,7 +7,7 @@ const setToken = () => {
   token = window.localStorage.getItem('jwt-token')
 }
 
-const login = async credentials => {
+const login = async (credentials) => {
   try {
     const response = await axios.post(`${baseUrl}/um/login`, credentials)
     return response.data
