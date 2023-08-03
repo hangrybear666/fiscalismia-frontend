@@ -9,21 +9,33 @@ import {
   createBrowserRouter,
   RouterProvider,
   createRoutesFromElements,
-  Route } from "react-router-dom";
+  Route,
+  Navigate  } from "react-router-dom";
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <React.Fragment>
         <Route
-          path="login"
+          index
+          path="/"
+          element={<Navigate to="/login" />}
+          // loader={rootLoader}
+          // action={rootAction}
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path="/login"
           element={<SignInSide/>}
           // loader={rootLoader}
           // action={rootAction}
           errorElement={<ErrorPage />}
         />
-        <Route element={<ProtectedRoute/>}>
+        <Route
+          element={<ProtectedRoute/>}
+          errorElement={<ErrorPage />}
+        >
           <Route
-            path="home"
+            path="/home"
             element={<Fiscalismia/>}
             // loader={rootLoader}
             // action={rootAction}
@@ -32,9 +44,11 @@ import {
         </Route>
         <Route
           path="*"
-          element={<ErrorPage isNoMatch={true}/>}
-          // loader={rootLoader}
-          // action={rootAction}
+          element={<></>}
+          errorElement={<ErrorPage isNoMatch={true}/>}
+          loader={
+            () => {throw new Response(null, { status: 404, statusText: 'not found' })}
+          }
         />
       </React.Fragment>
     )
