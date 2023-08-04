@@ -48,7 +48,7 @@ export default function SignInSide() {
   const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
   useEffect(() => {
     if (authenticated)
-    navigate('/home', { replace: true })
+    navigate('/fiscalismia', { replace: true })
   }, [authenticated])
 
   const handleLogin = async (e) => {
@@ -85,7 +85,7 @@ export default function SignInSide() {
         <IconButton
           color="primary"
           variant="text"
-          onClick={() => {navigate('/home')}}>
+          onClick={() => {navigate('/fiscalismia')}}>
           <HomeIcon />
           Home
         </IconButton>

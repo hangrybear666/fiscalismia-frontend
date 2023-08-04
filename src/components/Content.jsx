@@ -20,7 +20,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../services/pgConnections';
 
-export default function Content({ show }) {
+export default function Content({ show = true }) {
   const [result, setResult] = useState([])
   const [showResult, setShowResult] = useState(false)
   const [postInput, setPostInput] = useState('')

@@ -3,6 +3,7 @@ export const resourceProperties = {
   APP_URL: 'http://localhost:5173/',
   OVERVIEW: 'Übersicht',
   HOME: 'Home',
+  LOGOUT: 'Logout',
   MONTHLY_BUDGET:'Monatliches Budget',
   SAVINGS: 'Ersparnisse',
   SALES: 'Verkäufe',

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
 import SignInSide from './components/SignInSide';
+import Content from './components/Content';
 import { AuthProvider, ProtectedRoute } from './services/userAuthentication';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
@@ -15,6 +16,7 @@ import {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <React.Fragment>
+        {/* Level 0 */}
         <Route
           index
           path="/"
@@ -34,13 +36,22 @@ import {
           element={<ProtectedRoute/>}
           errorElement={<ErrorPage />}
         >
+          {/* Level 1 */}
           <Route
-            path="/home"
+            path="/fiscalismia"
             element={<Fiscalismia/>}
             // loader={rootLoader}
             // action={rootAction}
             errorElement={<ErrorPage />}
-          />
+          >
+            {/* Level 2 */}
+            {/* <Route
+              path="test"
+              element={<ErrorPage/>}
+              errorElement={<ErrorPage />}
+            /> */}
+
+          </Route>
         </Route>
         <Route
           path="*"

@@ -62,7 +62,7 @@ function NavBtns() {
       <IconButton
         color="primary"
         variant="text"
-        onClick={() => {navigate('/home')}}>
+        onClick={() => {navigate('/fiscalismia')}}>
         <HomeIcon />
         Home
       </IconButton>
