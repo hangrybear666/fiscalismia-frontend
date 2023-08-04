@@ -12,14 +12,12 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import pgConnections from '../services/pgConnections';
-import Content from './Content';
 import { IconButton } from '@mui/material';
-import Stack from '@mui/material/Stack';
 import HomeIcon from '@mui/icons-material/Home';
-import { Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
-import { useAuth, isUserAuthenticated } from '../services/userAuthentication';
+import { useAuth, isUserAuthenticated, isJwtToken } from '../services/userAuthentication';
 
 
 function Copyright(props) {
@@ -46,22 +44,18 @@ const theme = createTheme({
 export default function SignInSide() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [loggedIn, setLoggedIn] = useState(false)
   const navigate = useNavigate()
   const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
   useEffect(() => {
     if (authenticated)
     navigate('/home', { replace: true })
-    // setLoggedIn(true) // TODO
   }, [authenticated])
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { username:username, password:password }
-    // console.log(`provideduserdetails: ${JSON.stringify(user)}`)
     const response = await pgConnections.login(user)
-    // console.log(`response from database: ${response}`)
-    if (response) { // TODO
+    if (isJwtToken(response)) {
       window.localStorage.setItem('jwt-token', response)
       window.localStorage.setItem('loginUserName', username)
       console.log(`jwt-token in localStorage: ${window.localStorage.getItem('jwt-token')}`)
@@ -84,20 +78,20 @@ export default function SignInSide() {
     }
   }
 
-  // if (loggedIn) {
-  //   return (
-  //     <>
-  //       <p>User <b>{loginUserName}</b> is already logged in.</p>
-  //       <IconButton
-  //         color="primary"
-  //         variant="text"
-  //         onClick={() => {navigate('/home')}}>
-  //         <HomeIcon />
-  //         Home
-  //       </IconButton>
-  //     </>
-  //   )
-  // }
+  if (window.localStorage.getItem('loginUserName')) {
+    return (
+      <>
+        <p>User <b>{window.localStorage.getItem('loginUserName')}</b> is already logged in.</p>
+        <IconButton
+          color="primary"
+          variant="text"
+          onClick={() => {navigate('/home')}}>
+          <HomeIcon />
+          Home
+        </IconButton>
+      </>
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>
