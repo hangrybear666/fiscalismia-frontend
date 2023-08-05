@@ -12,15 +12,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import TempDeleteTable from './minor/TempDeleteTable';
+import TempDeleteTable from '../minor/TempDeleteTable';
 import Input from '@mui/material/Input';
 import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import pgConnections from '../services/pgConnections';
+import pgConnections from '../../services/pgConnections';
 
-export default function Content({ show = true }) {
+export default function Content({ show = true, contentRoute }) {
   const [result, setResult] = useState([])
   const [showResult, setShowResult] = useState(false)
   const [postInput, setPostInput] = useState('')
@@ -97,8 +97,13 @@ export default function Content({ show = true }) {
   }
   return (
     <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
+      <Typography color="inherit" variant="h5" align="center">
+        {contentRoute}
+      </Typography>
+
+
       {/* DB REST TESTING */}
-      <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
+      {/* <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
         <Grid item xs={6}>
           <Typography color="inherit" variant="h5" align="center">
             Database Queries
@@ -154,8 +159,11 @@ export default function Content({ show = true }) {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       {/* DB REST TESTING */}
+
+
+
     </Paper>
   );
 }

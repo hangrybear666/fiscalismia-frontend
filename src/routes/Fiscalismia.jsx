@@ -6,12 +6,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Navigator from '../components/Navigator';
-import Content from '../components/Content';
+import Content from '../components/content/Content';
 import Header from '../components/Header';
 import SignInSide from '../components/SignInSide'
 import { theme } from '../components/styling/Theme';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import { menuEntries } from '../components/minor/MenuEntries';
+import ErrorPage from '../components/ErrorPage';
 import { resourceProperties as res } from '../resources/resource_properties'
+
 import {
   Outlet,
   useLoaderData,
@@ -19,7 +22,9 @@ import {
   useNavigation,
   NavLink,
   redirect,
-  useSubmit, } from "react-router-dom";
+  useSubmit,
+  Route,
+  Routes } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -68,7 +73,22 @@ export default function Fiscalismia() {
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-            <Content/>
+            <Routes>
+              {menuEntries.map(({ id: parentId, path: parentPath, children }) =>(
+                <React.Fragment key={parentId}>
+                  {children.map(({ id: childId, path: childPath }) => (
+                    <Route
+                      path={`/${parentPath}/${childPath}`}
+                      element={<Content contentRoute={`${parentPath}/${childPath}`}/>}
+                      errorElement={<ErrorPage />}
+                      key={childId}
+                    />
+                    ))
+                  }
+                </React.Fragment>
+                ))
+              }
+            </Routes>
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />

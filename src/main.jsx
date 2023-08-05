@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
 import SignInSide from './components/SignInSide';
-import Content from './components/Content';
+import Content from './components/content/Content';
+import { resourceProperties as res } from './resources/resource_properties';
 import { AuthProvider, ProtectedRoute } from './services/userAuthentication';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
@@ -38,7 +39,7 @@ import {
         >
           {/* Level 1 */}
           <Route
-            path="/fiscalismia"
+            path={`${res.APP_ROOT_PATH}/*`}
             element={<Fiscalismia/>}
             // loader={rootLoader}
             // action={rootAction}

@@ -14,7 +14,10 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LogoutBtn from './minor/LogoutBtn';
 import { resourceProperties as res } from '../resources/resource_properties'
+import { Divider } from '@mui/material';
 
+const headerBgColor = '#012731' // Daintree
+// const headerBgColor = '#2a2f23' // Pine Tree
 function Header(props) {
   const { onDrawerToggle } = props;
 
@@ -27,7 +30,7 @@ function Header(props) {
   return (
     <React.Fragment>
       {/* Header Settings, Link and Logout Btn Toolbar */}
-      <AppBar color="primary" position="sticky" elevation={0}>
+      <AppBar position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
@@ -78,23 +81,26 @@ function Header(props) {
       {/* Content Header Text */}
       <AppBar
         component="div"
-        color="primary"
         position="static"
         elevation={0}
         sx={{ zIndex: 0 }}
       >
-        <Toolbar>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item xs>
-              <Typography color="inherit" variant="h5" component="h1">
-                Content Header Placeholer
-              </Typography>
-            </Grid>
+        <Grid container alignItems="center" spacing={0}>
+          <Grid item xs sx={{ mt: '25px', ml:2 }}>
+            <Divider/>
+            <Typography color="inherit" variant="h5" sx={{ paddingTop:'5px',paddingBottom:'4px', ml:2 }}>
+              Content Header Placeholer
+            </Typography>
+            <Divider/>
           </Grid>
-        </Toolbar>
+        </Grid>
       </AppBar>
       {/* Content Header relative Tab Navigation */}
-      <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0 }}>
+      <AppBar
+        component="div"
+        position="static"
+        elevation={0}
+        sx={{ zIndex: 0 }}>
         <Tabs value={0} textColor="inherit">
           <Tab label="Tab 1" />
           <Tab label="Tab 2" />

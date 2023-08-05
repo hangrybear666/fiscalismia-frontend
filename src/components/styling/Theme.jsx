@@ -1,6 +1,14 @@
 
 import { createTheme } from '@mui/material/styles';
 
+const menuBgColor = '#081627' // Default
+const headerBgColor = '#012731' // Daintree
+/**
+ * '#313026' // Dark Olive Night
+ * '#012731' // Daintree
+ * '#2a2f23' // Pine Tree
+ */
+
 export let theme = createTheme({
     palette: {
       primary: {
@@ -39,9 +47,16 @@ export let theme = createTheme({
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            backgroundColor: '#081627',
+            backgroundColor: menuBgColor,
           },
         },
+      },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: headerBgColor,
+          },
+        }
       },
       MuiButton: {
         styleOverrides: {
@@ -100,7 +115,8 @@ export let theme = createTheme({
       MuiDivider: {
         styleOverrides: {
           root: {
-            backgroundColor: 'rgb(255,255,255,0.15)',
+            backgroundColor: 'rgb(255,255,255,0.5)',
+            borderColor:'rgba(128,128,128,0.5)',
           },
         },
       },

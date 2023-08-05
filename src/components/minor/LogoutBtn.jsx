@@ -14,7 +14,7 @@ export default function LogoutBtn({ fullWidth }) {
   const { setToken, setLoginUserName,  setAuthenticated } = useAuth()
   const navigate = useNavigate();
 
-  const handleLogout = async (e) => {
+  const handleLogout = (e) => {
     e.preventDefault();
     console.log("Logging Out...")
     window.localStorage.removeItem('jwt-token')

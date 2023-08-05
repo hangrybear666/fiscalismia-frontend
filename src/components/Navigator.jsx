@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -8,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutBtn from './minor/LogoutBtn';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { menuEntries } from './minor/MenuEntries';
 import { resourceProperties as res } from '../resources/resource_properties'
 
@@ -16,22 +17,49 @@ const item = {
   py: '2px',
   px: 3,
   color: 'rgba(255, 255, 255, 0.7)',
-  '&:hover, &.Mui-selected:hover': {
-    bgcolor: 'rgba(248,208,130,0.2)',
+  '&:hover': {
+    bgcolor: 'rgba(248,208,130,0.3)',
     color: 'rgba(248,204,116,0.9)',
+  },
+  '&.Mui-selected:hover': {
+    bgcolor: 'rgba(248,208,130,0.3)',
+    color:'rgba(255, 255, 255, 0.7)',
   },
   '&.Mui-selected': {
     bgcolor: "rgba(255, 255, 255, 0.8)",
-    color: "rgba(20,20,20,0.9)"
+    color: "rgba(20,20,20,0.9)",
   }
 }
 
 
 export default function Navigator(props) {
+  const [selectedRelativePath, setSelectedRelativePath] = useState('')
   const { ...other } = props;
+  const navigate = useNavigate()
+  let location = useLocation()
+
+  const handleMenuSelection = (parentPath, childPath) => {
+    const selectedPath = `${parentPath}/${childPath}`
+    setSelectedRelativePath(selectedPath)
+    navigate(selectedPath)
+  }
+
+  const isMenuEntrySelected = (parentPath, childPath) => {
+    const pathToTest = `${parentPath}/${childPath}`
+    const localLocation = location.pathname.split(`${res.APP_ROOT_PATH}/`)
+    return pathToTest === selectedRelativePath ? true : pathToTest === localLocation[1] ? true : false
+  }
+
+  const isHomeSelected = () => {
+    if (location.pathname === res.APP_ROOT_PATH) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="permanent" {...other} >
       <List disablePadding>
         {/* FISCALISMIA */}
         <ListItem sx={{ paddingY: 2, color: '#fff' }}>
@@ -46,12 +74,17 @@ export default function Navigator(props) {
             }}
           />
         </ListItem>
-        <Divider sx={{ borderColor:'rgba(128,128,128,0.5)' }} />
+        <Divider/>
         {/* HOME */}
         <ListItem  sx={{  padding:0 }}>
           <ListItemButton
-            selected={true}
-            sx={{ ...item }}>
+            selected={isHomeSelected()}
+            sx={{ ...item }}
+            onClick={() => {
+              setSelectedRelativePath(null);
+              navigate(res.APP_ROOT_PATH);
+            }}
+            >
             <ListItemText
               primary={res.HOME}
               primaryTypographyProps={{
@@ -63,26 +96,30 @@ export default function Navigator(props) {
               }}/>
           </ListItemButton>
         </ListItem>
-        <Divider sx={{ borderColor:'rgba(128,128,128,0.5)' }} />
+        <Divider/>
         {/* NAVBAR MENU */}
-        {menuEntries.map(({ id, children }) => (
-          <Box key={id} sx={{ bgcolor: '#101F33' }}>
+        {menuEntries.map(({ id: parentId, path: parentPath, children }) => (
+          <Box key={parentId} >
             <ListItem sx={{ py: 2, px: 3 }}>
-              <ListItemText sx={{ color: '#ffffff' }}>{id}</ListItemText>
+              <ListItemText sx={{ color: '#ffffff' }}>{parentId}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            {children.map(({ id: childId, path: childPath, icon, active }) => (
               <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={{...item}}>
+                <ListItemButton
+                  selected={isMenuEntrySelected(parentPath, childPath)} // TODO
+                  sx={{...item}}
+                  onClick={() => handleMenuSelection(parentPath, childPath)}
+                >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}
-            <Divider sx={{ mt: 2, borderColor:'rgba(128,128,128,0.5)' }} />
+            <Divider sx={{ mt: 2 }} />
           </Box>
         ))}
         <ListItem sx={{
-          color: 'rgba(245,81,81,0.8)',
+          color: 'rgba(245,81,81,0.9)',
           padding: 0,
           '&:hover': {
             bgcolor: 'rgba(245,81,81,0.3)',

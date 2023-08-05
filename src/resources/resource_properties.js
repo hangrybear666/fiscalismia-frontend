@@ -1,8 +1,13 @@
 export const resourceProperties = {
   APP_NAME: "Fiscalismia",
   APP_URL: 'http://localhost:5173/',
+  APP_ROOT_PATH: "/fiscalismia",
   OVERVIEW: 'Übersicht',
   HOME: 'Home',
+  DEALS: 'Angebote',
+  FOOD_PRICES: 'Lebensmittelpreise',
+  GROCERY_DEALS: 'Supermarkt Angebote',
+  GROCERIES: 'Lebensmittel',
   LOGOUT: 'Logout',
   MONTHLY_BUDGET:'Monatliches Budget',
   SAVINGS: 'Ersparnisse',
@@ -22,6 +27,4 @@ export const resourceProperties = {
   BACKEND: 'Backend',
   GITHUB_FRONTEND_URL: 'https://github.com/hangrybear666/fiscalismia-frontend',
   GITHUB_BACKEND_URL: 'https://github.com/hangrybear666/fiscalismia-backend',
-
-
 };
