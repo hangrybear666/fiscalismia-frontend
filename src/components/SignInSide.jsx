@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res } from '../resources/resource_properties'
+import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserAuthenticated, isJwtToken } from '../services/userAuthentication';
 
 
@@ -48,7 +49,7 @@ export default function SignInSide() {
   const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
   useEffect(() => {
     if (authenticated)
-    navigate(res.APP_ROOT_PATH, { replace: true })
+    navigate(paths.APP_ROOT_PATH, { replace: true })
   }, [authenticated])
 
   const handleLogin = async (e) => {
@@ -85,7 +86,7 @@ export default function SignInSide() {
         <IconButton
           color="primary"
           variant="text"
-          onClick={() => {navigate(res.APP_ROOT_PATH)}}>
+          onClick={() => {navigate(paths.APP_ROOT_PATH)}}>
           <HomeIcon />
           Home
         </IconButton>

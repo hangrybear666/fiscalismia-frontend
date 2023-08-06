@@ -1,7 +1,6 @@
 export const resourceProperties = {
   APP_NAME: "Fiscalismia",
   APP_URL: 'http://localhost:5173/',
-  APP_ROOT_PATH: "/fiscalismia",
   OVERVIEW: 'Übersicht',
   HOME: 'Home',
   DEALS: 'Angebote',

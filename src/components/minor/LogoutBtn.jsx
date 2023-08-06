@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/userAuthentication';
 import { resourceProperties as res } from '../../resources/resource_properties'
+import { paths } from '../../resources/router_navigation_paths';
 
 export default function LogoutBtn({ fullWidth }) {
   const { setToken, setLoginUserName,  setAuthenticated } = useAuth()
@@ -22,7 +23,7 @@ export default function LogoutBtn({ fullWidth }) {
     setToken(null)
     setLoginUserName(null)
     setAuthenticated(false)
-    navigate('/login')
+    navigate(paths.LOGIN)
   };
 
   if (fullWidth) {

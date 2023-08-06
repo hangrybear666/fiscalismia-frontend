@@ -2,8 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Fiscalismia from './routes/Fiscalismia'
 import SignInSide from './components/SignInSide';
-import Content from './components/content/Content';
-import { resourceProperties as res } from './resources/resource_properties';
+import { paths } from './resources/router_navigation_paths';
 import { AuthProvider, ProtectedRoute } from './services/userAuthentication';
 import ErrorPage from './components/ErrorPage';
 import './index.css'
@@ -21,13 +20,13 @@ import {
         <Route
           index
           path="/"
-          element={<Navigate to="/login" />}
+          element={<Navigate to={paths.LOGIN} />}
           // loader={rootLoader}
           // action={rootAction}
           errorElement={<ErrorPage />}
         />
         <Route
-          path="/login"
+          path={paths.LOGIN}
           element={<SignInSide/>}
           // loader={rootLoader}
           // action={rootAction}
@@ -39,19 +38,13 @@ import {
         >
           {/* Level 1 */}
           <Route
-            path={`${res.APP_ROOT_PATH}/*`}
+            path={`${paths.APP_ROOT_PATH}/*`}
             element={<Fiscalismia/>}
             // loader={rootLoader}
             // action={rootAction}
             errorElement={<ErrorPage />}
           >
             {/* Level 2 */}
-            {/* <Route
-              path="test"
-              element={<ErrorPage/>}
-              errorElement={<ErrorPage />}
-            /> */}
-
           </Route>
         </Route>
         <Route

@@ -1,6 +1,6 @@
 import { Navigate, useNavigate, useRouteError,  useLocation, NavLink, isRouteErrorResponse } from 'react-router-dom';
 import { IconButton } from '@mui/material';
-import { resourceProperties as res } from '../resources/resource_properties';
+import { paths } from '../resources/router_navigation_paths';
 import Stack from '@mui/material/Stack';
 import HomeIcon from '@mui/icons-material/Home';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
@@ -63,14 +63,14 @@ function NavBtns() {
       <IconButton
         color="primary"
         variant="text"
-        onClick={() => {navigate(res.APP_ROOT_PATH)}}>
+        onClick={() => {navigate(paths.APP_ROOT_PATH)}}>
         <HomeIcon />
         Home
       </IconButton>
       <IconButton
         color="primary"
         variant="text"
-        onClick={() => {navigate('/login')}}>
+        onClick={() => {navigate(paths.LOGIN)}}>
         <VpnKeyIcon />
         Login
       </IconButton>

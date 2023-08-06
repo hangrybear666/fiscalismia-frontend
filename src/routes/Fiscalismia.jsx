@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,25 +6,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Navigator from '../components/Navigator';
-import Content from '../components/content/Content';
 import Header from '../components/Header';
-import SignInSide from '../components/SignInSide'
+import ContentHandler from '../components/ContentHandler';
 import { theme } from '../components/styling/Theme';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import { menuEntries } from '../components/minor/MenuEntries';
-import ErrorPage from '../components/ErrorPage';
 import { resourceProperties as res } from '../resources/resource_properties'
-
-import {
-  Outlet,
-  useLoaderData,
-  Form,
-  useNavigation,
-  NavLink,
-  redirect,
-  useSubmit,
-  Route,
-  Routes } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -41,7 +26,8 @@ function Copyright() {
 const drawerWidth = 256;
 
 export default function Fiscalismia() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [contentHeader, setContentHeader] = useState('');
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDrawerToggle = () => {
@@ -59,6 +45,7 @@ export default function Fiscalismia() {
           {isSmUp ? null : (
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
+              setContentHeader={setContentHeader}
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
@@ -67,28 +54,14 @@ export default function Fiscalismia() {
 
           <Navigator
             PaperProps={{ style: { width: drawerWidth } }}
+            setContentHeader={setContentHeader}
             sx={{ display: { sm: 'block', xs: 'none' } }}
           />
         </Box>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Header onDrawerToggle={handleDrawerToggle} />
+          <Header onDrawerToggle={handleDrawerToggle} contentHeader={contentHeader}/>
           <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-            <Routes>
-              {menuEntries.map(({ id: parentId, path: parentPath, children }) =>(
-                <React.Fragment key={parentId}>
-                  {children.map(({ id: childId, path: childPath }) => (
-                    <Route
-                      path={`/${parentPath}/${childPath}`}
-                      element={<Content contentRoute={`${parentPath}/${childPath}`}/>}
-                      errorElement={<ErrorPage />}
-                      key={childId}
-                    />
-                    ))
-                  }
-                </React.Fragment>
-                ))
-              }
-            </Routes>
+            <ContentHandler/>
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />

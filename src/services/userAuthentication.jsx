@@ -4,6 +4,7 @@ import {
   useLocation,
   Outlet
 } from 'react-router-dom';
+import { paths } from "../resources/router_navigation_paths";
 import jwt_decode from "jwt-decode";
 
 /**
@@ -86,7 +87,7 @@ export const isUserAuthenticated = (token, loginUserName = null) => {
  * @returns all children Routes being Protected if true; Navigates to redirectPath if false
  */
 export const ProtectedRoute = ({
-  redirectPath = '/login',
+  redirectPath = paths.LOGIN,
   children
 }) => {
   const location = useLocation();

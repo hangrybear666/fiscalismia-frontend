@@ -20,13 +20,9 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
 
-export default function Content({ show = true, contentRoute }) {
+
+export default function Content({ show = true, value }) {
   const [result, setResult] = useState([])
-  const [showResult, setShowResult] = useState(false)
-  const [postInput, setPostInput] = useState('')
-  const [putId, setPutId] = useState('')
-  const [putInput, setPutInput] = useState('')
-  const [deleteInput, setDeleteInput] = useState('')
 
   const inputChangeListener = (e) => {
     switch (e.target.id) {
@@ -97,8 +93,14 @@ export default function Content({ show = true, contentRoute }) {
   }
   return (
     <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
-      <Typography color="inherit" variant="h5" align="center">
-        {contentRoute}
+      <Typography color="inherit" variant="h5">
+        {value.header}
+      </Typography>
+      <Typography color="inherit" variant="h6">
+        {value.subHeader}
+      </Typography>
+      <Typography color="inherit" variant="body1">
+        {value.path}
       </Typography>
 
 

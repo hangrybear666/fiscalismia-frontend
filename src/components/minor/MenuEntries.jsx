@@ -1,4 +1,5 @@
 import { resourceProperties as res } from '../../resources/resource_properties'
+import { paths } from '../../resources/router_navigation_paths';
 import SavingsIcon from '@mui/icons-material/Savings';
 import EuroIcon from '@mui/icons-material/Euro';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
@@ -17,40 +18,35 @@ import AddchartIcon from '@mui/icons-material/Addchart';
 export const menuEntries = [
   {
     id: res.VARIABLE_EXPENSES,
-    path: 'variable_expenses',
     children: [
-      { id: res.OVERVIEW, path: 'overview', icon: <AnalyticsIcon />, active: true }, // TODO active weg
-      { id: res.STORES, path: 'stores', icon: <StorefrontIcon />},
-      { id: res.INDULGENCES, path: 'indulgences', icon: <LiquorIcon /> },
+      { id: res.OVERVIEW, path: paths.VARIABLE_EXPENSES_OVERVIEW, icon: <AnalyticsIcon />, },
+      { id: res.STORES, path: paths.VARIABLE_EXPENSES_STORES, icon: <StorefrontIcon />},
+      { id: res.INDULGENCES, path: paths.VARIABLE_EXPENSES_INDULGENCES, icon: <LiquorIcon /> },
     ],
   },
   {
     id: res.FIXED_COSTS,
-    path: 'fixed_costs',
     children: [
-      { id: res.OVERVIEW, path: 'overview', icon: <AnalyticsIcon /> },
-      { id: res.LIVING_ESSENTIALS, path: 'essentials', icon: <CottageIcon /> },
-      { id: res.RECREATION_RELAXATION, path: 'leisure', icon: <SportsEsportsIcon /> },
+      { id: res.OVERVIEW, path: paths.FIXED_COSTS_OVERVIEW, icon: <AnalyticsIcon /> },
+      { id: res.LIVING_ESSENTIALS, path: paths.FIXED_COSTS_LIVING_ESSENTIALS, icon: <CottageIcon /> },
+      { id: res.RECREATION_RELAXATION, path: paths.FIXED_COSTS_RECREATION_RELAXATION, icon: <SportsEsportsIcon /> },
     ],
   },
   {
     id: res.INCOME,
-    path: 'income',
     children: [
-      { id: res.OVERVIEW, path: 'overview', icon: <AnalyticsIcon /> },
-      { id: res.MONTHLY_BUDGET, path: 'budget', icon: <EuroIcon />},
-      { id: res.SALES, path: 'sales', icon: <CreditScoreIcon /> },
-      { id: res.SAVINGS, path: 'savings', icon: <SavingsIcon /> },
+      { id: res.OVERVIEW, path: paths.INCOME_OVERVIEW, icon: <AnalyticsIcon /> },
+      { id: res.MONTHLY_BUDGET, path: paths.INCOME_MONTHLY_BUDGET, icon: <EuroIcon />},
+      { id: res.SALES, path: paths.INCOME_SALES, icon: <CreditScoreIcon /> },
+      { id: res.SAVINGS, path: paths.INCOME_SAVINGS, icon: <SavingsIcon /> },
     ],
   },
-  ,
   {
     id: res.DEALS,
-    path: 'deals',
     children: [
-      { id: res.OVERVIEW, path: 'overview', icon: <PercentIcon /> },
-      { id: res.FOOD_PRICES, path: 'food_prices', icon: <ShoppingCartIcon />},
-      { id: res.GROCERY_DEALS, path: 'grocery_deals', icon: <AddShoppingCartIcon />},
+      { id: res.OVERVIEW, path: paths.DEALS_OVERVIEW, icon: <PercentIcon /> },
+      { id: res.FOOD_PRICES, path: paths.DEALS_FOOD_PRICES, icon: <ShoppingCartIcon />},
+      { id: res.GROCERY_DEALS, path: paths.DEALS_GROCERY_DEALS, icon: <AddShoppingCartIcon />},
     ],
   },
 ]

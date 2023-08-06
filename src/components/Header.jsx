@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Grid from '@mui/material/Grid';
@@ -20,6 +20,7 @@ const headerBgColor = '#012731' // Daintree
 // const headerBgColor = '#2a2f23' // Pine Tree
 function Header(props) {
   const { onDrawerToggle } = props;
+  const { header, subHeader } = props.contentHeader
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -88,8 +89,13 @@ function Header(props) {
         <Grid container alignItems="center" spacing={0}>
           <Grid item xs sx={{ mt: '25px', ml:2 }}>
             <Divider/>
-            <Typography color="inherit" variant="h5" sx={{ paddingTop:'5px',paddingBottom:'4px', ml:2 }}>
-              Content Header Placeholer
+            {/* HEADER */}
+            <Typography
+              color="inherit"
+              variant="h4"
+              fontWeight={300}
+              sx={{ paddingTop:'1px',paddingBottom:'1px', ml:2 }}>
+              {header}
             </Typography>
             <Divider/>
           </Grid>
@@ -101,11 +107,16 @@ function Header(props) {
         position="static"
         elevation={0}
         sx={{ zIndex: 0 }}>
-        <Tabs value={0} textColor="inherit">
-          <Tab label="Tab 1" />
-          <Tab label="Tab 2" />
-          <Tab label="Tab 3" />
-        </Tabs>
+          {/* SUBHEADER */}
+          <Typography
+            variant="h5"
+            letterSpacing={2}
+            fontSize={24}
+            textTransform={'uppercase'}
+            fontWeight={300}
+            sx={{ ml:4, paddingTop:1.5,paddingBottom:0.5 }} >
+            {subHeader}
+          </Typography>
       </AppBar>
     </React.Fragment>
   );

@@ -11,6 +11,7 @@ import LogoutBtn from './minor/LogoutBtn';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { menuEntries } from './minor/MenuEntries';
 import { resourceProperties as res } from '../resources/resource_properties'
+import { paths } from '../resources/router_navigation_paths';
 
 
 const item = {
@@ -38,20 +39,25 @@ export default function Navigator(props) {
   const navigate = useNavigate()
   let location = useLocation()
 
-  const handleMenuSelection = (parentPath, childPath) => {
-    const selectedPath = `${parentPath}/${childPath}`
-    setSelectedRelativePath(selectedPath)
-    navigate(selectedPath)
+  const handleMenuSelection = (parentId, childId, path) => {
+    const contentHeader = {
+      header: parentId,
+      subHeader: childId,
+      path: path
+    }
+    props.setContentHeader(contentHeader)
+    setSelectedRelativePath(path)
+    navigate(path)
   }
 
-  const isMenuEntrySelected = (parentPath, childPath) => {
-    const pathToTest = `${parentPath}/${childPath}`
-    const localLocation = location.pathname.split(`${res.APP_ROOT_PATH}/`)
-    return pathToTest === selectedRelativePath ? true : pathToTest === localLocation[1] ? true : false
+  const isMenuEntrySelected = (path) => {
+    const localLocation = location.pathname.split(`${paths.APP_ROOT_PATH}/`)
+    return path === selectedRelativePath ? true : path === localLocation[1] ? true : false
   }
 
   const isHomeSelected = () => {
-    if (location.pathname === res.APP_ROOT_PATH) {
+    if (location.pathname === paths.APP_ROOT_PATH) {
+      props.setContentHeader('')
       return true
     } else {
       return false
@@ -82,7 +88,7 @@ export default function Navigator(props) {
             sx={{ ...item }}
             onClick={() => {
               setSelectedRelativePath(null);
-              navigate(res.APP_ROOT_PATH);
+              navigate(paths.APP_ROOT_PATH);
             }}
             >
             <ListItemText
@@ -98,17 +104,17 @@ export default function Navigator(props) {
         </ListItem>
         <Divider/>
         {/* NAVBAR MENU */}
-        {menuEntries.map(({ id: parentId, path: parentPath, children }) => (
+        {menuEntries.map(({ id: parentId, children }) => (
           <Box key={parentId} >
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: '#ffffff' }}>{parentId}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, path: childPath, icon, active }) => (
+            {children.map(({ id: childId, path, icon}) => (
               <ListItem disablePadding key={childId}>
                 <ListItemButton
-                  selected={isMenuEntrySelected(parentPath, childPath)} // TODO
+                  selected={isMenuEntrySelected(path)}
                   sx={{...item}}
-                  onClick={() => handleMenuSelection(parentPath, childPath)}
+                  onClick={() => handleMenuSelection(parentId, childId, path)}
                 >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
