@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import ContentHandler from '../components/ContentHandler';
 import { theme } from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties'
+import { paths } from '../resources/router_navigation_paths';
 
 function Copyright() {
   return (
@@ -27,7 +28,7 @@ const drawerWidth = 256;
 
 export default function Fiscalismia() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [contentHeader, setContentHeader] = useState('');
+  const [contentHeader, setContentHeader] = useState({header: res.HOME, subHeader: '', path: paths.APP_ROOT_PATH})
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDrawerToggle = () => {

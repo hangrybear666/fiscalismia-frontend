@@ -57,7 +57,6 @@ export default function Navigator(props) {
 
   const isHomeSelected = () => {
     if (location.pathname === paths.APP_ROOT_PATH) {
-      props.setContentHeader('')
       return true
     } else {
       return false
@@ -88,6 +87,7 @@ export default function Navigator(props) {
             sx={{ ...item }}
             onClick={() => {
               setSelectedRelativePath(null);
+              props.setContentHeader({header: res.HOME, subHeader: '', path: paths.APP_ROOT_PATH})
               navigate(paths.APP_ROOT_PATH);
             }}
             >

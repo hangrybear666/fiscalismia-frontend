@@ -4,6 +4,7 @@ import { paths } from '../resources/router_navigation_paths';
 import { resourceProperties as res } from '../resources/resource_properties';
 import { Route, Routes, Navigate } from "react-router-dom";
 import TestData from './content/TestData'
+import VarExpOverview from './content/variableExpenses_OVERVIEW';
 
 export default function Content( props ) {
 
@@ -15,7 +16,7 @@ export default function Content( props ) {
     }
     switch (path) {
       case paths.VARIABLE_EXPENSES_OVERVIEW :
-        return <TestData value={value}/>
+        return <VarExpOverview value={value}/>
       case paths.VARIABLE_EXPENSES_STORES :
         return <TestData value={value}/>
       case paths.VARIABLE_EXPENSES_INDULGENCES :
