@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -34,7 +34,7 @@ function Header(props) {
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
-            <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
+            <Grid sx={{ display: { sm: 'none', xs: 'block' } }}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -44,15 +44,15 @@ function Header(props) {
                 <MenuIcon />
               </IconButton>
             </Grid>
-            <Grid item xs />
-            <Grid item>
+            <Grid xs />
+            <Grid>
               <Tooltip title="Alerts • No alerts">
                 <IconButton color="inherit">
                   <NotificationsIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
-            <Grid item>
+            <Grid>
                 <Tooltip title={res.GITHUB_REPOS}>
                   <IconButton
                     color="inherit"
@@ -66,14 +66,14 @@ function Header(props) {
                   </IconButton>
                 </Tooltip>
             </Grid>
-            <Grid item>
+            <Grid>
               <Tooltip title={res.SETTINGS}>
                 <IconButton color="inherit">
                   <SettingsIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
-            <Grid item>
+            <Grid>
               <LogoutBtn/>
             </Grid>
           </Grid>
@@ -87,7 +87,7 @@ function Header(props) {
         sx={{ zIndex: 0 }}
       >
         <Grid container alignItems="center" spacing={0}>
-          <Grid item xs sx={{ mt: '25px', ml:2 }}>
+          <Grid xs sx={{ mt: '25px', ml:2 }}>
             <Divider/>
             {/* HEADER */}
             <Typography
@@ -106,7 +106,8 @@ function Header(props) {
         component="div"
         position="static"
         elevation={0}
-        sx={{ zIndex: 0 }}>
+        sx={{ zIndex: 0,
+              borderBottom: '6px solid #756244' }}>
           {/* SUBHEADER */}
           <Typography
             variant="h5"

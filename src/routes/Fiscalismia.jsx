@@ -12,15 +12,17 @@ import { theme } from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties'
 import { paths } from '../resources/router_navigation_paths';
 
-function Copyright() {
+function Footer() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {`${res.COPYRIGHT} `}
-      <Link color="inherit" href={res.APP_URL}>
-        {res.APP_NAME}
-      </Link>{' '}
-      {new Date().getFullYear()}.
-    </Typography>
+    <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
+      <Typography variant="body2" color="text.secondary" align="center">
+        {`${res.COPYRIGHT} `}
+        <Link color="inherit" href={res.APP_URL}>
+          {res.APP_NAME}
+        </Link>{' '}
+        {new Date().getFullYear()}.
+      </Typography>
+    </Box>
   );
 }
 
@@ -61,12 +63,8 @@ export default function Fiscalismia() {
         </Box>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} contentHeader={contentHeader}/>
-          <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-            <ContentHandler/>
-          </Box>
-          <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
-            <Copyright />
-          </Box>
+          <ContentHandler/>
+          <Footer />
         </Box>
       </Box>
     </ThemeProvider>

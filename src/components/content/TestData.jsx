@@ -3,7 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Unstable_Grid2';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -19,10 +19,17 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
+import ContentCard from '../minor/ContentCard';
+import { getFabUtilityClass } from '@mui/material';
 
 
 export default function Content({ show = true, value }) {
   const [result, setResult] = useState([])
+  const [showResult, setShowResult] = useState(false)
+  const [postInput, setPostInput] = useState('')
+  const [putId, setPutId] = useState('')
+  const [putInput, setPutInput] = useState('')
+  const [deleteInput, setDeleteInput] = useState('')
 
   const inputChangeListener = (e) => {
     switch (e.target.id) {
@@ -43,6 +50,13 @@ export default function Content({ show = true, value }) {
 
   const getTest = async () => {
     const response = await pgConnections.getTest()
+    setResult(response)
+    setShowResult(true)
+  }
+
+  const getFixedCostsByEffectiveDate = async () => {
+    const response = await pgConnections.getFixedCostsByEffectiveDate('01.08.2023')
+    console.log(response)
     setResult(response)
     setShowResult(true)
   }
@@ -92,8 +106,8 @@ export default function Content({ show = true, value }) {
     )
   }
   return (
-    <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
-      <Typography color="inherit" variant="h5">
+    <Paper elevation={12} sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
+      {/* <Typography color="inherit" variant="h5">
         {value.header}
       </Typography>
       <Typography color="inherit" variant="h6">
@@ -101,30 +115,32 @@ export default function Content({ show = true, value }) {
       </Typography>
       <Typography color="inherit" variant="body1">
         {value.path}
-      </Typography>
-
+      </Typography> */}
 
       {/* DB REST TESTING */}
-      {/* <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
-        <Grid item xs={6}>
+      <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
+        <Grid xs={6}>
           <Typography color="inherit" variant="h5" align="center">
             Database Queries
           </Typography>
           <Divider sx={{ mb: 2, borderBottomWidth: '1px', borderBottomColor:'#333333'}} orientation="horizontal" role="presentation"/>
           <Grid container spacing={2} direction="column" alignItems="left">
-            <Grid item xs={12}>
-              <Button  sx={{ width: 1}} variant="contained" size="large" color="primary" onClick={getTest}>GET</Button>
+            <Grid xs={12}>
+              <Button  sx={{ width: 1}} variant="contained" size="large" color="secondary" onClick={getFixedCostsByEffectiveDate}>GET Fixed Costs</Button>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
+              <Button  sx={{ width: 1}} variant="contained" size="large" color="primary" onClick={getTest}>GET Test Data</Button>
+            </Grid>
+            <Grid xs={12}>
               <Box component="form" noValidate onSubmit={processPost}>
                 <FormControl sx={{ width: 1}}>
                   <InputLabel htmlFor="postInput">String for INSERT</InputLabel>
                   <FilledInput id="postInput" value={postInput} onChange={inputChangeListener}/>
-                  <Button type="submit" variant="contained" size="large" color="info">POST</Button>
+                  <Button type="submit" variant="contained" size="large" color="info">POST Test Data</Button>
                 </FormControl>
               </Box>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <Box component="form" noValidate
                 onSubmit={processPut}
                 sx={{
@@ -140,19 +156,19 @@ export default function Content({ show = true, value }) {
                   <InputLabel htmlFor="putInput">String for UPDATE</InputLabel>
                   <FilledInput id="putInput" size="small" value={putInput} onChange={inputChangeListener}/>
                 </FormControl>
-                <Button sx={{ width: 3/10}} type="submit" variant="contained" size="large" color="success">PUT</Button>
+                <Button sx={{ width: 3/10}} type="submit" variant="contained" size="large" color="success">PUT Test Data</Button>
               </Box>
             </Grid>
-            <Grid item xs={12} sx={{ mb:4 }}>
+            <Grid xs={12} sx={{ mb:4 }}>
               <Box component="form" noValidate onSubmit={processDelete}>
                 <FormControl sx={{ width: 1}}>
                   <InputLabel htmlFor="deleteInput">ID for DELETE</InputLabel>
                   <FilledInput id="deleteInput" type="number" size="small" inputProps={{ min: 0, max: 999 }} value={deleteInput} onChange={inputChangeListener}/>
-                  <Button type="submit" variant="contained" size="large" color="error">DELETE</Button>
+                  <Button type="submit" variant="contained" size="large" color="error">DELETE Test Data</Button>
                 </FormControl>
               </Box>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <Typography color="inherit" variant="h5" align="center">
                 Database Result
               </Typography>
@@ -161,7 +177,7 @@ export default function Content({ show = true, value }) {
             </Grid>
           </Grid>
         </Grid>
-      </Grid> */}
+      </Grid>
       {/* DB REST TESTING */}
 
 

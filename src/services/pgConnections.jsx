@@ -16,6 +16,26 @@ const login = async (credentials) => {
   }
 }
 
+/**
+ * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
+ * @returns Object containing a results array with all matched rows from the Database
+ */
+ export const getFixedCostsByEffectiveDate = async (validDate) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const getTest = async () => {
   if (!token) {
     setToken()
@@ -78,6 +98,7 @@ const deleteTest = async id => {
 
 export default {
   login,
+  getFixedCostsByEffectiveDate,
   getTest,
   postTest,
   putTest,

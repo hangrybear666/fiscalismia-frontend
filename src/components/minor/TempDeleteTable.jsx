@@ -21,6 +21,9 @@ export default function TempDeleteTable({ show, results  }) {
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell align="right">Description</TableCell>
+            <TableCell align="right">monthly_interval</TableCell>
+            <TableCell align="right">billed_cost</TableCell>
+            <TableCell align="right">monthly_cost</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -31,6 +34,9 @@ export default function TempDeleteTable({ show, results  }) {
             >
               <TableCell component="th" scope="row">{row.id}</TableCell>
               <TableCell align="right">{row.description}</TableCell>
+              {row?.monthly_interval ? <TableCell align="right">{row.monthly_interval}</TableCell> : null}
+              {row?.billed_cost ? <TableCell align="right">{row.billed_cost}</TableCell> : null}
+              {row?.monthly_cost ? <TableCell align="right">{row.monthly_cost}</TableCell> : null}
             </TableRow>
           ))}
         </TableBody>
