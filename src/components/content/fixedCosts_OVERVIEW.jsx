@@ -6,11 +6,13 @@ import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
 import CellWifiOutlinedIcon from '@mui/icons-material/CellWifiOutlined';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
-import { resourceProperties as res } from '../../resources/resource_properties';
+import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
+import WaterDamageOutlinedIcon from '@mui/icons-material/WaterDamageOutlined';
+import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate } from '../../services/pgConnections';
 
 const iconProperties = {
-  fontSize: 55,
+  fontSize: 55, 
   opacity: 0.5,
   boxShadow: 10,
   borderRadius:1,
@@ -39,10 +41,10 @@ function constructContentCardObject(header, amount, interval, details, icon, img
 
 function extractAndCondenseFixedCosts(fixedCosts) {
   let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, 'https://source.unsplash.com/random/?bills')
-  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, <LocalAtmOutlinedIcon sx={iconProperties}/>, 'no-img')
-  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, <CellWifiOutlinedIcon sx={iconProperties}/>, 'no-img')
-  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, <FitnessCenterOutlinedIcon sx={iconProperties}/>, 'no-img')
-  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, <SubscriptionsOutlinedIcon sx={iconProperties}/>, 'no-img')
+  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, null, 'no-img')
+  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, 'no-img')
+  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, null, 'no-img')
+  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, null, 'no-img')
   let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, 'no-img')
   let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, 'no-img')
   // Monthly Total Amount
@@ -51,8 +53,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .reduce((partialSum, a) => partialSum + parseFloat(a), 0));
   // Rent and Utilities
   let rentAndUtilitiesFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('miete') || row.description.toLowerCase().includes('strom')
-      || row.description.toLowerCase().includes('gas') )
+    .filter((row) => row.category === categories.LIVING_ESSENTIALS_KEY )
   rentAndUtilities.amount = Math.round(rentAndUtilitiesFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -60,7 +61,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .map((row) => row.description.trim())
   // DSL & Telephone
   let dslAndPhoneFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('dsl') || row.description.toLowerCase().includes('mobilfunk'))
+    .filter((row) => row.category === categories.INTERNET_AND_PHONE_KEY )
   dslAndPhone.amount = Math.round(dslAndPhoneFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -68,8 +69,8 @@ function extractAndCondenseFixedCosts(fixedCosts) {
       .map((row) => row.description.trim())
   // Sports and Health
   let sportsAndHealthFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('health') || row.description.toLowerCase().includes('supplements')
-      || row.description.toLowerCase().includes('gym') || row.description.toLowerCase().includes('sports'))
+    .filter((row) => row.category === categories.SPORTS_FACILITIES_KEY || row.category === categories.SUPPLEMENTS_HEALTH_KEY ||
+      row.category === categories.SUPPLEMENTS_PERFORMANCE_KEY ||  row.category === categories.PHYSIO_AND_HEALTH_COURSES_KEY)
   sportsAndHealth.amount = Math.round(sportsAndHealthFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -77,7 +78,8 @@ function extractAndCondenseFixedCosts(fixedCosts) {
       .map((row) => row.description.trim())
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('abonnement'))
+    .filter((row) => row.category === categories.LEISURE_GAMING_KEY || row.category === categories.LEISURE_MUSIC_PODCASTS_KEY || 
+      row.category === categories.LEISURE_TV_CINEMA_KEY)
   mediaAndEntertainment.amount = Math.round(mediaAndEntertainmentFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -85,7 +87,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
       .map((row) => row.description.trim())
   // Insurance
   let insuranceFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('versicherung'))
+    .filter((row) => row.category === categories.INSURANCE_KEY)
   insurance.amount = Math.round(insuranceFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -93,7 +95,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
       .map((row) => row.description.trim())
   // Student Loans
   let studentLoansFiltered = fixedCosts.results
-    .filter((row) => row.description.toLowerCase().includes('kredit') || row.description.toLowerCase().includes('bafög'))
+    .filter((row) => row.category === categories.STUDENT_LOANS_KEY)
   studentLoans.amount = Math.round(studentLoansFiltered
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
@@ -102,7 +104,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   return {monthlyTotalCost, rentAndUtilities, dslAndPhone, sportsAndHealth, mediaAndEntertainment, insurance, studentLoans}
 }
 
-export default function FixedCosts_OVERVIEW( props ) {
+export default function FixedCosts_Overview( props ) {
   // Default Template
   // const [header, setHeader ] = useState('Miete, Strom & Heizung')
   // const [amount, setAmount ] = useState('450€')
@@ -124,8 +126,6 @@ export default function FixedCosts_OVERVIEW( props ) {
   useEffect(() => {
     const getFixedCosts = async() => {
        let results = await getFixedCostsByEffectiveDate('2023-08-01') // TODO Frontend Parameter mittels Select oder Datepicker
-       console.log(`results from fixed cost query:
-        ${JSON.stringify(results)}`)
        setFixedCosts(results)
        let extractedFixedCosts = extractAndCondenseFixedCosts(results)
        setMonthlyTotalCost(extractedFixedCosts.monthlyTotalCost)
@@ -170,7 +170,7 @@ export default function FixedCosts_OVERVIEW( props ) {
       : null} */}
 
       <Grid xs={12} sx={{ mb:3 }}>
-        <ContentCard elevation={12} {...monthlyTotalCost}  />
+        <ContentCard elevation={12} {...monthlyTotalCost} imgHeight={330} />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
         <ContentCard {...rentAndUtilities}  />

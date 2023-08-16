@@ -19,7 +19,8 @@ const login = async (credentials) => {
 /**
  * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd) // TODO
  * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
- * @returns Object containing a results array with all matched rows from the Database
+ * @returns Object containing a results array with all fixed costs valid at provided date from the db
+ * @route /api/fiscalismia/fixed_costs/valid/:date
  */
  export const getFixedCostsByEffectiveDate = async (validDate) => {
   if (!token) {
@@ -30,6 +31,26 @@ const login = async (credentials) => {
       headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * @returns Object containing a results array with all fixed costs from the db
+ * @route /api/fiscalismia/fixed_costs
+ */
+export const getAllFixedCosts = async () => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/fixed_costs`, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -98,7 +119,6 @@ const deleteTest = async id => {
 
 export default {
   login,
-  getFixedCostsByEffectiveDate,
   getTest,
   postTest,
   putTest,

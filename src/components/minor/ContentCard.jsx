@@ -13,24 +13,24 @@ import { Paper } from '@mui/material';
 
 
 export default function ContentCard( props ) {
-  const { img, header, amount, interval, icon, details, elevation } = props
+  const { img, header, amount, interval, icon, details, elevation, imgHeight } = props
 
   return (
     <Card
       elevation={elevation ? elevation : 4}
       variant="elevation"
-      sx={{margin:1, height: '100%'}}
+      sx={{margin:0.5, height: '100%', border: '1px solid rgb(96,96,96,0.5)'}}
       square
     >
       {img ?
       <CardMedia
-        sx={{ height: 200 }}
+        sx={{ height: imgHeight ? imgHeight : 200 }}
         image={img}
         title={header}
       />
       : null}
-      <CardContent >
-        <Grid container spacing={1}>
+      <CardContent sx={{ padding:0 }}>
+        <Grid container spacing={1} sx={{ padding:0 }}>
 
           {/* HEADER */}
           <Grid
@@ -40,7 +40,7 @@ export default function ContentCard( props ) {
             xs={header ? 12 : 0}
           >
           {header ?
-          <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary" >
             {header}
           </Typography>
           : null }
@@ -57,12 +57,12 @@ export default function ContentCard( props ) {
           >
             <Stack >
               {amount ?
-              <Typography  sx={{ mt: 0.5 }} variant="h5" >
+              <Typography  sx={{ mt: 0.2 }} variant="h5" >
                 {amount}€
               </Typography>
               : null}
               {interval ?
-              <Typography variant="subtitle1" sx={{ mb: 0.5 }} color="text.secondary">
+              <Typography variant="subtitle1" sx={{ mb: 0.2 }} color="text.secondary">
                 {interval}
               </Typography>
               : null}
@@ -88,9 +88,10 @@ export default function ContentCard( props ) {
           <Grid xs={details ? 12 : 0}
             display="flex"
             justifyContent="center"
-            alignItems="center">
+            alignItems="center"
+            sx={{ paddingLeft:2, paddingRight:2}}>
             {details ?
-            <Typography sx={{ mt: 1 }} variant="body2">
+            <Typography noWrap sx={{ mt: 1 }} variant="body2">
               {details.map((e) => (
                 <React.Fragment key={e}>
                   • {e}

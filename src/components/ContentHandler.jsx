@@ -4,8 +4,10 @@ import { paths } from '../resources/router_navigation_paths';
 import { resourceProperties as res } from '../resources/resource_properties';
 import { Route, Routes, Navigate } from "react-router-dom";
 import TestData from './content/TestData'
-import VariableExpenses_OVERVIEW from './content/variableExpenses_OVERVIEW';
-import FixedCosts_OVERVIEW from './content/fixedCosts_OVERVIEW';
+import VariableExpenses_Overview from './content/variableExpenses_Overview';
+import FixedCosts_Overview from './content/fixedCosts_Overview';
+import FixedCosts_LivingEssentials from './content/fixedCosts_LivingEssentials';
+import FixedCosts_Leisure from './content/fixedCosts_Leisure';
 import Box from '@mui/material/Box';
 
 export default function Content( props ) {
@@ -18,17 +20,17 @@ export default function Content( props ) {
     }
     switch (path) {
       case paths.VARIABLE_EXPENSES_OVERVIEW :
-        return <VariableExpenses_OVERVIEW value={value}/>
+        return <VariableExpenses_Overview value={value}/>
       case paths.VARIABLE_EXPENSES_STORES :
         return <TestData value={value}/>
       case paths.VARIABLE_EXPENSES_INDULGENCES :
         return <TestData value={value}/>
       case paths.FIXED_COSTS_OVERVIEW :
-        return <FixedCosts_OVERVIEW/>
+        return <FixedCosts_Overview/>
       case paths.FIXED_COSTS_LIVING_ESSENTIALS :
-        return <TestData value={value}/>
+        return <FixedCosts_LivingEssentials value={value}/>
       case paths.FIXED_COSTS_RECREATION_RELAXATION :
-        return <TestData value={value}/>
+        return <FixedCosts_Leisure value={value}/>
       case paths.INCOME_OVERVIEW :
         return <TestData value={value}/>
       case paths.INCOME_MONTHLY_BUDGET :
