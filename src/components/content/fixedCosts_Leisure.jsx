@@ -6,6 +6,7 @@ import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import ContentChart_VerticalBar from '../minor/ContentChart_VerticalBar';
+import SelectDropdown from '../minor/SelectDropdown';
 
 const iconProperties = {
   fontSize: 55,
@@ -47,6 +48,10 @@ function filterMediaAndEntertainment(specificFixedCosts) {
     row.category === categories.LEISURE_TV_CINEMA_KEY)
 }
 
+function getUniqueEffectiveDates(fixedCosts) {
+  return Array.from(new Set(fixedCosts.map(e => e.effective_date)))
+}
+
 function extractCardData(specificFixedCosts) {
   let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, <FitnessCenterOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?fitness')
   let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, <SubscriptionsOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?cinema')
@@ -57,7 +62,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   sportsAndHealth.details = sportsAndHealthFiltered
-    .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
 
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts)
@@ -65,7 +70,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered
-    .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
   return { sportsAndHealth, mediaAndEntertainment }
 }
 
@@ -90,6 +95,11 @@ function constructContentChartObject( title, xAxis, dataSets, colors ) {
     return contentChartObj
 }
 
+/**
+ *
+ * @param {*} fixedCosts all fixed costs within db
+ * @returns contentChartObj constructed via helper method constructContentChartObject
+ */
 function extractChartData(fixedCosts) {
   // Sports and Health
   const sportsColors = {
@@ -100,7 +110,7 @@ function extractChartData(fixedCosts) {
   }
   const sportsAndHealthFiltered = filterSportsAndHealth(fixedCosts)
   // unique effective dates as string array
-  const sportsEffectiveDatesArr = Array.from(new Set(sportsAndHealthFiltered.map(e => e.effective_date)))
+  const sportsEffectiveDatesArr = getUniqueEffectiveDates(sportsAndHealthFiltered)
   sportsEffectiveDatesArr.sort()
   // only read dates from datetime
   const sportsXaxis = sportsEffectiveDatesArr.map(e => e.substring(0,10))
@@ -160,7 +170,7 @@ function extractChartData(fixedCosts) {
   }
   let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(fixedCosts)
   // unique effective dates as string array
-  const mediaEffectiveDatesArr = Array.from(new Set(sportsAndHealthFiltered.map(e => e.effective_date)))
+  const mediaEffectiveDatesArr = getUniqueEffectiveDates(mediaAndEntertainmentFiltered)
   mediaEffectiveDatesArr.sort()
   // only read dates from datetime
   const mediaXaxis = mediaEffectiveDatesArr.map(e => e.substring(0,10))
@@ -204,32 +214,51 @@ function extractChartData(fixedCosts) {
 }
 
 export default function FixedCosts_Leisure( props ) {
-  // Default Template
   // Fixed Costs from DB
   const [sportsAndHealthCard, setSportsAndHealthCard] = useState(null)
   const [mediaAndEntertainmentCard, setMediaAndEntertainmentCard] = useState(null)
   const [sportsAndHealthChart, setSportsAndHealthChart] = useState(null)
   const [mediaAndEntertainmentChart, setMediaAndEntertainmentChart] = useState(null)
+  const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
+  const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
+
+  const handleSelect = (selected) => {
+    setSelectedEffectiveDate(selected)
+  }
 
   useEffect(() => {
     const getFixedCosts = async() => {
-      // Fixed Costs valid at a specific date
-      let specificfixedCosts = await getFixedCostsByEffectiveDate('2023-08-01') // TODO Frontend Parameter mittels Select oder Datepicker
-      let selectedFixedCosts = extractCardData(specificfixedCosts)
-      setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth)
-      setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment)
       // All fixed costs in the DB
       let fixedCosts = await getAllFixedCosts();
+      let effectiveDateSelectItems = getUniqueEffectiveDates(fixedCosts.results)
+      if (!selectedEffectiveDate) {
+        // Initialize selection
+        setSelectedEffectiveDate(effectiveDateSelectItems[0])
+      }
+      setEffectiveDateSelectItems(effectiveDateSelectItems)
       let allFixedCosts = extractChartData(fixedCosts)
       setSportsAndHealthChart(allFixedCosts.sportsAndHealth)
       setMediaAndEntertainmentChart(allFixedCosts.mediaAndEntertainment)
+      // Fixed Costs valid at a specific date
+      let specificfixedCosts = await getFixedCostsByEffectiveDate(selectedEffectiveDate ? selectedEffectiveDate.substring(0,10) : effectiveDateSelectItems ? effectiveDateSelectItems[0].substring(0,10) : '2023-08-01')
+      let selectedFixedCosts = extractCardData(specificfixedCosts)
+      setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth)
+      setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment)
      }
      getFixedCosts();
-     }, []
+     }, [selectedEffectiveDate]
   )
 
   return (
     <Grid container spacing={4}>
+      <Grid  sm={12} >
+        <SelectDropdown
+          selectLabel={res.DATE}
+          selectItems={effectiveDateSelectItems}
+          selectedValue={selectedEffectiveDate}
+          handleSelect={handleSelect}
+        />
+      </Grid>
       <Grid  md={12} xl={4}>
         <ContentCard {...sportsAndHealthCard} imgHeight={300}/>
       </Grid>

@@ -51,7 +51,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   rentAndUtilities.details = rentAndUtilitiesFiltered
-    .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
   // DSL & Telephone
   let dslAndPhoneFiltered = fixedCosts.results
     .filter((row) => row.category === categories.INTERNET_AND_PHONE_KEY )
@@ -59,7 +59,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   dslAndPhone.details = dslAndPhoneFiltered
-      .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
   // Insurance
   let insuranceFiltered = fixedCosts.results
     .filter((row) => row.category === categories.INSURANCE_KEY)
@@ -67,7 +67,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   insurance.details = insuranceFiltered
-      .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
   // Student Loans
   let studentLoansFiltered = fixedCosts.results
     .filter((row) =>  row.category === categories.STUDENT_LOANS_KEY)
@@ -75,7 +75,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   studentLoans.details = studentLoansFiltered
-      .map((row) => row.description.trim())
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
   return {rentAndUtilities, dslAndPhone, insurance, studentLoans}
 }
 

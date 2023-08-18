@@ -4,6 +4,8 @@ export const resourceProperties = {
   OVERVIEW: 'Übersicht',
   HOME: 'Home',
   DEALS: 'Angebote',
+  DATE: 'Datum',
+  EURO: '€',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   GROCERIES: 'Lebensmittel',
