@@ -7,22 +7,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../services/userAuthentication';
+import { invalidateSession, useAuth } from '../../services/userAuthentication';
 import { resourceProperties as res } from '../../resources/resource_properties'
 import { paths } from '../../resources/router_navigation_paths';
 
 export default function LogoutBtn({ fullWidth }) {
-  const { setToken, setLoginUserName,  setAuthenticated } = useAuth()
   const navigate = useNavigate();
+  const { setToken, setLoginUserName,  setAuthenticated } = useAuth()
 
   const handleLogout = (e) => {
     e.preventDefault();
     console.log("Logging Out...")
-    window.localStorage.removeItem('jwt-token')
-    window.localStorage.removeItem('loginUserName')
-    setToken(null)
-    setLoginUserName(null)
-    setAuthenticated(false)
+    invalidateSession( setToken, setLoginUserName,  setAuthenticated )
     navigate(paths.LOGIN)
   };
 

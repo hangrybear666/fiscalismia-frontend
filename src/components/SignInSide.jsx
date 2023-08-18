@@ -59,7 +59,6 @@ export default function SignInSide() {
     if (isJwtToken(response)) {
       window.localStorage.setItem('jwt-token', response)
       window.localStorage.setItem('loginUserName', username)
-      console.log(`jwt-token in localStorage: ${window.localStorage.getItem('jwt-token')}`)
       setLoginUserName(username)
       setToken(response)
       if (isUserAuthenticated(response, username)) {

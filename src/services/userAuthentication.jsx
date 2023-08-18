@@ -60,6 +60,15 @@ export const isJwtToken = (token) => {
   return user.userName ? true : false
 }
 
+export const invalidateSession = ( setToken, setLoginUserName,  setAuthenticated ) => {
+  window.localStorage.removeItem('jwt-token')
+  window.localStorage.removeItem('loginUserName')
+  setToken(null)
+  setLoginUserName(null)
+  setAuthenticated(false)
+  console.info('Invalidated session.')
+}
+
 /**
  * decodes a provided token and compares the contained user objects userName field with the loginUserName parameter
  * @param {*} token jwt-token
@@ -68,12 +77,18 @@ export const isJwtToken = (token) => {
  */
 export const isUserAuthenticated = (token, loginUserName = null) => {
   if (!token) {
-    console.log("TOKEN UNDEFINED")
+    console.error("Token undefined.")
     return false
   }
   const decodedToken = jwt_decode(token)
   if (decodedToken?.user?.userName === loginUserName) {
-    console.log(`User [${loginUserName}] successfully authenticated`)
+    const secondsSinceEpoch = Math.floor(new Date().getTime() / 1000)
+    const tokenExpiresAt = decodedToken.exp
+    if (tokenExpiresAt < secondsSinceEpoch) {
+      console.info(`Token expired [${secondsSinceEpoch - tokenExpiresAt}] seconds ago.`)
+      return false
+    }
+    console.info(`User [${loginUserName}] successfully authenticated`)
     return true
   } else {
     console.error('Token Authentication failed.')
@@ -91,12 +106,10 @@ export const ProtectedRoute = ({
   children
 }) => {
   const location = useLocation();
-  const { token, loginUserName } = useAuth()
-  // const token = window.localStorage.getItem('jwt-token')
-  // const loginUserName = window.localStorage.getItem('loginUserName')
-
+  const { token, loginUserName, setToken, setLoginUserName,  setAuthenticated } = useAuth()
   if (!isUserAuthenticated(token, loginUserName)) {
-    console.error("PROTECTED ROUTE ACCESS [DENIED]")
+    console.info("PROTECTED ROUTE ACCESS [DENIED]")
+    invalidateSession(setToken, setLoginUserName,  setAuthenticated)
     return <Navigate to={redirectPath} replace state={{ from: location }} />;
   }
 
