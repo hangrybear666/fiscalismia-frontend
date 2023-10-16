@@ -8,11 +8,13 @@ import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
 import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
 import WaterDamageOutlinedIcon from '@mui/icons-material/WaterDamageOutlined';
+import ContentChart_VerticalBar from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
-import { getFixedCostsByEffectiveDate } from '../../services/pgConnections';
+import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
+import SelectDropdown from '../minor/SelectDropdown';
 
 const iconProperties = {
-  fontSize: 55, 
+  fontSize: 55,
   opacity: 0.5,
   boxShadow: 10,
   borderRadius:1,
@@ -37,6 +39,60 @@ function constructContentCardObject(header, amount, interval, details, icon, img
     contentCardObj.img = null
   }
   return contentCardObj
+}
+
+
+function constructContentChartObject( title, xAxis, dataSets, colors ) {
+  const contentChartObj =
+    {
+    chartTitle: title,
+    labels: xAxis,
+    dataSet1: dataSets?.dataSet1,
+    dataSet1Name: dataSets?.dataSet1Name,
+    color1: colors?.color1,
+    }
+    return contentChartObj
+}
+
+function getUniqueEffectiveDates(fixedCosts) {
+  return Array.from(new Set(fixedCosts.map(e => e.effective_date)))
+}
+
+/**
+ *
+ * @param {*} fixedCosts all fixed costs within db
+ * @returns contentChartObj constructed via helper method constructContentChartObject
+ */
+function extractChartData(fixedCosts) {
+  // Sports and Health
+  const overviewColors = {
+    color1: '',
+  }
+  // No filtering of overall results required
+  const overviewFiltered = fixedCosts.results
+  // unique effective dates as string array
+  const overviewDatesArr = getUniqueEffectiveDates(overviewFiltered)
+  overviewDatesArr.sort()
+  // only read date string from datetime
+  const overviewXaxis = overviewDatesArr.map(e => e.substring(0,10))
+  let overviewDataset = []
+  // for each unique date create an xAxis array with summed up monthly_cost values
+  overviewDatesArr.forEach( (xAxisEntry) => {
+    overviewDataset.push(
+      overviewFiltered
+      .filter(e => e.effective_date === xAxisEntry)
+      .map((row) => row.monthly_cost)
+      .reduce((partialSum, add) => partialSum + parseFloat(add), 0)
+    )
+  } )
+
+  const overviewDataSets = {
+    dataSet1: overviewDataset,
+    dataSet1Name: res.FIXED_COSTS_MONHTLY_COST,
+  }
+  let overview = constructContentChartObject(res.FIXED_COSTS_MONHTLY_COST, overviewXaxis, overviewDataSets, overviewColors)
+
+  return { overview }
 }
 
 function extractAndCondenseFixedCosts(fixedCosts) {
@@ -78,7 +134,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
       .map((row) => row.description.trim())
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = fixedCosts.results
-    .filter((row) => row.category === categories.LEISURE_GAMING_KEY || row.category === categories.LEISURE_MUSIC_PODCASTS_KEY || 
+    .filter((row) => row.category === categories.LEISURE_GAMING_KEY || row.category === categories.LEISURE_MUSIC_PODCASTS_KEY ||
       row.category === categories.LEISURE_TV_CINEMA_KEY)
   mediaAndEntertainment.amount = Math.round(mediaAndEntertainmentFiltered
     .map((row) => row.monthly_cost)
@@ -105,13 +161,6 @@ function extractAndCondenseFixedCosts(fixedCosts) {
 }
 
 export default function FixedCosts_Overview( props ) {
-  // Default Template
-  // const [header, setHeader ] = useState('Miete, Strom & Heizung')
-  // const [amount, setAmount ] = useState('450€')
-  // const [interval, setInterval ] = useState('monatlich')
-  // const [details, setDetails ] = useState(['- 360€ Miete','- 50€ Strom','- 40€ Gas'])
-  // const [img, setImg ] = useState('https://source.unsplash.com/random')
-  // const [icon, setIcon ] = useState(<FireplaceIcon sx={iconProperties} />)
   // Fixed Costs from DB
   const [fixedCosts, setFixedCosts] = useState([])
   const [monthlyTotalCost, setMonthlyTotalCost] = useState(null)
@@ -122,55 +171,59 @@ export default function FixedCosts_Overview( props ) {
   const [insurance, setInsurance] = useState(null)
   const [studentLoans, setStudentLoans] = useState(null)
 
+  const [allFixedCostsChart, setAllFixedCostsChart] = useState(null)// TODO
+  const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
+  const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
+
+  const handleSelect = (selected) => {
+    setSelectedEffectiveDate(selected)
+  }
 
   useEffect(() => {
     const getFixedCosts = async() => {
-       let results = await getFixedCostsByEffectiveDate('2023-08-01') // TODO Frontend Parameter mittels Select oder Datepicker
-       setFixedCosts(results)
-       let extractedFixedCosts = extractAndCondenseFixedCosts(results)
-       setMonthlyTotalCost(extractedFixedCosts.monthlyTotalCost)
-       setRentAndUtilities(extractedFixedCosts.rentAndUtilities)
-       setDslAndPhone(extractedFixedCosts.dslAndPhone)
-       setSportsAndHealth(extractedFixedCosts.sportsAndHealth)
-       setMediaAndEntertainment(extractedFixedCosts.mediaAndEntertainment)
-       setInsurance(extractedFixedCosts.insurance)
-       setStudentLoans(extractedFixedCosts.studentLoans)
+      // All fixed costs in the DB
+      let fixedCosts = await getAllFixedCosts();
+      let effectiveDateSelectItems = getUniqueEffectiveDates(fixedCosts.results)
+      if (!selectedEffectiveDate) {
+        // Initialize selection
+        setSelectedEffectiveDate(effectiveDateSelectItems[0])
+      }
+      setEffectiveDateSelectItems(effectiveDateSelectItems)
+      let allFixedCosts = extractChartData(fixedCosts)
+      setAllFixedCostsChart(allFixedCosts.overview)
+
+      let results = await getFixedCostsByEffectiveDate(
+        selectedEffectiveDate
+        ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
+        : effectiveDateSelectItems
+        ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
+        : '2023-08-01'); // Fallback auf übergebenes Datum
+      setFixedCosts(results)
+      let extractedFixedCosts = extractAndCondenseFixedCosts(results)
+      setMonthlyTotalCost(extractedFixedCosts.monthlyTotalCost)
+      setRentAndUtilities(extractedFixedCosts.rentAndUtilities)
+      setDslAndPhone(extractedFixedCosts.dslAndPhone)
+      setSportsAndHealth(extractedFixedCosts.sportsAndHealth)
+      setMediaAndEntertainment(extractedFixedCosts.mediaAndEntertainment)
+      setInsurance(extractedFixedCosts.insurance)
+      setStudentLoans(extractedFixedCosts.studentLoans)
      }
      getFixedCosts();
-     }, []
+     }, [selectedEffectiveDate]
   )
 
   return (
-    <Grid container spacing={2}>
-      {/* <Grid xs={6} md={4}>
-        <ContentCard img={img} header={header} amount={amount} interval={interval} icon={icon} details={details} />
+    <Grid container spacing={3}>
+      <Grid  sm={12} >
+        <SelectDropdown
+          selectLabel={res.DATE}
+          selectItems={effectiveDateSelectItems}
+          selectedValue={selectedEffectiveDate}
+          handleSelect={handleSelect}
+        />
       </Grid>
-      <Grid xs={6} md={4}>
-        <ContentCard img={img} amount={amount} interval={interval}  />
-      </Grid>
-      <Grid xs={6} md={4}>
-        <ContentCard img={img} amount={amount} details={details} />
-      </Grid>
-      <Grid xs={6} md={4}>
-        <ContentCard header={header} details={details} />
-      </Grid>
-      <Grid xs={6} md={4}>
-        <ContentCard header={header} icon={icon} details={details} />
-      </Grid> */}
-
-      {/* {fixedCosts?.results ?
-      fixedCosts.results.map((row, index) => {
-        let turnus = row.monthly_interval === '1.00' ? 'monatlich' : row.monthly_interval === '12.00' ? 'jährlich' : `alle ${row.monthly_interval} Monate`
-        return (
-        <Grid key={row.id} xs={4} md={3}>
-          <ContentCard img={`https://source.unsplash.com/random/${index}`} header={row.description} interval={turnus} amount={row.billed_cost} />
-        </Grid>
-        )
-      })
-      : null} */}
-
-      <Grid xs={12} sx={{ mb:3 }}>
-        <ContentCard elevation={12} {...monthlyTotalCost} imgHeight={330} />
+      <Grid xs={12}>
+        <ContentCard elevation={12} {...monthlyTotalCost} imgHeight={250} />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
         <ContentCard {...rentAndUtilities}  />
@@ -189,6 +242,9 @@ export default function FixedCosts_Overview( props ) {
       </Grid>
       <Grid xs={6} md={4} xl={2}>
         <ContentCard {...insurance}  />
+      </Grid>
+      <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
+        <ContentChart_VerticalBar {...allFixedCostsChart} barCount={1} selectedLabel={selectedEffectiveDate}/>
       </Grid>
     </Grid>
   )

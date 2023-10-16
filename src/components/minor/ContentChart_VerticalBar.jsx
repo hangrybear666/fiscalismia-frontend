@@ -8,10 +8,11 @@ import {
   Tooltip,
   Legend
 } from "chart.js"
+import annotationPlugin from 'chartjs-plugin-annotation';
 import { Bar } from "react-chartjs-2"
 import { faker } from '@faker-js/faker';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin)
 
 /**
  * Vertical Bar Chart receiving between 1 and 3 datasets for the y-axis whereas labels describe the x-axis
@@ -20,6 +21,33 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 export default function ContentChart( props ) {
 
   const labels = props.labels ? props.labels : ["Mai 2020 - Juni 2022", "Juli 2022 - Dezember 2022", "Januar 2023 - Mai 2023", "Juni 2023 - aktuell"]
+  const selectedLabel = props.selectedLabel
+  let selectedLabelIndex = -1
+  let maxValueYaxis = 0
+  // finds Index of selected Label for x Axis box highlighting via chartjs-plugin-annotation
+  if (selectedLabel) {
+    labels.forEach( (e,i) => {
+      if (e === selectedLabel)
+        selectedLabelIndex = i
+    })
+    // finds maximum Y value within all datasets for y Axis box highlighting via chartjs-plugin-annotation
+    if (props.dataSet1) {
+      let currentMax = Math.max(...props.dataSet1)
+      maxValueYaxis = currentMax
+    }
+    if (props.dataSet2) {
+      let currentMax = Math.max(...props.dataSet2)
+      maxValueYaxis < currentMax ? currentMax : maxValueYaxis
+    }
+    if (props.dataSet3) {
+      let currentMax = Math.max(...props.dataSet3)
+      maxValueYaxis < currentMax ? currentMax : maxValueYaxis
+    }
+    if (props.dataSet4) {
+      let currentMax = Math.max(...props.dataSet4)
+      maxValueYaxis < currentMax ? currentMax : maxValueYaxis
+    }
+  }
 
   const options = {
     responsive: true,
@@ -30,6 +58,19 @@ export default function ContentChart( props ) {
       title: {
         display: true,
         text: props.chartTitle ? props.chartTitle  : "Chart.js Bar Chart"
+      },
+      annotation: {
+        annotations: {
+          box1: {
+            type: 'box',
+            xMin: selectedLabelIndex !== -1 ? selectedLabelIndex - 0.5 : -1,
+            xMax: selectedLabelIndex !== -1 ? selectedLabelIndex + 0.5 : -1,
+            yMin: 0,
+            yMax: Math.ceil(maxValueYaxis) +1,
+            drawTime: 'beforeDraw',
+            backgroundColor: 'rgba(235,165,62,0.2)'
+          }
+        }
       }
     }
   }

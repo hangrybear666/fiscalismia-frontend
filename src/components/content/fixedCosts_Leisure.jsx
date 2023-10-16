@@ -27,7 +27,7 @@ function constructContentCardObject(header, amount, interval, details, icon, img
     amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
     interval: turnus,
     details: details,
-    img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
+    img: img ? img : `https://source.unsplash.com/random/?dollar&${Math.floor(Math.random() * 100)}`,
     icon: icon
   }
   if (img === 'no-img') {
@@ -240,7 +240,12 @@ export default function FixedCosts_Leisure( props ) {
       setSportsAndHealthChart(allFixedCosts.sportsAndHealth)
       setMediaAndEntertainmentChart(allFixedCosts.mediaAndEntertainment)
       // Fixed Costs valid at a specific date
-      let specificfixedCosts = await getFixedCostsByEffectiveDate(selectedEffectiveDate ? selectedEffectiveDate.substring(0,10) : effectiveDateSelectItems ? effectiveDateSelectItems[0].substring(0,10) : '2023-08-01')
+      let specificfixedCosts = await getFixedCostsByEffectiveDate(
+        selectedEffectiveDate
+        ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
+        : effectiveDateSelectItems
+        ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
+        : '2023-08-01'); // Fallback auf übergebenes Datum
       let selectedFixedCosts = extractCardData(specificfixedCosts)
       setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth)
       setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment)
@@ -250,7 +255,7 @@ export default function FixedCosts_Leisure( props ) {
   )
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={2}>
       <Grid  sm={12} >
         <SelectDropdown
           selectLabel={res.DATE}
@@ -260,16 +265,16 @@ export default function FixedCosts_Leisure( props ) {
         />
       </Grid>
       <Grid  md={12} xl={4}>
-        <ContentCard {...sportsAndHealthCard} imgHeight={300}/>
+        <ContentCard {...sportsAndHealthCard} imgHeight={275}/>
       </Grid>
       <Grid  md={12} xl={8} display="flex" alignItems="center" justifyContent="center">
-        <ContentChart_VerticalBar {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH}/>
+        <ContentChart_VerticalBar {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
       </Grid>
       <Grid md={12} xl={4}>
-        <ContentCard {...mediaAndEntertainmentCard} imgHeight={300}/>
+        <ContentCard {...mediaAndEntertainmentCard} imgHeight={275}/>
       </Grid>
-      <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center">
-        <ContentChart_VerticalBar {...mediaAndEntertainmentChart} barCount={3}/>
+      <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
+        <ContentChart_VerticalBar {...mediaAndEntertainmentChart} barCount={3} selectedLabel={selectedEffectiveDate}/>
       </Grid>
     </Grid>
   )

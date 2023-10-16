@@ -19,7 +19,12 @@ export default function ContentCard( props ) {
     <Card
       elevation={elevation ? elevation : 4}
       variant="elevation"
-      sx={{margin:0.5, height: '100%', border: '1px solid rgb(96,96,96,0.5)'}}
+      sx={{
+        margin:0,
+        height: '100%',
+        border: '1px solid rgb(64,64,64,0.5)',
+        paddingBottom:1.5
+         }}
       square
     >
       {img ?
@@ -89,13 +94,13 @@ export default function ContentCard( props ) {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ paddingLeft:2, paddingRight:2}}>
+            sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
             {details ?
             <Typography noWrap sx={{ mt: 1 }} variant="body2">
-              {details.map((e) => (
+              {details.map((e,i) => (
                 <React.Fragment key={e}>
                   • {e}
-                  <br />
+                  {i < details.length -1 ? <br /> : null}
                 </React.Fragment>
               ))}
             </Typography>

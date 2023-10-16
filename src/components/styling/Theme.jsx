@@ -98,6 +98,16 @@ export let theme = createTheme({
           },
         },
       },
+      MuiCardContent: {
+        styleOverrides: {
+          root: {
+            padding: 0,
+            "&:last-child": {
+              paddingBottom: '0px',
+            },
+          },
+        },
+      },
       MuiIconButton: {
         styleOverrides: {
           root: {

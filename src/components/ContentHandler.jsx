@@ -53,7 +53,7 @@ export default function Content( props ) {
   }
 
   return (
-    <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
+    <Box component="main" sx={{ flex: 1, py: 3, px: 3, bgcolor: '#eaeff1' }}>
       <Routes>
         {menuEntries.map(({ id: parentId, children }) =>(
           <React.Fragment key={parentId}>
