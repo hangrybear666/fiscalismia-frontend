@@ -45,7 +45,7 @@ export default function ContentCard( props ) {
             xs={header ? 12 : 0}
           >
           {header ?
-          <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary" >
+          <Typography variant="overline" sx={{ fontSize: 14, paddingX: 2 }} color="text.secondary" >
             {header}
           </Typography>
           : null }

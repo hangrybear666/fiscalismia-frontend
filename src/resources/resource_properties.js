@@ -51,7 +51,7 @@ export const resourceProperties = {
 
 export const fixedCostCategories = {
   LIVING_ESSENTIALS_KEY: 'LIVING_ESSENTIALS',
-  LIVING_ESSENTIALS_VALUE: 'Lebensnotwendiges',
+  LIVING_ESSENTIALS_VALUE: 'Miete & Nebenkosten',
   INTERNET_AND_PHONE_KEY: 'INTERNET_AND_PHONE',
   INTERNET_AND_PHONE_VALUE: 'Internet & Mobilfunk',
   INSURANCE_KEY: 'INSURANCE',
