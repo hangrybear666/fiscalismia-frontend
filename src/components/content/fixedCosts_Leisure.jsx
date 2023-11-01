@@ -5,7 +5,7 @@ import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
-import ContentChart_VerticalBar from '../minor/ContentChart_VerticalBar';
+import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
 
 const iconProperties = {
@@ -42,8 +42,8 @@ function filterSportsAndHealth(fixedCosts) {
     row.category === categories.SUPPLEMENTS_PERFORMANCE_KEY ||  row.category === categories.PHYSIO_AND_HEALTH_COURSES_KEY)
 }
 
-function filterMediaAndEntertainment(specificFixedCosts) {
-  return specificFixedCosts.results
+function filterMediaAndEntertainment(fixedCosts) {
+  return fixedCosts.results
     .filter((row) => row.category === categories.LEISURE_GAMING_KEY || row.category === categories.LEISURE_MUSIC_PODCASTS_KEY ||
     row.category === categories.LEISURE_TV_CINEMA_KEY)
 }
@@ -51,29 +51,6 @@ function filterMediaAndEntertainment(specificFixedCosts) {
 function getUniqueEffectiveDates(fixedCosts) {
   return Array.from(new Set(fixedCosts.map(e => e.effective_date)))
 }
-
-function extractCardData(specificFixedCosts) {
-  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, <FitnessCenterOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?fitness')
-  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, <SubscriptionsOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?cinema')
-
-  // Sports and Health
-  let sportsAndHealthFiltered = filterSportsAndHealth(specificFixedCosts)
-  sportsAndHealth.amount = Math.round(sportsAndHealthFiltered
-    .map((row) => row.monthly_cost)
-    .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
-  sportsAndHealth.details = sportsAndHealthFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
-
-  // Media and Entertainment
-  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts)
-  mediaAndEntertainment.amount = Math.round(mediaAndEntertainmentFiltered
-    .map((row) => row.monthly_cost)
-    .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
-  mediaAndEntertainment.details = mediaAndEntertainmentFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
-  return { sportsAndHealth, mediaAndEntertainment }
-}
-
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
   const contentChartObj =
     {
@@ -97,10 +74,10 @@ function constructContentChartObject( title, xAxis, dataSets, colors ) {
 
 /**
  *
- * @param {*} fixedCosts all fixed costs within db
+ * @param {*} allFixedCosts all fixed costs within db
  * @returns contentChartObj constructed via helper method constructContentChartObject
  */
-function extractChartData(fixedCosts) {
+function extractChartData(allFixedCosts) {
   // Sports and Health
   const sportsColors = {
     color1: '',
@@ -108,7 +85,7 @@ function extractChartData(fixedCosts) {
     color3: '',
     color4: '',
   }
-  const sportsAndHealthFiltered = filterSportsAndHealth(fixedCosts)
+  const sportsAndHealthFiltered = filterSportsAndHealth(allFixedCosts)
   // unique effective dates as string array
   const sportsEffectiveDatesArr = getUniqueEffectiveDates(sportsAndHealthFiltered)
   sportsEffectiveDatesArr.sort()
@@ -168,7 +145,7 @@ function extractChartData(fixedCosts) {
     color2: '',
     color3: '',
   }
-  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(fixedCosts)
+  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(allFixedCosts)
   // unique effective dates as string array
   const mediaEffectiveDatesArr = getUniqueEffectiveDates(mediaAndEntertainmentFiltered)
   mediaEffectiveDatesArr.sort()
@@ -213,12 +190,42 @@ function extractChartData(fixedCosts) {
   return { sportsAndHealth, mediaAndEntertainment }
 }
 
+/**
+ *  Extracts information of specific fixed costs valid at a given date
+ *  to display in cards dependent on the selected effective date
+ * @param {*} specificFixedCosts
+ * @returns
+ */
+function extractCardData(specificFixedCosts) {
+  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, <FitnessCenterOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?fitness')
+  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, <SubscriptionsOutlinedIcon sx={iconProperties}/>, 'https://source.unsplash.com/random/?cinema')
+
+  // Sports and Health
+  let sportsAndHealthFiltered = filterSportsAndHealth(specificFixedCosts)
+  sportsAndHealth.amount = Math.round(sportsAndHealthFiltered
+    .map((row) => row.monthly_cost)
+    .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
+  sportsAndHealth.details = sportsAndHealthFiltered
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+
+  // Media and Entertainment
+  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts)
+  mediaAndEntertainment.amount = Math.round(mediaAndEntertainmentFiltered
+    .map((row) => row.monthly_cost)
+    .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
+  mediaAndEntertainment.details = mediaAndEntertainmentFiltered
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+  return { sportsAndHealth, mediaAndEntertainment }
+}
+
 export default function FixedCosts_Leisure( props ) {
-  // Fixed Costs from DB
+  // Selected Specific Fixed Costs
   const [sportsAndHealthCard, setSportsAndHealthCard] = useState(null)
   const [mediaAndEntertainmentCard, setMediaAndEntertainmentCard] = useState(null)
+  // All Fixed Costs Visualized in Barchart
   const [sportsAndHealthChart, setSportsAndHealthChart] = useState(null)
   const [mediaAndEntertainmentChart, setMediaAndEntertainmentChart] = useState(null)
+  // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
 
@@ -229,16 +236,16 @@ export default function FixedCosts_Leisure( props ) {
   useEffect(() => {
     const getFixedCosts = async() => {
       // All fixed costs in the DB
-      let fixedCosts = await getAllFixedCosts();
-      let effectiveDateSelectItems = getUniqueEffectiveDates(fixedCosts.results)
+      let allFixedCosts = await getAllFixedCosts();
+      let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results)
       if (!selectedEffectiveDate) {
         // Initialize selection
         setSelectedEffectiveDate(effectiveDateSelectItems[0])
       }
       setEffectiveDateSelectItems(effectiveDateSelectItems)
-      let allFixedCosts = extractChartData(fixedCosts)
-      setSportsAndHealthChart(allFixedCosts.sportsAndHealth)
-      setMediaAndEntertainmentChart(allFixedCosts.mediaAndEntertainment)
+      let allFixedCostsChartData = extractChartData(allFixedCosts)
+      setSportsAndHealthChart(allFixedCostsChartData.sportsAndHealth)
+      setMediaAndEntertainmentChart(allFixedCostsChartData.mediaAndEntertainment)
       // Fixed Costs valid at a specific date
       let specificfixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
@@ -268,13 +275,13 @@ export default function FixedCosts_Leisure( props ) {
         <ContentCard {...sportsAndHealthCard} imgHeight={275}/>
       </Grid>
       <Grid  md={12} xl={8} display="flex" alignItems="center" justifyContent="center">
-        <ContentChart_VerticalBar {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
+        <ContentVerticalBarChart {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
       </Grid>
       <Grid md={12} xl={4}>
         <ContentCard {...mediaAndEntertainmentCard} imgHeight={275}/>
       </Grid>
       <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
-        <ContentChart_VerticalBar {...mediaAndEntertainmentChart} barCount={3} selectedLabel={selectedEffectiveDate}/>
+        <ContentVerticalBarChart {...mediaAndEntertainmentChart} dataSetCount={3} selectedLabel={selectedEffectiveDate}/>
       </Grid>
     </Grid>
   )

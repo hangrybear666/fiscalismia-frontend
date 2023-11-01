@@ -8,17 +8,11 @@ import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
 import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
 import WaterDamageOutlinedIcon from '@mui/icons-material/WaterDamageOutlined';
-import ContentChart_VerticalBar from '../minor/ContentChart_VerticalBar';
+import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
 
-const iconProperties = {
-  fontSize: 55,
-  opacity: 0.5,
-  boxShadow: 10,
-  borderRadius:1,
-}
 
 function constructContentCardObject(header, amount, interval, details, icon, img) { // TODO img
   let turnus = interval === '1.00' ? res.INTERVAL_MONTHLY
@@ -49,7 +43,9 @@ function constructContentChartObject( title, xAxis, dataSets, colors ) {
     labels: xAxis,
     dataSet1: dataSets?.dataSet1,
     dataSet1Name: dataSets?.dataSet1Name,
-    color1: colors?.color1,
+    pointColor1: colors.pointColor1,
+    lineColor1: colors.lineColor1,
+    selectionColor: colors.selectionColor,
     }
     return contentChartObj
 }
@@ -60,16 +56,17 @@ function getUniqueEffectiveDates(fixedCosts) {
 
 /**
  *
- * @param {*} fixedCosts all fixed costs within db
+ * @param {*} allFixedCosts all fixed costs within db
  * @returns contentChartObj constructed via helper method constructContentChartObject
  */
-function extractChartData(fixedCosts) {
-  // Sports and Health
+function extractChartData(allFixedCosts) {
   const overviewColors = {
-    color1: '',
+    pointColor1: 'rgba(220, 193, 111,0.6)',
+    lineColor1: 'black',
+    selectionColor: 'rgba(255, 77, 77,0.8)',
   }
   // No filtering of overall results required
-  const overviewFiltered = fixedCosts.results
+  const overviewFiltered = allFixedCosts.results
   // unique effective dates as string array
   const overviewDatesArr = getUniqueEffectiveDates(overviewFiltered)
   overviewDatesArr.sort()
@@ -95,8 +92,14 @@ function extractChartData(fixedCosts) {
   return { overview }
 }
 
-function extractAndCondenseFixedCosts(fixedCosts) {
-  let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, 'https://source.unsplash.com/random/?bills')
+/**
+ *  Extracts information of specific fixed costs valid at a given date
+ *  to display in cards dependent on the selected effective date
+ * @param {*} specificFixedCosts
+ * @returns
+ */
+function extractCardData(specificFixedCosts) {
+  let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, 'no-img')
   let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, null, 'no-img')
   let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, 'no-img')
   let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, null, 'no-img')
@@ -104,11 +107,11 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, 'no-img')
   let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, 'no-img')
   // Monthly Total Amount
-  monthlyTotalCost.amount = Math.round(fixedCosts.results
+  monthlyTotalCost.amount = Math.round(specificFixedCosts.results
     .map((row) => row.monthly_cost)
     .reduce((partialSum, a) => partialSum + parseFloat(a), 0));
   // Rent and Utilities
-  let rentAndUtilitiesFiltered = fixedCosts.results
+  let rentAndUtilitiesFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.LIVING_ESSENTIALS_KEY )
   rentAndUtilities.amount = Math.round(rentAndUtilitiesFiltered
     .map((row) => row.monthly_cost)
@@ -116,7 +119,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   rentAndUtilities.details = rentAndUtilitiesFiltered
     .map((row) => row.description.trim())
   // DSL & Telephone
-  let dslAndPhoneFiltered = fixedCosts.results
+  let dslAndPhoneFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.INTERNET_AND_PHONE_KEY )
   dslAndPhone.amount = Math.round(dslAndPhoneFiltered
     .map((row) => row.monthly_cost)
@@ -124,7 +127,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   dslAndPhone.details = dslAndPhoneFiltered
       .map((row) => row.description.trim())
   // Sports and Health
-  let sportsAndHealthFiltered = fixedCosts.results
+  let sportsAndHealthFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.SPORTS_FACILITIES_KEY || row.category === categories.SUPPLEMENTS_HEALTH_KEY ||
       row.category === categories.SUPPLEMENTS_PERFORMANCE_KEY ||  row.category === categories.PHYSIO_AND_HEALTH_COURSES_KEY)
   sportsAndHealth.amount = Math.round(sportsAndHealthFiltered
@@ -133,7 +136,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   sportsAndHealth.details = sportsAndHealthFiltered
       .map((row) => row.description.trim())
   // Media and Entertainment
-  let mediaAndEntertainmentFiltered = fixedCosts.results
+  let mediaAndEntertainmentFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.LEISURE_GAMING_KEY || row.category === categories.LEISURE_MUSIC_PODCASTS_KEY ||
       row.category === categories.LEISURE_TV_CINEMA_KEY)
   mediaAndEntertainment.amount = Math.round(mediaAndEntertainmentFiltered
@@ -142,7 +145,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered
       .map((row) => row.description.trim())
   // Insurance
-  let insuranceFiltered = fixedCosts.results
+  let insuranceFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.INSURANCE_KEY)
   insurance.amount = Math.round(insuranceFiltered
     .map((row) => row.monthly_cost)
@@ -150,7 +153,7 @@ function extractAndCondenseFixedCosts(fixedCosts) {
   insurance.details = insuranceFiltered
       .map((row) => row.description.trim())
   // Student Loans
-  let studentLoansFiltered = fixedCosts.results
+  let studentLoansFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.STUDENT_LOANS_KEY)
   studentLoans.amount = Math.round(studentLoansFiltered
     .map((row) => row.monthly_cost)
@@ -161,17 +164,17 @@ function extractAndCondenseFixedCosts(fixedCosts) {
 }
 
 export default function FixedCosts_Overview( props ) {
-  // Fixed Costs from DB
-  const [fixedCosts, setFixedCosts] = useState([])
-  const [monthlyTotalCost, setMonthlyTotalCost] = useState(null)
-  const [rentAndUtilities, setRentAndUtilities] = useState(null)
-  const [dslAndPhone, setDslAndPhone] = useState(null)
-  const [sportsAndHealth, setSportsAndHealth] = useState(null)
-  const [mediaAndEntertainment, setMediaAndEntertainment] = useState(null)
-  const [insurance, setInsurance] = useState(null)
-  const [studentLoans, setStudentLoans] = useState(null)
-
-  const [allFixedCostsChart, setAllFixedCostsChart] = useState(null)// TODO
+  // Selected Specific Fixed Costs
+  const [monthlyTotalCostCard, setMonthlyTotalCostCard] = useState(null)
+  const [rentAndUtilitiesCard, setRentAndUtilitiesCard] = useState(null)
+  const [dslAndPhoneCard, setDslAndPhoneCard] = useState(null)
+  const [sportsAndHealthCard, setSportsAndHealthCard] = useState(null)
+  const [mediaAndEntertainmentCard, setMediaAndEntertainmentCard] = useState(null)
+  const [insuranceCard, setInsuranceCard] = useState(null)
+  const [studentLoansCard, setStudentLoansCard] = useState(null)
+  // All Fixed Costs Visualized in Barchart
+  const [allFixedCostsChart, setAllFixedCostsChart] = useState(null)
+  // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
 
@@ -182,15 +185,15 @@ export default function FixedCosts_Overview( props ) {
   useEffect(() => {
     const getFixedCosts = async() => {
       // All fixed costs in the DB
-      let fixedCosts = await getAllFixedCosts();
-      let effectiveDateSelectItems = getUniqueEffectiveDates(fixedCosts.results)
+      let allFixedCosts = await getAllFixedCosts();
+      let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results)
       if (!selectedEffectiveDate) {
         // Initialize selection
         setSelectedEffectiveDate(effectiveDateSelectItems[0])
       }
       setEffectiveDateSelectItems(effectiveDateSelectItems)
-      let allFixedCosts = extractChartData(fixedCosts)
-      setAllFixedCostsChart(allFixedCosts.overview)
+      let allFixedCostsCardData = extractChartData(allFixedCosts)
+      setAllFixedCostsChart(allFixedCostsCardData.overview)
 
       let results = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
@@ -198,15 +201,14 @@ export default function FixedCosts_Overview( props ) {
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
         : '2023-08-01'); // Fallback auf übergebenes Datum
-      setFixedCosts(results)
-      let extractedFixedCosts = extractAndCondenseFixedCosts(results)
-      setMonthlyTotalCost(extractedFixedCosts.monthlyTotalCost)
-      setRentAndUtilities(extractedFixedCosts.rentAndUtilities)
-      setDslAndPhone(extractedFixedCosts.dslAndPhone)
-      setSportsAndHealth(extractedFixedCosts.sportsAndHealth)
-      setMediaAndEntertainment(extractedFixedCosts.mediaAndEntertainment)
-      setInsurance(extractedFixedCosts.insurance)
-      setStudentLoans(extractedFixedCosts.studentLoans)
+      let extractedFixedCosts = extractCardData(results)
+      setMonthlyTotalCostCard(extractedFixedCosts.monthlyTotalCost)
+      setRentAndUtilitiesCard(extractedFixedCosts.rentAndUtilities)
+      setDslAndPhoneCard(extractedFixedCosts.dslAndPhone)
+      setSportsAndHealthCard(extractedFixedCosts.sportsAndHealth)
+      setMediaAndEntertainmentCard(extractedFixedCosts.mediaAndEntertainment)
+      setInsuranceCard(extractedFixedCosts.insurance)
+      setStudentLoansCard(extractedFixedCosts.studentLoans)
      }
      getFixedCosts();
      }, [selectedEffectiveDate]
@@ -223,29 +225,31 @@ export default function FixedCosts_Overview( props ) {
         />
       </Grid>
       <Grid xs={12}>
-        <ContentCard elevation={12} {...monthlyTotalCost} imgHeight={250} />
+        <ContentCard elevation={12} {...monthlyTotalCostCard} />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...rentAndUtilities}  />
+        <ContentCard {...rentAndUtilitiesCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...studentLoans}  />
+        <ContentCard {...studentLoansCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...dslAndPhone}  />
+        <ContentCard {...dslAndPhoneCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...sportsAndHealth}  />
+        <ContentCard {...sportsAndHealthCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...mediaAndEntertainment}  />
+        <ContentCard {...mediaAndEntertainmentCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...insurance}  />
+        <ContentCard {...insuranceCard}  />
       </Grid>
-      <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
-        <ContentChart_VerticalBar {...allFixedCostsChart} barCount={1} selectedLabel={selectedEffectiveDate}/>
+      <Grid xs={0} xl={1}></Grid>
+      <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >
+        <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate}/>
       </Grid>
+      <Grid xs={0} xl={1}></Grid>
     </Grid>
   )
 }
