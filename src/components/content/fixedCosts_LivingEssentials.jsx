@@ -201,30 +201,37 @@ export default function FixedCosts_LivingEssentials( props ) {
   }
 
   useEffect(() => {
-    const getFixedCosts = async() => {
+    const queryAllFixedCosts = async() => {
       // All fixed costs in the DB
       let allFixedCosts = await getAllFixedCosts();
       let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results)
-      if (!selectedEffectiveDate) {
-        // Initialize selection
-        setSelectedEffectiveDate(effectiveDateSelectItems[0])
-      }
+      setSelectedEffectiveDate(effectiveDateSelectItems[0])
       setEffectiveDateSelectItems(effectiveDateSelectItems)
-      let allFixedCostsCardData = extractChartData(allFixedCosts)
-      setLivingEssentialsChart(allFixedCostsCardData.livingEssentials)
-       let results = await getFixedCostsByEffectiveDate(
+      let allFixedCostsChartData = extractChartData(allFixedCosts)
+      setLivingEssentialsChart(allFixedCostsChartData.livingEssentials)
+     }
+     queryAllFixedCosts();
+     }, []
+  )
+
+  useEffect(() => {
+    const getSpecificFixedCosts = async() => {
+       let specificFixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
         ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
         : '2023-08-01'); // Fallback auf übergebenes Datum
-       let extractedFixedCosts = extractCardData(results)
+       let extractedFixedCosts = extractCardData(specificFixedCosts)
        setRentAndUtilitiesCard(extractedFixedCosts.rentAndUtilities)
        setDslAndPhoneCard(extractedFixedCosts.dslAndPhone)
        setInsuranceCard(extractedFixedCosts.insurance)
        setStudentLoansCard(extractedFixedCosts.studentLoans)
      }
-     getFixedCosts();
+     // Prevents unnecessary initial Fallback query on pageload before queryAllFixedCosts has set the selectedEffectiveDate state
+     if (selectedEffectiveDate) {
+       getSpecificFixedCosts();
+     }
      }, [selectedEffectiveDate]
   )
 

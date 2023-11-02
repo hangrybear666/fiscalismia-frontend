@@ -234,19 +234,22 @@ export default function FixedCosts_Leisure( props ) {
   }
 
   useEffect(() => {
-    const getFixedCosts = async() => {
+    const queryAllFixedCosts = async() => {
       // All fixed costs in the DB
       let allFixedCosts = await getAllFixedCosts();
       let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results)
-      if (!selectedEffectiveDate) {
-        // Initialize selection
-        setSelectedEffectiveDate(effectiveDateSelectItems[0])
-      }
+      setSelectedEffectiveDate(effectiveDateSelectItems[0])
       setEffectiveDateSelectItems(effectiveDateSelectItems)
       let allFixedCostsChartData = extractChartData(allFixedCosts)
       setSportsAndHealthChart(allFixedCostsChartData.sportsAndHealth)
       setMediaAndEntertainmentChart(allFixedCostsChartData.mediaAndEntertainment)
-      // Fixed Costs valid at a specific date
+     }
+     queryAllFixedCosts();
+     }, []
+  )
+
+  useEffect(() => {
+    const getSpecificFixedCosts = async() => {
       let specificfixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
         ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
@@ -257,7 +260,10 @@ export default function FixedCosts_Leisure( props ) {
       setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth)
       setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment)
      }
-     getFixedCosts();
+      // Prevents unnecessary initial Fallback query on pageload before queryAllFixedCosts has set the selectedEffectiveDate state
+      if (selectedEffectiveDate) {
+        getSpecificFixedCosts();
+      }
      }, [selectedEffectiveDate]
   )
 
