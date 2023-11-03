@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ContentCard from '../minor/ContentCard';
+import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
 import CellWifiOutlinedIcon from '@mui/icons-material/CellWifiOutlined';
@@ -246,16 +246,16 @@ export default function FixedCosts_LivingEssentials( props ) {
         />
       </Grid>
       <Grid xs={6} md={4} xl={3}>
-        <ContentCard {...rentAndUtilitiesCard}  />
+        <ContentCardCosts {...rentAndUtilitiesCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={3}>
-        <ContentCard {...studentLoansCard}  />
+        <ContentCardCosts {...studentLoansCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={3}>
-        <ContentCard {...dslAndPhoneCard}  />
+        <ContentCardCosts {...dslAndPhoneCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={3}>
-        <ContentCard {...insuranceCard}  />
+        <ContentCardCosts {...insuranceCard}  />
       </Grid>
       {/* All Living Essentials Bar Chart */}
       <Grid xs={0}  xl={1}></Grid>

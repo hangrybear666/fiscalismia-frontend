@@ -19,7 +19,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
-import ContentCard from '../minor/ContentCard';
+import ContentCardCosts from '../minor/ContentCardCosts';
 import { getFabUtilityClass } from '@mui/material';
 
 

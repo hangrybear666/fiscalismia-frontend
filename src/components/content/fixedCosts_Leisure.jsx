@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ContentCard from '../minor/ContentCard';
+import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
@@ -278,13 +278,13 @@ export default function FixedCosts_Leisure( props ) {
         />
       </Grid>
       <Grid  md={12} xl={4}>
-        <ContentCard {...sportsAndHealthCard} imgHeight={275}/>
+        <ContentCardCosts {...sportsAndHealthCard} imgHeight={275}/>
       </Grid>
       <Grid  md={12} xl={8} display="flex" alignItems="center" justifyContent="center">
         <ContentVerticalBarChart {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
       </Grid>
       <Grid md={12} xl={4}>
-        <ContentCard {...mediaAndEntertainmentCard} imgHeight={275}/>
+        <ContentCardCosts {...mediaAndEntertainmentCard} imgHeight={275}/>
       </Grid>
       <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
         <ContentVerticalBarChart {...mediaAndEntertainmentChart} dataSetCount={3} selectedLabel={selectedEffectiveDate}/>
