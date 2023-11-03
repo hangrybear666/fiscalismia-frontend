@@ -57,6 +57,46 @@ export const getAllFixedCosts = async () => {
   }
 }
 
+/**
+ * Returns food prices and discounts valid at the time of request (current_date)
+ * @returns Object containing a results array with all food prices and discounts from the db
+ * @route /api/fiscalismia/food_prices_and_discounts
+ */
+export const getAllFoodPricesAndDiscounts = async () => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Returns discounted foods valid at the time of request (current_date)
+ * @returns Object containing a results array with all active discounts from the db
+ * @route /api/fiscalismia/discounted_foods_current
+ */
+export const getCurrentFoodDiscounts = async () => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const getTest = async () => {
   if (!token) {
     setToken()

@@ -8,6 +8,8 @@ import VariableExpenses_Overview from './content/variableExpenses_Overview';
 import FixedCosts_Overview from './content/fixedCosts_Overview';
 import FixedCosts_LivingEssentials from './content/fixedCosts_LivingEssentials';
 import FixedCosts_Leisure from './content/fixedCosts_Leisure';
+import Deals_FoodPrices from './content/deals_foodPrices';
+import Deals_GroceryDeals from './content/deals_groceryDeals';
 import Box from '@mui/material/Box';
 
 export default function Content( props ) {
@@ -42,9 +44,9 @@ export default function Content( props ) {
       case paths.DEALS_OVERVIEW :
         return <TestData value={value}/>
       case paths.DEALS_FOOD_PRICES :
-        return <TestData value={value}/>
+        return <Deals_FoodPrices value={value}/>
       case paths.DEALS_GROCERY_DEALS :
-        return <TestData value={value}/>
+        return <Deals_GroceryDeals value={value}/>
       default:
         <React.Fragment>
         </React.Fragment>
