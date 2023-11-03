@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ContentCard from '../minor/ContentCard';
+import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
 import FireplaceIcon from '@mui/icons-material/Fireplace';
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
@@ -14,17 +14,17 @@ import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/p
 import SelectDropdown from '../minor/SelectDropdown';
 
 
-function constructContentCardObject(header, amount, interval, details, icon, img) { // TODO img
-  let turnus = interval === '1.00' ? res.INTERVAL_MONTHLY
-    : interval === '3.00' ? res.INTERVAL_QUARTERLY
-    : interval === '6.00' ? res.INTERVAL_HALFYEARLY
-    : interval === '12.00' ? res.INTERVAL_YEARLY
-    : `alle ${interval} Monate`
+function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
+  let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
+    : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
+    : subtitle === '6.00' ? res.INTERVAL_HALFYEARLY
+    : subtitle === '12.00' ? res.INTERVAL_YEARLY
+    : `alle ${subtitle} Monate`
   const contentCardObj =
    {
     header: header.trim(),
     amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
-    interval: turnus,
+    subtitle: turnus,
     details: details,
     img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
     icon: icon
@@ -231,25 +231,25 @@ export default function FixedCosts_Overview( props ) {
         />
       </Grid>
       <Grid xs={12}>
-        <ContentCard elevation={12} {...monthlyTotalCostCard} />
+        <ContentCardCosts elevation={12} {...monthlyTotalCostCard} />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...rentAndUtilitiesCard}  />
+        <ContentCardCosts {...rentAndUtilitiesCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...studentLoansCard}  />
+        <ContentCardCosts {...studentLoansCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...dslAndPhoneCard}  />
+        <ContentCardCosts {...dslAndPhoneCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...sportsAndHealthCard}  />
+        <ContentCardCosts {...sportsAndHealthCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...mediaAndEntertainmentCard}  />
+        <ContentCardCosts {...mediaAndEntertainmentCard}  />
       </Grid>
       <Grid xs={6} md={4} xl={2}>
-        <ContentCard {...insuranceCard}  />
+        <ContentCardCosts {...insuranceCard}  />
       </Grid>
       <Grid xs={0} xl={1}></Grid>
       <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >

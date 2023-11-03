@@ -15,17 +15,17 @@ const iconProperties = {
   borderRadius:1,
 }
 
-function constructContentCardObject(header, amount, interval, details, icon, img) { // TODO img
-  let turnus = interval === '1.00' ? res.INTERVAL_MONTHLY
-    : interval === '3.00' ? res.INTERVAL_QUARTERLY
-    : interval === '6.00' ? res.INTERVAL_HALFYEARLY
+function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
+  let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
+    : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
+    : subtitle === '6.00' ? res.INTERVAL_HALFYEARLY
     : interval === '12.00' ? res.INTERVAL_YEARLY
-    : `alle ${interval} Monate`
+    : `alle ${subtitle} Monate`
   const contentCardObj =
    {
     header: header.trim(),
     amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
-    interval: turnus,
+    subtitle: turnus,
     details: details,
     img: img ? img : `https://source.unsplash.com/random/?dollar&${Math.floor(Math.random() * 100)}`,
     icon: icon

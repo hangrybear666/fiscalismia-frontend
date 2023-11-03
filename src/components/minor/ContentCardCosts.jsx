@@ -13,7 +13,7 @@ import { Paper } from '@mui/material';
 
 
 export default function ContentCard( props ) {
-  const { img, header, amount, interval, icon, details, elevation, imgHeight } = props
+  const { img, header, amount, subtitle, icon, details, elevation, imgHeight } = props
 
   return (
     <Card
@@ -51,10 +51,10 @@ export default function ContentCard( props ) {
           : null }
           </Grid>
 
-          {/* AMOUNT & INTERVAL */}
+          {/* AMOUNT & SUBTITLE */}
           <Grid
             xs={icon ? 6 : 12}
-            display={(amount || interval) ? 'flex' : 'none'}
+            display={(amount || subtitle) ? 'flex' : 'none'}
             justifyContent={icon ? 'flex-end' : 'center'}
             alignItems="center"
             sx={{ borderTop: '1px solid rgb(50,50,50,0.4)',
@@ -66,9 +66,9 @@ export default function ContentCard( props ) {
                 {amount}€
               </Typography>
               : null}
-              {interval ?
+              {subtitle ?
               <Typography variant="subtitle1" sx={{ mb: 0.2 }} color="text.secondary">
-                {interval}
+                {subtitle}
               </Typography>
               : null}
             </Stack>
@@ -76,9 +76,9 @@ export default function ContentCard( props ) {
 
           {/* ICON */}
           <Grid
-            xs={icon ? (amount || interval) ? 6 : 12 : 0}
+            xs={icon ? (amount || subtitle) ? 6 : 12 : 0}
             display={icon ? 'flex' : 'none'}
-            justifyContent={(amount || interval) ? 'start' : 'center'}
+            justifyContent={(amount || subtitle) ? 'start' : 'center'}
             alignItems="center"
             sx={{ paddingLeft:2,
                   borderTop: '1px solid rgb(50,50,50,0.4)',
