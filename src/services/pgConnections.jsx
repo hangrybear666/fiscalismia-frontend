@@ -1,5 +1,12 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3002/api/fiscalismia'
+import { serverConfig } from '../resources/resource_properties';
+const baseUrl = serverConfig.API_BASE_URL
+export class FileSizeError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'FileSizeError';
+  }
+}
 
 let token = window.localStorage.getItem('jwt-token')
 
@@ -96,6 +103,37 @@ export const getCurrentFoodDiscounts = async () => {
     console.error(error);
   }
 }
+/**
+ * User Upload of images such as jpg/webp/png requiring:
+ * - <input type="file" /> within a <Button component='label'/>
+ * @param {*} postContent
+ * @returns
+ */
+export const postFoodItemImg = async (event, foodItemId) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data' }
+    }
+    let file = event.target.files[0];
+    if (file?.size > 1 * 1024 * 1024) {
+      return new FileSizeError('File size is limited to 1MB.')
+    }
+    if (file?.type !== 'image/png' && file?.type !== 'image/jpeg' && file?.type !== 'image/webp') {
+      return new axios.AxiosError('Images must be uploaded as either png, jpeg or webp!');
+    }
+    const formData = new FormData();
+    formData.append('foodItemImg', file);
+    formData.append("id", foodItemId);
+    const response = await axios.post(`${baseUrl}/upload/food_item_img`, formData, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const getTest = async () => {
   if (!token) {
@@ -118,7 +156,8 @@ const postTest = async newObject => {
   }
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'application/json',}
     }
     const response = await axios.post(baseUrl, newObject, config)
     return response.data

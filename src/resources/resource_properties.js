@@ -8,6 +8,7 @@ export const resourceProperties = {
   EURO: '€',
   GRAMS: 'g',
   SYMBOL_PERCENT: '%',
+  UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
@@ -95,4 +96,9 @@ export const fixedCostCategories = {
   SUPPLEMENTS_PERFORMANCE_VALUE: 'Supplemente: Leistung',
   PHYSIO_AND_HEALTH_COURSES_KEY: 'PHYSIO_AND_HEALTH_COURSES',
   PHYSIO_AND_HEALTH_COURSES_VALUE: 'Physio & Gesundheitskurse',
+}
+
+export const serverConfig = {
+  NODE_ROOT_URL: 'http://localhost:3002/',
+  API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
 }
