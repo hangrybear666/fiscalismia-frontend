@@ -20,3 +20,15 @@
   box-shadow: 8px 8px 12px 4px rgba(0, 0, 0, 0.25);
   transition: transform 0.5s ease 0s, box-shadow 0.5s linear 0s;
 }
+
+/* INPUT FIELD HIDE ARROW KEYS ON NUMBER */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+/* INPUT FIELD HIDE ARROW KEYS ON NUMBER MOZILLA */
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
