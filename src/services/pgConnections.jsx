@@ -135,6 +135,26 @@ export const postFoodItemImg = async (event, foodItemId) => {
   }
 }
 
+/**
+ * deletes server side images and removes filepath entry from db
+ * @param {*} filepath
+ * @returns
+ */
+export const deleteFoodItemImg = async id => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const getTest = async () => {
   if (!token) {
     setToken()

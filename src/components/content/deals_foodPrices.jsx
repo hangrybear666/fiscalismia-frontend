@@ -1,79 +1,134 @@
 import React, { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
+import Grid from '@mui/material/Unstable_Grid2';
+import ContentCardFoodPrices from '../minor/ContentCardFoodPrices';
+import { resourceProperties as res, fixedCostCategories as categories, serverConfig } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
+import SelectDropdown from '../minor/SelectDropdown';
+import IconButton from '@mui/material/IconButton';
+import CancelIcon from '@mui/icons-material/CancelSharp';
+import Chip from '@mui/material/Chip';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function constructContentCardObject(foodItemId, header, originalPrice, pricePerKg, kcalAmount, subtitle, lastUpdated, details, store, img) { // TODO img
+  const contentCardObj =
+   {
+    foodItemId: foodItemId,
+    header: header ? header.trim() : null,
+    originalPrice: originalPrice,
+    pricePerKg: pricePerKg,
+    kcalAmount: kcalAmount,
+    subtitle: subtitle ? subtitle.trim() : null,
+    lastUpdated: lastUpdated,
+    details: details,
+    img: img ? img : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`,
+    store: store
+  }
+  if (img === 'no-img') {
+    contentCardObj.img = null
+  }
+  return contentCardObj
 }
-const tableHeadStyling = {
-  backgroundColor: '#081627',
-  '> th' : {color: '#ffffff',
-            letterSpacing: 1,
-            fontWeight:500}
+
+/**
+ * extracts relevant fields from the db query result
+ * in order to populate one card for each discounted item.
+ * @param {*} allFoodDiscounts db query result
+ */
+function extractCardData(allFoodDiscounts) {
+  let discountedFoodItemCards = new Array();
+  allFoodDiscounts.forEach( e => {
+    let card = constructContentCardObject(
+      e.id,
+      `${e.food_item} - ${e.brand}`,
+      `${e.price}${res.CURRENCY_EURO}`,
+      `${e.price_per_kg}${res.CURRENCY_EURO}/kg`,
+      `${e.kcal_amount}kcal/100g`,
+      `Gewicht ${e.weight}g`,
+      `zuletzt geprüft ${e.last_update}`,
+      null, // details
+      e.store,
+      e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : 'no-img'
+    );
+      discountedFoodItemCards.push(card);
+  })
+  return discountedFoodItemCards
+
 }
-const tableRowStyling = {
-  '&:nth-of-type(odd)': {backgroundColor: 'rgba(128,128,128,0.7)'},
-  '&:nth-of-type(even)': {backgroundColor: 'rgba(184,184,184,0.8)'},
-  '&:last-child td, &:last-child th': { border: 0 },
+
+function macroNutrientFilter(foodPrices, selection) {
+  return foodPrices.filter(e => e.main_macro == selection)
+}
+
+function getMacroNutrientCategories(allFoodPrices) {
+  return Array.from(new Set(allFoodPrices.map(e => e.main_macro)))
 }
 
 export default function Deals_FoodPrices( props ) {
-  const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
+  const [foodPrices, setFoodPrices] = useState(null)
+  const [foodItemCards, setFoodItemCards] = useState(null)
+
+  const [macroNutrientSelectItems, setMacroNutrientSelectItems] = useState(null)
+  const [selectedMacroNutrient, setSelectedMacroNutrient] = useState('')
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
-      let allFoodPricesAndDiscounts = await getAllFoodPricesAndDiscounts();
-      allFoodPricesAndDiscounts.results.forEach(element => {
-        console.log(element)
-      });
-      setFoodPricesAndDiscounts(allFoodPricesAndDiscounts.results)
+      let allFoodPrices = await getAllFoodPricesAndDiscounts();
+      setFoodPrices(allFoodPrices.results)
+      setMacroNutrientSelectItems(getMacroNutrientCategories(allFoodPrices.results))
+      setFoodItemCards(extractCardData(allFoodPrices.results))
     }
     getAllPricesAndDiscounts();
   }, []
   )
+  const handleSelect = (selection) => {
+    setSelectedMacroNutrient(selection)
+    const filteredFoodPrices = macroNutrientFilter(foodPrices, selection)
+    setFoodItemCards(extractCardData(filteredFoodPrices))
+  }
+  const handleClearSelection = () => {
+    setSelectedMacroNutrient(null)
+    setFoodItemCards(extractCardData(foodPrices))
+  }
 
   return (
-    <TableContainer component={Paper} sx={{borderRadius:0}}>
-      <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
-        <TableHead>
-          <TableRow sx={tableHeadStyling}>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_FOODITEM}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_BRAND}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_STORE}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_MAIN_MACRO}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_PRICE_TOP}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {foodPricesAndDiscounts ? foodPricesAndDiscounts.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={tableRowStyling}
-            >
-              <TableCell>{row.food_item}</TableCell>
-              <TableCell>{row.brand}</TableCell>
-              <TableCell>{row.store}</TableCell>
-              <TableCell>{row.main_macro}</TableCell>
-              <TableCell align="right">{row.kcal_amount}{res.KCAL}</TableCell>
-              <TableCell align="right">{row.weight}{res.GRAMS}</TableCell>
-              <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
-              <TableCell>{row.last_update}</TableCell>
-              <TableCell align="right">{row.weight_per_100_kcal}€</TableCell>
-            </TableRow>
-          )) : null}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <React.Fragment>
+      <Grid container spacing={2} sx={{marginTop:2}}>
+        <Grid  sm={8} xl={10} >
+          <SelectDropdown
+            defaultValue={res.ALL}
+            selectLabel={res.DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL}
+            selectItems={macroNutrientSelectItems}
+            selectedValue={selectedMacroNutrient}
+            handleSelect={handleSelect}
+          />
+        </Grid>
+        <Grid  sm={4} xl={2}>
+          <IconButton
+            onClick={handleClearSelection}
+            variant="outlined"
+            color="error"
+            sx={{
+              borderRadius:0,
+              paddingX: 1,
+              width:'100%',
+              paddingY: 2,
+              border: '1px solid rgba(64,64,64,0.5)',
+              fontSize:15,
+              fontWeight:400,}}
+          >
+            <CancelIcon sx={{mr:1.5}}/>
+              {res.DEALS_FOOD_PRICES_SELECTITEMS_DELETE_SELECTION}
+          </IconButton>
+          </Grid>
+        {foodItemCards ?
+        foodItemCards.map((foodItem) => (
+          <Grid key={foodItem.header} xs={12} lg={6} xl={4}>
+            <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
+          </Grid>
+        ))
+        : null
+      }
+      </Grid>
+    </React.Fragment>
   );
 }

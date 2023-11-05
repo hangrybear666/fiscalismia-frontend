@@ -13,14 +13,17 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/CancelSharp';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import Stack from '@mui/system/Stack';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { resourceProperties as res, serverConfig } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg} from '../../services/pgConnections';
 import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
 
@@ -40,8 +43,8 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function ContentCardDiscounts( props ) {
-  const { foodItemId, header, originalPrice, discountPrice, subtitle, store, discountPercentage, startDate, endDate, daysLeft, details, elevation, img, imgHeight } = props
+export default function ContentCardFoodPrices( props ) {
+  const { foodItemId, header, originalPrice, subtitle, store, pricePerKg, kcalAmount, lastUpdated, details, elevation, img, imgHeight } = props
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
@@ -213,7 +216,7 @@ export default function ContentCardDiscounts( props ) {
 
             {/* store */}
             <Grid
-              xs={4} lg={4}
+              xs={4}
               display='flex'
               justifyContent='center'
               alignItems="center"
@@ -228,29 +231,18 @@ export default function ContentCardDiscounts( props ) {
 
             {/* title & subtitle */}
             <Grid
-              xs={8} lg={4}
-              display={( (originalPrice && discountPrice) || subtitle) ? 'flex' : 'none'}
-              justifyContent='flex-start'
+              xs={4}
+              display={( originalPrice || subtitle) ? 'flex' : 'none'}
+              justifyContent='center'
               alignItems="center"
               sx={{ borderTop: '1px solid rgb(50,50,50,0.4)',
                     borderBottom: '1px solid rgb(50,50,50,0.4)' }}
             >
               <Stack >
-                {originalPrice && discountPrice ?
-                <Grid sx={{ mt: 0.2 }} display='flex'>
-                  <Typography variant="h6" sx={{
-                    textDecoration:'line-through',
-                    fontSize: 16,
-                    marginTop:0.4,
-                    fontWeight:300,
-                    fontStyle: 'italic'
-                    }}>
-                    {originalPrice}
-                  </Typography>
-                  <Typography sx={{ ml:1, fontWeight:500, }} variant="h6" >
-                    {discountPrice}
-                  </Typography>
-                </Grid>
+                {originalPrice ?
+                <Typography sx={{ ml:3, fontWeight:500, }} variant="h6" >
+                  {originalPrice}
+                </Typography>
                 : null}
                 {subtitle ?
                 <Typography variant="subtitle1" sx={{ mb: 0.2, fontSize:15, letterSpacing:1 }} color="text.secondary">
@@ -261,28 +253,28 @@ export default function ContentCardDiscounts( props ) {
             </Grid>
 
 
-            {/* discount percentage */}
+            {/* price per kg */}
             <Grid
-              lg={4}
+              xs={4}
               display='flex'
               justifyContent='center'
               alignItems="center"
-              sx={{ display: { xs: 'none', lg: 'flex' },
+              sx={{ display: 'flex',
                     paddingLeft:2,
                     borderTop: '1px solid rgb(50,50,50,0.4)',
                     borderBottom: '1px solid rgb(50,50,50,0.4)' }}
             >
-              {discountPercentage ?
+              {pricePerKg ?
               <Paper elevation={0}>
-                <Chip label={discountPercentage}
+                <Chip
+                  label={pricePerKg}
                   sx={{
                     borderRadius:0,
-                    paddingY: 3,
+                    paddingX: 0,
+                    paddingY: 2,
                     border: '1px solid rgba(64,64,64,0.5)',
-                    fontSize:17,
-                    fontWeight:500,
-                    color:'#ffffff',
-                    backgroundColor: 'rgba(0,128,32,0.7)'}}
+                    fontSize:15,
+                    fontWeight:400,}}
                 />
               </Paper>
               : null}
@@ -290,14 +282,13 @@ export default function ContentCardDiscounts( props ) {
 
             {/* DETAILS */}
             <Grid xs={12}
-              display={details || startDate || endDate ? 'flex' : 'none'}
+              display={details || lastUpdated ? 'flex' : 'none'}
               justifyContent="center"
               alignItems="center"
               sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
               <Stack sx={{ mt: 1,minWidth: '100%' }}>
-                <Chip label={startDate} sx={{ borderRadius:0 }} variant="outlined" color="success" icon={<EventAvailableIcon />} />
-                <Chip label={daysLeft} sx={{ borderRadius:0, marginTop:'-1px' }} variant="outlined" color="success" icon={<HourglassBottomIcon/>} />
-                <Chip label={endDate} sx={{ borderRadius:0, mt:1 }} variant="outlined" color="warning" icon={<EventBusyIcon />} />
+                <Chip label={kcalAmount} sx={{ borderRadius:0 }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
+                <Chip label={lastUpdated} sx={{ mt:1, borderRadius:0 }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
                 {details ?
                 <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
                   {details.map((e,i) => (

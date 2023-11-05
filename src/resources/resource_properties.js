@@ -7,6 +7,7 @@ export const resourceProperties = {
   DATE: 'Datum',
   EURO: '€',
   GRAMS: 'g',
+  ALL: 'Alle',
   SYMBOL_PERCENT: '%',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
@@ -62,6 +63,9 @@ export const resourceProperties = {
   DEALS_OVERVIEW_THEADER_PRICE_TOP: 'Preis',
   DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP: 'zuletzt geprüft',
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Gesamtverbrauch Hochrechnung',
+
+  DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL: 'Auswahl Makronährstoff',
+  DEALS_FOOD_PRICES_SELECTITEMS_DELETE_SELECTION: 'Auswahl löschen',
 
   DEALS_GROCERY_DEALS_THEADER_FOODITEM: 'Artikel',
   DEALS_GROCERY_DEALS_THEADER_BRAND: 'Marke',
