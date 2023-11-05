@@ -41,7 +41,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function ContentCardDiscounts( props ) {
-  const { foodItemId, header, originalPrice, discountPrice, subtitle, store, discountPercentage, startDate, endDate, daysLeft, details, elevation, img, imgHeight } = props
+  const { foodItemId, header, originalPrice, discountPrice, subtitle, store, discountPercentage, startDate, endDate, dealDuration, daysLeft, startsInDays, details, elevation, img, imgHeight } = props
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
@@ -147,7 +147,7 @@ export default function ContentCardDiscounts( props ) {
         sx={{
           margin:0,
           height: '100%',
-          border: '2px solid rgb(64,64,64,0.4)',
+          border: '1px solid rgb(64,64,64,0.5)',
           paddingBottom:1.5
           }}
         square
@@ -295,9 +295,15 @@ export default function ContentCardDiscounts( props ) {
               alignItems="center"
               sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
               <Stack sx={{ mt: 1,minWidth: '100%' }}>
-                <Chip label={startDate} sx={{ borderRadius:0 }} variant="outlined" color="success" icon={<EventAvailableIcon />} />
-                <Chip label={daysLeft} sx={{ borderRadius:0, marginTop:'-1px' }} variant="outlined" color="success" icon={<HourglassBottomIcon/>} />
-                <Chip label={endDate} sx={{ borderRadius:0, mt:1 }} variant="outlined" color="warning" icon={<EventBusyIcon />} />
+                {daysLeft
+                ? <Chip label={daysLeft} sx={{ borderRadius:0, mt:0.5, fontWeight:600 }} variant="outlined" color="success" icon={<EventAvailableIcon />} />
+                : null}
+                {startsInDays
+                ? <Chip label={startsInDays} sx={{ borderRadius:0, mt:0.5, letterSpacing:2,fontWeight:300 }} variant="outlined" color="error" icon={<EventBusyIcon />} />
+                : null}
+                <Chip label={dealDuration} sx={{ borderRadius:0, mt:0.5 }} variant="outlined" color="success" icon={<HourglassBottomIcon/>} />
+                <Chip label={startDate} sx={{ borderRadius:0, mt: 0.5 }} variant="outlined" color="success" icon={<EventAvailableIcon />} />
+                <Chip label={endDate} sx={{ borderRadius:0, mt:0.5 }} variant="outlined"  icon={<EventBusyIcon />} />
                 {details ?
                 <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
                   {details.map((e,i) => (

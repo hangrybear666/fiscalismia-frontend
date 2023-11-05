@@ -9,17 +9,14 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/CancelSharp';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import Stack from '@mui/system/Stack';
-import { Paper } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { resourceProperties as res, serverConfig } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg} from '../../services/pgConnections';
@@ -150,7 +147,7 @@ export default function ContentCardFoodPrices( props ) {
         sx={{
           margin:0,
           height: '100%',
-          border: '2px solid rgb(64,64,64,0.4)',
+          border: '1px solid rgb(64,64,64,0.5)',
           paddingBottom:1.5
           }}
         square
@@ -257,7 +254,7 @@ export default function ContentCardFoodPrices( props ) {
             <Grid
               xs={4}
               display='flex'
-              justifyContent='center'
+              justifyContent='flex-start'
               alignItems="center"
               sx={{ display: 'flex',
                     paddingLeft:2,

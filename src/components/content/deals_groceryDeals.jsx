@@ -9,7 +9,8 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import ContentCardDiscounts from '../minor/ContentCardDiscounts';
 import { resourceProperties as res, fixedCostCategories as categories, serverConfig } from '../../resources/resource_properties';
-import { getCurrentFoodDiscounts } from '../../services/pgConnections';
+import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
+import InputFoodDiscountModal from '../minor/InputFoodDiscountModal';
 
 const tableHeadStyling = {
   backgroundColor: '#081627',
@@ -23,7 +24,7 @@ const tableRowStyling = {
   '&:last-child td, &:last-child th': { border: 0 },
 }
 
-function constructContentCardObject(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, daysLeft, details, store, img) { // TODO img
+function constructContentCardObject(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, dealDuration, daysLeft, startsInDays, details, store, img) { // TODO img
   const contentCardObj =
    {
     foodItemId: foodItemId,
@@ -34,7 +35,9 @@ function constructContentCardObject(foodItemId, header, originalPrice, discountP
     subtitle: subtitle ? subtitle.trim() : null,
     startDate: startDate,
     endDate: endDate,
+    dealDuration: dealDuration,
     daysLeft: daysLeft,
+    startsInDays: startsInDays,
     details: details,
     img: img ? img : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`,
     store: store
@@ -62,7 +65,9 @@ function extractCardData(allFoodDiscounts) {
       `Gewicht ${e.weight}g`,
       `gültig von ${e.discount_start_date}`,
       `gültig bis ${e.discount_end_date}`,
-      `noch ${e.discount_days_left} Tage`,
+      `Angebotsdauer: ${e.discount_days_duration} Tage`,
+      e.starts_in_days <= 0 ? `noch ${e.ends_in_days} Tage gültig` : null,
+      e.starts_in_days > 0 ? e.starts_in_days == 1 ? `gültig ab morgen` : `startet in ${e.starts_in_days} Tagen` : null,
       null, // details
       e.store,
       e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : 'no-img'
@@ -72,23 +77,56 @@ function extractCardData(allFoodDiscounts) {
   return discountedFoodItemCards
 
 }
+/**
+ * 1) Transforms a list of Objects from the db into a map of key:value pairs
+ * -> key is the selected label
+ * -> value is the food item ID for discount price insertion into the db
+ * 2) Transforms a list of Objects from the db into an array of selection labels for the dropdown
+ * @param {*} allFoodPrices selectItemArray: for dropdown, 
+ * selectItemLabelValueMap: for finding ID of selected label
+ * @returns
+ */
+function getFoodItemSelectItemsForModal(allFoodPrices) {
+  const selectItemLabelValueMap = new Map();
+  const selectItemArray = new Array();
+  allFoodPrices.forEach((e,i) => {
+    const cur = {
+      key: `${e.food_item} - ${e.brand}`,
+      value: e.id,
+    }
+    selectItemLabelValueMap.set(cur.key,cur.value);
+    selectItemArray[i] = `${e.food_item} - ${e.brand}`;
+  })
+  return { selectItemArray, selectItemLabelValueMap}
+}
 
 export default function Deals_GroceryDeals( props ) {
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
   const [discountedItemCards, setDiscountedItemCards] = useState(null)
+  const [allFoodItemsForSelection, setAllFoodItemsForSelection] = useState(null)
+  const [allFoodItemMapForSelection, setAllFoodItemMapForSelection] = useState(null)
+  // this setter is called from the Modal after db insertion to force the frontend to update and refetch the data from db
+  const [discountAddedItemId, setDiscountAddedItemId] = useState(null)
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
       let allFoodDiscounts = await getCurrentFoodDiscounts();
+      let allFoodItems = await getAllFoodPricesAndDiscounts();
+      const selectionInfoForModal = getFoodItemSelectItemsForModal(allFoodItems.results)
+      const selectItemArray = selectionInfoForModal.selectItemArray
+      const selectItemLabelValueMap = selectionInfoForModal.selectItemLabelValueMap
+      setAllFoodItemsForSelection(selectItemArray)
+      setAllFoodItemMapForSelection(selectItemLabelValueMap)
       setFoodPricesAndDiscounts(allFoodDiscounts.results)
       setDiscountedItemCards(extractCardData(allFoodDiscounts.results))
     }
     getAllPricesAndDiscounts();
-  }, []
+  }, [discountAddedItemId]
   )
 
   return (
     <React.Fragment>
+      <InputFoodDiscountModal selectItems={allFoodItemsForSelection} selectItemMap={allFoodItemMapForSelection} setDiscountAddedItemId={setDiscountAddedItemId}/>
       <TableContainer component={Paper} sx={{borderRadius:0}}>
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
           <TableHead>
@@ -106,7 +144,7 @@ export default function Deals_GroceryDeals( props ) {
           <TableBody>
             {foodPricesAndDiscounts ? foodPricesAndDiscounts.map((row) => (
               <TableRow
-                key={row.id}
+                key={row.id + row.discount_start_date}
                 sx={tableRowStyling}
               >
                 <TableCell>{row.food_item}</TableCell>
@@ -125,7 +163,7 @@ export default function Deals_GroceryDeals( props ) {
       <Grid container spacing={3} sx={{marginTop:2}}>
         {discountedItemCards ?
         discountedItemCards.map((foodItem) => (
-          <Grid key={foodItem.header} xs={4}>
+          <Grid key={foodItem.id + foodItem.startDate} xs={4}>
             <ContentCardDiscounts elevation={3} {...foodItem} imgHeight={150} />
           </Grid>
         ))

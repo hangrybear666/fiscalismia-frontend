@@ -106,13 +106,13 @@ export default function Deals_FoodPrices( props ) {
           <IconButton
             onClick={handleClearSelection}
             variant="outlined"
-            color="error"
+            color="primary"
             sx={{
               borderRadius:0,
               paddingX: 1,
               width:'100%',
               paddingY: 2,
-              border: '1px solid rgba(64,64,64,0.5)',
+              border: '1px solid rgba(64,64,64,0.4)',
               fontSize:15,
               fontWeight:400,}}
           >
@@ -122,7 +122,7 @@ export default function Deals_FoodPrices( props ) {
           </Grid>
         {foodItemCards ?
         foodItemCards.map((foodItem) => (
-          <Grid key={foodItem.header} xs={12} lg={6} xl={4}>
+          <Grid key={foodItem.header} xs={12} lg={6} xl={3}>
             <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
           </Grid>
         ))

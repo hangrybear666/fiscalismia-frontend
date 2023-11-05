@@ -135,6 +135,22 @@ export const postFoodItemImg = async (event, foodItemId) => {
   }
 }
 
+export const postFoodItemDiscount = async foodItemDiscountObj => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'application/json',}
+    }
+    const response = await axios.post(`${baseUrl}/upload/food_item_discount`, foodItemDiscountObj, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /**
  * deletes server side images and removes filepath entry from db
  * @param {*} filepath

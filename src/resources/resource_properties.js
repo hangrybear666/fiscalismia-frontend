@@ -11,6 +11,7 @@ export const resourceProperties = {
   SYMBOL_PERCENT: '%',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
+  SAVE: 'Speichern',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   GROCERIES: 'Lebensmittel',
@@ -75,6 +76,17 @@ export const resourceProperties = {
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT: 'Ersparnis',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE: 'gültig von',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE: 'gültig bis',
+
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_OPEN: 'Angebot hinzufügen',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_DISCOUNT_AMOUNT: 'Angebotspreis',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_START_DATE: 'gültig von',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE: 'gültig bis',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL: 'Artikel auswählen',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 12.05',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG: 'Das Startdatum muss vor dem Enddatum liegen.',
+
+  MINOR_INPUT_FOOD_ITEM_MODAL_OPEN: 'Artikel hinzufügen',
 };
 
 export const fixedCostCategories = {

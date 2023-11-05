@@ -27,7 +27,7 @@ export default function SelectDropdown( { selectLabel, selectItems, selectedValu
           }}
         >
           {selectItems
-            ? selectItems.map(e => <MenuItem key={e} value={e}>{e.substring(0,10)}</MenuItem>)
+            ? selectItems.map(e => <MenuItem key={e} value={e}>{e.substring(0,40)}</MenuItem>)
             : null}
         </Select>
       </FormControl>
