@@ -17,8 +17,16 @@ import CancelIcon from '@mui/icons-material/CancelSharp';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import Stack from '@mui/system/Stack';
 import Paper from '@mui/material/Paper';
+import aldi from '../../public/imgs/supermarkets/aldi1.png'
+import metro from '../../public/imgs/supermarkets/metro1.png'
+import kaufland from '../../public/imgs/supermarkets/kaufland1.png'
+import lidl from '../../public/imgs/supermarkets/lidl1.png'
+import netto from '../../public/imgs/supermarkets/netto1.png'
+import rewe from '../../public/imgs/supermarkets/rewe1.png'
+import amazon from '../../public/imgs/supermarkets/amazon1.png'
+import edeka from '../../public/imgs/supermarkets/edeka1.png'
 import { styled } from '@mui/material/styles';
-import { resourceProperties as res, serverConfig } from '../../resources/resource_properties';
+import { resourceProperties as res, serverConfig, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg} from '../../services/pgConnections';
 import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
@@ -53,6 +61,29 @@ export default function ContentCardFoodPrices( props ) {
     }
     setOpen(false);
   };
+
+  const getSupermarketLogo = () => {
+    switch (store) {
+      case foodCategories.JSON_STORES.aldi:
+        return aldi;
+      case foodCategories.JSON_STORES.lidl:
+        return lidl;
+      case foodCategories.JSON_STORES.kaufland:
+        return kaufland;
+      case foodCategories.JSON_STORES.rewe:
+        return rewe;
+      case foodCategories.JSON_STORES.metro:
+        return metro;
+      case foodCategories.JSON_STORES.amazon:
+        return amazon;
+      case foodCategories.JSON_STORES.netto:
+        return netto;
+      case foodCategories.JSON_STORES.edeka:
+        return edeka;
+      default:
+        break;
+    }
+  }
 
   /**
    * Validation of user input is done in postFoodItemImg
@@ -222,7 +253,17 @@ export default function ContentCardFoodPrices( props ) {
                     borderBottom: '1px solid rgb(50,50,50,0.4)' }}
             >
               {store ?
-              store
+                <Box
+                  component="img"
+                  sx={{
+                    height: 64,
+                    width: 64,
+                    maxHeight: { xs: 96, md: 96 },
+                    maxWidth: { xs: 96, md: 96 },
+                  }}
+                  alt={store}
+                  src={getSupermarketLogo()}
+              />
               : null}
             </Grid>
 
