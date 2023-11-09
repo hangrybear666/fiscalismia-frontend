@@ -132,13 +132,14 @@ export default function Deals_GroceryDeals( props ) {
           <TableHead>
             <TableRow sx={tableHeadStyling}>
               <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_FOODITEM}</TableCell>
-              <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_BRAND}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{res.DEALS_GROCERY_DEALS_THEADER_BRAND}</TableCell>
               <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_STORE}</TableCell>
-              <TableCell align="right">{res.DEALS_GROCERY_DEALS_THEADER_ORIGINAL_PRICE}</TableCell>
-              <TableCell align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_AMOUNT}</TableCell>
-              <TableCell align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_GROCERY_DEALS_THEADER_ORIGINAL_PRICE}</TableCell>
+              <TableCell align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PRICE}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_AMOUNT}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}  align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT}</TableCell>
               <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE}</TableCell>
-              <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -148,22 +149,23 @@ export default function Deals_GroceryDeals( props ) {
                 sx={tableRowStyling}
               >
                 <TableCell>{row.food_item}</TableCell>
-                <TableCell>{row.brand}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.brand}</TableCell>
                 <TableCell>{row.store}</TableCell>
-                <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
-                <TableCell align="right">{row.reduced_by_amount}{res.CURRENCY_EURO}</TableCell>
-                <TableCell align="right">{row.reduced_by_pct}{res.SYMBOL_PERCENT}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}  align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
+                <TableCell align="right">{row.discount_price}{res.CURRENCY_EURO}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}  align="right">{row.reduced_by_amount}{res.CURRENCY_EURO}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}  align="right">{row.reduced_by_pct}{res.SYMBOL_PERCENT}</TableCell>
                 <TableCell>{row.discount_start_date}</TableCell>
-                <TableCell>{row.discount_end_date}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.discount_end_date}</TableCell>
               </TableRow>
             )) : null}
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid container spacing={3} sx={{marginTop:2}}>
+      <Grid container spacing={2} sx={{marginTop:1.5}}>
         {discountedItemCards ?
         discountedItemCards.map((foodItem) => (
-          <Grid key={foodItem.id + foodItem.startDate} xs={4}>
+          <Grid key={foodItem.id + foodItem.startDate} xs={12} md={6} xl={4}>
             <ContentCardDiscounts elevation={3} {...foodItem} imgHeight={150} />
           </Grid>
         ))

@@ -122,7 +122,7 @@ export default function Deals_FoodPrices( props ) {
           </Grid>
         {foodItemCards ?
         foodItemCards.map((foodItem) => (
-          <Grid key={foodItem.header} xs={12} lg={6} xl={3}>
+          <Grid key={foodItem.header} xs={12} md={6} xl={3}>
             <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
           </Grid>
         ))

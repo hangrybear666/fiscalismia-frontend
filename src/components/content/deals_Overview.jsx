@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import InputFoodItemModal from '../minor/InputFoodItemModal';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 
@@ -23,6 +24,8 @@ const tableRowStyling = {
 
 export default function Deals_Overview( props ) {
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
+  // to refresh table based on added food item after DB insertion
+  const [addedItemId, setAddedItemId] = useState('')
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
@@ -33,44 +36,47 @@ export default function Deals_Overview( props ) {
       setFoodPricesAndDiscounts(allFoodPricesAndDiscounts.results)
     }
     getAllPricesAndDiscounts();
-  }, []
+  }, [addedItemId]
   )
 
   return (
-    <TableContainer component={Paper} sx={{borderRadius:0}}>
-      <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
-        <TableHead>
-          <TableRow sx={tableHeadStyling}>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_FOODITEM}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_BRAND}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_STORE}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_MAIN_MACRO}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_PRICE_TOP}</TableCell>
-            <TableCell>{res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP}</TableCell>
-            <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {foodPricesAndDiscounts ? foodPricesAndDiscounts.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={tableRowStyling}
-            >
-              <TableCell>{row.food_item}</TableCell>
-              <TableCell>{row.brand}</TableCell>
-              <TableCell>{row.store}</TableCell>
-              <TableCell>{row.main_macro}</TableCell>
-              <TableCell align="right">{row.kcal_amount}{res.KCAL}</TableCell>
-              <TableCell align="right">{row.weight}{res.GRAMS}</TableCell>
-              <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
-              <TableCell>{row.last_update}</TableCell>
-              <TableCell align="right">{row.weight_per_100_kcal}€</TableCell>
+    <>
+      <InputFoodItemModal setAddedItemId={setAddedItemId}/>
+      <TableContainer component={Paper} sx={{borderRadius:0}}>
+        <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
+          <TableHead>
+            <TableRow sx={tableHeadStyling}>
+              <TableCell>{res.DEALS_OVERVIEW_THEADER_FOODITEM}</TableCell>
+              <TableCell>{res.DEALS_OVERVIEW_THEADER_BRAND}</TableCell>
+              <TableCell>{res.DEALS_OVERVIEW_THEADER_STORE}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{res.DEALS_OVERVIEW_THEADER_MAIN_MACRO}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP}</TableCell>
+              <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_PRICE_TOP}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP}</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP}</TableCell>
             </TableRow>
-          )) : null}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {foodPricesAndDiscounts ? foodPricesAndDiscounts.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={tableRowStyling}
+              >
+                <TableCell>{row.food_item}</TableCell>
+                <TableCell>{row.brand}</TableCell>
+                <TableCell>{row.store}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.main_macro}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.kcal_amount}{res.KCAL}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.weight}{res.GRAMS}</TableCell>
+                <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.last_update}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.weight_per_100_kcal}€</TableCell>
+              </TableRow>
+            )) : null}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }

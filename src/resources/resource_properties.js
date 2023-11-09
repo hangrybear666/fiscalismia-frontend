@@ -11,10 +11,12 @@ export const resourceProperties = {
   SYMBOL_PERCENT: '%',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
+  SIGN_IN: 'Einloggen',
   SAVE: 'Speichern',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   GROCERIES: 'Lebensmittel',
+  LOGIN: 'Login',
   LOGOUT: 'Logout',
   MONTHLY_BUDGET:'Monatliches Budget',
   SAVINGS: 'Ersparnisse',
@@ -73,6 +75,7 @@ export const resourceProperties = {
   DEALS_GROCERY_DEALS_THEADER_STORE: 'Supermarkt',
   DEALS_GROCERY_DEALS_THEADER_ORIGINAL_PRICE: 'Originalpreis',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_AMOUNT: 'Preisreduktion',
+  DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PRICE: 'Angebotspreis',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT: 'Ersparnis',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE: 'gültig von',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE: 'gültig bis',
@@ -87,6 +90,20 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG: 'Das Startdatum muss vor dem Enddatum liegen.',
 
   MINOR_INPUT_FOOD_ITEM_MODAL_OPEN: 'Artikel hinzufügen',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_FOOD_ITEM: 'Artikel',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_PRICE: 'Preis in €',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_WEIGHT: 'Gewicht in Gramm',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_KCAL_AMOUNT: 'kcal/100g',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE: 'Datum des letzten Preischecks',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MAIN_MACRO: 'Hauptmakro',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_STORE: 'Laden',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_BRAND: 'Marke',
+  MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 12.05',
+  MINOR_INPUT_FOOD_ITEM_MODAL_KCAL_AMOUNT_VALIDATION_ERROR_MSG: 'Kalorien als Zahl erwartet, zB.: 350',
+  MINOR_INPUT_FOOD_ITEM_MODAL_FOOD_ITEM_VALIDATION_ERROR_MSG: 'Artikel muss mindestens 5 Zeichen enthalten.',
+  MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG: 'Marke muss mindestens 4 Zeichen enthalten.',
+  MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG: 'Gewicht als Zahl in Gramm erwartet, zB.: 500',
+  MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
 };
 
 export const fixedCostCategories = {
@@ -112,6 +129,34 @@ export const fixedCostCategories = {
   SUPPLEMENTS_PERFORMANCE_VALUE: 'Supplemente: Leistung',
   PHYSIO_AND_HEALTH_COURSES_KEY: 'PHYSIO_AND_HEALTH_COURSES',
   PHYSIO_AND_HEALTH_COURSES_VALUE: 'Physio & Gesundheitskurse',
+}
+
+export const foodItemInputCategories = {
+  ARRAY_STORES: [
+    'Aldi Süd',
+    'Lidl',
+    'Kaufland',
+    'Rewe',
+    'Metro',
+    'Amazon',
+    'Netto',
+    'Edeka'],
+  JSON_STORES: {
+    aldi: 'Aldi Süd',
+    lidl: 'Lidl',
+    kaufland: 'Kaufland',
+    rewe: 'Rewe',
+    metro: 'Metro',
+    amazon: 'Amazon',
+    netto: 'Netto',
+    edeka: 'Edeka',
+  },
+  ARRAY_MACROS: [
+    'Protein',
+    'Fats',
+    'Carbs',
+    'Fiber'
+  ]
 }
 
 export const serverConfig = {
