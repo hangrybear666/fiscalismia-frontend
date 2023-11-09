@@ -237,7 +237,7 @@ export default function FixedCosts_LivingEssentials( props ) {
 
   return (
     <Grid container spacing={2} >
-      <Grid  sm={12} >
+      <Grid  xs={12} >
         <SelectDropdown
           selectLabel={res.DATE}
           selectItems={effectiveDateSelectItems}

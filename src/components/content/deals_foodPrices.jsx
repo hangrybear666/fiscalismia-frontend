@@ -93,7 +93,7 @@ export default function Deals_FoodPrices( props ) {
   return (
     <React.Fragment>
       <Grid container spacing={2} sx={{marginTop:2}}>
-        <Grid  sm={8} xl={10} >
+        <Grid  xs={7} md={8} xl={10} >
           <SelectDropdown
             defaultValue={res.ALL}
             selectLabel={res.DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL}
@@ -102,7 +102,7 @@ export default function Deals_FoodPrices( props ) {
             handleSelect={handleSelect}
           />
         </Grid>
-        <Grid  sm={4} xl={2}>
+        <Grid  xs={5} md={4} xl={2}>
           <IconButton
             onClick={handleClearSelection}
             variant="outlined"

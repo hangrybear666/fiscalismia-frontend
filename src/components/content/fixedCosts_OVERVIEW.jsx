@@ -222,7 +222,7 @@ export default function FixedCosts_Overview( props ) {
 
   return (
     <Grid container spacing={3}>
-      <Grid  sm={12} >
+      <Grid  xs={12} >
         <SelectDropdown
           selectLabel={res.DATE}
           selectItems={effectiveDateSelectItems}

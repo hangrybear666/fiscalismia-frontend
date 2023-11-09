@@ -269,7 +269,7 @@ export default function FixedCosts_Leisure( props ) {
 
   return (
     <Grid container spacing={2}>
-      <Grid  sm={12} >
+      <Grid  xs={12} >
         <SelectDropdown
           selectLabel={res.DATE}
           selectItems={effectiveDateSelectItems}
@@ -277,16 +277,16 @@ export default function FixedCosts_Leisure( props ) {
           handleSelect={handleSelect}
         />
       </Grid>
-      <Grid  md={12} xl={4}>
+      <Grid  md={12} lg={4}>
         <ContentCardCosts {...sportsAndHealthCard} imgHeight={275}/>
       </Grid>
-      <Grid  md={12} xl={8} display="flex" alignItems="center" justifyContent="center">
+      <Grid  md={12} lg={8} display="flex" alignItems="center" justifyContent="center">
         <ContentVerticalBarChart {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
       </Grid>
-      <Grid md={12} xl={4}>
+      <Grid md={12} lg={4}>
         <ContentCardCosts {...mediaAndEntertainmentCard} imgHeight={275}/>
       </Grid>
-      <Grid md={12} xl={8} display="flex" alignItems="center" justifyContent="center" >
+      <Grid md={12} lg={8} display="flex" alignItems="center" justifyContent="center" >
         <ContentVerticalBarChart {...mediaAndEntertainmentChart} dataSetCount={3} selectedLabel={selectedEffectiveDate}/>
       </Grid>
     </Grid>
