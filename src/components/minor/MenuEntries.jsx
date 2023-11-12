@@ -11,6 +11,7 @@ import PercentIcon from '@mui/icons-material/Percent';
 import CottageIcon from '@mui/icons-material/Cottage';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 // good icons for ADD functionality
 import AddCardIcon from '@mui/icons-material/AddCard';
 import AddchartIcon from '@mui/icons-material/Addchart';
@@ -47,6 +48,13 @@ export const menuEntries = [
       { id: res.OVERVIEW, path: paths.DEALS_OVERVIEW, icon: <PercentIcon /> },
       { id: res.FOOD_PRICES, path: paths.DEALS_FOOD_PRICES, icon: <ShoppingCartIcon />},
       { id: res.GROCERY_DEALS, path: paths.DEALS_GROCERY_DEALS, icon: <AddShoppingCartIcon />},
+    ],
+  },
+  ,
+  {
+    id: res.ADMIN_PANEL,
+    children: [
+      { id: res.UPLOAD_AREA, path: paths.ADMIN_UPLOAD_AREA, icon: <FileUploadIcon /> },
     ],
   },
 ]

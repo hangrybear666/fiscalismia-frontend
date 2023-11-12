@@ -14,4 +14,5 @@ export const paths = {
   DEALS_OVERVIEW: "deals/overview",
   DEALS_FOOD_PRICES: "deals/food_prices",
   DEALS_GROCERY_DEALS: "deals/grocery_deals",
+  ADMIN_UPLOAD_AREA: "admin/upload",
 };

@@ -13,6 +13,8 @@ export const resourceProperties = {
   KCAL: 'kcal',
   SIGN_IN: 'Einloggen',
   SAVE: 'Speichern',
+  ADMIN_PANEL: 'Adminbereich',
+  UPLOAD_AREA: 'DB Upload',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   GROCERIES: 'Lebensmittel',
@@ -104,6 +106,15 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG: 'Marke muss mindestens 4 Zeichen enthalten.',
   MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG: 'Gewicht als Zahl in Gramm erwartet, zB.: 500',
   MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
+
+  MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_OPEN: 'TSV Import Supermarktartikel',
+  MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
+  MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update',
+
+  
+  MINOR_INPUT_FIXED_COSTS_MODAL_OPEN: 'TSV Import Fixkosten',
+  MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
+  MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
 };
 
 export const fixedCostCategories = {
@@ -153,7 +164,7 @@ export const foodItemInputCategories = {
   },
   ARRAY_MACROS: [
     'Protein',
-    'Fats',
+    'Fat',
     'Carbs',
     'Fiber'
   ]

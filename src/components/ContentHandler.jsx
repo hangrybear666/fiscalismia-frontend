@@ -48,6 +48,8 @@ export default function Content( props ) {
         return <Deals_FoodPrices value={value}/>
       case paths.DEALS_GROCERY_DEALS :
         return <Deals_GroceryDeals value={value}/>
+      case paths.ADMIN_UPLOAD_AREA :
+        return <TestData value={value}/>
       default:
         <React.Fragment>
         </React.Fragment>
