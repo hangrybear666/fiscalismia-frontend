@@ -134,7 +134,11 @@ export const postFoodItemImg = async (event, foodItemId) => {
     console.error(error);
   }
 }
-
+/**
+ * performs db insertion of provided object
+ * @param {*} foodItemDiscountObj with fields: id,price,startDate,endDate
+ * @returns
+ */
 export const postFoodItemDiscount = async foodItemDiscountObj => {
   if (!token) {
     setToken()
@@ -150,8 +154,59 @@ export const postFoodItemDiscount = async foodItemDiscountObj => {
     console.error(error);
   }
 }
+/** receives TSV as input from admin
+ * MANDATORY HEADER STRUCTURE:
+ * category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date
+ * @param {*} fixedCostsTsvInput
+ * @returns INSERT INTO statements for manual validation and loading of db table
+ * or ERROR data
+ */
+export const postFixedCostTsv = async fixedCostsTsvInput => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'text/plain',}
+    }
+    const response = await axios.post(`${baseUrl}/texttsv/fixed_costs`, fixedCostsTsvInput, config)
+    return response
+  } catch (error) {
+    return error
+  }
+}
 
-export const postNewFoodItem = async foodItemDiscountObj => {
+/**
+ * receives TSV as input from admin
+ * MANDATORY HEADER STRUCTURE:
+ * food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update
+ * @param {*} foodItemTsvInput
+ * @returns INSERT INTO statements for manual validation and loading of db table
+ * or ERROR data
+ */
+export const postAllFoodItems = async foodItemTsvInput => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'text/plain',}
+    }
+    const response = await axios.post(`${baseUrl}/texttsv/new_food_items`, foodItemTsvInput, config)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+/**
+ * performs db insertion of provided object
+ * @param {*} foodItemObj with fields: foodItem, brand, store, mainMacro, kcalAmount, weight, price, lastUpdate
+ * @returns dimension_key of inserted object or ERROR
+ */
+export const postNewFoodItem = async foodItemObj => {
   if (!token) {
     setToken()
   }
@@ -160,7 +215,7 @@ export const postNewFoodItem = async foodItemDiscountObj => {
       headers: { Authorization: `Bearer ${token}` ,
       'Content-Type': 'application/json',}
     }
-    const response = await axios.post(`${baseUrl}/upload/food_item`, foodItemDiscountObj, config)
+    const response = await axios.post(`${baseUrl}/upload/food_item`, foodItemObj, config)
     return response.data
   } catch (error) {
     console.error(error);
