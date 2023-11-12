@@ -21,6 +21,8 @@ import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
 import ContentCardCosts from '../minor/ContentCardCosts';
 import { getFabUtilityClass } from '@mui/material';
+import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
+import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
 
 
 export default function Content({ show = true, value }) {
@@ -116,6 +118,14 @@ export default function Content({ show = true, value }) {
       <Typography color="inherit" variant="body1">
         {value.path}
       </Typography> */}
+      {window.localStorage.getItem('loginUserName') == 'admin'
+      ? <InputFixedCostsFromTsvModal/>
+      : null}
+      {window.localStorage.getItem('loginUserName') == 'admin'
+      ? <Box sx={{mb:2}}>
+          <InputAllFoodItemsFromTsvModal/>
+        </Box>
+      : null}
 
       {/* DB REST TESTING */}
       <Grid sx={{ mt:2, mb:3 }} container spacing={0} columns={{ xs: 6 }} direction="column" alignItems="center">
