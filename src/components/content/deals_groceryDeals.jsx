@@ -62,12 +62,12 @@ function extractCardData(allFoodDiscounts) {
       `${e.price}${res.CURRENCY_EURO}`,
       `${e.discount_price}${res.CURRENCY_EURO}`,
       `${Math.round(e.reduced_by_pct)}${res.SYMBOL_PERCENT}`,
-      `Gewicht ${e.weight}g`,
-      `gültig von ${e.discount_start_date}`,
-      `gültig bis ${e.discount_end_date}`,
-      `Angebotsdauer: ${e.discount_days_duration} Tage`,
-      e.starts_in_days <= 0 ? `noch ${e.ends_in_days} Tage gültig` : null,
-      e.starts_in_days > 0 ? e.starts_in_days == 1 ? `gültig ab morgen` : `startet in ${e.starts_in_days} Tagen` : null,
+      `Gewicht ${e.weight}g`, // TODO mit resources ersetzen
+      `gültig von ${e.discount_start_date}`, // TODO mit resources ersetzen
+      `gültig bis ${e.discount_end_date}`, // TODO mit resources ersetzen
+      `Angebotsdauer: ${e.discount_days_duration} Tage`, // TODO mit resources ersetzen
+      e.starts_in_days <= 0 ? e.ends_in_days == 1 ? `noch heute und morgen gültig` : e.ends_in_days == 0 ? `letzter Tag der Gültigkeit` : `noch ${e.ends_in_days} Tage gültig` : null, // TODO mit resources ersetzen
+      e.starts_in_days > 0 ? e.starts_in_days == 1 ? `gültig ab morgen` : `startet in ${e.starts_in_days} Tagen` : null, // TODO mit resources ersetzen
       null, // details
       e.store,
       e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : 'no-img'
@@ -82,7 +82,7 @@ function extractCardData(allFoodDiscounts) {
  * -> key is the selected label
  * -> value is the food item ID for discount price insertion into the db
  * 2) Transforms a list of Objects from the db into an array of selection labels for the dropdown
- * @param {*} allFoodPrices selectItemArray: for dropdown, 
+ * @param {*} allFoodPrices selectItemArray: for dropdown,
  * selectItemLabelValueMap: for finding ID of selected label
  * @returns
  */
@@ -91,11 +91,11 @@ function getFoodItemSelectItemsForModal(allFoodPrices) {
   const selectItemArray = new Array();
   allFoodPrices.forEach((e,i) => {
     const cur = {
-      key: `${e.food_item} - ${e.brand}`,
+      key: `${e.food_item} - ${e.brand} | ${e.store}`,
       value: e.id,
     }
     selectItemLabelValueMap.set(cur.key,cur.value);
-    selectItemArray[i] = `${e.food_item} - ${e.brand}`;
+    selectItemArray[i] = `${e.food_item} - ${e.brand} | ${e.store}`;
   })
   return { selectItemArray, selectItemLabelValueMap}
 }

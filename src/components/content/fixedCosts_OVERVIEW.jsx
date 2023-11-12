@@ -12,6 +12,7 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
+import { Box } from '@mui/material';
 
 
 function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
@@ -221,41 +222,43 @@ export default function FixedCosts_Overview( props ) {
   )
 
   return (
-    <Grid container spacing={3}>
-      <Grid  xs={12} >
-        <SelectDropdown
-          selectLabel={res.DATE}
-          selectItems={effectiveDateSelectItems}
-          selectedValue={selectedEffectiveDate}
-          handleSelect={handleSelect}
-        />
+    <>
+      <Grid container spacing={3}>
+        <Grid  xs={12} >
+          <SelectDropdown
+            selectLabel={res.DATE}
+            selectItems={effectiveDateSelectItems}
+            selectedValue={selectedEffectiveDate}
+            handleSelect={handleSelect}
+          />
+        </Grid>
+        <Grid xs={12}>
+          <ContentCardCosts elevation={12} {...monthlyTotalCostCard} />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...rentAndUtilitiesCard}  />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...studentLoansCard}  />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...dslAndPhoneCard}  />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...sportsAndHealthCard}  />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...mediaAndEntertainmentCard}  />
+        </Grid>
+        <Grid xs={6} md={4} xl={2}>
+          <ContentCardCosts {...insuranceCard}  />
+        </Grid>
+        <Grid xs={0} xl={1}></Grid>
+        <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >
+          <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate}/>
+        </Grid>
+        <Grid xs={0} xl={1}></Grid>
       </Grid>
-      <Grid xs={12}>
-        <ContentCardCosts elevation={12} {...monthlyTotalCostCard} />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...rentAndUtilitiesCard}  />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...studentLoansCard}  />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...dslAndPhoneCard}  />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...sportsAndHealthCard}  />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...mediaAndEntertainmentCard}  />
-      </Grid>
-      <Grid xs={6} md={4} xl={2}>
-        <ContentCardCosts {...insuranceCard}  />
-      </Grid>
-      <Grid xs={0} xl={1}></Grid>
-      <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >
-        <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate}/>
-      </Grid>
-      <Grid xs={0} xl={1}></Grid>
-    </Grid>
+    </>
   )
 }

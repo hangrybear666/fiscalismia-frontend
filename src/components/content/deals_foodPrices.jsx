@@ -92,7 +92,7 @@ export default function Deals_FoodPrices( props ) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={2} sx={{marginTop:2}}>
+      <Grid container spacing={1} sx={{marginTop:2}}>
         <Grid  xs={7} md={8} xl={10} >
           <SelectDropdown
             defaultValue={res.ALL}
@@ -122,7 +122,7 @@ export default function Deals_FoodPrices( props ) {
           </Grid>
         {foodItemCards ?
         foodItemCards.map((foodItem) => (
-          <Grid key={foodItem.header} xs={12} md={6} xl={3}>
+          <Grid key={foodItem.foodItemId} xs={12} md={6} lg={3} xl={2}>
             <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
           </Grid>
         ))

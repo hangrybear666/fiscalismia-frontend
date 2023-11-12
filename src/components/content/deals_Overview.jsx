@@ -30,9 +30,6 @@ export default function Deals_Overview( props ) {
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
       let allFoodPricesAndDiscounts = await getAllFoodPricesAndDiscounts();
-      allFoodPricesAndDiscounts.results.forEach(element => {
-        console.log(element)
-      });
       setFoodPricesAndDiscounts(allFoodPricesAndDiscounts.results)
     }
     getAllPricesAndDiscounts();
@@ -71,7 +68,7 @@ export default function Deals_Overview( props ) {
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.weight}{res.GRAMS}</TableCell>
                 <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
                 <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.last_update}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.weight_per_100_kcal}€</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.normalized_price}€</TableCell>
               </TableRow>
             )) : null}
           </TableBody>
