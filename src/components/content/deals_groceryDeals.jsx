@@ -165,7 +165,7 @@ export default function Deals_GroceryDeals( props ) {
       <Grid container spacing={2} sx={{marginTop:1.5}}>
         {discountedItemCards ?
         discountedItemCards.map((foodItem) => (
-          <Grid key={foodItem.id + foodItem.startDate} xs={12} md={6} xl={4}>
+          <Grid key={foodItem.foodItemId + foodItem.startDate} xs={12} md={6} xl={4}>
             <ContentCardDiscounts elevation={3} {...foodItem} imgHeight={150} />
           </Grid>
         ))
