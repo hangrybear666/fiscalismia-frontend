@@ -20,6 +20,7 @@ import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFoodItemDiscount } from '../../services/pgConnections';
+import { Autocomplete, Stack } from '@mui/material';
 
 
 const style = {
@@ -47,13 +48,14 @@ function dateValidation(dateStr) {
 export default function InputFoodDiscountModal( props ) {
   const [open, setOpen] = React.useState(false);
   // Selection
-  const { selectItems, selectItemMap, setDiscountAddedItemId } = props
-  const [selectedFoodItem, setSelectedFoodItem] = React.useState('');
+  const { setDiscountAddedItemId, autoCompleteItemArray } = props
   const [selectedFoodItemId, setSelectedFoodItemId] = React.useState('');
   // Validation
+  const [isFoodItemSelectionError, setIsFoodItemSelectionError] = React.useState(false);
   const [isPriceValidationError, setIsPriceValidationError] = React.useState(false);
   const [isStartDateValidationError, setIsStartDateValidationError] = React.useState(false);
   const [isEndDateValidationError, setIsEndDateValidationError] = React.useState(false);
+  const [foodItemSelectionErrorMessage, setFoodItemSelectionErrorMessage] = React.useState('');
   const [discountPriceValidationErrorMessage, setDiscountPriceValidationErrorMessage] = React.useState('');
   const [startDateErrorMessage, setStartDateErrorMessage] = React.useState('');
   const [endDateErrorMessage, setEndDateErrorMessage] = React.useState('');
@@ -90,12 +92,21 @@ export default function InputFoodDiscountModal( props ) {
   }
 
   /* some basic validation of:
+   * - Autocomplete Selection
    * - discount_price
    * - discount_start_date
    * - discount_end_date
    */
   const validateInput = (e) => {
     e.preventDefault();
+    // Food Item Selection
+    if (!isNumeric(selectedFoodItemId)) {
+      setIsFoodItemSelectionError(true)
+      setFoodItemSelectionErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG)
+    } else {
+      setIsFoodItemSelectionError(false)
+      setFoodItemSelectionErrorMessage('')
+    }
     // Price Validation
     if (!isNumeric(discountPrice)) {
       setIsPriceValidationError(true)
@@ -137,6 +148,7 @@ export default function InputFoodDiscountModal( props ) {
   }
 
   const inputChangeListener = (e) => {
+    e.preventDefault();
     switch (e.target.id) {
       case "discount_price":
         setDiscountPrice(e.target.value.replace(',','.'))
@@ -150,14 +162,8 @@ export default function InputFoodDiscountModal( props ) {
     }
   }
 
-  /**
-   * sets selected label of dropdown
-   * then gets the corresponding food item id for db insertion from the map that holds the label as key
-   * @param {*} selection 
-   */
-  const handleSelect = (selection) => {
-    setSelectedFoodItem(selection)
-    setSelectedFoodItemId(selectItemMap.get(selection))
+  const handleAutoCompleteSelection = (event, newValue) => {
+    setSelectedFoodItemId(newValue?.id ? newValue.id : null)
   }
 
   return (
@@ -180,14 +186,26 @@ export default function InputFoodDiscountModal( props ) {
         onClose={handleClose}
       >
         <Box sx={style}>
-          {selectItems
-          ? <SelectDropdown
-            defaultValue={res.ALL}
-            selectLabel={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL}
-            selectItems={selectItems}
-            selectedValue={selectedFoodItem}
-            handleSelect={handleSelect}
-          />
+          {/* AUTOCOMPLETE DROPDOWN FÜR FOOD ITEMS */}
+          {autoCompleteItemArray
+          ?
+          <Stack>
+            <Autocomplete
+              disablePortal
+              onChange={handleAutoCompleteSelection}
+              options={autoCompleteItemArray}
+              renderInput={(params) => <TextField {...params} label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL} sx={{ borderRadius:0 }}/>}
+              sx={{ ml:0.8, width:'100%' }}
+            />
+            <Typography sx={{ 
+              color: 'rgba(211,47,47,1.0)', 
+              fontSize: 12,
+              ml:1,
+              mt:0.5,
+              display: isFoodItemSelectionError ? 'inline' : 'none' }}>
+                {foodItemSelectionErrorMessage}
+            </Typography>
+          </Stack>
           : null}
           {/* ANGEBOTSPREIS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">

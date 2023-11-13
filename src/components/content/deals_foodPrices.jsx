@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import ContentCardFoodPrices from '../minor/ContentCardFoodPrices';
 import { resourceProperties as res, fixedCostCategories as categories, serverConfig } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
-import SelectDropdown from '../minor/SelectDropdown';
-import IconButton from '@mui/material/IconButton';
-import CancelIcon from '@mui/icons-material/CancelSharp';
-import Chip from '@mui/material/Chip';
+import FilterFoodPriceData from '../minor/FilterFoodPriceData';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { Box, Typography } from '@mui/material';
 
 function constructContentCardObject(foodItemId, header, originalPrice, pricePerKg, kcalAmount, subtitle, lastUpdated, details, store, img) { // TODO img
   const contentCardObj =
@@ -55,79 +53,65 @@ function extractCardData(allFoodDiscounts) {
 
 }
 
-function macroNutrientFilter(foodPrices, selection) {
-  return foodPrices.filter(e => e.main_macro == selection)
-}
-
-function getMacroNutrientCategories(allFoodPrices) {
-  return Array.from(new Set(allFoodPrices.map(e => e.main_macro)))
-}
-
 export default function Deals_FoodPrices( props ) {
-  const [foodPrices, setFoodPrices] = useState(null)
-  const [foodItemCards, setFoodItemCards] = useState(null)
+  // breakpoint
+  const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down("lg"));
 
-  const [macroNutrientSelectItems, setMacroNutrientSelectItems] = useState(null)
-  const [selectedMacroNutrient, setSelectedMacroNutrient] = useState('')
+  const [foodPrices, setFoodPrices] = useState(null)
+  // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
+  const [filteredFoodPrices, setFilteredFoodPrices] = useState(null)
+  const [foodItemCards, setFoodItemCards] = useState(null)
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
       let allFoodPrices = await getAllFoodPricesAndDiscounts();
       setFoodPrices(allFoodPrices.results)
-      setMacroNutrientSelectItems(getMacroNutrientCategories(allFoodPrices.results))
       setFoodItemCards(extractCardData(allFoodPrices.results))
     }
+    if (filteredFoodPrices) {
+      setFoodItemCards(extractCardData(filteredFoodPrices))
+      return;
+    }
     getAllPricesAndDiscounts();
-  }, []
+  }, [filteredFoodPrices]
   )
-  const handleSelect = (selection) => {
-    setSelectedMacroNutrient(selection)
-    const filteredFoodPrices = macroNutrientFilter(foodPrices, selection)
-    setFoodItemCards(extractCardData(filteredFoodPrices))
-  }
-  const handleClearSelection = () => {
-    setSelectedMacroNutrient(null)
-    setFoodItemCards(extractCardData(foodPrices))
-  }
 
   return (
     <React.Fragment>
       <Grid container spacing={1} sx={{marginTop:2}}>
-        <Grid  xs={7} md={8} xl={10} >
-          <SelectDropdown
-            defaultValue={res.ALL}
-            selectLabel={res.DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL}
-            selectItems={macroNutrientSelectItems}
-            selectedValue={selectedMacroNutrient}
-            handleSelect={handleSelect}
-          />
+        {/* Horizontal Data Filtering on top on small screens */}
+        <Grid xs={12} >
+          {foodPrices
+          ? <FilterFoodPriceData
+            doNotRender={!isSmallScreen}
+            displayHorizontally={true}
+            foodPrices={foodPrices}
+            setFilteredFoodPrices={setFilteredFoodPrices}/>
+          : null }
         </Grid>
-        <Grid  xs={5} md={4} xl={2}>
-          <IconButton
-            onClick={handleClearSelection}
-            variant="outlined"
-            color="primary"
-            sx={{
-              borderRadius:0,
-              paddingX: 1,
-              width:'100%',
-              paddingY: 2,
-              border: '1px solid rgba(64,64,64,0.4)',
-              fontSize:15,
-              fontWeight:400,}}
-          >
-            <CancelIcon sx={{mr:1.5}}/>
-              {res.DEALS_FOOD_PRICES_SELECTITEMS_DELETE_SELECTION}
-          </IconButton>
-          </Grid>
-        {foodItemCards ?
-        foodItemCards.map((foodItem) => (
-          <Grid key={foodItem.foodItemId} xs={12} md={6} lg={3} xl={2}>
-            <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
-          </Grid>
-        ))
-        : null
-      }
+        {/* FOOD ITEM CARDS */}
+        <Grid container xs={12} lg={9} >
+          {foodItemCards
+            ? foodItemCards.map((foodItem) => (
+              <Grid key={foodItem.foodItemId} xs={12} md={6} lg={4} xl={3} >
+                <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
+              </Grid>
+          ))
+            : null
+          }
+        </Grid>
+        {/* Vertical Data Filtering on right side on large screens */}
+        <Grid lg={3} >
+          <Box sx={{ marginLeft: { lg:2} }}>
+            {foodPrices
+            ? <FilterFoodPriceData
+              doNotRender={isSmallScreen}
+              displayHorizontally={false}
+              foodPrices={foodPrices}
+              setFilteredFoodPrices={setFilteredFoodPrices}/>
+            : null }
+          </Box>
+        </Grid>
       </Grid>
     </React.Fragment>
   );

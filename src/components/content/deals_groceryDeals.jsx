@@ -82,29 +82,34 @@ function extractCardData(allFoodDiscounts) {
  * -> key is the selected label
  * -> value is the food item ID for discount price insertion into the db
  * 2) Transforms a list of Objects from the db into an array of selection labels for the dropdown
+ * 3) Transforms a list of Objects from the db into an array of autocomplete labels and additional information
  * @param {*} allFoodPrices selectItemArray: for dropdown,
  * selectItemLabelValueMap: for finding ID of selected label
+ * autoCompleteItemArray: Array with label for input completion and any other desired information
  * @returns
  */
-function getFoodItemSelectItemsForModal(allFoodPrices) {
+function getFoodItemSelectionDataStructures(allFoodPrices) {
   const selectItemLabelValueMap = new Map();
   const selectItemArray = new Array();
+  const autoCompleteItemArray = new Array();
   allFoodPrices.forEach((e,i) => {
     const cur = {
       key: `${e.food_item} - ${e.brand} | ${e.store}`,
       value: e.id,
     }
-    selectItemLabelValueMap.set(cur.key,cur.value);
-    selectItemArray[i] = `${e.food_item} - ${e.brand} | ${e.store}`;
+    // selectItemLabelValueMap.set(cur.key,cur.value);
+    // selectItemArray[i] = `${e.food_item} - ${e.brand} | ${e.store}`;
+    autoCompleteItemArray[i] = { label: `${e.food_item} - ${e.brand} | ${e.store}`,
+                                 id:e.id}
   })
-  return { selectItemArray, selectItemLabelValueMap}
+  // return { selectItemArray, selectItemLabelValueMap, autoCompleteItemArray}
+  return { autoCompleteItemArray}
 }
 
 export default function Deals_GroceryDeals( props ) {
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
   const [discountedItemCards, setDiscountedItemCards] = useState(null)
-  const [allFoodItemsForSelection, setAllFoodItemsForSelection] = useState(null)
-  const [allFoodItemMapForSelection, setAllFoodItemMapForSelection] = useState(null)
+  const [allFoodItemArrayForAutoComplete, setAllFoodItemArrayForAutoComplete] = useState(null)
   // this setter is called from the Modal after db insertion to force the frontend to update and refetch the data from db
   const [discountAddedItemId, setDiscountAddedItemId] = useState(null)
 
@@ -112,11 +117,9 @@ export default function Deals_GroceryDeals( props ) {
     const getAllPricesAndDiscounts = async() => {
       let allFoodDiscounts = await getCurrentFoodDiscounts();
       let allFoodItems = await getAllFoodPricesAndDiscounts();
-      const selectionInfoForModal = getFoodItemSelectItemsForModal(allFoodItems.results)
-      const selectItemArray = selectionInfoForModal.selectItemArray
-      const selectItemLabelValueMap = selectionInfoForModal.selectItemLabelValueMap
-      setAllFoodItemsForSelection(selectItemArray)
-      setAllFoodItemMapForSelection(selectItemLabelValueMap)
+      const selectionInfoForModal = getFoodItemSelectionDataStructures(allFoodItems.results)
+      const autoCompleteItemArray = selectionInfoForModal.autoCompleteItemArray
+      setAllFoodItemArrayForAutoComplete(autoCompleteItemArray)
       setFoodPricesAndDiscounts(allFoodDiscounts.results)
       setDiscountedItemCards(extractCardData(allFoodDiscounts.results))
     }
@@ -126,7 +129,7 @@ export default function Deals_GroceryDeals( props ) {
 
   return (
     <React.Fragment>
-      <InputFoodDiscountModal selectItems={allFoodItemsForSelection} selectItemMap={allFoodItemMapForSelection} setDiscountAddedItemId={setDiscountAddedItemId}/>
+      <InputFoodDiscountModal setDiscountAddedItemId={setDiscountAddedItemId} autoCompleteItemArray={allFoodItemArrayForAutoComplete}/>
       <TableContainer component={Paper} sx={{borderRadius:0}}>
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
           <TableHead>

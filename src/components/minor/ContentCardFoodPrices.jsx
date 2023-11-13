@@ -25,6 +25,10 @@ import netto from '../../public/imgs/supermarkets/netto1.png'
 import rewe from '../../public/imgs/supermarkets/rewe1.png'
 import amazon from '../../public/imgs/supermarkets/amazon1.png'
 import edeka from '../../public/imgs/supermarkets/edeka1.png'
+import butcher from '../../public/imgs/supermarkets/butcher1.png'
+import online from '../../public/imgs/supermarkets/online1.png'
+import online2 from '../../public/imgs/supermarkets/online2.png'
+import all from '../../public/imgs/supermarkets/alle1.png'
 import { styled } from '@mui/material/styles';
 import { resourceProperties as res, serverConfig, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg} from '../../services/pgConnections';
@@ -80,6 +84,12 @@ export default function ContentCardFoodPrices( props ) {
         return netto;
       case foodCategories.JSON_STORES.edeka:
         return edeka;
+      case foodCategories.JSON_STORES.butcher:
+        return butcher;
+      case foodCategories.JSON_STORES.online:
+        return online;
+      case foodCategories.JSON_STORES.all:
+        return all;
       default:
         break;
     }
@@ -236,7 +246,7 @@ export default function ContentCardFoodPrices( props ) {
               sx={{ padding:0 }}
             >
             {header ?
-            <Typography variant="overline" sx={{ fontSize: 16, paddingX: 2, letterSpacing:2 }} color="text.secondary" >
+            <Typography variant="overline" sx={{ fontSize: 14, paddingX: 2, letterSpacing:2 }} color="text.secondary" >
               {header}
             </Typography>
             : null }
@@ -249,15 +259,14 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent='center'
               alignItems="center"
               sx={{ paddingLeft:2,
-                    borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: '1px solid rgb(50,50,50,0.4)' }}
             >
               {store ?
                 <Box
                   component="img"
                   sx={{
-                    height: 64,
-                    width: 64,
+                    height: 56,
+                    width: 56,
                     maxHeight: { xs: 96, md: 96 },
                     maxWidth: { xs: 96, md: 96 },
                   }}
@@ -273,17 +282,16 @@ export default function ContentCardFoodPrices( props ) {
               display={( originalPrice || subtitle) ? 'flex' : 'none'}
               justifyContent='center'
               alignItems="center"
-              sx={{ borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+              sx={{ borderTop: '1px solid rgb(50,50,50,0.4)' }}
             >
               <Stack >
                 {originalPrice ?
-                <Typography sx={{ ml:3, fontWeight:500, }} variant="h6" >
+                <Typography sx={{ ml:3, fontWeight:500, fontSize:16, }} variant="h6" >
                   {originalPrice}
                 </Typography>
                 : null}
                 {subtitle ?
-                <Typography variant="subtitle1" sx={{ mb: 0.2, fontSize:15, letterSpacing:1 }} color="text.secondary">
+                <Typography variant="subtitle1" sx={{ mb: 0.2, fontSize:14, letterSpacing:1 }} color="text.secondary">
                   {subtitle}
                 </Typography>
                 : null}
@@ -299,8 +307,7 @@ export default function ContentCardFoodPrices( props ) {
               alignItems="center"
               sx={{ display: 'flex',
                     paddingLeft:2,
-                    borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: '1px solid rgb(50,50,50,0.4)' }}
             >
               {pricePerKg ?
               <Paper elevation={0}>
@@ -311,7 +318,7 @@ export default function ContentCardFoodPrices( props ) {
                     paddingX: 0,
                     paddingY: 2,
                     border: '1px solid rgba(64,64,64,0.5)',
-                    fontSize:15,
+                    fontSize:14,
                     fontWeight:400,}}
                 />
               </Paper>
@@ -324,9 +331,9 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent="center"
               alignItems="center"
               sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
-              <Stack sx={{ mt: 1,minWidth: '100%' }}>
-                <Chip label={kcalAmount} sx={{ borderRadius:0 }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
-                <Chip label={lastUpdated} sx={{ mt:1, borderRadius:0 }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
+              <Stack sx={{ mt: 0.5,minWidth: '100%' }}>
+                <Chip label={kcalAmount} sx={{ borderRadius:0, fontSize:12, fontWeight:400, height:'26px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
+                <Chip label={lastUpdated} sx={{ mt:0.7, borderRadius:0,fontSize:12, fontWeight:400, height:'26px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
                 {details ?
                 <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
                   {details.map((e,i) => (

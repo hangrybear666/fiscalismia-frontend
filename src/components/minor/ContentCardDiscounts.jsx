@@ -31,6 +31,10 @@ import netto from '../../public/imgs/supermarkets/netto1.png'
 import rewe from '../../public/imgs/supermarkets/rewe1.png'
 import amazon from '../../public/imgs/supermarkets/amazon1.png'
 import edeka from '../../public/imgs/supermarkets/edeka1.png'
+import butcher from '../../public/imgs/supermarkets/butcher1.png'
+import online from '../../public/imgs/supermarkets/online1.png'
+import online2 from '../../public/imgs/supermarkets/online2.png'
+import all from '../../public/imgs/supermarkets/alle1.png'
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -79,6 +83,12 @@ export default function ContentCardDiscounts( props ) {
         return netto;
       case foodCategories.JSON_STORES.edeka:
         return edeka;
+      case foodCategories.JSON_STORES.butcher:
+        return butcher;
+      case foodCategories.JSON_STORES.online:
+        return online;
+      case foodCategories.JSON_STORES.all:
+        return all;
       default:
         break;
     }
@@ -241,7 +251,7 @@ export default function ContentCardDiscounts( props ) {
             : null }
             </Grid>
 
-            {/* store */}
+            {/* STORE IMAGES */}
             <Grid
               xs={4}
               display='flex'

@@ -12,6 +12,7 @@ import Deals_Overview from './content/deals_Overview';
 import Deals_FoodPrices from './content/deals_FoodPrices';
 import Deals_GroceryDeals from './content/deals_groceryDeals';
 import Box from '@mui/material/Box';
+import { contentBackgroundColor, contentMaxWidth } from './styling/Theme';
 
 export default function Content( props ) {
 
@@ -58,22 +59,29 @@ export default function Content( props ) {
   }
 
   return (
-    <Box component="main" sx={{ flex: 1, py: 3, px: 3, bgcolor: '#eaeff1' }}>
-      <Routes>
-        {menuEntries.map(({ id: parentId, children }) =>(
-          <React.Fragment key={parentId}>
-            {children.map(({ id: childId, icon, path }) => (
-              <Route
-                path={path}
-                element={renderedElement(parentId, childId, path)}
-                key={childId}
-              />
+    <Box component="main" sx={{
+      flex: 1,
+      py: 3,
+      px: 3,
+      bgcolor: contentBackgroundColor }}
+    >
+        <Box id="content" sx={{ maxWidth: contentMaxWidth, margin:'0 auto' }}>
+          <Routes>
+            {menuEntries.map(({ id: parentId, children }) =>(
+              <React.Fragment key={parentId}>
+                {children.map(({ id: childId, icon, path }) => (
+                  <Route
+                    path={path}
+                    element={renderedElement(parentId, childId, path)}
+                    key={childId}
+                  />
+                  ))
+                }
+              </React.Fragment>
               ))
             }
-          </React.Fragment>
-          ))
-        }
-      </Routes>
+          </Routes>
+        </Box>
     </Box>
   );
 }
