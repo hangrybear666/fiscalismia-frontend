@@ -168,6 +168,7 @@ export default function InputFoodItemModal( props ) {
   }
 
   const inputChangeListener = (e) => {
+    e.preventDefault();
     switch (e.target.id) {
       case "food_item":
         setFoodItem(e.target.value)

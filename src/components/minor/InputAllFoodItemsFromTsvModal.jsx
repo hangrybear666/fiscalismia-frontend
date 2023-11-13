@@ -58,6 +58,7 @@ export default function InputAllFoodItemsFromTsvModal( props ) {
   }
 
   const inputChangeListener = (e) => {
+      e.preventDefault();
       setFoodItemTsvInput(e.target.value)
   }
 

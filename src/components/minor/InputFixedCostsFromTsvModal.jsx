@@ -58,6 +58,7 @@ export default function InputFixedCOstsFromTsvModal( props ) {
   }
 
   const inputChangeListener = (e) => {
+      e.preventDefault();
       setFixedCostsTsvInput(e.target.value)
   }
 

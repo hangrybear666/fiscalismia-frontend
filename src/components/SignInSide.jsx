@@ -68,6 +68,7 @@ export default function SignInSide() {
   };
 
   const inputChangeListener = (e) => {
+    e.preventDefault();
     switch (e.target.id) {
       case "username":
         setUsername(e.target.value)

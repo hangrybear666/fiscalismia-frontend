@@ -34,6 +34,7 @@ export default function Content({ show = true, value }) {
   const [deleteInput, setDeleteInput] = useState('')
 
   const inputChangeListener = (e) => {
+    e.preventDefault();
     switch (e.target.id) {
       case "postInput":
         setPostInput(e.target.value)
