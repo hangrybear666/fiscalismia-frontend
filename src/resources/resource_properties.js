@@ -87,6 +87,7 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_START_DATE: 'gültig von',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE: 'gültig bis',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL: 'Artikel auswählen',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG: 'Kein Artikel ausgewählt.',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 12.05',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG: 'Das Startdatum muss vor dem Enddatum liegen.',
@@ -111,10 +112,15 @@ export const resourceProperties = {
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update',
 
-  
   MINOR_INPUT_FIXED_COSTS_MODAL_OPEN: 'TSV Import Fixkosten',
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
+
+  MINOR_FILTER_FOOD_PRICES_NAME_HEADER: 'Suche',
+  MINOR_FILTER_FOOD_PRICES_FOOD_ITEM_INPUT_LABEL: 'Artikel',
+  MINOR_FILTER_FOOD_PRICES_MACRO_HEADER: 'Auswahl Makronährstoff',
+  MINOR_FILTER_FOOD_PRICES_STORE_HEADER: 'Auswahl Supermarkt',
+  MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER: 'Auswahl löschen',
 };
 
 export const fixedCostCategories = {
@@ -151,7 +157,11 @@ export const foodItemInputCategories = {
     'Metro',
     'Amazon',
     'Netto',
-    'Edeka'],
+    'Edeka',
+    'Metzger',
+    'Online',
+    'Alle',
+  ],
   JSON_STORES: {
     aldi: 'Aldi Süd',
     lidl: 'Lidl',
@@ -161,13 +171,22 @@ export const foodItemInputCategories = {
     amazon: 'Amazon',
     netto: 'Netto',
     edeka: 'Edeka',
+    butcher: 'Metzger',
+    online: 'Online',
+    all: 'Alle',
   },
   ARRAY_MACROS: [
     'Protein',
     'Fat',
     'Carbs',
     'Fiber'
-  ]
+  ],
+  JSON_MACROS: {
+    protein: 'Protein',
+    fat: 'Fat',
+    carbs: 'Carbs',
+    fiber: 'Fiber'
+  }
 }
 
 export const serverConfig = {

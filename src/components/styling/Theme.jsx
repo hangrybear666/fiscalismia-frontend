@@ -1,6 +1,8 @@
 
 import { createTheme } from '@mui/material/styles';
 
+export const contentBackgroundColor = '#eaeff1';
+export const contentMaxWidth = '1620px';
 const menuBgColor = '#081627' // Default
 const headerBgColor = '#012731' // Daintree
 /**
@@ -15,6 +17,15 @@ export let theme = createTheme({
         light: '#63ccff',
         main: '#183863',
         dark: '#006db3',
+      },
+    },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 700,
+        md: 1000,
+        lg: 1300,
+        xl: 1600,
       },
     },
     typography: {
@@ -127,6 +138,20 @@ export let theme = createTheme({
           root: {
             backgroundColor: 'rgb(255,255,255,0.5)',
             borderColor:'rgba(128,128,128,0.5)',
+          },
+        },
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            borderRadius:0,
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            borderRadius:0,
           },
         },
       },
