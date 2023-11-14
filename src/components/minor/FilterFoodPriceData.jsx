@@ -16,11 +16,6 @@ import all from '../../public/imgs/supermarkets/alle1.png'
 import { resourceProperties as res, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
 import { Paper, Box, Divider, Stack, IconButton, Typography, Button, ButtonGroup, FormControl, InputLabel, Input, Autocomplete, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
-const headerStyle = {
-  letterSpacing:2,
-  fontWeight:300,
-  fontSize:13
-}
 
 function getMacroNutrientCategories(allFoodPrices) {
   return Array.from(new Set(allFoodPrices.map(e => e.main_macro)))
@@ -46,13 +41,12 @@ function getFoodItemSelectionDataStructures(allFoodPrices) {
 }
 
 export default function FilterFoodPriceData( props ) {
-  if (props.doNotRender) {
-    return (<></>)
-  }
-  const { displayVertically } = props
+  const { displayHorizontally } = props
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
-  const { foodPrices, setFilteredFoodPrices } = props
+  const { foodPrices, filteredFoodPrices, setFilteredFoodPrices } = props
 
+  // React re-renders components with their default value when their key changes
+  const [resetAutocompleteHelper, setResetAutocompleteHelper] = useState(0)
   // FILTERING
   const [autoCompleteItemArray, setAutoCompleteItemArray] = useState([])
   const [macroNutrientItems, setMacroNutrientItems] = useState([])
@@ -61,6 +55,15 @@ export default function FilterFoodPriceData( props ) {
   const [selectedStore, setSelectedStore] = useState('')
   const [selectedFoodItemIds, setSelectedFoodItemIds] = useState([])
 
+  const headerStyle = {
+    letterSpacing:2,
+    fontWeight:300,
+    fontSize:13,
+    textDecoration: 'underline',
+    mt:0.6,
+    mb:0.4,
+    display: displayHorizontally ? 'none' : 'inline'
+  }
   useEffect(() => {
     if (foodPrices) {
       setAutoCompleteItemArray(getFoodItemSelectionDataStructures(foodPrices))
@@ -69,13 +72,6 @@ export default function FilterFoodPriceData( props ) {
     }
   }, []
   )
-
-  const handleClearSelection = () => {
-    setSelectedMacroNutrient('')
-    setSelectedStore('')
-    setSelectedFoodItemIds([])
-    setFilteredFoodPrices(null)
-  }
 
   const getSupermarketLogo = (store) => {
     switch (store) {
@@ -107,19 +103,31 @@ export default function FilterFoodPriceData( props ) {
   }
 
   const handleAutoCompleteSelection = (event, newValue) => {
-      if (newValue?.length == 1) {
-        const foodItemArr = [newValue[0].id]
-        setSelectedFoodItemIds(foodItemArr)
-      } else if (newValue?.length > 1) {
+      if (newValue?.length > 0) {
+        setSelectedMacroNutrient('')
+        setSelectedStore('')
         const foodItemArr = newValue.map(e=> e.id)
-        console.log(foodItemArr)
         setSelectedFoodItemIds(foodItemArr)
+        setFilteredFoodPrices(foodPrices.filter(e => foodItemArr.includes(e.id)))
+      } else {
+        setFilteredFoodPrices(null)
       }
     // setSelectedFoodItemId(newValue?.id ? newValue.id : null)
   }
 
+  const handleClearSelection = () => {
+    setSelectedMacroNutrient('')
+    setSelectedStore('')
+    setSelectedFoodItemIds([])
+    // React re-renders components with their default value when their key changes
+    setResetAutocompleteHelper(Math.random() * 1000000)
+    setFilteredFoodPrices(null)
+  }
+
   const handleMacroSelect = (event, newValue) => {
     setSelectedMacroNutrient(newValue)
+    setSelectedStore('')
+    setResetAutocompleteHelper(Math.random() * 1000000)
     // set parent's filtered food item list based on selection
     if (newValue) {
       setFilteredFoodPrices(foodPrices.filter(e => e.main_macro == newValue))
@@ -129,8 +137,9 @@ export default function FilterFoodPriceData( props ) {
   }
 
   const handleStoreSelect = (event, newValue) => {
-    console.log(newValue)
     setSelectedStore(newValue)
+    setSelectedMacroNutrient('')
+    setResetAutocompleteHelper(Math.random() * 1000000)
     // set parent's filtered food item list based on selection
     if (newValue) {
       setFilteredFoodPrices(foodPrices.filter(e => e.store == newValue))
@@ -140,141 +149,161 @@ export default function FilterFoodPriceData( props ) {
   }
 
   return (
-    <Paper elevation={6} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
-      <Box
-        sx={{padding:1,   }}>
-        <Grid
-          container
-          spacing={1}
-          sx={{}}>
-          {/* FILTER FOOD NAME */}
-          <Grid  xs={12} >
-            {autoCompleteItemArray ?
-              <Autocomplete
-                multiple
-                filterSelectedOptions
-                onChange={handleAutoCompleteSelection}
-                options={autoCompleteItemArray}
-                renderInput={(params) => <TextField {...params} label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL} sx={{ borderRadius:0 }}/>}
-                sx={{ width:'100%' }}
-              />
-            : null}
-            <Divider/>
-          </Grid>
-          {/* SELECT MACRO */}
-          <Grid  xs={12} >
-            <Stack>
-              <Typography sx={headerStyle}>
-                {res.MINOR_FILTER_FOOD_PRICES_MACRO_HEADER}
-              </Typography>
-              <ToggleButtonGroup
-                fullWidth
-                color="primary"
-                value={selectedMacroNutrient}
-                exclusive
-                onChange={handleMacroSelect}
-              >
-                {macroNutrientItems
-                ? macroNutrientItems.map(e => (
-                  <ToggleButton
-                    key={e}
-                    value={e}
-                    size="medium"
-                    sx={{
-                      borderRadius:0,
-                      '&:hover': {
-                        bgcolor: 'rgba(128,128,128,0.4)',
-                      },
-                      '&.Mui-selected:hover': {
-                        bgcolor: 'rgba(128,128,128,0.9)',},
-                      '&.Mui-selected': {
-                        bgcolor: "rgba(64,64,64, 0.8)",
-                        color:'#ffffff',
-                        boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
-                        transition: 'transform 0.5s ease 0s, box-shadow 0.2s linear 0s'},
-                    }}
-                  >
-                    {e}
-                  </ToggleButton>))
-                : null}
-              </ToggleButtonGroup>
-            </Stack>
-            <Divider/>
-          </Grid>
-          {/* SELECT SUPERMARKET */}
-          <Grid  xs={12} >
-            <Stack>
-              <Typography sx={headerStyle}>
-                  {res.MINOR_FILTER_FOOD_PRICES_STORE_HEADER}
-              </Typography>
-              <Stack direction="row" spacing={1}  useFlexGap flexWrap="wrap">
-              <ToggleButtonGroup
-                value={selectedStore}
-                color="primary"
-                exclusive
-                onChange={handleStoreSelect}
-                sx={{flexWrap: "wrap"}}
-              >
-                {storeItems
-                ? storeItems.map(e=> (
-                  <ToggleButton
-                    key={e}
-                    value={e}
-                    size="medium"
-                    sx={{
-                      borderRadius:0,
-                      margin:0,
-                      padding:'6px',
-                      border:0,
-                      '&:hover': {
-                        bgcolor: 'rgba(128,128,128,0.3)',
-                      },
-                      '&.Mui-selected:hover': {
-                        bgcolor: 'rgba(128,128,128,0.7)',},
-                      '&.Mui-selected': {
-                        bgcolor: "rgba(64,64,64, 0.8)",
-                        transform: 'translate3d(0px, 5px, 0px)',
-                        boxShadow: '0px 0px 6px 2px rgba(64,64,64, 0.4)',
-                        transition: 'transform 0.5s ease 0s, box-shadow 0.5s linear 0s'},
-                      }}
-                  >
-                  <Box
-                    key={e}
-                    component="img"
-                    sx={{
-                      height: 64,
-                      width: 64,
-                    }}
-                    alt={e}
-                    src={getSupermarketLogo(e)}
-                  />
-                  </ToggleButton>
-                  ))
-                : null}
-              </ToggleButtonGroup>
-              </Stack>
-            </Stack>
-          </Grid>
-          <Grid xs={12}>
-            <IconButton
-              onClick={handleClearSelection}
-              variant="outlined"
-              color="primary"
-              sx={{
-                borderRadius:0,
-                paddingX: 1,
-                width:'100%',
-                paddingY: 2,
-                border: '1px solid rgba(64,64,64,0.4)',
-                fontSize:15,
-                fontWeight:400,}}
-            >
-              <CancelIcon sx={{mr:1.5}}/>
-              {res.MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER}
-          </IconButton>
-          </Grid>
+    <Grid container spacing={1}>
+        <Grid xs={12}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+            <Box
+              sx={{padding:1.2}}>
+                <Typography>Filter Results</Typography>
+            </Box>
+          </Paper>
         </Grid>
-      </Box>
-    </Paper>
+        <Grid xs={12}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+            <Box
+              sx={{padding:1.2}}>
+              <Grid
+                container
+                spacing={1}
+                sx={{}}>
+                {/* FILTER FOOD NAME */}
+                <Grid  xs={12} >
+                  {autoCompleteItemArray ?
+                    <Autocomplete
+                      key={resetAutocompleteHelper}
+                      multiple
+                      filterSelectedOptions
+                      onChange={handleAutoCompleteSelection}
+                      options={autoCompleteItemArray}
+                      renderInput={(params) => <TextField {...params} label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL} sx={{ borderRadius:0 }}/>}
+                      sx={{ width:'100%' }}
+                    />
+                  : null}
+                  <Divider/>
+                </Grid>
+                {/* SELECT MACRO */}
+                <Grid  xs={12} >
+                  <Stack>
+                    <Typography sx={headerStyle}>
+                      {res.MINOR_FILTER_FOOD_PRICES_MACRO_HEADER}
+                    </Typography>
+                    <ToggleButtonGroup
+                      fullWidth
+                      color="primary"
+                      value={selectedMacroNutrient}
+                      exclusive
+                      onChange={handleMacroSelect}
+                    >
+                      {macroNutrientItems
+                      ? macroNutrientItems.map(e => (
+                        <ToggleButton
+                          key={e}
+                          value={e}
+                          size={displayHorizontally ? 'small' : 'medium'}
+                          sx={{
+                            borderRadius:0,
+                            '&:hover': {
+                              bgcolor: 'rgba(128,128,128,0.4)',
+                            },
+                            '&.Mui-selected:hover': {
+                              bgcolor: 'rgba(128,128,128,0.9)',},
+                            '&.Mui-selected': {
+                              bgcolor: "rgba(64,64,64, 0.8)",
+                              color:'#ffffff',
+                              boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
+                              transition: 'box-shadow 0.2s linear 0s'},
+                          }}
+                        >
+                          {e}
+                        </ToggleButton>))
+                      : null}
+                    </ToggleButtonGroup>
+                  </Stack>
+                  <Divider/>
+                </Grid>
+                {/* SELECT SUPERMARKET */}
+                <Grid  xs={12} >
+                  <Stack>
+                    <Typography sx={headerStyle}>
+                        {res.MINOR_FILTER_FOOD_PRICES_STORE_HEADER}
+                    </Typography>
+                    <Stack direction="row" spacing={1}  useFlexGap flexWrap="wrap">
+                    <ToggleButtonGroup
+                      value={selectedStore}
+                      color="primary"
+                      exclusive
+                      onChange={handleStoreSelect}
+                      sx={{flexWrap: "wrap"}}
+                    >
+                      {storeItems
+                      ? storeItems.map(e=> (
+                        <ToggleButton
+                          key={e}
+                          value={e}
+                          size="medium"
+                          sx={{
+                            borderRadius:0,
+                            margin:0,
+                            padding: displayHorizontally ?'3px' : '6px',
+                            border:0,
+                            '&:hover': {
+                              bgcolor: 'rgba(128,128,128,0.3)',
+                            },
+                            '&.Mui-selected:hover': {
+                              bgcolor: 'rgba(128,128,128,0.7)',},
+                            '&.Mui-selected': {
+                              bgcolor: "rgba(64,64,64, 0.8)",
+                              transform: 'translate3d(0px, 5px, 0px)',
+                              boxShadow: '0px 0px 6px 2px rgba(64,64,64, 0.4)',
+                              transition: 'transform 0.5s ease 0s, box-shadow 0.5s linear 0s'},
+                            }}
+                        >
+                        <Box
+                          key={e}
+                          component="img"
+                          sx={{
+                            height: displayHorizontally ? 48 : 64,
+                            width: displayHorizontally ? 48 : 64,
+                          }}
+                          alt={e}
+                          src={getSupermarketLogo(e)}
+                        />
+                        </ToggleButton>
+                        ))
+                      : null}
+                    </ToggleButtonGroup>
+                    </Stack>
+                  </Stack>
+                </Grid>
+                <Grid xs={12} sx={{display: displayHorizontally ? 'none' : 'block'}}>
+                  <IconButton
+                    onClick={handleClearSelection}
+                    variant="outlined"
+                    color="primary"
+                    sx={{
+                      borderRadius:0,
+                      paddingX: 1,
+                      '&:hover': {
+                        bgcolor: 'rgba(245,81,81,0.4)',
+                        border: '1px solid rgba(64,64,64,0.9)',
+                        boxShadow: '0px 0px 6px 2px rgba(64,64,64, 0.4)',
+                        color:'rgba(0,0,0,0.7)',
+                        transition: 'box-shadow 0.2s linear 0s'
+                      },
+                      width:'100%',
+                      paddingY: 1,
+                      border: '1px solid rgba(64,64,64,0.5)',
+                      fontSize:14,
+                      fontWeight:400,}}
+                  >
+                    <CancelIcon sx={{mr:1.5}}/>
+                    {res.MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER}
+                </IconButton>
+                </Grid>
+              </Grid>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
   );
 }

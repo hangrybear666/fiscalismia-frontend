@@ -2,7 +2,7 @@
 import { createTheme } from '@mui/material/styles';
 
 export const contentBackgroundColor = '#eaeff1';
-export const contentMaxWidth = '1620px';
+export const contentMaxWidth = '1660px';
 const menuBgColor = '#081627' // Default
 const headerBgColor = '#012731' // Daintree
 /**

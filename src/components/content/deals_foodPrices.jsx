@@ -81,16 +81,16 @@ export default function Deals_FoodPrices( props ) {
       <Grid container spacing={1} sx={{marginTop:2}}>
         {/* Horizontal Data Filtering on top on small screens */}
         <Grid xs={12} >
-          {foodPrices
+          {foodPrices && isSmallScreen
           ? <FilterFoodPriceData
-            doNotRender={!isSmallScreen}
-            displayHorizontally={true}
-            foodPrices={foodPrices}
-            setFilteredFoodPrices={setFilteredFoodPrices}/>
+              displayHorizontally={true}
+              foodPrices={foodPrices}
+              filteredFoodPrices={filteredFoodPrices}
+              setFilteredFoodPrices={setFilteredFoodPrices}/>
           : null }
         </Grid>
         {/* FOOD ITEM CARDS */}
-        <Grid container xs={12} lg={9} >
+        <Grid container xs={12} lg={8} xl={9} >
           {foodItemCards
             ? foodItemCards.map((foodItem) => (
               <Grid key={foodItem.foodItemId} xs={12} md={6} lg={4} xl={3} >
@@ -101,14 +101,14 @@ export default function Deals_FoodPrices( props ) {
           }
         </Grid>
         {/* Vertical Data Filtering on right side on large screens */}
-        <Grid lg={3} >
+        <Grid lg={4} xl={3}>
           <Box sx={{ marginLeft: { lg:2} }}>
-            {foodPrices
+            {foodPrices && !isSmallScreen
             ? <FilterFoodPriceData
-              doNotRender={isSmallScreen}
-              displayHorizontally={false}
-              foodPrices={foodPrices}
-              setFilteredFoodPrices={setFilteredFoodPrices}/>
+                displayHorizontally={false}
+                foodPrices={foodPrices}
+                filteredFoodPrices={filteredFoodPrices}
+                setFilteredFoodPrices={setFilteredFoodPrices}/>
             : null }
           </Box>
         </Grid>
