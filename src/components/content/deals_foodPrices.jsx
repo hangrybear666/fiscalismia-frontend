@@ -61,6 +61,7 @@ export default function Deals_FoodPrices( props ) {
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
   const [filteredFoodPrices, setFilteredFoodPrices] = useState(null)
   const [foodItemCards, setFoodItemCards] = useState(null)
+  const [hasBeenSortedBy, setHasBeenSortedBy] = useState(null)
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
@@ -73,7 +74,7 @@ export default function Deals_FoodPrices( props ) {
       return;
     }
     getAllPricesAndDiscounts();
-  }, [filteredFoodPrices]
+  }, [filteredFoodPrices, hasBeenSortedBy]
   )
 
   return (
@@ -86,7 +87,9 @@ export default function Deals_FoodPrices( props ) {
               displayHorizontally={true}
               foodPrices={foodPrices}
               filteredFoodPrices={filteredFoodPrices}
-              setFilteredFoodPrices={setFilteredFoodPrices}/>
+              setFilteredFoodPrices={setFilteredFoodPrices}
+              hasBeenSortedBy={hasBeenSortedBy}
+              setHasBeenSortedBy={setHasBeenSortedBy}/>
           : null }
         </Grid>
         {/* FOOD ITEM CARDS */}
@@ -108,7 +111,9 @@ export default function Deals_FoodPrices( props ) {
                 displayHorizontally={false}
                 foodPrices={foodPrices}
                 filteredFoodPrices={filteredFoodPrices}
-                setFilteredFoodPrices={setFilteredFoodPrices}/>
+                setFilteredFoodPrices={setFilteredFoodPrices}
+                hasBeenSortedBy={hasBeenSortedBy}
+                setHasBeenSortedBy={setHasBeenSortedBy}/>
             : null }
           </Box>
         </Grid>

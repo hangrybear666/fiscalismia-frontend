@@ -13,8 +13,107 @@ import butcher from '../../public/imgs/supermarkets/butcher1.png'
 import online from '../../public/imgs/supermarkets/online1.png'
 import online2 from '../../public/imgs/supermarkets/online2.png'
 import all from '../../public/imgs/supermarkets/alle1.png'
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { resourceProperties as res, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
 import { Paper, Box, Divider, Stack, IconButton, Typography, Button, ButtonGroup, FormControl, InputLabel, Input, Autocomplete, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
+
+const SORT_BY_IDS = {
+  pricePerKgDesc: 1,
+  pricePerKgAsc: 2,
+  kcalAmountDesc: 3,
+  kcalAmountAsc: 4,
+  priceDesc: 5,
+  priceAsc: 6,
+  normalizedPriceDesc: 7,
+  normalizedPriceAsc: 8,
+}
+
+let sortCriteria = new Array();
+sortCriteria.push(
+  [
+    {
+      id: SORT_BY_IDS.pricePerKgDesc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_DESC,
+      icon: <KeyboardDoubleArrowDownIcon/>
+    }
+  ,
+    {
+      id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE_PER_KG,
+      tooltip: null,
+      icon: null
+    }
+  ,
+    {
+      id: SORT_BY_IDS.pricePerKgAsc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_ASC,
+      icon: <KeyboardDoubleArrowUpIcon/>
+    }
+  ]
+);
+sortCriteria.push(
+  [
+    {
+      id: SORT_BY_IDS.kcalAmountDesc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_DESC,
+      icon: <KeyboardDoubleArrowDownIcon/>
+    }
+  ,
+    {
+      id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT,
+      tooltip: null,
+      icon: null
+    }
+  ,
+    {
+      id: SORT_BY_IDS.kcalAmountAsc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_ASC,
+      icon: <KeyboardDoubleArrowUpIcon/>
+    }
+  ]
+);
+sortCriteria.push(
+  [
+    {
+      id: SORT_BY_IDS.priceDesc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_DESC,
+      icon: <KeyboardDoubleArrowDownIcon/>
+    }
+  ,
+    {
+      id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE,
+      tooltip: null,
+      icon: null
+    }
+  ,
+    {
+      id: SORT_BY_IDS.priceAsc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_ASC,
+      icon: <KeyboardDoubleArrowUpIcon/>
+    }
+  ]
+);
+sortCriteria.push(
+  [
+    {
+      id: SORT_BY_IDS.normalizedPriceDesc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_DESC,
+      icon: <KeyboardDoubleArrowDownIcon/>
+    }
+  ,
+    {
+      id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE,
+      icon: null
+    }
+  ,
+    {
+      id: SORT_BY_IDS.normalizedPriceAsc,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_ASC,
+      icon: <KeyboardDoubleArrowUpIcon/>
+    }
+  ]
+);
 
 
 function getMacroNutrientCategories(allFoodPrices) {
@@ -43,7 +142,7 @@ function getFoodItemSelectionDataStructures(allFoodPrices) {
 export default function FilterFoodPriceData( props ) {
   const { displayHorizontally } = props
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
-  const { foodPrices, filteredFoodPrices, setFilteredFoodPrices } = props
+  const { foodPrices, filteredFoodPrices, setFilteredFoodPrices, setHasBeenSortedBy, hasBeenSortedBy } = props
 
   // React re-renders components with their default value when their key changes
   const [resetAutocompleteHelper, setResetAutocompleteHelper] = useState(0)
@@ -53,7 +152,6 @@ export default function FilterFoodPriceData( props ) {
   const [storeItems, setStoreItems] = useState([])
   const [selectedMacroNutrient, setSelectedMacroNutrient] = useState('')
   const [selectedStore, setSelectedStore] = useState('')
-  const [selectedFoodItemIds, setSelectedFoodItemIds] = useState([])
 
   const headerStyle = {
     letterSpacing:2,
@@ -103,11 +201,11 @@ export default function FilterFoodPriceData( props ) {
   }
 
   const handleAutoCompleteSelection = (event, newValue) => {
+    setHasBeenSortedBy(null)
       if (newValue?.length > 0) {
         setSelectedMacroNutrient('')
         setSelectedStore('')
         const foodItemArr = newValue.map(e=> e.id)
-        setSelectedFoodItemIds(foodItemArr)
         setFilteredFoodPrices(foodPrices.filter(e => foodItemArr.includes(e.id)))
       } else {
         setFilteredFoodPrices(null)
@@ -116,15 +214,16 @@ export default function FilterFoodPriceData( props ) {
   }
 
   const handleClearSelection = () => {
+    setHasBeenSortedBy(null)
     setSelectedMacroNutrient('')
     setSelectedStore('')
-    setSelectedFoodItemIds([])
     // React re-renders components with their default value when their key changes
     setResetAutocompleteHelper(Math.random() * 1000000)
     setFilteredFoodPrices(null)
   }
 
   const handleMacroSelect = (event, newValue) => {
+    setHasBeenSortedBy(null)
     setSelectedMacroNutrient(newValue)
     setSelectedStore('')
     setResetAutocompleteHelper(Math.random() * 1000000)
@@ -133,6 +232,60 @@ export default function FilterFoodPriceData( props ) {
       setFilteredFoodPrices(foodPrices.filter(e => e.main_macro == newValue))
     } else {
       setFilteredFoodPrices(foodPrices)
+    }
+  }
+
+
+  const handleSortListener = (event, newValue) => {
+    if (hasBeenSortedBy != newValue) {
+      setHasBeenSortedBy(newValue)
+      switch (newValue) {
+        case SORT_BY_IDS.priceAsc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.price > b.price ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.price > b.price ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.priceDesc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.price < b.price ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.price < b.price ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.kcalAmountAsc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.kcal_amount > b.kcal_amount ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.kcal_amount > b.kcal_amount ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.kcalAmountDesc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.kcal_amount < b.kcal_amount ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.kcal_amount < b.kcal_amount ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.pricePerKgAsc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.price_per_kg > b.price_per_kg ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.price_per_kg > b.price_per_kg ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.pricePerKgDesc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.price_per_kg < b.price_per_kg ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.price_per_kg < b.price_per_kg ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.normalizedPriceAsc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.normalized_price > b.normalized_price ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.normalized_price > b.normalized_price ? 1 : -1 ))
+          break;
+        case SORT_BY_IDS.normalizedPriceDesc:
+          setFilteredFoodPrices(filteredFoodPrices
+            ? filteredFoodPrices.sort((a,b) => a.normalized_price < b.normalized_price ? 1 : -1 )
+            : foodPrices.sort((a,b) => a.normalized_price < b.normalized_price ? 1 : -1 ))
+          break;
+        default:
+          break;
+        }
+
+    } else {
+      // DO NOTHING; has already been sorted by this criteria
     }
   }
 
@@ -154,7 +307,44 @@ export default function FilterFoodPriceData( props ) {
           <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
             <Box
               sx={{padding:1.2}}>
-                <Typography>Filter Results</Typography>
+                <Typography>Sort Results</Typography>
+                {sortCriteria ?
+                sortCriteria.map(parent=> (
+                  <ToggleButtonGroup
+                    key={parent[1].id}
+                    exclusive
+                    onChange={handleSortListener}
+                    sx={{m:0.5}}
+                  >
+                    {parent.map(child => (
+                      <ToggleButton
+                        key={child.id}
+                        value={child.id}
+                        size="small"
+                        disabled={child.icon ? false : true}
+                        sx={{
+                          borderRadius:0,
+                          '&:hover': {
+                            bgcolor: 'rgba(128,128,128,0.4)',
+                          },
+                          '&.Mui-selected:hover': {
+                            bgcolor: 'rgba(128,128,128,0.9)',},
+                          '&.Mui-selected': {
+                            bgcolor: "rgba(64,64,64, 0.8)",
+                            color:'#ffffff',
+                            boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
+                            transition: 'box-shadow 0.2s linear 0s'},
+                          '&.Mui-disabled' : {
+                            color: 'rgba(64,64,64, 0.9)'
+                          },
+                        }}
+                      >
+                        {child.icon ? child.icon : child.id}
+                      </ToggleButton>)
+                    )}
+                  </ToggleButtonGroup>
+                  ))
+                : null}
             </Box>
           </Paper>
         </Grid>
