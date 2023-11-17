@@ -193,7 +193,10 @@ export default function ContentCardFoodPrices( props ) {
           }}
         square
       >
-        {img || imgFilePath ?
+        {img == res.NO_IMG ?
+        <></>
+        :
+        img || imgFilePath ?
         <Box sx={{position: 'relative'}}>
           {/* IMAGE queried from server */}
           <CardMedia
@@ -217,21 +220,19 @@ export default function ContentCardFoodPrices( props ) {
                   alignItems:'center',
                   display:'flex'}}>
             <Paper elevation={4}>
-              <form action="http://localhost:3002/api/fiscalismia/upload/food_item_img" method="post" encType="multipart/form-data">
-                <Button
-                  sx={{ borderRadius:0,
-                    paddingY:2,
-                    color:'#ffffff',
-                    border: '1px solid rgba(64,64,64,0.2)',
-                    backgroundColor: 'rgba(128,128,128,0.3)'
-                  }}
-                    component='label'
-                    variant='contained'
-                    startIcon={<CloudUploadIcon />}>
-                    {res.UPLOAD_IMG}
-                  <VisuallyHiddenInput type="file" onChange={handleFileUpload}/>
-                </Button>
-              </form>
+              <Button
+                sx={{ borderRadius:0,
+                  paddingY:2,
+                  color:'#ffffff',
+                  border: '1px solid rgba(64,64,64,0.2)',
+                  backgroundColor: 'rgba(128,128,128,0.3)'
+                }}
+                  component='label'
+                  variant='contained'
+                  startIcon={<CloudUploadIcon />}>
+                  {res.UPLOAD_IMG}
+                <VisuallyHiddenInput type="file" onChange={handleFileUpload}/>
+              </Button>
             </Paper>
           </CardActions>}
         <CardContent sx={{ padding:0 }}>
@@ -286,12 +287,12 @@ export default function ContentCardFoodPrices( props ) {
             >
               <Stack >
                 {originalPrice ?
-                <Typography sx={{ ml:3, fontWeight:500, fontSize:16, }} variant="h6" >
+                <Typography sx={{  ml:2,fontWeight:500, fontSize:16, }} variant="h6" >
                   {originalPrice}
                 </Typography>
                 : null}
                 {subtitle ?
-                <Typography variant="subtitle1" sx={{ mb: 0.2, fontSize:14, letterSpacing:1 }} color="text.secondary">
+                <Typography variant="subtitle1" sx={{ mb: 0.2, ml:1.5,fontSize:14, letterSpacing:1 }} color="text.secondary">
                   {subtitle}
                 </Typography>
                 : null}
@@ -306,7 +307,6 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent='flex-start'
               alignItems="center"
               sx={{ display: 'flex',
-                    paddingLeft:2,
                     borderTop: '1px solid rgb(50,50,50,0.4)' }}
             >
               {pricePerKg ?

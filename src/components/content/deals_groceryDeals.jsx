@@ -42,7 +42,7 @@ function constructContentCardObject(foodItemId, header, originalPrice, discountP
     img: img ? img : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`,
     store: store
   }
-  if (img === 'no-img') {
+  if (img === res.NO_IMG) {
     contentCardObj.img = null
   }
   return contentCardObj
@@ -70,7 +70,7 @@ function extractCardData(allFoodDiscounts) {
       e.starts_in_days > 0 ? e.starts_in_days == 1 ? `gültig ab morgen` : `startet in ${e.starts_in_days} Tagen` : null, // TODO mit resources ersetzen
       null, // details
       e.store,
-      e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : 'no-img'
+      e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : res.NO_IMG
     );
       discountedFoodItemCards.push(card);
   })
@@ -168,7 +168,7 @@ export default function Deals_GroceryDeals( props ) {
       <Grid container spacing={2} sx={{marginTop:1.5}}>
         {discountedItemCards ?
         discountedItemCards.map((foodItem) => (
-          <Grid key={foodItem.foodItemId + foodItem.startDate} xs={12} md={6} xl={4}>
+          <Grid key={foodItem.foodItemId + foodItem.startDate} xs={12} md={6} lg={4} xl={3}>
             <ContentCardDiscounts elevation={3} {...foodItem} imgHeight={150} />
           </Grid>
         ))

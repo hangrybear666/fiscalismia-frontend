@@ -18,11 +18,8 @@ function constructContentCardObject(foodItemId, header, originalPrice, pricePerK
     subtitle: subtitle ? subtitle.trim() : null,
     lastUpdated: lastUpdated,
     details: details,
-    img: img ? img : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`,
+    img: img,
     store: store
-  }
-  if (img === 'no-img') {
-    contentCardObj.img = null
   }
   return contentCardObj
 }
@@ -32,7 +29,7 @@ function constructContentCardObject(foodItemId, header, originalPrice, pricePerK
  * in order to populate one card for each discounted item.
  * @param {*} allFoodDiscounts db query result
  */
-function extractCardData(allFoodDiscounts) {
+function extractCardData(allFoodDiscounts, initializeWithoutImage) {
   let discountedFoodItemCards = new Array();
   allFoodDiscounts.forEach( e => {
     let card = constructContentCardObject(
@@ -45,7 +42,7 @@ function extractCardData(allFoodDiscounts) {
       `zuletzt geprüft ${e.last_update}`,
       null, // details
       e.store,
-      e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : 'no-img'
+      (e.img == res.NO_IMG || initializeWithoutImage) ? res.NO_IMG : e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : null
     );
       discountedFoodItemCards.push(card);
   })
@@ -67,10 +64,10 @@ export default function Deals_FoodPrices( props ) {
     const getAllPricesAndDiscounts = async() => {
       let allFoodPrices = await getAllFoodPricesAndDiscounts();
       setFoodPrices(allFoodPrices.results)
-      setFoodItemCards(extractCardData(allFoodPrices.results))
+      setFoodItemCards(extractCardData(allFoodPrices.results, true))
     }
     if (filteredFoodPrices) {
-      setFoodItemCards(extractCardData(filteredFoodPrices))
+      setFoodItemCards(extractCardData(filteredFoodPrices, false))
       return;
     }
     getAllPricesAndDiscounts();
@@ -96,7 +93,7 @@ export default function Deals_FoodPrices( props ) {
         <Grid container xs={12} lg={8} xl={9} >
           {foodItemCards
             ? foodItemCards.map((foodItem) => (
-              <Grid key={foodItem.foodItemId} xs={12} md={6} lg={4} xl={3} >
+              <Grid key={foodItem.foodItemId} xs={12} md={6} lg={6} xl={3} >
                 <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
               </Grid>
           ))

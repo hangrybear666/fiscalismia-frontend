@@ -30,7 +30,7 @@ function constructContentCardObject(header, amount, subtitle, details, icon, img
     img: img ? img : `https://source.unsplash.com/random/?dollar&${Math.floor(Math.random() * 100)}`,
     icon: icon
   }
-  if (img === 'no-img') {
+  if (img === res.NO_IMG) {
     contentCardObj.img = null
   }
   return contentCardObj

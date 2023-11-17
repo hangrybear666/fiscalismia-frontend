@@ -16,7 +16,7 @@ import all from '../../public/imgs/supermarkets/alle1.png'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { resourceProperties as res, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
-import { Paper, Box, Divider, Stack, IconButton, Typography, Button, ButtonGroup, FormControl, InputLabel, Input, Autocomplete, TextField, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Paper, Box, Divider, Stack, IconButton, Typography, Autocomplete, TextField, ToggleButtonGroup, ToggleButton, Switch } from '@mui/material';
 
 const SORT_BY_IDS = {
   pricePerKgDesc: 1,
@@ -152,6 +152,8 @@ export default function FilterFoodPriceData( props ) {
   const [storeItems, setStoreItems] = useState([])
   const [selectedMacroNutrient, setSelectedMacroNutrient] = useState('')
   const [selectedStore, setSelectedStore] = useState('')
+  // Render Images yes or no switch
+  const [renderImages, setRenderImages] = React.useState(false);
 
   const headerStyle = {
     letterSpacing:2,
@@ -160,7 +162,7 @@ export default function FilterFoodPriceData( props ) {
     textDecoration: 'underline',
     mt:0.6,
     mb:0.4,
-    display: displayHorizontally ? 'none' : 'inline'
+    display: displayHorizontally ? 'none' : 'block'
   }
   useEffect(() => {
     if (foodPrices) {
@@ -197,6 +199,36 @@ export default function FilterFoodPriceData( props ) {
         return all;
       default:
         break;
+    }
+  }
+
+  const handleRenderImagesSwitch = (event) => {
+    setRenderImages(event.target.checked)
+    if(!event.target.checked) {
+      setFilteredFoodPrices(
+        filteredFoodPrices
+        ? filteredFoodPrices.map(e=> {
+          e.img = res.NO_IMG
+          return e
+        })
+        : foodPrices.map(e=> {
+          e.img = res.NO_IMG
+          return e
+        })
+      )
+      // setHasBeenSortedBy(Math.random *10)
+    } else {
+      setFilteredFoodPrices(
+        filteredFoodPrices
+        ? filteredFoodPrices.map(e=> {
+          e.img = null
+          return e
+        })
+        : foodPrices.map(e=> {
+          e.img = null
+          return e
+        })
+      )
     }
   }
 
@@ -303,48 +335,62 @@ export default function FilterFoodPriceData( props ) {
 
   return (
     <Grid container spacing={1}>
+      <Grid xs={12}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+            <Box
+              sx={{padding:1.2}}>
+              <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL}</Typography>
+              <Switch
+                size="large"
+                checked={renderImages}
+                onChange={handleRenderImagesSwitch}
+              />
+            </Box>
+          </Paper>
+        </Grid>
         <Grid xs={12}>
           <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
             <Box
               sx={{padding:1.2}}>
-                <Typography>Sort Results</Typography>
-                {sortCriteria ?
-                sortCriteria.map(parent=> (
-                  <ToggleButtonGroup
-                    key={parent[1].id}
-                    exclusive
-                    onChange={handleSortListener}
-                    sx={{m:0.5}}
-                  >
-                    {parent.map(child => (
-                      <ToggleButton
-                        key={child.id}
-                        value={child.id}
-                        size="small"
-                        disabled={child.icon ? false : true}
-                        sx={{
-                          borderRadius:0,
-                          '&:hover': {
-                            bgcolor: 'rgba(128,128,128,0.4)',
-                          },
-                          '&.Mui-selected:hover': {
-                            bgcolor: 'rgba(128,128,128,0.9)',},
-                          '&.Mui-selected': {
-                            bgcolor: "rgba(64,64,64, 0.8)",
-                            color:'#ffffff',
-                            boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
-                            transition: 'box-shadow 0.2s linear 0s'},
-                          '&.Mui-disabled' : {
-                            color: 'rgba(64,64,64, 0.9)'
-                          },
-                        }}
-                      >
-                        {child.icon ? child.icon : child.id}
-                      </ToggleButton>)
-                    )}
-                  </ToggleButtonGroup>
-                  ))
-                : null}
+              <Typography sx={headerStyle}>{res.SORT_BY}</Typography>
+              {sortCriteria ?
+              sortCriteria.map(parent=> (
+                <ToggleButtonGroup
+                  key={parent[1].id}
+                  exclusive
+                  value={hasBeenSortedBy}
+                  onChange={handleSortListener}
+                  sx={{m:0.5}}
+                >
+                  {parent.map(child => (
+                    <ToggleButton
+                      key={child.id}
+                      value={child.id}
+                      size="small"
+                      disabled={child.icon ? false : true}
+                      sx={{
+                        borderRadius:0,
+                        '&:hover': {
+                          bgcolor: 'rgba(128,128,128,0.4)',
+                        },
+                        '&.Mui-selected:hover': {
+                          bgcolor: 'rgba(128,128,128,0.9)',},
+                        '&.Mui-selected': {
+                          bgcolor: "rgba(64,64,64, 0.8)",
+                          color:'#ffffff',
+                          boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
+                          transition: 'box-shadow 0.2s linear 0s'},
+                        '&.Mui-disabled' : {
+                          color: 'rgba(64,64,64, 0.9)'
+                        },
+                      }}
+                    >
+                      {child.icon ? child.icon : child.id}
+                    </ToggleButton>)
+                  )}
+                </ToggleButtonGroup>
+                ))
+              : null}
             </Box>
           </Paper>
         </Grid>

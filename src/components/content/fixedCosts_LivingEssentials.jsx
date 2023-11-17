@@ -32,7 +32,7 @@ function constructContentCardObject(header, amount, subtitle, details, icon, img
     img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
     icon: icon
   }
-  if (img === 'no-img') {
+  if (img === res.NO_IMG) {
     contentCardObj.img = null
   }
   return contentCardObj
@@ -145,10 +145,10 @@ function extractChartData(allFixedCosts) {
  * @returns
  */
 function extractCardData(specificFixedCosts) {
-  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, <LocalAtmOutlinedIcon sx={iconProperties}/>, 'no-img')
-  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, <CellWifiOutlinedIcon sx={iconProperties}/>, 'no-img')
-  let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, <WaterDamageOutlinedIcon sx={iconProperties}/>, 'no-img' )
-  let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, <MoneyOffOutlinedIcon sx={iconProperties}/>, 'no-img')
+  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, <LocalAtmOutlinedIcon sx={iconProperties}/>, res.NO_IMG)
+  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, <CellWifiOutlinedIcon sx={iconProperties}/>, res.NO_IMG)
+  let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, <WaterDamageOutlinedIcon sx={iconProperties}/>, res.NO_IMG )
+  let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, <MoneyOffOutlinedIcon sx={iconProperties}/>, res.NO_IMG)
   // Rent and Utilities
   let rentAndUtilitiesFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.LIVING_ESSENTIALS_KEY )

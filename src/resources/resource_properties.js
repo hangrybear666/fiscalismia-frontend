@@ -8,10 +8,14 @@ export const resourceProperties = {
   EURO: '€',
   GRAMS: 'g',
   ALL: 'Alle',
+  NO_IMG: 'no-img',
   SYMBOL_PERCENT: '%',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
   SIGN_IN: 'Einloggen',
+  CREATE_ACCOUNT: 'Account anlegen',
+  USERNAME: 'Nutzername',
+  PASSWORD: 'Passwort',
   SAVE: 'Speichern',
   ADMIN_PANEL: 'Adminbereich',
   UPLOAD_AREA: 'DB Upload',
@@ -23,6 +27,7 @@ export const resourceProperties = {
   MONTHLY_BUDGET:'Monatliches Budget',
   SAVINGS: 'Ersparnisse',
   SALES: 'Verkäufe',
+  SORT_BY: 'Sortieren nach',
   LIVING_ESSENTIALS:'Wohnen & Essentielles',
   RECREATION_RELAXATION:'Freizeit & Erholung',
   STORES: 'Verkaufsplattformen',
@@ -121,22 +126,26 @@ export const resourceProperties = {
   MINOR_FILTER_FOOD_PRICES_MACRO_HEADER: 'Auswahl Makronährstoff',
   MINOR_FILTER_FOOD_PRICES_STORE_HEADER: 'Auswahl Supermarkt',
   MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER: 'Auswahl löschen',
+  MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL: 'Bilder anzeigen',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_ASC: 'Nach €/kg aufsteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE_PER_KG: 'Kilopreis',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_DESC: 'Nach €/kg absteigend.',
-
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_ASC: 'Nach € aufsteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE: 'Preis',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_DESC: 'Nach € absteigend.',
-
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_ASC: 'Nach € aufsteigend.',
-  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE: 'Preis für Tagesbedarf',
+  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE: 'Preis für Tag',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE: 'Wenn nur dieses Nahrungsmittel 3500kcal abdecken müsste, was wäre der Preis?',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_DESC: 'Nach € absteigend.',
-  
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_ASC: 'Nach kcal/100g aufsteigend.',
-  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT: 'Kalorien',
+  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT: 'KCAL',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_DESC: 'Nach kcal/100g absteigend.',
+
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1: 'Kein Nutzername angegeben.',
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2: 'Nutzername muss mindestens 3 Zeichen enthalten.',
+
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2: 'Passwort muss mindestens 8 Zeichen enthalten.',
 };
 
 export const fixedCostCategories = {
@@ -207,5 +216,7 @@ export const foodItemInputCategories = {
 
 export const serverConfig = {
   NODE_ROOT_URL: 'http://localhost:3002/',
-  API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
+  // API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
+  API_BASE_URL: `http://192.168.178.37:3002/api/fiscalismia`,
+
 }

@@ -30,7 +30,7 @@ function constructContentCardObject(header, amount, subtitle, details, icon, img
     img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
     icon: icon
   }
-  if (img === 'no-img') {
+  if (img === res.NO_IMG) {
     contentCardObj.img = null
   }
   return contentCardObj
@@ -100,13 +100,13 @@ function extractChartData(allFixedCosts) {
  * @returns
  */
 function extractCardData(specificFixedCosts) {
-  let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, 'no-img')
-  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, null, 'no-img')
-  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, 'no-img')
-  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, null, 'no-img')
-  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, null, 'no-img')
-  let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, 'no-img')
-  let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, 'no-img')
+  let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, res.NO_IMG)
+  let rentAndUtilities = constructContentCardObject(res.FIXED_COSTS_RENT_UTILITIES, null, '1.00', null, null, res.NO_IMG)
+  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG)
+  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, null, res.NO_IMG)
+  let mediaAndEntertainment = constructContentCardObject(res.FIXED_COSTS_MEDIA_ENTERTAINMENT, null, '1.00', null, null, res.NO_IMG)
+  let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG)
+  let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, res.NO_IMG)
   // Monthly Total Amount
   monthlyTotalCost.amount = Math.round(specificFixedCosts.results
     .map((row) => row.monthly_cost)
