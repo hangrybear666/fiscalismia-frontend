@@ -187,7 +187,7 @@ export default function ContentCardFoodPrices( props ) {
         variant="elevation"
         sx={{
           margin:0,
-          height: '100%',
+          height:img == res.NO_IMG ? '230px' : `${imgHeight+230}px`,
           border: '1px solid rgb(64,64,64,0.5)',
           paddingBottom:1.5
           }}
@@ -244,7 +244,8 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent="center"
               alignItems="center"
               xs={header ? 12 : 0}
-              sx={{ padding:0 }}
+              sx={{ padding:0,
+                height:'75px', }}
             >
             {header ?
             <Typography variant="overline" sx={{ fontSize: 14, paddingX: 2, letterSpacing:2 }} color="text.secondary" >

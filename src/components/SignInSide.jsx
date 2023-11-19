@@ -3,23 +3,21 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import pgConnections from '../services/pgConnections';
+import { login, getUserSpecificSettings } from '../services/pgConnections';
 import { IconButton } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { resourceProperties as res } from '../resources/resource_properties'
+import { resourceProperties as res, localStorageKeys } from '../resources/resource_properties'
 import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserAuthenticated, isJwtToken } from '../services/userAuthentication';
-
+import CreateAccountModal from './minor/CreateAccountModal';
 
 function Copyright(props) {
   return (
@@ -37,10 +35,18 @@ function Copyright(props) {
 const theme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      light: '#63ccff',
+      main: '#63ccff',
+      dark: '#006db3',
+    },
+    secondary: {
+      light: '#68456e',
+      main: '#bd9fc2',
+      dark: '#d3bcd6',
+    },
   },
 });
-
-
 
 export default function SignInSide() {
   const [username, setUsername] = useState('')
@@ -48,17 +54,33 @@ export default function SignInSide() {
   const navigate = useNavigate()
   const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
   useEffect(() => {
-    if (authenticated)
-    navigate(paths.APP_ROOT_PATH, { replace: true })
+    const getUserSettings = async() => {
+      try {
+        const response = await getUserSpecificSettings(loginUserName);
+        if (response?.results?.length > 0) {
+          let userSettingsMap = new Map();
+          response.results.forEach(e=> {
+            userSettingsMap.set(e.setting_key, e.setting_value)
+          })
+          window.localStorage.setItem(localStorageKeys.selectedMode, userSettingsMap.get(localStorageKeys.selectedMode))
+          window.localStorage.setItem(localStorageKeys.selectedPalette, userSettingsMap.get(localStorageKeys.selectedPalette))
+        }
+      } finally {
+        navigate(paths.APP_ROOT_PATH, { replace: true });
+      }
+    }
+    if (authenticated) {
+      getUserSettings();
+    }
   }, [authenticated])
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { username:username, password:password }
-    const response = await pgConnections.login(user)
+    const response = await login(user)
     if (isJwtToken(response)) {
-      window.localStorage.setItem('jwt-token', response)
-      window.localStorage.setItem('loginUserName', username)
+      window.localStorage.setItem(localStorageKeys.token, response)
+      window.localStorage.setItem(localStorageKeys.loginUserName, username)
       setLoginUserName(username)
       setToken(response)
       if (isUserAuthenticated(response, username)) {
@@ -79,19 +101,23 @@ export default function SignInSide() {
     }
   }
 
-  if (window.localStorage.getItem('loginUserName')) {
-    return (
-      <>
-        <p>User <b>{window.localStorage.getItem('loginUserName')}</b> is already logged in.</p>
-        <IconButton
-          color="primary"
-          variant="text"
-          onClick={() => {navigate(paths.APP_ROOT_PATH)}}>
-          <HomeIcon />
-          Home
-        </IconButton>
-      </>
-    )
+  // because user settings are still being loaded after loginUserName has been set, only display this page after a timeout
+  // if useNavigate has already forwarded to a different page, nothing is rendered for the user
+  if (window.localStorage.getItem(localStorageKeys.loginUserName)) {
+    setTimeout(function(){
+      return (
+        <>
+          <p>User <b>{window.localStorage.getItem(localStorageKeys.loginUserName)}</b> is already logged in.</p>
+          <IconButton
+            color="primary"
+            variant="text"
+            onClick={() => {navigate(paths.APP_ROOT_PATH, { replace: true })}}>
+            <HomeIcon />
+            Home
+          </IconButton>
+        </>
+      )
+  }, 2000);
   }
 
   return (
@@ -100,8 +126,9 @@ export default function SignInSide() {
         <CssBaseline />
         <Grid
           xs={false}
-          sm={4}
-          md={7}
+          sm={false}
+          md={6}
+          lg={8}
           sx={{
             backgroundImage: 'url(https://source.unsplash.com/random/?forest)',
             backgroundRepeat: 'no-repeat',
@@ -111,7 +138,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid xs={12} md={6} lg={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               mx: 4,
@@ -128,13 +155,13 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="username"
-                label="Username"
+                label={res.USERNAME}
                 autoComplete="username"
                 autoFocus
                 value={username}
@@ -144,25 +171,22 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                label="Password"
+                label={res.PASSWORD}
                 type="password"
                 id="password"
                 autoComplete="current-password"
                 value={password}
                 onChange={inputChangeListener}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Button
-                type="submit"
+                onClick={handleLogin}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 1, mb: 2, bgcolor: 'primary.main'}}
+                sx={{ mt: 1, mb:2.5, bgcolor: 'primary.main'}}
               >
-                Sign In
+                {res.LOGIN}
               </Button>
+              <CreateAccountModal/>
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

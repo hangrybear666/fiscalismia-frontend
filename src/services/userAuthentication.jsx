@@ -5,6 +5,7 @@ import {
   Outlet
 } from 'react-router-dom';
 import { paths } from "../resources/router_navigation_paths";
+import { resourceProperties as res, localStorageKeys } from "../resources/resource_properties";
 import jwt_decode from "jwt-decode";
 
 /**
@@ -19,8 +20,8 @@ const AuthContext = createContext(null)
  */
 export const AuthProvider = ({ children }) => {
 
-  const [token, setToken] = useState(window.localStorage.getItem('jwt-token') || null);
-  const [loginUserName, setLoginUserName] = useState(window.localStorage.getItem('loginUserName') || null)
+  const [token, setToken] = useState(window.localStorage.getItem(localStorageKeys.token) || null);
+  const [loginUserName, setLoginUserName] = useState(window.localStorage.getItem(localStorageKeys.loginUserName) || null)
   const [authenticated, setAuthenticated] = useState(false)
 
   const loggedInAs = {
@@ -61,8 +62,10 @@ export const isJwtToken = (token) => {
 }
 
 export const invalidateSession = ( setToken, setLoginUserName,  setAuthenticated ) => {
-  window.localStorage.removeItem('jwt-token')
-  window.localStorage.removeItem('loginUserName')
+  window.localStorage.removeItem(localStorageKeys.token)
+  window.localStorage.removeItem(localStorageKeys.loginUserName)
+  window.localStorage.removeItem(localStorageKeys.selectedMode)
+  window.localStorage.removeItem(localStorageKeys.selectedPalette)
   setToken(null)
   setLoginUserName(null)
   setAuthenticated(false)

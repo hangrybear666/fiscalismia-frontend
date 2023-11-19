@@ -16,7 +16,7 @@ import all from '../../public/imgs/supermarkets/alle1.png'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { resourceProperties as res, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
-import { Paper, Box, Divider, Stack, IconButton, Typography, Autocomplete, TextField, ToggleButtonGroup, ToggleButton, Switch } from '@mui/material';
+import { Paper, Box, Divider, Stack, IconButton, Typography, Autocomplete, TextField, ToggleButtonGroup, ToggleButton, Switch, Tooltip } from '@mui/material';
 
 const SORT_BY_IDS = {
   pricePerKgDesc: 1,
@@ -28,7 +28,7 @@ const SORT_BY_IDS = {
   normalizedPriceDesc: 7,
   normalizedPriceAsc: 8,
 }
-
+// HINWEIS: Tooltips aktuell nicht eingebaut weil selected styling der Buttons dann nicht funktioniert hat
 let sortCriteria = new Array();
 sortCriteria.push(
   [
@@ -55,7 +55,7 @@ sortCriteria.push(
   [
     {
       id: SORT_BY_IDS.kcalAmountDesc,
-      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_DESC,
+      tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_DESC,
       icon: <KeyboardDoubleArrowDownIcon/>
     }
   ,
@@ -381,7 +381,7 @@ export default function FilterFoodPriceData( props ) {
                           boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
                           transition: 'box-shadow 0.2s linear 0s'},
                         '&.Mui-disabled' : {
-                          color: 'rgba(64,64,64, 0.9)'
+                          color: 'rgba(64,64,64, 0.7)'
                         },
                       }}
                     >

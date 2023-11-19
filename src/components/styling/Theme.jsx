@@ -1,23 +1,25 @@
 
+import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
+import { menuBgColor, headerBgColor, palette } from './PaletteAndColors';
+import { localStorageKeys } from '../../resources/resource_properties';
 
-export const contentBackgroundColor = '#eaeff1';
-export const contentMaxWidth = '1660px';
-const menuBgColor = '#081627' // Default
-const headerBgColor = '#012731' // Daintree
-/**
- * '#313026' // Dark Olive Night
- * '#012731' // Daintree
- * '#2a2f23' // Pine Tree
- */
+export const contentMaxWidth = '1680px';
 
-export let theme = createTheme({
+export default function CustomThemeProvider({ children }) {
+
+  const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode)
+  const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette)
+
+  const selectedPaletteStr = userPalette ? userPalette : 'default'
+  const selectedMode = userColorMode ? userColorMode : 'light'
+  const paletteKey = `${selectedPaletteStr}${selectedMode}`
+  const selectedPalette = palette.get(paletteKey)
+
+  let theme = createTheme({
     palette: {
-      primary: {
-        light: '#63ccff',
-        main: '#183863',
-        dark: '#006db3',
-      },
+      mode: selectedMode,
+      ...selectedPalette,
     },
     breakpoints: {
       values: {
@@ -25,7 +27,7 @@ export let theme = createTheme({
         sm: 700,
         md: 1000,
         lg: 1300,
-        xl: 1600,
+        xl: 1680,
       },
     },
     typography: {
@@ -194,3 +196,10 @@ export let theme = createTheme({
       },
     },
   };
+  return (
+    <ThemeProvider theme={theme}>
+      {children}
+    </ThemeProvider>
+  )
+}
+

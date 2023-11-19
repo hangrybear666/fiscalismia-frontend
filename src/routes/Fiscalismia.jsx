@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import Navigator from '../components/Navigator';
 import Header from '../components/Header';
 import ContentHandler from '../components/ContentHandler';
-import { theme } from '../components/styling/Theme';
+import CustomThemeProvider from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties'
 import { paths } from '../resources/router_navigation_paths';
 
@@ -31,6 +31,7 @@ const drawerWidth = 256;
 export default function Fiscalismia() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contentHeader, setContentHeader] = useState({header: res.HOME, subHeader: '', path: paths.APP_ROOT_PATH})
+  const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDrawerToggle = () => {
@@ -38,7 +39,7 @@ export default function Fiscalismia() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <CustomThemeProvider>
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
         <CssBaseline />
         <Box
@@ -67,6 +68,6 @@ export default function Fiscalismia() {
           <Footer />
         </Box>
       </Box>
-    </ThemeProvider>
+    </CustomThemeProvider>
   );
 }

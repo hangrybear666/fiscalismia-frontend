@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { serverConfig } from '../resources/resource_properties';
+import { serverConfig, localStorageKeys } from '../resources/resource_properties';
 const baseUrl = serverConfig.API_BASE_URL
 export class FileSizeError extends Error {
   constructor(message) {
@@ -8,15 +8,30 @@ export class FileSizeError extends Error {
   }
 }
 
-let token = window.localStorage.getItem('jwt-token')
+let token = window.localStorage.getItem(localStorageKeys.token)
 
 const setToken = () => {
-  token = window.localStorage.getItem('jwt-token')
+  token = window.localStorage.getItem(localStorageKeys.token)
 }
 
-const login = async (credentials) => {
+export const login = async (credentials) => {
   try {
     const response = await axios.post(`${baseUrl}/um/login`, credentials)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getUserSpecificSettings = async (username) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/um/settings/${username}`, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -304,7 +319,6 @@ const deleteTest = async id => {
 }
 
 export default {
-  login,
   getTest,
   postTest,
   putTest,

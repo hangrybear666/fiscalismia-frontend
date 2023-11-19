@@ -21,6 +21,8 @@ export const resourceProperties = {
   UPLOAD_AREA: 'DB Upload',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
+  PLACEHOLDER: 'Platzhalter',
+  LOGGED_IN_AS:'Nutzer:',
   GROCERIES: 'Lebensmittel',
   LOGIN: 'Login',
   LOGOUT: 'Logout',
@@ -147,6 +149,13 @@ export const resourceProperties = {
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2: 'Passwort muss mindestens 8 Zeichen enthalten.',
 };
+
+export const localStorageKeys = {
+  token: 'jwt-token',
+  loginUserName: 'loginUserName',
+  selectedMode: 'selected_mode',
+  selectedPalette: 'selected_palette',
+}
 
 export const fixedCostCategories = {
   LIVING_ESSENTIALS_KEY: 'LIVING_ESSENTIALS',
