@@ -23,6 +23,59 @@ export const login = async (credentials) => {
   }
 }
 
+
+/**
+ * 0) WARNING: THE BACKEND CURRENTLY CONTAINS A WHITELIST OF USERNAMES TO LIMIT ACCESS
+ * 1) performs DB INSERTION into um_users
+ * 2) initializes um_user_settings such as mode (light) and palette(default)
+ * @param {*} username
+ * @param {*} email
+ * @param {*} password
+ * @returns username if successful OR error otherwise
+ */
+export const createUserCredentials = async (username, email, password) => {
+  try {
+    const accountObject = {
+      username:username,
+      email:email,
+      password:password
+    }
+    const response = await axios.post(`${baseUrl}/um/credentials`, accountObject )
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * performs db UPSERT statement for um_user_settings for:
+ * SET setting_value='value'
+ * WHERE user_id = (subselect loginUserName) AND setting_key='key'
+ * @param {*} loginUserName SELECT id FROM public.um_users WHERE username = 'loginUserName'
+ * @param {*} key setting_key column of um_user_settings
+ * @param {*} value setting_value column of um_user_settings
+ * @returns username associated with updated row
+ */
+export const postUpdatedUserSettings = async (loginUserName, key, value) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}`, }
+    }
+    const userSettingObj = {
+      username: loginUserName,
+      settingKey: key,
+      settingValue: value
+    }
+    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj , config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const getUserSpecificSettings = async (username) => {
   if (!token) {
     setToken()

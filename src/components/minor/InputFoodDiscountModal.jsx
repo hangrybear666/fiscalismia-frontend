@@ -82,7 +82,6 @@ export default function InputFoodDiscountModal( props ) {
     if (response?.results[0]?.food_prices_dimension_key == selectedFoodItemId) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added discount to DB:")
-      console.log(foodItemDiscountObj)
       setOpen(false)
       setDiscountAddedItemId(selectedFoodItemId)
     } else {

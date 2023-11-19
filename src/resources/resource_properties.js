@@ -22,7 +22,9 @@ export const resourceProperties = {
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   PLACEHOLDER: 'Platzhalter',
-  LOGGED_IN_AS:'Nutzer:',
+  LOGGED_IN_AS:'Nutzername:',
+  SELECTED_MODE:'Farbmodus:',
+  SELECTED_PALETTE:'Farbpalette:',
   GROCERIES: 'Lebensmittel',
   LOGIN: 'Login',
   LOGOUT: 'Logout',
@@ -36,6 +38,7 @@ export const resourceProperties = {
   INDULGENCES:'Genussmittel',
   COPYRIGHT: 'Copyright ©',
   VARIABLE_EXPENSES: 'Variable Ausgaben',
+  EMAIL: 'Email Adresse',
   INCOME: 'Einkommen',
   FIXED_COSTS: 'Fixkosten',
   SETTINGS: 'Einstellungen',
@@ -148,6 +151,8 @@ export const resourceProperties = {
 
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2: 'Passwort muss mindestens 8 Zeichen enthalten.',
+
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1: 'Email ist keine valide Adresse',
 };
 
 export const localStorageKeys = {

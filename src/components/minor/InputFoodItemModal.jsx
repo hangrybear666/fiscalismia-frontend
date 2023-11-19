@@ -98,7 +98,6 @@ export default function InputFoodItemModal( props ) {
     if (response?.results[0]?.dimension_key) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added food item to DB:")
-      console.log(foodItemObj)
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
       setAddedItemId(response?.results[0].id)

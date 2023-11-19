@@ -1,2 +1,4 @@
 # User Notification on failed Login attempt
-# Remember Me on Login (throw away or change token duration)
+# Error: User not authenticated with provided token. Authentication via token failed => LOGOUT AND INVALIDATE SESSION
+  zB. STATUS 401 unauthorized abfangen
+  passiert zB wenn der UserAccount gelöscht wird in der DB während er eingeloggt ist.

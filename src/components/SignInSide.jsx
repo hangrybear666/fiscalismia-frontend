@@ -86,6 +86,8 @@ export default function SignInSide() {
       if (isUserAuthenticated(response, username)) {
         setAuthenticated(true)
       }
+    } else {
+      // TODO notify user of failed login
     }
   };
 

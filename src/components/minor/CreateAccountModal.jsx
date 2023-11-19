@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import EmailIcon from '@mui/icons-material/Email';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Input from '@mui/material/Input';
@@ -20,8 +22,8 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { resourceProperties as res } from '../../resources/resource_properties';
-import { postFoodItemDiscount } from '../../services/pgConnections';
+import { resourceProperties as res, localStorageKeys } from '../../resources/resource_properties';
+import { createUserCredentials } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
 
 const style = {
@@ -36,24 +38,22 @@ const style = {
   p: 4,
 };
 
-/** helper function to validate dates in the format YYYY/MM/DD */
-function dateValidation(dateStr) {
-  const date = new Date(dateStr);
-  return { isValid: !isNaN(date), date: date }
-}
+const regExEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export default function CreateAccountModal( props ) {
   const [open, setOpen] = React.useState(false);
-  // Selection
-  const [selectedFoodItemId, setSelectedFoodItemId] = React.useState('');
+  const navigate = useNavigate();
   // Validation
   const [isUsernameValidationError, setIsUsernameValidationError] = React.useState(false);
   const [usernameValidationErrorMessage, setUsernameValidationErrorMessage] = React.useState('');
   const [isPasswordValidationError, setIsPasswordValidationError] = React.useState(false);
   const [passwordValidationErrorMessage, setPasswordValidationErrorMessage] = React.useState('');
+  const [isEmailValidationError, setIsEmailValidationError] = React.useState(false);
+  const [emailValidationErrorMessage, setEmailValidationErrorMessage] = React.useState('');
   // Inputs
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -62,39 +62,22 @@ export default function CreateAccountModal( props ) {
    * queries DB for food item discount information insertion via REST API
    * notifies user on success or error
    */
-  const saveUserInput = async() => {
-    // const foodItemDiscountObj = {
-    //   id:selectedFoodItemId,
-    //   price:discountPrice,
-    //   startDate:startDate,
-    //   endDate:endDate,
-    // }
-    // const response = await postFoodItemDiscount(foodItemDiscountObj)
-    // if (response?.results[0]?.food_prices_dimension_key == selectedFoodItemId) {
-    //   // this setter is called to force the frontend to update and refetch the data from db
-    //   console.log("SUCCESSFULLY added discount to DB:")
-    //   console.log(foodItemDiscountObj)
-    //   setOpen(false)
-    //   setDiscountAddedItemId(selectedFoodItemId)
-    // } else {
-    //   // TODO User Notification
-    //   console.error(response)
-    // }
+  const persistUserCredentialsAndSettings = async() => {
+    const response = await createUserCredentials(username,email,password)
+    if (response?.results[0]?.username == username) {
+      // TODO User Notification
+      console.log("SUCCESSFULLY added user account to DB")
+      setOpen(false)
+      navigate(0)
+    } else {
+      // TODO User Notification
+      console.error(response)
+    }
   }
 
-  /* some basic validation of:
-   * - Autocomplete Selection
-   * - discount_price
-   * - discount_start_date
-   * - discount_end_date
-   */
   const validateInput = (e) => {
     e.preventDefault();
-    console.log(username)
-    console.log(!username)
-    console.log(username?.length < 3)
-    // Food Item Selection
-    // Price Validation
+
     if (!username) {
       setIsUsernameValidationError(true)
       setUsernameValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1)
@@ -123,12 +106,19 @@ export default function CreateAccountModal( props ) {
       setIsPasswordValidationError(false)
       setPasswordValidationErrorMessage('')
     }
-    if (isUsernameValidationError) {
+    if (!regExEmail.test(email)) {
+      setIsEmailValidationError(true)
+      setEmailValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1)
+    } else {
+      setIsEmailValidationError(false)
+      setEmailValidationErrorMessage('')
+    }
+    if (isUsernameValidationError || isPasswordValidationError || isEmailValidationError) {
       // Errors present => return
       return
     } else {
       // Errors missing => save to db
-      saveUserInput()
+      persistUserCredentialsAndSettings()
     }
   }
 
@@ -140,6 +130,9 @@ export default function CreateAccountModal( props ) {
         break;
       case "create_password":
         setPassword(e.target.value.trim())
+        break;
+      case "create_email":
+        setEmail(e.target.value.trim())
         break;
     }
   }
@@ -173,6 +166,20 @@ export default function CreateAccountModal( props ) {
               startAdornment={<InputAdornment position="start"><AccountCircleIcon/></InputAdornment>}
             />
             <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{usernameValidationErrorMessage}</FormHelperText>
+          </FormControl>
+          {/* EMAIL */}
+          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+            <InputLabel color="secondary" htmlFor="create_email">{res.EMAIL}</InputLabel>
+            <Input
+              id="create_email"
+              value={email}
+              onChange={inputChangeListener}
+              type="text"
+              color="secondary"
+              error={isEmailValidationError}
+              startAdornment={<InputAdornment position="start"><EmailIcon/></InputAdornment>}
+            />
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{emailValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* PASSWORD */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
