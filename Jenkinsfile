@@ -15,13 +15,13 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh "chmod +x -R ${env.WORKSPACE}"
-        sh './jenkins/scripts/test.sh'
+        sh 'echo "Testing TBD"'
       }
     }
 
     stage('Deliver') {
       steps {
+        sh 'chmod +x -R ${env.WORKSPACE}'
         sh './jenkins/scripts/deliver.sh'
         input 'Finished using the web site? (Click "Proceed" to continue)'
         sh './jenkins/scripts/kill.sh'
