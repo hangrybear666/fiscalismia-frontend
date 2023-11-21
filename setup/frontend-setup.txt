@@ -17,3 +17,8 @@ npm run dev
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
 // replace index.css font-family with:
 font-family: Roboto;
+   __    ___     __   __        ___    __
+  / _` |  |     /  ` /  \ |\ | |__  | / _`
+  \__> |  |     \__, \__/ | \| |    | \__>
+// since git and VSCODE can become desynced when changing casing of filenames, make git respect casing by:
+git config core.ignorecase false

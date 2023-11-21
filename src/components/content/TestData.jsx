@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -20,6 +21,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
 import ContentCardCosts from '../minor/ContentCardCosts';
+import { localStorageKeys } from '../../resources/resource_properties';
 import { getFabUtilityClass } from '@mui/material';
 import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
 import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
@@ -110,7 +112,7 @@ export default function Content({ show = true, value }) {
   }
   return (
     <Paper elevation={12} sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }} className="selectionAnimation">
-      {/* <Typography color="inherit" variant="h5">
+      <Typography color="inherit" variant="h5">
         {value.header}
       </Typography>
       <Typography color="inherit" variant="h6">
@@ -118,11 +120,11 @@ export default function Content({ show = true, value }) {
       </Typography>
       <Typography color="inherit" variant="body1">
         {value.path}
-      </Typography> */}
-      {window.localStorage.getItem('loginUserName') == 'admin'
+      </Typography>
+      {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <InputFixedCostsFromTsvModal/>
       : null}
-      {window.localStorage.getItem('loginUserName') == 'admin'
+      {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <Box sx={{mb:2}}>
           <InputAllFoodItemsFromTsvModal/>
         </Box>

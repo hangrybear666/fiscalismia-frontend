@@ -10,10 +10,14 @@ import FixedCosts_LivingEssentials from './content/fixedCosts_LivingEssentials';
 import FixedCosts_Leisure from './content/fixedCosts_Leisure';
 import Deals_Overview from './content/deals_Overview';
 import Deals_FoodPrices from './content/deals_FoodPrices';
-import Deals_GroceryDeals from './content/deals_groceryDeals';
+import Deals_GroceryDeals from './content/deals_GroceryDeals';
 import Box from '@mui/material/Box';
-import { contentBackgroundColor } from './styling/PaletteAndColors';
+import TESTDELETETABLE from './content/TESTDELETETABLE';
+import TEST_DATAGRID from './content/TEST_DATAGRID';
 import { contentMaxWidth } from './styling/Theme';
+import { contentBackgroundColor } from './styling/PaletteAndColors';
+import { Typography } from '@mui/material';
+import PaletteAndThemeTest from './content/PaletteAndThemeTest';
 
 export default function Content( props ) {
 
@@ -37,9 +41,9 @@ export default function Content( props ) {
       case paths.FIXED_COSTS_RECREATION_RELAXATION :
         return <FixedCosts_Leisure value={value}/>
       case paths.INCOME_OVERVIEW :
-        return <TestData value={value}/>
+        return <TESTDELETETABLE value={value}/>
       case paths.INCOME_MONTHLY_BUDGET :
-        return <TestData value={value}/>
+        return <TEST_DATAGRID value={value}/>
       case paths.INCOME_SALES :
         return <TestData value={value}/>
       case paths.INCOME_SAVINGS :
@@ -67,6 +71,7 @@ export default function Content( props ) {
       bgcolor: contentBackgroundColor }}
     >
         <Box id="content" sx={{ maxWidth: contentMaxWidth, margin:'0 auto' }}>
+          <PaletteAndThemeTest show={true}/>
           <Routes>
             {menuEntries.map(({ id: parentId, children }) =>(
               <React.Fragment key={parentId}>

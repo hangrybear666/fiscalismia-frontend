@@ -14,7 +14,6 @@ import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/p
 import SelectDropdown from '../minor/SelectDropdown';
 import { Box } from '@mui/material';
 
-
 function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
   let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
     : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
