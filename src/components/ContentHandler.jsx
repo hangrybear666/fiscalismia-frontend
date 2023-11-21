@@ -12,7 +12,8 @@ import Deals_Overview from './content/deals_Overview';
 import Deals_FoodPrices from './content/deals_FoodPrices';
 import Deals_GroceryDeals from './content/deals_groceryDeals';
 import Box from '@mui/material/Box';
-import { contentBackgroundColor, contentMaxWidth } from './styling/Theme';
+import { contentBackgroundColor } from './styling/PaletteAndColors';
+import { contentMaxWidth } from './styling/Theme';
 
 export default function Content( props ) {
 
