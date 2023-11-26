@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -11,20 +12,8 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFixedCostTsv } from '../../services/pgConnections';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  minWidth: '50%',
-  width:'600px',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
 export default function InputFixedCOstsFromTsvModal( props ) {
+  const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Inputs
   const [fixedCostsTsvInput, setFixedCostsTsvInput] = React.useState('');
@@ -32,6 +21,18 @@ export default function InputFixedCOstsFromTsvModal( props ) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '50%',
+    width:'600px',
+    bgcolor: 'background.paper',
+    border: `2px solid ${palette.secondary.main}`,
+    boxShadow: 24,
+    p: 4,
+  };
   /**
    * queries REST API for transformation of texttsv to INSERT INTO Statements
    * MANDATORY HEADER STRUCTURE:
@@ -67,9 +68,9 @@ export default function InputFixedCOstsFromTsvModal( props ) {
     <Button
         onClick={handleOpen}
         variant="contained"
-        color="primary"
+        color="tertiary"
         sx={{ borderRadius:0,
-          border: '1px solid rgba(0,0,0,0.7)',
+          border: `1px solid  ${palette.border.dark}`,
           boxShadow: '3px 3px 8px 2px rgba(64,64,64, 0.7)',
           mb:0.8
             }}
@@ -94,7 +95,7 @@ export default function InputFixedCOstsFromTsvModal( props ) {
               maxRows={30}
               type="text"
             />
-            <FormHelperText sx={{ color:'rgba(164,148,0,1.0)' }}>{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
+            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button
@@ -103,7 +104,7 @@ export default function InputFixedCOstsFromTsvModal( props ) {
                   margin:'0 auto',
                   mt:2,
                   ml:1,
-                  border: '1px solid rgba(0,0,0,0.7)',
+                  border: `1px solid ${palette.border.dark}`,
                   width:'100%',
                   boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)',
                   }}

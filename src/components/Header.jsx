@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -6,6 +7,7 @@ import { resourceProperties as res } from '../resources/resource_properties'
 import { Divider } from '@mui/material';
 import SettingsAndProfileAppBar from './minor/SettingsAndProfileAppBar';
 function Header(props) {
+  const { palette } = useTheme();
   const { onDrawerToggle } = props;
   const { header, subHeader } = props.contentHeader
 
@@ -42,7 +44,7 @@ function Header(props) {
         position="static"
         elevation={0}
         sx={{ zIndex: 0,
-              borderBottom: '6px solid #756244' }}>
+              borderBottom: `2px solid ${palette.secondary.main}` }}>
           {/* SUBHEADER */}
           <Typography
             variant="h5"

@@ -14,7 +14,7 @@ import { paths } from '../resources/router_navigation_paths';
 
 function Footer() {
   return (
-    <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
+    <Box component="footer" sx={{ p: 2 }}>
       <Typography variant="body2" color="text.secondary" align="center">
         {`${res.COPYRIGHT} `}
         <Link color="inherit" href={res.APP_URL}>

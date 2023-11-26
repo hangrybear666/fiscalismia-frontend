@@ -47,34 +47,41 @@ export default function PaletteAndThemeTest({ show = false }) {
     )
   }
   return (
-    <Paper elevation={12}>
+    <Paper elevation={12} sx={{p:2, borderRadius:0}}>
 
       <Stack direction="row" spacing={1}>
         <Button onClick={click} size="large" variant="contained" color="primary">Primary</Button>
         <Button size="large" variant="contained" color="secondary">Secondary</Button>
+        <Button size="large" variant="contained" color="tertiary">Tertiary</Button>
         <Button size="large" variant="contained" color="info">Info</Button>
         <Button size="large" variant="contained" color="success">Success</Button>
         <Button size="large" variant="contained" color="warning">Warning</Button>
         <Button size="large" variant="contained" color="error">Error</Button>
       </Stack>
 
+      <Divider/>
       <Stack direction="row" spacing={1} sx={{mt:1}}>
         <Button size="large" variant="outlined" color="primary">Primary</Button>
         <Button size="large" variant="outlined" color="secondary">Secondary</Button>
+        <Button size="large" variant="outlined" color="tertiary">Tertiary</Button>
         <Button size="large" variant="outlined" color="info">Info</Button>
         <Button size="large" variant="outlined" color="success">Success</Button>
         <Button size="large" variant="outlined" color="warning">Warning</Button>
         <Button size="large" variant="outlined" color="error">Error</Button>
       </Stack>
 
+      <Divider/>
       <Stack direction="row" spacing={4} sx={{mt:1}}>
         <Button size="large" variant="text" color="primary">Primary</Button>
         <Button size="large" variant="text" color="secondary">Secondary</Button>
+        <Button size="large" variant="text" color="tertiary">Tertiary</Button>
         <Button size="large" variant="text" color="info">Info</Button>
         <Button size="large" variant="text" color="success">Success</Button>
         <Button size="large" variant="text" color="warning">Warning</Button>
         <Button size="large" variant="text" color="error">Error</Button>
       </Stack>
+
+      <Divider/>
 
       <Stack direction="row" sx={{ width: '100%',mt:1 }} spacing={0}>
         <Alert severity="error">
@@ -95,6 +102,7 @@ export default function PaletteAndThemeTest({ show = false }) {
         </Alert>
       </Stack>
 
+      <Divider/>
       <Stack direction="row" sx={{ width: '100%',mt:1 }} spacing={0}>
         <Alert severity="error" variant="filled">
           <AlertTitle>Error</AlertTitle>
@@ -114,6 +122,7 @@ export default function PaletteAndThemeTest({ show = false }) {
         </Alert>
       </Stack>
 
+      <Divider/>
       <Stack direction="row" sx={{ width: '100%',mt:1 }} spacing={0}>
         <Alert severity="error" variant="outlined">
           <AlertTitle>Error</AlertTitle>

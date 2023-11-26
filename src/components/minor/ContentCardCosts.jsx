@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Card from '@mui/material/Card';
@@ -13,6 +14,7 @@ import { Paper } from '@mui/material';
 
 
 export default function ContentCard( props ) {
+  const { palette } = useTheme();
   const { img, header, amount, subtitle, icon, details, elevation, imgHeight } = props
 
   return (
@@ -22,7 +24,7 @@ export default function ContentCard( props ) {
       sx={{
         margin:0,
         height: '100%',
-        border: '1px solid rgb(64,64,64,0.5)',
+        border: `1px solid ${palette.border.light}`,
         paddingBottom:1.5
          }}
       square
@@ -57,8 +59,8 @@ export default function ContentCard( props ) {
             display={(amount || subtitle) ? 'flex' : 'none'}
             justifyContent={icon ? 'flex-end' : 'center'}
             alignItems="center"
-            sx={{ borderTop: '1px solid rgb(50,50,50,0.4)',
-                  borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+            sx={{ borderTop: `1px solid ${palette.border.light}`,
+                  borderBottom: `1px solid ${palette.border.light}` }}
           >
             <Stack >
               {amount ?
@@ -81,8 +83,8 @@ export default function ContentCard( props ) {
             justifyContent={(amount || subtitle) ? 'start' : 'center'}
             alignItems="center"
             sx={{ paddingLeft:2,
-                  borderTop: '1px solid rgb(50,50,50,0.4)',
-                  borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+                  borderTop: `1px solid ${palette.border.light}`,
+                  borderBottom: `1px solid ${palette.border.light}` }}
           >
             {icon ?
             icon

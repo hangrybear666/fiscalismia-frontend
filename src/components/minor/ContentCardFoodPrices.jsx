@@ -1,4 +1,5 @@
 import React, {useReducer} from 'react';
+import { useTheme } from '@mui/material/styles';
 import {AxiosError} from 'axios'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -53,6 +54,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function ContentCardFoodPrices( props ) {
+  const { palette } = useTheme();
   const { foodItemId, header, originalPrice, subtitle, store, pricePerKg, kcalAmount, lastUpdated, details, elevation, img, imgHeight } = props
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
@@ -187,8 +189,8 @@ export default function ContentCardFoodPrices( props ) {
         variant="elevation"
         sx={{
           margin:0,
-          height:img == res.NO_IMG ? '230px' : `${imgHeight+230}px`,
-          border: '1px solid rgb(64,64,64,0.5)',
+          height:img == res.NO_IMG ? '240px' : `${imgHeight+240}px`,
+          border: `1px solid ${palette.border.light}`,
           paddingBottom:1.5
           }}
         square
@@ -224,7 +226,7 @@ export default function ContentCardFoodPrices( props ) {
                 sx={{ borderRadius:0,
                   paddingY:2,
                   color:'#ffffff',
-                  border: '1px solid rgba(64,64,64,0.2)',
+                  border: `1px solid ${palette.border.light}`,
                   backgroundColor: 'rgba(128,128,128,0.3)'
                 }}
                   component='label'
@@ -261,7 +263,7 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent='center'
               alignItems="center"
               sx={{ paddingLeft:2,
-                    borderTop: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: `1px solid ${palette.border.light}` }}
             >
               {store ?
                 <Box
@@ -284,7 +286,7 @@ export default function ContentCardFoodPrices( props ) {
               display={( originalPrice || subtitle) ? 'flex' : 'none'}
               justifyContent='center'
               alignItems="center"
-              sx={{ borderTop: '1px solid rgb(50,50,50,0.4)' }}
+              sx={{ borderTop: `1px solid ${palette.border.light}` }}
             >
               <Stack >
                 {originalPrice ?
@@ -293,7 +295,7 @@ export default function ContentCardFoodPrices( props ) {
                 </Typography>
                 : null}
                 {subtitle ?
-                <Typography variant="subtitle1" sx={{ mb: 0.2, ml:1.5,fontSize:14, letterSpacing:1 }} color="text.secondary">
+                <Typography variant="subtitle1" sx={{ mb: 0.2, ml:1.5,fontSize:15, letterSpacing:1 }} color="text.secondary">
                   {subtitle}
                 </Typography>
                 : null}
@@ -308,7 +310,7 @@ export default function ContentCardFoodPrices( props ) {
               justifyContent='flex-start'
               alignItems="center"
               sx={{ display: 'flex',
-                    borderTop: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: `1px solid ${palette.border.light}` }}
             >
               {pricePerKg ?
               <Paper elevation={0}>
@@ -318,7 +320,7 @@ export default function ContentCardFoodPrices( props ) {
                     borderRadius:0,
                     paddingX: 0,
                     paddingY: 2,
-                    border: '1px solid rgba(64,64,64,0.5)',
+                    border: `1px solid ${palette.border.light}`,
                     fontSize:14,
                     fontWeight:400,}}
                 />
@@ -333,8 +335,8 @@ export default function ContentCardFoodPrices( props ) {
               alignItems="center"
               sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
               <Stack sx={{ mt: 0.5,minWidth: '100%' }}>
-                <Chip label={kcalAmount} sx={{ borderRadius:0, fontSize:12, fontWeight:400, height:'26px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
-                <Chip label={lastUpdated} sx={{ mt:0.7, borderRadius:0,fontSize:12, fontWeight:400, height:'26px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
+                <Chip label={kcalAmount} sx={{ borderRadius:0, borderWidth:2,letterSpacing:1, fontSize:13, fontWeight:400, height:'31px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
+                <Chip label={lastUpdated} sx={{ mt:0.7, borderRadius:0,letterSpacing:1, borderWidth:2, fontSize:13, fontWeight:400, height:'31px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
                 {details ?
                 <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
                   {details.map((e,i) => (

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import CancelIcon from '@mui/icons-material/CancelSharp';
 import aldi from '../../public/imgs/supermarkets/aldi1.png'
@@ -140,6 +141,7 @@ function getFoodItemSelectionDataStructures(allFoodPrices) {
 }
 
 export default function FilterFoodPriceData( props ) {
+  const { palette } = useTheme();
   const { displayHorizontally } = props
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
   const { foodPrices, filteredFoodPrices, setFilteredFoodPrices, setHasBeenSortedBy, hasBeenSortedBy } = props
@@ -336,7 +338,7 @@ export default function FilterFoodPriceData( props ) {
   return (
     <Grid container spacing={1}>
       <Grid xs={12}>
-          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: `1px solid ${palette.border.light}` }}>
             <Box
               sx={{padding:1.2}}>
               <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL}</Typography>
@@ -349,7 +351,7 @@ export default function FilterFoodPriceData( props ) {
           </Paper>
         </Grid>
         <Grid xs={12}>
-          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: `1px solid ${palette.border.light}` }}>
             <Box
               sx={{padding:1.2}}>
               <Typography sx={headerStyle}>{res.SORT_BY}</Typography>
@@ -381,7 +383,7 @@ export default function FilterFoodPriceData( props ) {
                           boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
                           transition: 'box-shadow 0.2s linear 0s'},
                         '&.Mui-disabled' : {
-                          color: 'rgba(64,64,64, 0.7)'
+                          color: palette.text.disabled
                         },
                       }}
                     >
@@ -395,7 +397,7 @@ export default function FilterFoodPriceData( props ) {
           </Paper>
         </Grid>
         <Grid xs={12}>
-          <Paper elevation={4} sx={{ borderRadius:0,border: '1px solid rgba(64,64,64,0.5)' }}>
+          <Paper elevation={4} sx={{ borderRadius:0,border: `1px solid ${palette.border.light}` }}>
             <Box
               sx={{padding:1.2}}>
               <Grid
@@ -521,14 +523,14 @@ export default function FilterFoodPriceData( props ) {
                       paddingX: 1,
                       '&:hover': {
                         bgcolor: 'rgba(245,81,81,0.4)',
-                        border: '1px solid rgba(64,64,64,0.9)',
+                        border: `1px solid ${palette.border.dark}`,
                         boxShadow: '0px 0px 6px 2px rgba(64,64,64, 0.4)',
                         color:'rgba(0,0,0,0.7)',
                         transition: 'box-shadow 0.2s linear 0s'
                       },
                       width:'100%',
                       paddingY: 1,
-                      border: '1px solid rgba(64,64,64,0.5)',
+                      border: `1px solid ${palette.border.light}`,
                       fontSize:14,
                       fontWeight:400,}}
                   >

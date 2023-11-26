@@ -138,8 +138,8 @@ export default function CustomThemeProvider({ children }) {
       MuiDivider: {
         styleOverrides: {
           root: {
-            backgroundColor: 'rgb(255,255,255,0.5)',
-            borderColor:'rgba(128,128,128,0.5)',
+            backgroundColor: selectedMode == 'light' ? 'rgb(255,255,255,0.6)' : 'rgb(232,232,232,0.4)',
+            borderColor: selectedMode == 'light' ? 'rgba(128,128,128,0.6)' : 'rgba(128,128,128,0.4)',
           },
         },
       },

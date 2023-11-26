@@ -1,39 +1,20 @@
 import * as React from 'react';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import EventBusyIcon from '@mui/icons-material/EventBusy';
-import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
-
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 /** helper function to validate decimal numbers */
 function isNumeric(value) {
@@ -46,6 +27,7 @@ function dateValidation(dateStr) {
 }
 
 export default function InputFoodDiscountModal( props ) {
+  const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Selection
   const { setDiscountAddedItemId, autoCompleteItemArray } = props
@@ -67,6 +49,17 @@ export default function InputFoodDiscountModal( props ) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: `2px solid ${palette.primary.main}`,
+    boxShadow: 24,
+    p: 4,
+  };
   /**
    * queries DB for food item discount information insertion via REST API
    * notifies user on success or error
@@ -170,9 +163,9 @@ export default function InputFoodDiscountModal( props ) {
     <Button
         onClick={handleOpen}
         variant="contained"
-        color="primary"
+        color="secondary"
         sx={{ borderRadius:0,
-          border: '1px solid rgba(0,0,0,0.7)',
+          border: `1px solid  ${palette.border.dark}`,
           boxShadow: '3px 3px 8px 2px rgba(64,64,64, 0.7)',
           mb:0.8
             }}
@@ -249,7 +242,7 @@ export default function InputFoodDiscountModal( props ) {
             sx={{ borderRadius:0,
                   margin:'0 auto',
                   ml:1,
-                  border: '1px solid rgba(0,0,0,0.7)',
+                  border: `1px solid ${palette.border.dark}`,
                   width:'100%',
                   boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)',
                   }}

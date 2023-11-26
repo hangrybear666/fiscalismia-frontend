@@ -15,7 +15,6 @@ import Box from '@mui/material/Box';
 import TESTDELETETABLE from './content/TESTDELETETABLE';
 import TEST_DATAGRID from './content/TEST_DATAGRID';
 import { contentMaxWidth } from './styling/Theme';
-import { contentBackgroundColor } from './styling/PaletteAndColors';
 import { Typography } from '@mui/material';
 import PaletteAndThemeTest from './content/PaletteAndThemeTest';
 
@@ -67,8 +66,7 @@ export default function Content( props ) {
     <Box component="main" sx={{
       flex: 1,
       py: 3,
-      px: 3,
-      bgcolor: contentBackgroundColor }}
+      px: 3, }}
     >
         <Box id="content" sx={{ maxWidth: contentMaxWidth, margin:'0 auto' }}>
           <PaletteAndThemeTest show={true}/>

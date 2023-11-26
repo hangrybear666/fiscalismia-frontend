@@ -1,4 +1,5 @@
-import React, {useReducer} from 'react';
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
 import {AxiosError} from 'axios'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -52,6 +53,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function ContentCardDiscounts( props ) {
+  const { palette } = useTheme();
   const { foodItemId, header, originalPrice, discountPrice, subtitle, store, discountPercentage, startDate, endDate, dealDuration, daysLeft, startsInDays, details, elevation, img, imgHeight } = props
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
@@ -187,7 +189,7 @@ export default function ContentCardDiscounts( props ) {
         sx={{
           margin:0,
           height: '100%',
-          border: '1px solid rgb(64,64,64,0.5)',
+          border: `1px solid ${palette.border.light}`,
           paddingBottom:1.5
           }}
         square
@@ -220,9 +222,9 @@ export default function ContentCardDiscounts( props ) {
                 <Button
                   sx={{ borderRadius:0,
                     paddingY:2,
-                    color:'#ffffff',
-                    border: '1px solid rgba(64,64,64,0.2)',
-                    backgroundColor: 'rgba(128,128,128,0.3)'
+                    color:'#eee',
+                    border: `1px solid ${palette.border.light}`,
+                    backgroundColor: 'rgba(128,128,128,0.5)'
                   }}
                     component='label'
                     variant='contained'
@@ -258,8 +260,8 @@ export default function ContentCardDiscounts( props ) {
               justifyContent='center'
               alignItems="center"
               sx={{ paddingLeft:2,
-                    borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: `1px solid ${palette.border.light}`,
+                    borderBottom: `1px solid ${palette.border.light}` }}
             >
               {store ?
                 <Box
@@ -282,8 +284,8 @@ export default function ContentCardDiscounts( props ) {
               display={( (originalPrice && discountPrice) || subtitle) ? 'flex' : 'none'}
               justifyContent='flex-start'
               alignItems="center"
-              sx={{ borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+              sx={{ borderTop: `1px solid ${palette.border.light}`,
+                    borderBottom: `1px solid ${palette.border.light}` }}
             >
               <Stack >
                 {originalPrice && discountPrice ?
@@ -318,8 +320,8 @@ export default function ContentCardDiscounts( props ) {
               justifyContent='center'
               alignItems="center"
               sx={{ paddingLeft:2,
-                    borderTop: '1px solid rgb(50,50,50,0.4)',
-                    borderBottom: '1px solid rgb(50,50,50,0.4)' }}
+                    borderTop: `1px solid ${palette.border.light}`,
+                    borderBottom: `1px solid ${palette.border.light}` }}
             >
               {discountPercentage ?
               <Paper elevation={0}>
@@ -327,11 +329,11 @@ export default function ContentCardDiscounts( props ) {
                   sx={{
                     borderRadius:0,
                     paddingY: 3,
-                    border: '1px solid rgba(64,64,64,0.5)',
+                    border: `1px solid ${palette.border.light}`,
                     fontSize:17,
                     fontWeight:500,
                     color:'#ffffff',
-                    backgroundColor: 'rgba(0,128,32,0.7)'}}
+                    backgroundColor: palette.success.main}}
                 />
               </Paper>
               : null}

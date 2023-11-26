@@ -1,6 +1,7 @@
 
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -25,6 +26,7 @@ import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material'
 
 
 function SettingsAndProfileAppBar( props ) {
+  const { palette } = useTheme();
   const { onDrawerToggle } = props;
   const navigate = useNavigate();
 
@@ -146,14 +148,14 @@ function SettingsAndProfileAppBar( props ) {
             sx={{
               '&.Mui-disabled' : {
                 opacity: 1,
-                color: 'rgba(64,64,64, 0.7)'
+                color: palette.text.disabled
               },
             }}>
             <ListItemIcon
               sx={{
                 '&.Mui-disabled' : {
                   opacity: 1,
-                  color: 'rgba(64,64,64, 0.7)'
+                  color: palette.text.disabled
                 },
                 margin:0}}>
                 <AccountCircleIcon/>
@@ -164,7 +166,7 @@ function SettingsAndProfileAppBar( props ) {
             </Typography>
           </MenuItem>
           <MenuItem onClick={handleColorModeChange}>
-            <ListItemIcon sx={{color: '#333', margin:0}}>{isDarkMode ? <Brightness7Icon/> :  <Brightness4Icon/> }</ListItemIcon>
+            <ListItemIcon sx={{color: palette.text.primary, margin:0}}>{isDarkMode ? <Brightness7Icon/> :  <Brightness4Icon/> }</ListItemIcon>
               <Typography sx={{whiteSpace: 'pre',}}>
                 {`${res.SELECTED_MODE}    ${
                   currentColorMode
@@ -173,7 +175,7 @@ function SettingsAndProfileAppBar( props ) {
               </Typography>
           </MenuItem>
           <MenuItem onClick={handlePaletteChange}>
-            <ListItemIcon sx={{color: '#333', margin:0}}><ColorLensIcon/></ListItemIcon>
+            <ListItemIcon sx={{color: palette.text.primary, margin:0}}><ColorLensIcon/></ListItemIcon>
             <Typography sx={{whiteSpace: 'pre',}}>
               {`${res.SELECTED_PALETTE}    ${
                 currentPalette
