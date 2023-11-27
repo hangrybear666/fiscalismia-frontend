@@ -245,6 +245,29 @@ export const postFixedCostTsv = async fixedCostsTsvInput => {
   }
 }
 
+/** receives TSV as input from admin
+ * MANDATORY HEADER STRUCTURE:
+ * description,	type,	monthly_interval,	value,	effective_date,	expiration_date
+ * @param {*} fixedIncomeTsvInput
+ * @returns INSERT INTO statements for manual validation and loading of db table
+ * or ERROR data
+ */
+export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'text/plain',}
+    }
+    const response = await axios.post(`${baseUrl}/texttsv/fixed_income`, fixedIncomeTsvInput, config)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 /**
  * receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:

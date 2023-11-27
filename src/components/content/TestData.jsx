@@ -25,6 +25,7 @@ import { localStorageKeys } from '../../resources/resource_properties';
 import { getFabUtilityClass } from '@mui/material';
 import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
 import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
+import InputFixedIncomeFromTsvModal from '../minor/InputFixedIncomeFromTsvModal';
 
 
 export default function Content({ show = true, value }) {
@@ -125,8 +126,13 @@ export default function Content({ show = true, value }) {
       ? <InputFixedCostsFromTsvModal/>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
-      ? <Box sx={{mb:2}}>
+      ? <Box >
           <InputAllFoodItemsFromTsvModal/>
+        </Box>
+      : null}
+      {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
+      ? <Box sx={{mb:2}}>
+          <InputFixedIncomeFromTsvModal/>
         </Box>
       : null}
 

@@ -10,13 +10,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
-import { postFixedCostTsv } from '../../services/pgConnections';
+import { postFixedIncomeTsv } from '../../services/pgConnections';
 
-export default function InputFixedCOstsFromTsvModal( props ) {
+export default function InputFixedIncomeFromTsvModal( props ) {
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Inputs
-  const [fixedCostsTsvInput, setFixedCostsTsvInput] = React.useState('');
+  const [fixedIncomeTsvInput, setFixedIncomeTsvInput] = React.useState('');
   // Selection
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,30 +36,30 @@ export default function InputFixedCOstsFromTsvModal( props ) {
   /**
    * queries REST API for transformation of texttsv to INSERT INTO Statements
    * MANDATORY HEADER STRUCTURE:
-   * category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date
+   * description,	type,	monthly_interval,	value,	effective_date,	expiration_date
    */
   const transformTsvToInsertStatements = async() => {
-    const result = await postFixedCostTsv(fixedCostsTsvInput)
+    const result = await postFixedIncomeTsv(fixedIncomeTsvInput)
     if (result?.status == 200 && result?.data?.length != 0) {
       console.log("INSERT STATEMENTS CREATED ")
-      setFixedCostsTsvInput(result.data)
+      setFixedIncomeTsvInput(result.data)
     } else if (result?.data?.length == 0) {
       console.error(result.response)
-      setFixedCostsTsvInput('RESPONSE DATA IS EMPTY')
+      setFixedIncomeTsvInput('RESPONSE DATA IS EMPTY')
     } else if (result?.response?.data?.error) {
       console.log("REQUEST FAILED WITH ERROR:")
       console.error(result.response.data.error)
-      setFixedCostsTsvInput(JSON.stringify(result.response.data.error))
+      setFixedIncomeTsvInput(JSON.stringify(result.response.data.error))
     } else {
       console.log("transformTsvToInsertStatements failed for unknown reason")
       console.error(result.response)
-      setFixedCostsTsvInput('unknown error')
+      setFixedIncomeTsvInput('unknown error')
     }
   }
 
   const inputChangeListener = (e) => {
       e.preventDefault();
-      setFixedCostsTsvInput(e.target.value)
+      setFixedIncomeTsvInput(e.target.value)
   }
 
   return (
@@ -75,7 +75,7 @@ export default function InputFixedCOstsFromTsvModal( props ) {
             }}
           startIcon={<AddCircleIcon />}
           >
-        {res.MINOR_INPUT_FIXED_COSTS_MODAL_OPEN}
+        {res.MINOR_INPUT_FIXED_INCOME_MODAL_OPEN}
       </Button>
       <Modal
         open={open}
@@ -84,17 +84,17 @@ export default function InputFixedCOstsFromTsvModal( props ) {
         <Box sx={style}>
           {/* FOOD ITEM */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="fixed_costs">{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
+            <InputLabel htmlFor="fixed_income">{res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
             <Input
-              id="fixed_costs"
-              value={fixedCostsTsvInput}
+              id="fixed_income"
+              value={fixedIncomeTsvInput}
               onChange={inputChangeListener}
               multiline
               minRows={15}
               maxRows={30}
               type="text"
             />
-            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
+            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

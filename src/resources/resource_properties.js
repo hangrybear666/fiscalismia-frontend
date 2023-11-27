@@ -126,6 +126,10 @@ export const resourceProperties = {
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
 
+  MINOR_INPUT_FIXED_INCOME_MODAL_OPEN: 'TSV Import Monatslohn',
+  MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
+  MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,	type,	monthly_interval,	value,	effective_date,	expiration_date',
+
   MINOR_FILTER_FOOD_PRICES_NAME_HEADER: 'Suche',
   MINOR_FILTER_FOOD_PRICES_FOOD_ITEM_INPUT_LABEL: 'Artikel',
   MINOR_FILTER_FOOD_PRICES_MACRO_HEADER: 'Auswahl Makronährstoff',

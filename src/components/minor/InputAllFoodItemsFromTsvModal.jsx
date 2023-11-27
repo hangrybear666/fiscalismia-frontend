@@ -46,7 +46,6 @@ export default function InputAllFoodItemsFromTsvModal( props ) {
       console.log("INSERT STATEMENTS CREATED ")
       setFoodItemTsvInput(result.data)
     } else if (result?.data?.length == 0) {
-      console.log("RESPONSE DATA IS EMPTY")
       console.error(result.response)
       setFoodItemTsvInput('RESPONSE DATA IS EMPTY')
     } else if (result?.response?.data?.error) {

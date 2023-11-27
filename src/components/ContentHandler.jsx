@@ -28,9 +28,9 @@ export default function Content( props ) {
       case paths.VARIABLE_EXPENSES_OVERVIEW :
         return <VariableExpenses_Overview value={value}/>
       case paths.VARIABLE_EXPENSES_STORES :
-        return <TestData value={value}/>
+        return <TEST_DATAGRID value={value}/>
       case paths.VARIABLE_EXPENSES_INDULGENCES :
-        return <TestData value={value}/>
+        return <TESTDELETETABLE value={value}/>
       case paths.FIXED_COSTS_OVERVIEW :
         return <FixedCosts_Overview/>
       case paths.FIXED_COSTS_LIVING_ESSENTIALS :
@@ -38,9 +38,9 @@ export default function Content( props ) {
       case paths.FIXED_COSTS_RECREATION_RELAXATION :
         return <FixedCosts_Leisure value={value}/>
       case paths.INCOME_OVERVIEW :
-        return <TESTDELETETABLE value={value}/>
+        return <TestData value={value}/>
       case paths.INCOME_MONTHLY_BUDGET :
-        return <TEST_DATAGRID value={value}/>
+        return <TestData value={value}/>
       case paths.INCOME_SALES :
         return <TestData value={value}/>
       case paths.INCOME_SAVINGS :
