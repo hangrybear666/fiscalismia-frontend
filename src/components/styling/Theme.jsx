@@ -1,7 +1,7 @@
 
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import { menuBgColor, headerBgColor, palette } from './PaletteAndColors';
+import { palette } from './PaletteAndColors';
 import { localStorageKeys } from '../../resources/resource_properties';
 
 export const contentMaxWidth = '1680px';
@@ -54,20 +54,19 @@ export default function CustomThemeProvider({ children }) {
     },
   });
 
-  theme = {
-    ...theme,
+  theme = createTheme(theme, {
     components: {
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            backgroundColor: menuBgColor,
+            backgroundColor: theme.palette.menu.main,
           },
         },
       },
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: headerBgColor,
+            backgroundColor: theme.palette.header.main,
           },
         }
       },
@@ -195,7 +194,7 @@ export default function CustomThemeProvider({ children }) {
         },
       },
     },
-  };
+  });
   return (
     <ThemeProvider theme={theme}>
       {children}

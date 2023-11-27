@@ -1,10 +1,3 @@
-/**
- * '#313026' // Dark Olive Night
- * '#012731' // Daintree
- * '#2a2f23' // Pine Tree
-*/
-export const menuBgColor = '#081627' // Default
-export const headerBgColor = '#012731' // Daintree
 export const palette = new Map();
 palette.set(
   "defaultlight",
@@ -18,8 +11,16 @@ palette.set(
       contrastText: '#fff',
     },
     tertiary: {
+      light: '#ac7eb4',
       main: '#56365C',
+      dark: '#2d1c30',
       contrastText: '#fff',
+    },
+    header: {
+      main: '#012731',
+    },
+    menu: {
+      main: '#081627',
     },
     info: {
       main: '#0183DE',
@@ -48,6 +49,10 @@ palette.set(
       main: 'rgba(64,64,64,0.7)',
       dark: 'rgba(64,64,64,0.9)',
     },
+    background: {
+      paper: '#fafafa',
+      default: '#eee',
+    },
   }
 )
 palette.set(
@@ -62,8 +67,16 @@ palette.set(
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
     tertiary: {
+      light: '#bd8fb2',
       main: '#a15e91',
+      dark: '#814b74',
       contrastText: "rgba(0, 0, 0, 0.87)",
+    },
+    header: {
+      main: '#012731',
+    },
+    menu: {
+      main: '#081627',
     },
     info: {
       main: '#0183DE',
@@ -92,7 +105,16 @@ palette.set(
       main: 'rgba(128,128,128,0.7)',
       dark: 'rgba(128,128,128,0.9)',
     },
+    background: {
+      paper: '#1c1c1c',
+      default: '#141414',
+    },
 })
+
+// 2a2f23 Pine Tree
+// 313026 Night Green
+// 535040 Olive Night
+// 4E4B35 Olive Leaf
 palette.set(
   "pastellight",
   {
@@ -105,8 +127,16 @@ palette.set(
       contrastText: '#fff',
     },
     tertiary: {
+      light: '#ebadbd',
       main: '#E1829C',
+      dark: '#d75b7c',
       contrastText: '#fff',
+    },
+    header: {
+      main: '#535040',
+    },
+    menu: {
+      main: '#2a2f23',
     },
     info: {
       main: '#91B8C6',
@@ -135,6 +165,10 @@ palette.set(
       main: 'rgba(64,64,64,0.7)',
       dark: 'rgba(64,64,64,0.9)',
     },
+    background: {
+      paper: '#fafafa',
+      default: '#eee',
+    },
   }
 )
 palette.set(
@@ -149,8 +183,16 @@ palette.set(
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
     tertiary: {
+      light: '#d2c6d1',
       main: '#C4B4C3',
+      dark: '#a58da4',
       contrastText: "rgba(0, 0, 0, 0.87)",
+    },
+    header: {
+      main: '#313026',
+    },
+    menu: {
+      main: '#2a2f23',
     },
     info: {
       main: '#B2CFD6',
@@ -178,6 +220,10 @@ palette.set(
       light: 'rgba(128,128,128,0.5)',
       main: 'rgba(128,128,128,0.7)',
       dark: 'rgba(128,128,128,0.9)',
+    },
+    background: {
+      paper: '#1c1c1c',
+      default: '#141414',
     },
   }
 )

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
@@ -9,6 +11,7 @@ import SelectDropdown from '../minor/SelectDropdown';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
+import { Paper } from '@mui/material';
 
 const iconProperties = {
   fontSize: 55,
@@ -185,6 +188,7 @@ function extractCardData(specificFixedCosts) {
 }
 
 export default function FixedCosts_LivingEssentials( props ) {
+  const { palette, breakpoints, mode } = useTheme();
   // Selected Specific Fixed Costs
   const [rentAndUtilitiesCard, setRentAndUtilitiesCard] = useState(null)
   const [dslAndPhoneCard, setDslAndPhoneCard] = useState(null)
@@ -195,7 +199,24 @@ export default function FixedCosts_LivingEssentials( props ) {
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
-
+  // breakpoint
+  const isXs = useMediaQuery(theme => theme.breakpoints.only("xs"));
+  const isSm = useMediaQuery(theme => theme.breakpoints.only("sm"));
+  const isMd = useMediaQuery(theme => theme.breakpoints.only("md"));
+  const isLg = useMediaQuery(theme => theme.breakpoints.only("lg"));
+  const isXl = useMediaQuery(theme => theme.breakpoints.only("xl"));
+  const breakpointWidth =
+    isXs
+    ? '90%'
+    : isSm
+    ? breakpoints.values.sm - 256
+    : isMd
+    ? breakpoints.values.md - 256
+    : isLg
+    ? breakpoints.values.lg - 256
+    : isXl
+    ? breakpoints.values.xl - 256
+    : 0
   const handleSelect = (selected) => {
     setSelectedEffectiveDate(selected)
   }
@@ -260,7 +281,22 @@ export default function FixedCosts_LivingEssentials( props ) {
       {/* All Living Essentials Bar Chart */}
       <Grid xs={0}  xl={1}></Grid>
       <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >
-        <ContentVerticalBarChart {...livingEssentialsChart} dataSetCount={4} selectedLabel={selectedEffectiveDate}/>
+        <Paper
+          elevation={6}
+          sx={{
+            borderRadius:0,
+            border: `1px solid ${palette.border.dark}`,
+            padding: 1,
+            backgroundColor: palette.background.default,
+            width: breakpointWidth,
+            height: 500
+          }}>
+          <ContentVerticalBarChart
+            {...livingEssentialsChart}
+            dataSetCount={4}
+            selectedLabel={selectedEffectiveDate}
+            legendPos={isXs || isSm ? 'top' : 'left'} />
+        </Paper>
       </Grid>
       <Grid xs={0} xl={1}></Grid>
     </Grid>

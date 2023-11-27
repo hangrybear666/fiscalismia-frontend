@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,18 +12,6 @@ import ContentCardDiscounts from '../minor/ContentCardDiscounts';
 import { resourceProperties as res, fixedCostCategories as categories, serverConfig } from '../../resources/resource_properties';
 import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import InputFoodDiscountModal from '../minor/InputFoodDiscountModal';
-
-const tableHeadStyling = {
-  backgroundColor: '#081627',
-  '> th' : {color: '#ffffff',
-            letterSpacing: 1,
-            fontWeight:500}
-}
-const tableRowStyling = {
-  '&:nth-of-type(odd)': {backgroundColor: 'rgba(128,128,128,0.7)'},
-  '&:nth-of-type(even)': {backgroundColor: 'rgba(184,184,184,0.8)'},
-  '&:last-child td, &:last-child th': { border: 0 },
-}
 
 function constructContentCardObject(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, dealDuration, daysLeft, startsInDays, details, store, img) { // TODO img
   const contentCardObj =
@@ -107,6 +96,7 @@ function getFoodItemSelectionDataStructures(allFoodPrices) {
 }
 
 export default function Deals_GroceryDeals( props ) {
+  const { palette } = useTheme();
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
   const [discountedItemCards, setDiscountedItemCards] = useState(null)
   const [allFoodItemArrayForAutoComplete, setAllFoodItemArrayForAutoComplete] = useState(null)
@@ -126,6 +116,18 @@ export default function Deals_GroceryDeals( props ) {
     getAllPricesAndDiscounts();
   }, [discountAddedItemId]
   )
+
+  const tableHeadStyling = {
+    backgroundColor: palette.primary.dark,
+    '> th' : {color: palette.common.white,
+              letterSpacing: 1,
+              fontWeight:500}
+  }
+  const tableRowStyling = {
+    '&:nth-of-type(odd)': {backgroundColor: 'rgba(128,128,128,0.7)'},
+    '&:nth-of-type(even)': {backgroundColor: 'rgba(184,184,184,0.8)'},
+    '&:last-child td, &:last-child th': { border: 0 },
+  }
 
   return (
     <React.Fragment>

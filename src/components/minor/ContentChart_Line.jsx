@@ -50,6 +50,7 @@ export default function ContentLineChart( props ) {
   }
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',

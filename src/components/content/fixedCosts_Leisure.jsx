@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
@@ -7,6 +9,7 @@ import { resourceProperties as res, fixedCostCategories as categories } from '..
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
+import { Paper } from '@mui/material';
 
 const iconProperties = {
   fontSize: 55,
@@ -219,6 +222,7 @@ function extractCardData(specificFixedCosts) {
 }
 
 export default function FixedCosts_Leisure( props ) {
+  const { palette, breakpoints, mode } = useTheme();
   // Selected Specific Fixed Costs
   const [sportsAndHealthCard, setSportsAndHealthCard] = useState(null)
   const [mediaAndEntertainmentCard, setMediaAndEntertainmentCard] = useState(null)
@@ -228,7 +232,8 @@ export default function FixedCosts_Leisure( props ) {
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
-
+  // breakpoint
+  const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down("md"));
   const handleSelect = (selected) => {
     setSelectedEffectiveDate(selected)
   }
@@ -281,13 +286,43 @@ export default function FixedCosts_Leisure( props ) {
         <ContentCardCosts {...sportsAndHealthCard} imgHeight={275}/>
       </Grid>
       <Grid  md={12} lg={8} display="flex" alignItems="center" justifyContent="center">
-        <ContentVerticalBarChart {...sportsAndHealthChart} chartTitle={res.FIXED_COSTS_SPORTS_HEALTH} selectedLabel={selectedEffectiveDate}/>
+        <Paper
+            elevation={6}
+            sx={{
+              borderRadius:0,
+              border: `1px solid ${palette.border.dark}`,
+              padding: 1,
+              backgroundColor: palette.background.default,
+              width: isSmallScreen ? breakpoints.values.sm -100 : '100%',
+              height: 500
+            }}>
+          <ContentVerticalBarChart
+            {...sportsAndHealthChart}
+            chartTitle={res.FIXED_COSTS_SPORTS_HEALTH}
+            selectedLabel={selectedEffectiveDate}
+            legendPos={isSmallScreen ? 'top' : 'left'}/>
+        </Paper>
       </Grid>
       <Grid md={12} lg={4}>
         <ContentCardCosts {...mediaAndEntertainmentCard} imgHeight={275}/>
       </Grid>
       <Grid md={12} lg={8} display="flex" alignItems="center" justifyContent="center" >
-        <ContentVerticalBarChart {...mediaAndEntertainmentChart} dataSetCount={3} selectedLabel={selectedEffectiveDate}/>
+        <Paper
+            elevation={6}
+            sx={{
+              borderRadius:0,
+              border: `1px solid ${palette.border.dark}`,
+              padding: 1,
+              backgroundColor: palette.background.default,
+              width: isSmallScreen ? breakpoints.values.sm -100 : '100%',
+              height: 500
+            }}>
+            <ContentVerticalBarChart
+              {...mediaAndEntertainmentChart}
+              dataSetCount={3}
+              selectedLabel={selectedEffectiveDate}
+              legendPos={isSmallScreen ? 'top' : 'left'}/>
+          </Paper>
       </Grid>
     </Grid>
   )

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,23 +11,24 @@ import InputFoodItemModal from '../minor/InputFoodItemModal';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 
-const tableHeadStyling = {
-  backgroundColor: '#081627',
-  '> th' : {color: '#ffffff',
-            letterSpacing: 1,
-            fontWeight:500}
-}
-const tableRowStyling = {
-  '&:nth-of-type(odd)': {backgroundColor: 'rgba(128,128,128,0.7)'},
-  '&:nth-of-type(even)': {backgroundColor: 'rgba(184,184,184,0.8)'},
-  '&:last-child td, &:last-child th': { border: 0 },
-}
 
 export default function Deals_Overview( props ) {
+  const { palette } = useTheme();
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null)
   // to refresh table based on added food item after DB insertion
   const [addedItemId, setAddedItemId] = useState('')
 
+  const tableHeadStyling = {
+    backgroundColor: palette.primary.dark,
+    '> th' : {color: palette.common.white,
+              letterSpacing: 1,
+              fontWeight:500}
+  }
+  const tableRowStyling = {
+    '&:nth-of-type(odd)': {backgroundColor: 'rgba(128,128,128,0.7)'},
+    '&:nth-of-type(even)': {backgroundColor: 'rgba(184,184,184,0.8)'},
+    '&:last-child td, &:last-child th': { border: 0 },
+  }
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
       let allFoodPricesAndDiscounts = await getAllFoodPricesAndDiscounts();

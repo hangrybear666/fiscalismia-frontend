@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import ContentCardCosts from '../minor/ContentCardCosts';
 import Grid from '@mui/material/Unstable_Grid2';
-import FireplaceIcon from '@mui/icons-material/Fireplace';
-import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
-import CellWifiOutlinedIcon from '@mui/icons-material/CellWifiOutlined';
-import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
-import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
-import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
-import WaterDamageOutlinedIcon from '@mui/icons-material/WaterDamageOutlined';
 import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
-import { Box } from '@mui/material';
+import { Paper } from '@mui/material';
 
 function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
   let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
@@ -164,6 +158,7 @@ function extractCardData(specificFixedCosts) {
 }
 
 export default function FixedCosts_Overview( props ) {
+  const { palette } = useTheme();
   // Selected Specific Fixed Costs
   const [monthlyTotalCostCard, setMonthlyTotalCostCard] = useState(null)
   const [rentAndUtilitiesCard, setRentAndUtilitiesCard] = useState(null)
@@ -177,7 +172,6 @@ export default function FixedCosts_Overview( props ) {
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState(null)
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('')
-
   const handleSelect = (selected) => {
     setSelectedEffectiveDate(selected)
   }
@@ -254,7 +248,18 @@ export default function FixedCosts_Overview( props ) {
         </Grid>
         <Grid xs={0} xl={1}></Grid>
         <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center" >
-          <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate}/>
+          <Paper
+            elevation={6}
+            sx={{
+              borderRadius:0,
+              border: `1px solid ${palette.border.dark}`,
+              padding: 1,
+              backgroundColor: palette.background.default,
+              width: '90%',
+              height: 500
+            }}>
+            <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate}/>
+          </Paper>
         </Grid>
         <Grid xs={0} xl={1}></Grid>
       </Grid>

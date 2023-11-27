@@ -44,7 +44,7 @@ function Header(props) {
         position="static"
         elevation={0}
         sx={{ zIndex: 0,
-              borderBottom: `2px solid ${palette.secondary.main}` }}>
+              borderBottom: `4px solid ${palette.secondary.dark}` }}>
           {/* SUBHEADER */}
           <Typography
             variant="h5"
