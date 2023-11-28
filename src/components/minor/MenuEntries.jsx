@@ -38,8 +38,8 @@ export const menuEntries = [
     children: [
       { id: res.OVERVIEW, path: paths.INCOME_OVERVIEW, icon: <AnalyticsIcon /> },
       { id: res.MONTHLY_BUDGET, path: paths.INCOME_MONTHLY_BUDGET, icon: <EuroIcon />},
+      { id: res.INVESTMENTS, path: paths.INCOME_INVESTMENTS, icon: <SavingsIcon /> },
       { id: res.SALES, path: paths.INCOME_SALES, icon: <CreditScoreIcon /> },
-      { id: res.SAVINGS, path: paths.INCOME_SAVINGS, icon: <SavingsIcon /> },
     ],
   },
   {

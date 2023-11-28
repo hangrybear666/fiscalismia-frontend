@@ -29,7 +29,7 @@ export const resourceProperties = {
   LOGIN: 'Login',
   LOGOUT: 'Logout',
   MONTHLY_BUDGET:'Monatliches Budget',
-  SAVINGS: 'Ersparnisse',
+  INVESTMENTS: 'Investments',
   SALES: 'Verkäufe',
   SORT_BY: 'Sortieren nach',
   LIVING_ESSENTIALS:'Wohnen & Essentielles',
@@ -53,6 +53,13 @@ export const resourceProperties = {
   INTERVAL_QUARTERLY: 'quartalsweise',
   INTERVAL_HALFYEARLY: 'halbjährlich',
   INTERVAL_YEARLY: 'jährlich',
+
+  INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
+  INCOME_NET_INCOME: 'Lohn [Netto]',
+  INCOME_GROSS_INCOME: 'Lohn [Brutto]',
+  INCOME_ONE_TIME_BONUS: 'Einmaliger Bonus [Netto]',
+  INCOME_NET_SALARY_KEY: 'net salary',
+  INCOME_GROSS_SALARY_KEY: 'gross salary',
 
   FIXED_COSTS_MONHTLY_COST: 'Gesamtkosten',
   FIXED_COSTS_RENT_UTILITIES: 'Miete & Nebenkosten',

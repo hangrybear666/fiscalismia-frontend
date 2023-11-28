@@ -15,6 +15,7 @@ import TESTDELETETABLE from './content/TESTDELETETABLE';
 import TEST_DATAGRID from './content/TEST_DATAGRID';
 import { contentMaxWidth } from './styling/Theme';
 import PaletteAndThemeTest from './content/PaletteAndThemeTest';
+import Income_Overview from './content/income_Overview';
 
 export default function Content( props ) {
 
@@ -38,12 +39,12 @@ export default function Content( props ) {
       case paths.FIXED_COSTS_RECREATION_RELAXATION :
         return <FixedCosts_Leisure value={value}/>
       case paths.INCOME_OVERVIEW :
-        return <TestData value={value}/>
+        return <Income_Overview value={value}/>
       case paths.INCOME_MONTHLY_BUDGET :
         return <TestData value={value}/>
       case paths.INCOME_SALES :
         return <TestData value={value}/>
-      case paths.INCOME_SAVINGS :
+      case paths.INCOME_INVESTMENTS :
         return <TestData value={value}/>
       case paths.DEALS_OVERVIEW :
         return <Deals_Overview value={value}/>

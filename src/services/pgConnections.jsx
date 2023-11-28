@@ -113,7 +113,27 @@ export const getUserSpecificSettings = async (username) => {
 }
 
 /**
- * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * Returns fixed income valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
+ * @returns Object containing a results array with all fixed income data valid at provided date from the db
+ * @route /api/fiscalismia/fixed_income/valid/:date
+ */
+export const getFixedIncomeByEffectiveDate = async (validDate) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/fixed_income/valid/${validDate}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
  * @returns Object containing a results array with all fixed costs from the db
  * @route /api/fiscalismia/fixed_costs
  */
@@ -126,6 +146,25 @@ export const getAllFixedCosts = async () => {
       headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(`${baseUrl}/fixed_costs`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * @returns Object containing a results array with all fixed income data from the db
+ * @route /api/fiscalismia/fixed_costs
+ */
+export const getAllFixedIncome = async () => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/fixed_income`, config)
     return response.data
   } catch (error) {
     console.error(error);
