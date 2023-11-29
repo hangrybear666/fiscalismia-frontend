@@ -2,3 +2,5 @@
 # Error: User not authenticated with provided token. Authentication via token failed => LOGOUT AND INVALIDATE SESSION
   zB. STATUS 401 unauthorized abfangen
   passiert zB wenn der UserAccount gelöscht wird in der DB während er eingeloggt ist.
+# income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
+  und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird

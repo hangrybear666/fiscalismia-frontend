@@ -55,6 +55,10 @@ export const resourceProperties = {
   INTERVAL_YEARLY: 'jährlich',
 
   INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
+  INCOME_FIXED_COST_CARD_HEADER: 'Fixkosten Gesamt',
+  INCOME_MONTHLY_BUDGET_CHART_HEADER: 'Monatliches Budget',
+  INCOME_YEARLY_GROSS_INCOME: 'Jahreslohn [Brutto]',
+  INCOME_MONTHLY_FIXED_COSTS: 'Monatliche Fixkosten',
   INCOME_NET_INCOME: 'Lohn [Netto]',
   INCOME_GROSS_INCOME: 'Lohn [Brutto]',
   INCOME_ONE_TIME_BONUS: 'Einmaliger Bonus [Netto]',

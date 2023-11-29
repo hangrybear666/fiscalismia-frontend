@@ -105,22 +105,25 @@ export default function ContentLineChart( props ) {
   }
 
   const data = {
-    labels,
+    labels: labels,
     datasets: [
       {
-        fill: props.dataSetCount === 1 ? true : false,
+        fill: true,
         label: props.dataSet1Name ? props.dataSet1Name : "Dataset 1",
         data: props.dataSet1 ? props.dataSet1 : labels.map(() => faker.number.int({ min: 0, max: 100 })),
         backgroundColor: props.pointColor1 ? props.pointColor1  : "rgba(64,64,64,0.7)",
         borderColor: props.lineColor1 ? props.lineColor1  : "rgba(94,85,23,0.7)",
         elements : line1Config,
+        order: props.dataSet1Order ? props.dataSet1Order : 1, // Datasets with higher order are drawn first
       },
       {
+        fill: true,
         label: props.dataSet2Name ? props.dataSet2Name : "Dataset 2",
-        data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
-        backgroundColor: props.pointColor1 ? props.pointColor1  : "rgba(64,64,64,0.6)",
-        borderColor: props.lineColor1 ? props.lineColor1  : "rgba(18, 28, 84, 0.7)",
+        data: props.dataSet2 ? props.dataSet2 : labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
+        backgroundColor: props.pointColor2 ? props.pointColor2  : "rgba(64,64,64,0.6)",
+        borderColor: props.lineColor2 ? props.lineColor2  : "rgba(18, 28, 84, 0.7)",
         elements : line2Config,
+        order: props.dataSet2Order ? props.dataSet2Order : 0,
       },
     ],
   };

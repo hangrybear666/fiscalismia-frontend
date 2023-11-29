@@ -16,6 +16,7 @@ import TEST_DATAGRID from './content/TEST_DATAGRID';
 import { contentMaxWidth } from './styling/Theme';
 import PaletteAndThemeTest from './content/PaletteAndThemeTest';
 import Income_Overview from './content/income_Overview';
+import Income_Monthly_Budget from './content/income_MonthlyBudget';
 
 export default function Content( props ) {
 
@@ -41,7 +42,7 @@ export default function Content( props ) {
       case paths.INCOME_OVERVIEW :
         return <Income_Overview value={value}/>
       case paths.INCOME_MONTHLY_BUDGET :
-        return <TestData value={value}/>
+        return <Income_Monthly_Budget value={value}/>
       case paths.INCOME_SALES :
         return <TestData value={value}/>
       case paths.INCOME_INVESTMENTS :

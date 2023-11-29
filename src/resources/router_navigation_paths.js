@@ -8,7 +8,7 @@ export const paths = {
   FIXED_COSTS_LIVING_ESSENTIALS: "fixed_costs/essentials",
   FIXED_COSTS_RECREATION_RELAXATION: "fixed_costs/leisure",
   INCOME_OVERVIEW: "income/overview",
-  INCOME_MONTHLY_BUDGET: "income/budget",
+  INCOME_MONTHLY_BUDGET: "income/monthly_budget",
   INCOME_SALES: "income/sales",
   INCOME_INVESTMENTS: "income/investments",
   DEALS_OVERVIEW: "deals/overview",
