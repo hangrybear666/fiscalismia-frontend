@@ -10,13 +10,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
-import { postFixedCostTsv } from '../../services/pgConnections';
+import { postVariableExpensesTsv } from '../../services/pgConnections';
 
-export default function InputFixedCOstsFromTsvModal( props ) {
+export default function InputVariableExpensesFromTsvModal( props ) {
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Inputs
-  const [fixedCostsTsvInput, setFixedCostsTsvInput] = React.useState('');
+  const [variableExpensesTsvInput, setVariableExpensesTsvInput] = React.useState('');
   // Selection
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,30 +36,31 @@ export default function InputFixedCOstsFromTsvModal( props ) {
   /**
    * queries REST API for transformation of texttsv to INSERT INTO Statements
    * MANDATORY HEADER STRUCTURE:
-   * category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date
+   * description,  category,  store cost,  date,  is_planned,  contains_indulgence, sensitivities
    */
   const transformTsvToInsertStatements = async() => {
-    const result = await postFixedCostTsv(fixedCostsTsvInput)
+    const result = await postVariableExpensesTsv(variableExpensesTsvInput)
     if (result?.status == 200 && result?.data?.length != 0) {
       console.log("INSERT STATEMENTS CREATED ")
-      setFixedCostsTsvInput(result.data)
+      console.log(result)
+      setVariableExpensesTsvInput(result.data)
     } else if (result?.data?.length == 0) {
       console.error(result.response)
-      setFixedCostsTsvInput('RESPONSE DATA IS EMPTY')
+      setVariableExpensesTsvInput('RESPONSE DATA IS EMPTY')
     } else if (result?.response?.data?.error) {
       console.log("REQUEST FAILED WITH ERROR:")
       console.error(result.response.data.error)
-      setFixedCostsTsvInput(JSON.stringify(result.response.data.error))
+      setVariableExpensesTsvInput(JSON.stringify(result.response.data.error))
     } else {
       console.log("transformTsvToInsertStatements failed for unknown reason")
       console.error(result.response)
-      setFixedCostsTsvInput('unknown error')
+      setVariableExpensesTsvInput('unknown error')
     }
   }
 
   const inputChangeListener = (e) => {
       e.preventDefault();
-      setFixedCostsTsvInput(e.target.value)
+      setVariableExpensesTsvInput(e.target.value)
   }
 
   return (
@@ -75,26 +76,26 @@ export default function InputFixedCOstsFromTsvModal( props ) {
             }}
           startIcon={<AddCircleIcon />}
           >
-        {res.MINOR_INPUT_FIXED_COSTS_MODAL_OPEN}
+        {res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_OPEN}
       </Button>
       <Modal
         open={open}
         onClose={handleClose}
       >
         <Box sx={style}>
-          {/* FIXED COSTS */}
+          {/* VARIABLE EXPENSES */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="fixed_costs">{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
+            <InputLabel htmlFor="variable_expenses">{res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
             <Input
-              id="fixed_costs"
-              value={fixedCostsTsvInput}
+              id="variable_expenses"
+              value={variableExpensesTsvInput}
               onChange={inputChangeListener}
               multiline
               minRows={15}
               maxRows={30}
               type="text"
             />
-            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
+            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
           </FormControl>
           {/* SAVE */}
           <Button

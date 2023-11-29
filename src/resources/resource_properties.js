@@ -137,6 +137,10 @@ export const resourceProperties = {
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
 
+  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_OPEN: 'TSV Import Variable Ausgaben',
+  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
+  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,  category,  store cost,  date,  is_planned,  contains_indulgence, sensitivities',
+
   MINOR_INPUT_FIXED_INCOME_MODAL_OPEN: 'TSV Import Monatslohn',
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,	type,	monthly_interval,	value,	effective_date,	expiration_date',

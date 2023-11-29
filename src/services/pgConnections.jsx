@@ -283,6 +283,29 @@ export const postFixedCostTsv = async fixedCostsTsvInput => {
     return error
   }
 }
+/** receives TSV as input from admin
+ * MANDATORY HEADER STRUCTURE:
+ * description,  category,  store cost,  date,  is_planned,  contains_indulgence, sensitivities
+ * @param {*} variableExpensesTsvInput
+ * @returns INSERT INTO statements for manual validation and loading of db table
+ * or ERROR data
+ */
+export const postVariableExpensesTsv = async variableExpensesTsvInput => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'text/plain',}
+    }
+    const response = await axios.post(`${baseUrl}/texttsv/variable_expenses`, variableExpensesTsvInput, config)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 
 /** receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:
