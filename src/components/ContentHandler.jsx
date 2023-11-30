@@ -17,6 +17,7 @@ import { contentMaxWidth } from './styling/Theme';
 import PaletteAndThemeTest from './content/PaletteAndThemeTest';
 import Income_Overview from './content/income_Overview';
 import Income_Monthly_Budget from './content/income_MonthlyBudget';
+import Income_Sales from './content/income_Sales';
 
 export default function Content( props ) {
 
@@ -44,7 +45,7 @@ export default function Content( props ) {
       case paths.INCOME_MONTHLY_BUDGET :
         return <Income_Monthly_Budget value={value}/>
       case paths.INCOME_SALES :
-        return <TestData value={value}/>
+        return <Income_Sales value={value}/>
       case paths.INCOME_INVESTMENTS :
         return <TestData value={value}/>
       case paths.DEALS_OVERVIEW :

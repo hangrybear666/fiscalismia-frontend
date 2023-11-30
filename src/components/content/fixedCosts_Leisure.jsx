@@ -209,7 +209,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   sportsAndHealth.details = sportsAndHealthFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
 
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts)
@@ -217,7 +217,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
   return { sportsAndHealth, mediaAndEntertainment }
 }
 

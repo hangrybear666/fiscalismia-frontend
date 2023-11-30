@@ -113,6 +113,27 @@ export const getUserSpecificSettings = async (username) => {
 }
 
 /**
+ * Returns variable expenses dependent on provided category description as string
+ * @param {*} category category description string
+ * @returns Object containing a results array with all variable expenses with provided category
+ * @route /api/fiscalismia/variable_expenses/category/:category
+ */
+export const getVariableExpenseByCategory = async (category) => {
+  if (!token) {
+    setToken()
+  }
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/variable_expenses/category/${category}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
  * Returns fixed income valid for a specific provided date in the format (yyyy-mm-dd) // TODO
  * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
  * @returns Object containing a results array with all fixed income data valid at provided date from the db

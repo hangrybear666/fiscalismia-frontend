@@ -159,7 +159,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   rentAndUtilities.details = rentAndUtilitiesFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
   // DSL & Telephone
   let dslAndPhoneFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.INTERNET_AND_PHONE_KEY )
@@ -167,7 +167,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   dslAndPhone.details = dslAndPhoneFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
   // Insurance
   let insuranceFiltered = specificFixedCosts.results
     .filter((row) => row.category === categories.INSURANCE_KEY)
@@ -175,7 +175,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   insurance.details = insuranceFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
   // Student Loans
   let studentLoansFiltered = specificFixedCosts.results
     .filter((row) =>  row.category === categories.STUDENT_LOANS_KEY)
@@ -183,7 +183,7 @@ function extractCardData(specificFixedCosts) {
     .map((row) => row.monthly_cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
   studentLoans.details = studentLoansFiltered
-    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.EURO))
+    .map((row) => row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO))
   return {rentAndUtilities, dslAndPhone, insurance, studentLoans}
 }
 

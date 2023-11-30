@@ -9,7 +9,7 @@ import Stack from '@mui/system/Stack';
 
 export default function ContentCard( props ) {
   const { palette } = useTheme();
-  const { img, header, amount, subtitle, icon, details, elevation, imgHeight } = props
+  const { img, header, amount, subtitle, icon, details, elevation, imgHeight, detailHeader } = props
 
   return (
     <Card
@@ -93,12 +93,30 @@ export default function ContentCard( props ) {
             sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
             {details ?
             <Typography noWrap sx={{ mt: 1 }} variant="body2">
-              {details.map((e,i) => (
-                <React.Fragment key={e}>
-                  • {e}
-                  {i < details.length -1 ? <br /> : null}
-                </React.Fragment>
-              ))}
+              {details.map((e,i) => {
+                if (detailHeader && i === 0) {
+                  return (
+                    <React.Fragment key={e}>
+                      <Typography sx={{textDecoration:'underline', mb:0.3, letterSpacing:2,fontSize:14, fontWeight:300}}>
+                        {detailHeader}
+                      </Typography>
+                      <Typography sx={{fontSize:14}}>
+                        • {e}
+                        {i < details.length -1 ? <br /> : null}
+                      </Typography>
+                    </React.Fragment>
+                  )
+                } else
+                return (
+                  <React.Fragment key={e}>
+                    <Typography sx={{fontSize:14}}>
+                      • {e}
+                      {i < details.length -1 ? <br /> : null}
+                    </Typography>
+                  </React.Fragment>
+                )
+              }
+              )}
             </Typography>
             : null}
           </Grid>
