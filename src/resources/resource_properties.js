@@ -184,6 +184,7 @@ export const resourceProperties = {
 export const localStorageKeys = {
   token: 'jwt-token',
   loginUserName: 'loginUserName',
+  authenticated: 'userAuthenticated',
   selectedMode: 'selected_mode',
   selectedPalette: 'selected_palette',
 }

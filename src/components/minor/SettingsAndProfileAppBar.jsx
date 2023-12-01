@@ -191,8 +191,8 @@ function SettingsAndProfileAppBar( props ) {
     </AppBar>
   </>
   )
-  SettingsAndProfileAppBar.propTypes = {
-    onDrawerToggle: PropTypes.func.isRequired,
-  };
 }
+SettingsAndProfileAppBar.propTypes = {
+  onDrawerToggle: PropTypes.func.isRequired,
+};
 export default SettingsAndProfileAppBar;

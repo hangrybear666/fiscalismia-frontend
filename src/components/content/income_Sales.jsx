@@ -69,7 +69,6 @@ function extractCardData(sales, selectedYear = 2023) {
   totalSales.amount = Math.round(salesTransformed
     .map((row) => row.cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));
-  console.log(storeBasedCards)
   return { totalSales, storeBasedCards }
 }
 
@@ -110,7 +109,7 @@ export default function Income_Sales( props ) {
             <ContentCard {...salesCard}  />
             {distinctStoreSalesCard
             ? distinctStoreSalesCard.map(card=> (
-              <ContentCard {...card}  />
+              <ContentCard key={card.header} {...card}  />
             ))
             : null}
           </Stack>

@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res, localStorageKeys } from '../resources/resource_properties'
 import { paths } from '../resources/router_navigation_paths';
-import { useAuth, isUserAuthenticated, isJwtToken } from '../services/userAuthentication';
+import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
 import CreateAccountModal from './minor/CreateAccountModal';
 
 function Copyright(props) {
@@ -51,8 +51,10 @@ const theme = createTheme({
 export default function SignInSide() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [authenticated, setAuthenticated] = useState(window.localStorage.getItem(localStorageKeys.token)  === "true" ?  true : false)
   const navigate = useNavigate()
-  const { loginUserName, setToken, setLoginUserName, authenticated, setAuthenticated } = useAuth()
+  const { loginUserName, setToken, setLoginUserName } = useAuth()
+  // After successfully logging in and authenticating the token, user settings are queried from the DB and redirect to Homepage is triggered
   useEffect(() => {
     const getUserSettings = async() => {
       try {
@@ -83,7 +85,8 @@ export default function SignInSide() {
       window.localStorage.setItem(localStorageKeys.loginUserName, username)
       setLoginUserName(username)
       setToken(response)
-      if (isUserAuthenticated(response, username)) {
+      if (isUserTokenValid(response, username)) {
+        window.localStorage.setItem(localStorageKeys.authenticated, "true")
         setAuthenticated(true)
       }
     } else {

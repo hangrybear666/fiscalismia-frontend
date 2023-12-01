@@ -92,7 +92,8 @@ export default function ContentCard( props ) {
             alignItems="center"
             sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
             {details ?
-            <Typography noWrap sx={{ mt: 1 }} variant="body2">
+            // since typography defaults to <p> and <p> elements can't have <p> children, set the component to a span.
+            <Typography component={'span'} noWrap sx={{ mt: 1 }} variant="body2">
               {details.map((e,i) => {
                 if (detailHeader && i === 0) {
                   return (

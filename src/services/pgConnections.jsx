@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { serverConfig, localStorageKeys } from '../resources/resource_properties';
+import { invalidateSession, useAuth } from '../services/userAuthentication';
+import { useNavigate } from 'react-router-dom';
 const baseUrl = serverConfig.API_BASE_URL
 export class FileSizeError extends Error {
   constructor(message) {
@@ -8,7 +10,18 @@ export class FileSizeError extends Error {
   }
 }
 
-let token = window.localStorage.getItem(localStorageKeys.token)
+
+/***
+ *      ___  _   _ _____ _   _  _____ _   _ _____ _____ _____   ___ _____ _____ _____ _   _
+ *     / _ \| | | |_   _| | | ||  ___| \ | |_   _|_   _/  __ \ / _ \_   _|_   _|  _  | \ | |
+ *    / /_\ \ | | | | | | |_| || |__ |  \| | | |   | | | /  \// /_\ \| |   | | | | | |  \| |
+ *    |  _  | | | | | | |  _  ||  __|| . ` | | |   | | | |    |  _  || |   | | | | | | . ` |
+ *    | | | | |_| | | | | | | || |___| |\  | | |  _| |_| \__/\| | | || |  _| |_\ \_/ / |\  |
+ *    \_| |_/\___/  \_/ \_| |_/\____/\_| \_/ \_/  \___/ \____/\_| |_/\_/  \___/ \___/\_| \_/
+ */
+
+// set from local storage variable on each request, to avoid caching of local variable in this file between logouts
+let token;
 
 const setToken = () => {
   token = window.localStorage.getItem(localStorageKeys.token)
@@ -22,7 +35,6 @@ export const login = async (credentials) => {
     console.error(error);
   }
 }
-
 
 /**
  * 0) WARNING: THE BACKEND CURRENTLY CONTAINS A WHITELIST OF USERNAMES TO LIMIT ACCESS
@@ -47,39 +59,97 @@ export const createUserCredentials = async (username, email, password) => {
   }
 }
 
-/**
- * performs db UPSERT statement for um_user_settings for:
- * SET setting_value='value'
- * WHERE user_id = (subselect loginUserName) AND setting_key='key'
- * @param {*} loginUserName SELECT id FROM public.um_users WHERE username = 'loginUserName'
- * @param {*} key setting_key column of um_user_settings
- * @param {*} value setting_value column of um_user_settings
- * @returns username associated with updated row
+/***
+ *     _____  _____ _____      ___   _      _
+ *    |  __ \|  ___|_   _|    / _ \ | |    | |
+ *    | |  \/| |__   | |     / /_\ \| |    | |
+ *    | | __ |  __|  | |     |  _  || |    | |
+ *    | |_\ \| |___  | |     | | | || |____| |____
+ *     \____/\____/  \_/     \_| |_/\_____/\_____/
  */
-export const postUpdatedUserSettings = async (loginUserName, key, value) => {
-  if (!token) {
-    setToken()
-  }
+
+/**
+ * @returns Object containing a results array with all fixed costs from the db
+ * @route /api/fiscalismia/fixed_costs
+ */
+export const getAllFixedCosts = async () => {
+  setToken()
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}`, }
+      headers: { Authorization: `Bearer ${token}` }
     }
-    const userSettingObj = {
-      username: loginUserName,
-      settingKey: key,
-      settingValue: value
-    }
-    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj , config)
+    const response = await axios.get(`${baseUrl}/fixed_costs`, config)
+    console.log("getAllFixedCosts RESPONSE")
+    console.log(response)
     return response.data
   } catch (error) {
     console.error(error);
   }
 }
 
-export const getUserSpecificSettings = async (username) => {
-  if (!token) {
-    setToken()
+/**
+ * @returns Object containing a results array with all fixed income data from the db
+ * @route /api/fiscalismia/fixed_costs
+ */
+export const getAllFixedIncome = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/fixed_income`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
   }
+}
+
+/**
+ * Returns food prices and discounts valid at the time of request (current_date)
+ * @returns Object containing a results array with all food prices and discounts from the db
+ * @route /api/fiscalismia/food_prices_and_discounts
+ */
+export const getAllFoodPricesAndDiscounts = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Returns discounted foods valid at the time of request (current_date)
+ * @returns Object containing a results array with all active discounts from the db
+ * @route /api/fiscalismia/discounted_foods_current
+ */
+export const getCurrentFoodDiscounts = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+/***
+ *     _____  _____ _____     ___________ _____ _____ ___________ _____ _____
+ *    |  __ \|  ___|_   _|   /  ___| ___ \  ___/  __ \_   _|  ___|_   _/  __ \
+ *    | |  \/| |__   | |     \ `--.| |_/ / |__ | /  \/ | | | |_    | | | /  \/
+ *    | | __ |  __|  | |      `--. \  __/|  __|| |     | | |  _|   | | | |
+ *    | |_\ \| |___  | |     /\__/ / |   | |___| \__/\_| |_| |    _| |_| \__/\
+ *     \____/\____/  \_/     \____/\_|   \____/ \____/\___/\_|    \___/ \____/
+ */
+
+export const getUserSpecificSettings = async (username) => {
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -98,14 +168,14 @@ export const getUserSpecificSettings = async (username) => {
  * @route /api/fiscalismia/fixed_costs/valid/:date
  */
  export const getFixedCostsByEffectiveDate = async (validDate) => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config)
+    console.log("getFixedCostsByEffectiveDate RESPONSE")
+    console.log(response)
     return response.data
   } catch (error) {
     console.error(error);
@@ -119,9 +189,7 @@ export const getUserSpecificSettings = async (username) => {
  * @route /api/fiscalismia/variable_expenses/category/:category
  */
 export const getVariableExpenseByCategory = async (category) => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -140,9 +208,7 @@ export const getVariableExpenseByCategory = async (category) => {
  * @route /api/fiscalismia/fixed_income/valid/:date
  */
 export const getFixedIncomeByEffectiveDate = async (validDate) => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -154,83 +220,42 @@ export const getFixedIncomeByEffectiveDate = async (validDate) => {
   }
 }
 
-/**
- * @returns Object containing a results array with all fixed costs from the db
- * @route /api/fiscalismia/fixed_costs
+/***
+ *    ______ _____ _____ _____
+ *    | ___ \  _  /  ___|_   _|
+ *    | |_/ / | | \ `--.  | |
+ *    |  __/| | | |`--. \ | |
+ *    | |   \ \_/ /\__/ / | |
+ *    \_|    \___/\____/  \_/
  */
-export const getAllFixedCosts = async () => {
-  if (!token) {
-    setToken()
-  }
+
+/**
+ * performs db UPSERT statement for um_user_settings for:
+ * SET setting_value='value'
+ * WHERE user_id = (subselect loginUserName) AND setting_key='key'
+ * @param {*} loginUserName SELECT id FROM public.um_users WHERE username = 'loginUserName'
+ * @param {*} key setting_key column of um_user_settings
+ * @param {*} value setting_value column of um_user_settings
+ * @returns username associated with updated row
+ */
+export const postUpdatedUserSettings = async (loginUserName, key, value) => {
+  setToken()
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}`, }
     }
-    const response = await axios.get(`${baseUrl}/fixed_costs`, config)
+    const userSettingObj = {
+      username: loginUserName,
+      settingKey: key,
+      settingValue: value
+    }
+    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj , config)
     return response.data
   } catch (error) {
     console.error(error);
   }
 }
 
-/**
- * @returns Object containing a results array with all fixed income data from the db
- * @route /api/fiscalismia/fixed_costs
- */
-export const getAllFixedIncome = async () => {
-  if (!token) {
-    setToken()
-  }
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/fixed_income`, config)
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-/**
- * Returns food prices and discounts valid at the time of request (current_date)
- * @returns Object containing a results array with all food prices and discounts from the db
- * @route /api/fiscalismia/food_prices_and_discounts
- */
-export const getAllFoodPricesAndDiscounts = async () => {
-  if (!token) {
-    setToken()
-  }
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config)
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-/**
- * Returns discounted foods valid at the time of request (current_date)
- * @returns Object containing a results array with all active discounts from the db
- * @route /api/fiscalismia/discounted_foods_current
- */
-export const getCurrentFoodDiscounts = async () => {
-  if (!token) {
-    setToken()
-  }
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config)
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
 /**
  * User Upload of images such as jpg/webp/png requiring:
  * - <input type="file" /> within a <Button component='label'/>
@@ -238,9 +263,7 @@ export const getCurrentFoodDiscounts = async () => {
  * @returns
  */
 export const postFoodItemImg = async (event, foodItemId) => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}`,
@@ -268,9 +291,7 @@ export const postFoodItemImg = async (event, foodItemId) => {
  * @returns
  */
 export const postFoodItemDiscount = async foodItemDiscountObj => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -282,6 +303,74 @@ export const postFoodItemDiscount = async foodItemDiscountObj => {
     console.error(error);
   }
 }
+
+/**
+ * performs db insertion of provided object
+ * @param {*} foodItemObj with fields: foodItem, brand, store, mainMacro, kcalAmount, weight, price, lastUpdate
+ * @returns dimension_key of inserted object or ERROR
+ */
+export const postNewFoodItem = async foodItemObj => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'application/json',}
+    }
+    const response = await axios.post(`${baseUrl}/upload/food_item`, foodItemObj, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/***
+ *    ______ _____ _      _____ _____ _____
+ *    |  _  \  ___| |    |  ___|_   _|  ___|
+ *    | | | | |__ | |    | |__   | | | |__
+ *    | | | |  __|| |    |  __|  | | |  __|
+ *    | |/ /| |___| |____| |___  | | | |___
+ *    |___/ \____/\_____/\____/  \_/ \____/
+ *
+ */
+
+/**
+ * deletes server side images and removes filepath entry from db
+ * @param {*} filepath
+ * @returns
+ */
+export const deleteFoodItemImg = async id => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/***
+ *     _   _____________  ___ _____ _____
+ *    | | | | ___ \  _  \/ _ \_   _|  ___|
+ *    | | | | |_/ / | | / /_\ \| | | |__
+ *    | | | |  __/| | | |  _  || | |  __|
+ *    | |_| | |   | |/ /| | | || | | |___
+ *     \___/\_|   |___/ \_| |_/\_/ \____/
+ */
+
+
+/***
+ *     _____     _        _____                            _           _    _   _       _
+ *    |_   _|   | |      /  ___|                          | |         | |  | | | |     | |
+ *      | | __ _| |__    \ `--.  ___ _ __   __ _ _ __ __ _| |_ ___  __| |  | | | | __ _| |_   _  ___
+ *      | |/ _` | '_ \    `--. \/ _ \ '_ \ / _` | '__/ _` | __/ _ \/ _` |  | | | |/ _` | | | | |/ _ \
+ *      | | (_| | |_) |  /\__/ /  __/ |_) | (_| | | | (_| | ||  __/ (_| |  \ \_/ / (_| | | |_| |  __/
+ *      \_/\__,_|_.__/   \____/ \___| .__/ \__,_|_|  \__,_|\__\___|\__,_|   \___/ \__,_|_|\__,_|\___|
+ *                                  | |
+ *                                  |_|
+ */
 /** receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:
  * category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date
@@ -290,9 +379,7 @@ export const postFoodItemDiscount = async foodItemDiscountObj => {
  * or ERROR data
  */
 export const postFixedCostTsv = async fixedCostsTsvInput => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -312,9 +399,7 @@ export const postFixedCostTsv = async fixedCostsTsvInput => {
  * or ERROR data
  */
 export const postVariableExpensesTsv = async variableExpensesTsvInput => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -336,9 +421,7 @@ export const postVariableExpensesTsv = async variableExpensesTsvInput => {
  * or ERROR data
  */
 export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -359,10 +442,8 @@ export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postAllFoodItems = async foodItemTsvInput => {
-  if (!token) {
-    setToken()
-  }
+export const postAllFoodItemTsv = async foodItemTsvInput => {
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -375,51 +456,17 @@ export const postAllFoodItems = async foodItemTsvInput => {
   }
 }
 
-/**
- * performs db insertion of provided object
- * @param {*} foodItemObj with fields: foodItem, brand, store, mainMacro, kcalAmount, weight, price, lastUpdate
- * @returns dimension_key of inserted object or ERROR
+/***
+ *     _____ _____ _____ _____
+ *    |_   _|  ___/  ___|_   _|
+ *      | | | |__ \ `--.  | |
+ *      | | |  __| `--. \ | |
+ *      | | | |___/\__/ / | |
+ *      \_/ \____/\____/  \_/
  */
-export const postNewFoodItem = async foodItemObj => {
-  if (!token) {
-    setToken()
-  }
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(`${baseUrl}/upload/food_item`, foodItemObj, config)
-    return response.data
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-/**
- * deletes server side images and removes filepath entry from db
- * @param {*} filepath
- * @returns
- */
-export const deleteFoodItemImg = async id => {
-  if (!token) {
-    setToken()
-  }
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config)
-    return response
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 const getTest = async () => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -432,9 +479,7 @@ const getTest = async () => {
 }
 
 const postTest = async newObject => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` ,
@@ -448,9 +493,7 @@ const postTest = async newObject => {
 }
 
 const putTest = async newObject => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -463,9 +506,7 @@ const putTest = async newObject => {
 }
 
 const deleteTest = async id => {
-  if (!token) {
-    setToken()
-  }
+  setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }

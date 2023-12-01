@@ -10,7 +10,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res} from '../../resources/resource_properties';
-import { postAllFoodItems } from '../../services/pgConnections';
+import { postAllFoodItemTsv } from '../../services/pgConnections';
 
 
 
@@ -41,7 +41,7 @@ export default function InputAllFoodItemsFromTsvModal( props ) {
    * food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update
    */
   const transformTsvToInsertStatements = async() => {
-    const result = await postAllFoodItems(foodItemTsvInput)
+    const result = await postAllFoodItemTsv(foodItemTsvInput)
     if (result?.status == 200 && result?.data?.length != 0) {
       console.log("INSERT STATEMENTS CREATED ")
       setFoodItemTsvInput(result.data)

@@ -97,8 +97,6 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
     )
   } )
 
-  console.log(overviewDataset)
-
   // No Filtering of Costs
   const costsFiltered = allFixedCosts.results
   // unique effective dates as string array

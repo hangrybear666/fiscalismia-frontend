@@ -13,12 +13,11 @@ import { paths } from '../../resources/router_navigation_paths';
 
 export default function LogoutBtn({ fullWidth }) {
   const navigate = useNavigate();
-  const { setToken, setLoginUserName,  setAuthenticated } = useAuth()
-
+  const { setToken, setLoginUserName } = useAuth()
   const handleLogout = (e) => {
     e.preventDefault();
     console.log("Logging Out...")
-    invalidateSession( setToken, setLoginUserName,  setAuthenticated )
+    invalidateSession( setToken, setLoginUserName )
     navigate(paths.LOGIN)
   };
 
