@@ -184,6 +184,7 @@ export default function InputFoodDiscountModal( props ) {
           <Stack>
             <Autocomplete
               disablePortal
+              selectOnFocus
               onChange={handleAutoCompleteSelection}
               options={autoCompleteItemArray}
               renderInput={(params) => <TextField {...params} label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL} sx={{ borderRadius:0 }}/>}

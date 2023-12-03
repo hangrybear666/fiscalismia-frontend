@@ -79,8 +79,74 @@ export const getAllFixedCosts = async () => {
       headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(`${baseUrl}/fixed_costs`, config)
-    console.log("getAllFixedCosts RESPONSE")
-    console.log(response)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * @returns Object containing a results array with all sensitivities within variable expenses in db
+ * @route /api/fiscalismia/sensitivity
+ */
+export const getAllVariableExpenseSensitivities = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/sensitivity`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * @returns Object containing a results array with all stores within variable expenses in db
+ * @route /api/fiscalismia/store
+ */
+export const getAllVariableExpenseStores = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/store`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * @returns Object containing a results array with all categories within variable expenses in db
+ * @route /api/fiscalismia/category
+ */
+export const getAllVariableExpenseCategories = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/category`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * @returns Object containing a results array with all variable Expenses from the db
+ * @route /api/fiscalismia/variable_expenses
+ */
+export const getAllVariableExpenses = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/variable_expenses`, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -174,8 +240,6 @@ export const getUserSpecificSettings = async (username) => {
       headers: { Authorization: `Bearer ${token}` }
     }
     const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config)
-    console.log("getFixedCostsByEffectiveDate RESPONSE")
-    console.log(response)
     return response.data
   } catch (error) {
     console.error(error);

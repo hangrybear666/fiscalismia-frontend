@@ -1,4 +1,5 @@
 # User Notification on failed Login attempt
+# im Dark Mode die selected Filter (Sort) Optionen anders stylen
 # pgConnections catch(error) mit user notification abfangen
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
   und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird

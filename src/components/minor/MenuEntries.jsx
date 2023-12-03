@@ -55,6 +55,9 @@ export const menuEntries = [
     id: res.ADMIN_PANEL,
     children: [
       { id: res.UPLOAD_AREA, path: paths.ADMIN_UPLOAD_AREA, icon: <FileUploadIcon /> },
+      { id: 'TEST 1', path: "admin/test1", icon: <FileUploadIcon /> },
+      { id: 'TEST 2', path: "admin/test2", icon: <FileUploadIcon /> },
+      { id: 'TEST 3', path: "admin/test3", icon: <FileUploadIcon /> },
     ],
   },
 ]

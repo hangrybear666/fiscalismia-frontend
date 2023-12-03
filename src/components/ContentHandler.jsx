@@ -3,7 +3,7 @@ import { menuEntries } from '../components/minor/MenuEntries';
 import { paths } from '../resources/router_navigation_paths';
 import { Route, Routes, Navigate } from "react-router-dom";
 import TestData from './content/TestData'
-import VariableExpenses_Overview from './content/variableExpenses_Overview';
+import DATAGRID_DEMO_BASIC from './content/DATAGRID_DEMO_BASIC';
 import FixedCosts_Overview from './content/fixedCosts_Overview';
 import FixedCosts_LivingEssentials from './content/fixedCosts_LivingEssentials';
 import FixedCosts_Leisure from './content/fixedCosts_Leisure';
@@ -18,6 +18,7 @@ import PaletteAndThemeTest from './content/PaletteAndThemeTest';
 import Income_Overview from './content/income_Overview';
 import Income_Monthly_Budget from './content/income_MonthlyBudget';
 import Income_Sales from './content/income_Sales';
+import VariableExpenses_Overview from './content/variableExpenses_Overview';
 
 export default function Content( props ) {
 
@@ -31,9 +32,9 @@ export default function Content( props ) {
       case paths.VARIABLE_EXPENSES_OVERVIEW :
         return <VariableExpenses_Overview value={value}/>
       case paths.VARIABLE_EXPENSES_STORES :
-        return <TEST_DATAGRID value={value}/>
+        return <TestData value={value}/>
       case paths.VARIABLE_EXPENSES_INDULGENCES :
-        return <TESTDELETETABLE value={value}/>
+        return <TestData value={value}/>
       case paths.FIXED_COSTS_OVERVIEW :
         return <FixedCosts_Overview/>
       case paths.FIXED_COSTS_LIVING_ESSENTIALS :
@@ -56,6 +57,12 @@ export default function Content( props ) {
         return <Deals_GroceryDeals value={value}/>
       case paths.ADMIN_UPLOAD_AREA :
         return <TestData value={value}/>
+      case "admin/test1" :
+        return <TEST_DATAGRID value={value}/>
+      case "admin/test2" :
+        return <DATAGRID_DEMO_BASIC value={value}/>
+      case "admin/test3" :
+        return <TESTDELETETABLE value={value}/>
       default:
         <React.Fragment>
         </React.Fragment>
