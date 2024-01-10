@@ -10,7 +10,30 @@ import Paper from '@mui/material/Paper';
 import InputVariableExpenseModal from '../minor/InputVariableExpenseModal';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getAllVariableExpenses, getAllVariableExpenseStores, getAllVariableExpenseCategories, getAllVariableExpenseSensitivities } from '../../services/pgConnections';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
+/**
+ * extracts all unique dates within expenses into an array
+ * @param {*} allVariableExpenses
+ * @returns array of date strings in the format yyyy-mm-dd
+ */
+function getUniquePurchasingDates(allVariableExpenses) {
+  return Array.from(new Set(allVariableExpenses.map(e => e.purchasing_date)))
+
+}
+
+/**
+ * extracts all unique years within unique date array into an array
+ * @param {*} allVariableExpenses
+ * @returns array of year strings in the format yyyy
+ */
+function getUniqueEffectiveDateYears(allVariableExpenses) {
+  const uniqueEffectiveDateArray = getUniquePurchasingDates(allVariableExpenses)
+  const uniqueYearSet = new Set(uniqueEffectiveDateArray.map(e => e.substring(0,4)))
+  return [...uniqueYearSet].sort() // return as Array
+}
 
 /**
  * Transforms a list of Objects from the db into simple arrays
@@ -39,11 +62,18 @@ function getStoreDataStructuresForAutocomplete(allStores, allCategories, allSens
   return { storeAutoCompleteItemArray, categoryAutoCompleteItemArray, indulgencesAutoCompleteItemArray }
 }
 
+
 export default function VariableExpenses_Overview( props ) {
   const { palette } = useTheme();
+  // Variable Expense Data for Display
   const [allVariableExpenses, setAllVariableExpenses] = useState(null)
+  const [selectedVariableExpenses, setSelectedVariableExpenses] = useState(null)
+  const [uniqueYearsWithinExpenses, setUniqueYearsWithinExpenses] = useState(null)
+  const [yearSelectionData, setYearSelectionData] = useState(null)
+  const [selectedYear, setSelectedYear] = useState(null)
   // to refresh table based on added food item after DB insertion
   const [addedItemId, setAddedItemId] = useState('')
+  // Autocomplete Data for InputModal
   const [storeAutoCompleteItemArray, setStoreAutoCompleteItemArray] = useState(null)
   const [categoryAutoCompleteItemArray, setCategoryAutoCompleteItemArray] = useState(null)
   const [indulgencesAutoCompleteItemArray, setIndulgencesAutoCompleteItemArray] = useState(null)
@@ -62,6 +92,10 @@ export default function VariableExpenses_Overview( props ) {
   useEffect(() => {
     const getAllPricesAndDiscounts = async() => {
       let allVariableExpenses = await getAllVariableExpenses();
+      const uniqueYears = getUniqueEffectiveDateYears(allVariableExpenses.results)
+      setUniqueYearsWithinExpenses(uniqueYears)
+      setYearSelectionData(new Array( uniqueYears )) // 2D Array for mapping ToggleButtonGroup as parent
+      // setSelectedYear(uniqueYears[0])
       let allStores = await getAllVariableExpenseStores();
       let allCategories = await getAllVariableExpenseCategories();
       let allSensitivities = await getAllVariableExpenseSensitivities();
@@ -72,12 +106,67 @@ export default function VariableExpenses_Overview( props ) {
       setIndulgencesAutoCompleteItemArray(autoCompleteItemArrays.indulgencesAutoCompleteItemArray)
     }
     getAllPricesAndDiscounts();
-  }, [addedItemId]
+  }, [addedItemId, selectedYear]
   )
+
+  const handleYearSelection = (event, newValue) => {
+    setSelectedYear(newValue)
+    setSelectedVariableExpenses(allVariableExpenses
+      .filter(e => e.purchasing_date.substring(0,4) === newValue))
+  }
 
   return (
     <>
       <InputVariableExpenseModal setAddedItemId={setAddedItemId} storeAutoCompleteItemArray={storeAutoCompleteItemArray} categoryAutoCompleteItemArray={categoryAutoCompleteItemArray} indulgencesAutoCompleteItemArray={indulgencesAutoCompleteItemArray}/>
+      <Box>
+        {yearSelectionData
+        ? yearSelectionData.map((parent, index) => {
+          return (
+          <ToggleButtonGroup
+            key={index}
+            variant="contained"
+            exclusive
+            value={selectedYear}
+            onChange={handleYearSelection}
+            sx={{mt:0.5,mb:1}}
+          >
+            {parent.map((child, index) => {
+              return (
+              <ToggleButton
+                key={index}
+                size="large"
+                value={child}
+                selected={child===selectedYear}
+                sx={{
+                  borderRadius:0,
+                  paddingX:3.25,
+                  '&:hover': {
+                    bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
+                    color: palette.common.white,
+                  },
+                  '&.Mui-selected:hover': {
+                    bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500],
+                  },
+                  '&.Mui-selected': {
+                    bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
+                    color: palette.mode === 'light' ? palette.common.white : palette.common.black,
+                    boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
+                    transition: 'box-shadow 0.2s linear 0s'},
+                  '&.Mui-disabled' : {
+                    color: palette.text.disabled
+                  },
+                }}
+              >
+                {child}
+              </ToggleButton>
+              )
+            }
+            )}
+          </ToggleButtonGroup>
+          )
+        })
+          : null}
+      </Box>
       <TableContainer component={Paper} sx={{borderRadius:0}}>
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table" >
           <TableHead>
@@ -90,26 +179,24 @@ export default function VariableExpenses_Overview( props ) {
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP}</TableCell>
               <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_PRICE_TOP}</TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP}</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {allVariableExpenses ? allVariableExpenses.map((row) => (
+            {selectedVariableExpenses ? selectedVariableExpenses.map((row) => (
               <TableRow
                 key={row.id}
                 sx={tableRowStyling}
               >
-                <TableCell>{row.food_item}</TableCell>
-                <TableCell>{row.brand}</TableCell>
+                <TableCell>{row.description}</TableCell>
+                <TableCell>{row.category}</TableCell>
                 <TableCell>{row.store}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.main_macro}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.kcal_amount}{res.KCAL}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.weight}{res.GRAMS}</TableCell>
-                <TableCell align="right">{row.price}{res.CURRENCY_EURO}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.last_update}</TableCell>
-                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.normalized_price}€</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.cost}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.purchasing_date}{res.KCAL}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">{row.is_planned ? 'Ja' : 'Nein'}</TableCell>
+                <TableCell align="right">{row.contains_indulgence ? 'Ja' : 'Nein'}</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} >{row.indulgences}</TableCell>
               </TableRow>
-            )) : null} */}
+            )) : null}
           </TableBody>
         </Table>
       </TableContainer>
