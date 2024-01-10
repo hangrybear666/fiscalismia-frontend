@@ -331,7 +331,7 @@ export default function InputFoodItemModal( props ) {
         color="secondary"
         sx={{ borderRadius:0,
           border: `1px solid  ${palette.border.dark}`,
-          boxShadow: '3px 3px 8px 2px rgba(64,64,64, 0.7)',
+          boxShadow: palette.mode === 'light' ?  `3px 3px 8px 2px ${palette.grey[700]}` : '',
           mb:0.8
             }}
           startIcon={<AddCircleIcon />}

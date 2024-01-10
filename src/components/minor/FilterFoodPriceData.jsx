@@ -116,7 +116,6 @@ sortCriteria.push(
   ]
 );
 
-
 function getMacroNutrientCategories(allFoodPrices) {
   return Array.from(new Set(allFoodPrices.map(e => e.main_macro)))
 }
@@ -373,14 +372,16 @@ export default function FilterFoodPriceData( props ) {
                       sx={{
                         borderRadius:0,
                         '&:hover': {
-                          bgcolor: 'rgba(128,128,128,0.4)',
+                          bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
+                          color: palette.common.white,
                         },
                         '&.Mui-selected:hover': {
-                          bgcolor: 'rgba(128,128,128,0.9)',},
+                          bgcolor: palette.mode === 'light' ? palette.grey[700] : palette.grey[500],
+                        },
                         '&.Mui-selected': {
-                          bgcolor: "rgba(64,64,64, 0.8)",
-                          color:'#ffffff',
-                          boxShadow: '0px 0px 4px 2px rgba(64,64,64, 0.6)',
+                          bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[400],
+                          color: palette.mode === 'light' ? palette.common.white : palette.common.black,
+                          boxShadow: `0px 0px 4px 2px ${palette.mode === 'light' ? palette.grey[700] : palette.grey[700]}`,
                           transition: 'box-shadow 0.2s linear 0s'},
                         '&.Mui-disabled' : {
                           color: palette.text.disabled
