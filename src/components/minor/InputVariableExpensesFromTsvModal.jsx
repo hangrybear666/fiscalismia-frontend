@@ -42,7 +42,6 @@ export default function InputVariableExpensesFromTsvModal( props ) {
     const result = await postVariableExpensesTsv(variableExpensesTsvInput)
     if (result?.status == 200 && result?.data?.length != 0) {
       console.log("INSERT STATEMENTS CREATED ")
-      console.log(result)
       setVariableExpensesTsvInput(result.data)
     } else if (result?.data?.length == 0) {
       console.error(result.response)
