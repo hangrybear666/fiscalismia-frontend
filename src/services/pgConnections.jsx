@@ -1,7 +1,5 @@
 import axios from 'axios'
 import { serverConfig, localStorageKeys } from '../resources/resource_properties';
-import { invalidateSession, useAuth } from '../services/userAuthentication';
-import { useNavigate } from 'react-router-dom';
 const baseUrl = serverConfig.API_BASE_URL
 export class FileSizeError extends Error {
   constructor(message) {

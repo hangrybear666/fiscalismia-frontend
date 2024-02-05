@@ -283,7 +283,7 @@ export const foodItemInputCategories = {
 
 export const serverConfig = {
   NODE_ROOT_URL: 'http://localhost:3002/',
-  // API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
-  API_BASE_URL: `http://172.19.64.1:3002/api/fiscalismia`,
-  
+  API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
+  // API_BASE_URL: `http://172.19.64.1:3002/api/fiscalismia`, // WSL for Jenkins
+  // API_BASE_URL: `http://192.168.178.37:3002/api/fiscalismia`,
 }
