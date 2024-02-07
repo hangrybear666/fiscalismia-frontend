@@ -554,13 +554,13 @@ const postTest = async newObject => {
   }
 }
 
-const putTest = async newObject => {
+const putTest = async (id, newObject) => {
   setToken()
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     }
-    const response = await axios.put(`${baseUrl}/${newObject.id}`, newObject, config)
+    const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
     return response
   } catch (error) {
     console.error(error);

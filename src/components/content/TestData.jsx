@@ -85,8 +85,8 @@ export default function Content({ show = true, value }) {
     if (putInput === '' || putId === '') {
       alert(`please provide values for PUT`)
     }
-    const updatedEntry = {id: putId, name: putInput}
-    await pgConnections.putTest(updatedEntry)
+    const updatedEntry = {description: putInput}
+    await pgConnections.putTest(putId, updatedEntry)
     const response = await pgConnections.getTest()
     setResult(response)
     setPutId('')
