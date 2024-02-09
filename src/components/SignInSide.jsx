@@ -112,13 +112,13 @@ export default function SignInSide() {
     setTimeout(function(){
       return (
         <>
-          <p>User <b>{window.localStorage.getItem(localStorageKeys.loginUserName)}</b> is already logged in.</p>
+          <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName))}</p>
           <IconButton
             color="primary"
             variant="text"
             onClick={() => {navigate(paths.APP_ROOT_PATH, { replace: true })}}>
             <HomeIcon />
-            Home
+            {res.HOME}
           </IconButton>
         </>
       )
@@ -158,7 +158,7 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              {res.SIGN_IN}
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField

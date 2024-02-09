@@ -53,6 +53,19 @@ export const resourceProperties = {
   INTERVAL_HALFYEARLY: 'halbjährlich',
   INTERVAL_YEARLY: 'jährlich',
 
+  BAD_REQUEST: 'Bad Request',
+  ERROR_FALLBACK_MESSAGE: 'Error has not been handled explicitly. Implementation should catch this properly.',
+  STATUS: 'Status',
+  STATUSTEXT: 'StatusText',
+  DATA: 'Data',
+  STATUS_NOT_DEFINED: 'Status Not defined',
+  STATUSTEXT_NOT_DEFINED: 'StatusText Not defined',
+  GENERIC_ERROR_MESSAGE: 'Sorry, an unexpected error has occurred.',
+  NOT_DEFINED: 'Not defined',
+  // Functions with placeholder vars
+  USER_ALREADY_LOGGED_IN : (pos1) => (`User ${pos1} is already logged in.`),
+  PATH_DOES_NOT_EXIST : (pos1) => (`Sorry, the requested path ${pos1} does not exist.`),
+
   INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
   INCOME_FIXED_COST_CARD_HEADER: 'Fixkosten Gesamt',
   INCOME_MONTHLY_BUDGET_CHART_HEADER: 'Monatliches Budget',

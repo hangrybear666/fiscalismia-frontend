@@ -1,6 +1,7 @@
 import { Navigate, useNavigate, useRouteError,  useLocation, NavLink, isRouteErrorResponse } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import { paths } from '../resources/router_navigation_paths';
+import { resourceProperties as res } from '../resources/resource_properties'
 import Stack from '@mui/material/Stack';
 import HomeIcon from '@mui/icons-material/Home';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
@@ -10,8 +11,8 @@ export default function ErrorPage( {isNoMatch} ) {
   let location = useLocation()
   if (!isRouteErrorResponse(error)) {
     error.status = 400
-    error.statusText = 'Bad Request'
-    error.data = 'Error has not been handled explicitly. Implementation should catch this properly. '
+    error.statusText = res.BAD_REQUEST
+    error.data = res.ERROR_FALLBACK_MESSAGE
   }
   console.error(`ErrorPage routerError is: ${error}`);
 
@@ -29,8 +30,10 @@ export default function ErrorPage( {isNoMatch} ) {
 function RoutingError({error, location}) {
   return (
     <div id="error-page">
-      <h1>{error?.status || 'Status Not defined'} | {error?.statusText || 'StatusText Not defined'}</h1>
-      <h2>Sorry, the requested path '{location.pathname}' does not exist.</h2>
+      <h1>{error?.status || res.STATUS_NOT_DEFINED} | {error?.statusText || res.STATUSTEXT_NOT_DEFINED}</h1>
+      <h2>
+        {res.PATH_DOES_NOT_EXIST(location.pathname)}
+      </h2>
       <hr/>
       <NavBtns/>
       <hr/>
@@ -41,10 +44,10 @@ function RoutingError({error, location}) {
 function GenericError({error}) {
   return (
     <div id="error-page">
-      <h1>Sorry, an unexpected error has occurred.</h1>
-      <p><u>Status:</u> {error?.status || 'Not defined'}</p>
-      <p><u>StatusText:</u> {error?.statusText || 'Not defined'}</p>
-      <p><u>Data:</u> {error?.data || 'Not defined'}</p>
+      <h1>{res.GENERIC_ERROR_MESSAGE}</h1>
+      <p><u>{res.STATUS}:</u> {error?.status || res.NOT_DEFINED}</p>
+      <p><u>{res.STATUSTEXT}:</u> {error?.statusText || res.NOT_DEFINED}</p>
+      <p><u>{res.DATA}:</u> {error?.data || res.NOT_DEFINED}</p>
       <hr/>
       <NavBtns/>
       <hr/>
@@ -65,14 +68,14 @@ function NavBtns() {
         variant="text"
         onClick={() => {navigate(paths.APP_ROOT_PATH)}}>
         <HomeIcon />
-        Home
+        {res.HOME}
       </IconButton>
       <IconButton
         color="primary"
         variant="text"
         onClick={() => {navigate(paths.LOGIN)}}>
         <VpnKeyIcon />
-        Login
+        {res.LOGIN}
       </IconButton>
     </Stack>
   )
