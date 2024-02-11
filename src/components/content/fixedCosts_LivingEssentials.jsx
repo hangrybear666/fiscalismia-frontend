@@ -48,7 +48,7 @@ function filterLivingEssentials(specificFixedCosts) {
 }
 
 function getUniqueEffectiveDates(fixedCosts) {
-  return Array.from(new Set(fixedCosts.map(e => e.effective_date)))
+  return Array.from(new Set(fixedCosts.map(e => e.effective_date))).sort((a,b) => a<b) // SORT Desc to initialize with current value at index 0
 }
 
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
@@ -241,7 +241,7 @@ export default function FixedCosts_LivingEssentials( props ) {
         selectedEffectiveDate
         ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
         : effectiveDateSelectItems
-        ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
+        ? effectiveDateSelectItems[0].substring(0,10)// Spezifische Kosten via erstem Eintrag aus allen effective dates
         : res.FALLBACK_DATE); // Fallback auf übergebenes Datum
        let extractedFixedCosts = extractCardData(specificFixedCosts)
        setRentAndUtilitiesCard(extractedFixedCosts.rentAndUtilities)

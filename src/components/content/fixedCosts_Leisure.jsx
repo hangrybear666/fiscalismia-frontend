@@ -52,7 +52,7 @@ function filterMediaAndEntertainment(fixedCosts) {
 }
 
 function getUniqueEffectiveDates(fixedCosts) {
-  return Array.from(new Set(fixedCosts.map(e => e.effective_date)))
+  return Array.from(new Set(fixedCosts.map(e => e.effective_date))).sort((a,b) => a<b) // SORT Desc to initialize with current value at index 0
 }
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
   const contentChartObj =
