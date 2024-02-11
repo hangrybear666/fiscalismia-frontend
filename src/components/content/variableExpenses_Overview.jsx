@@ -68,6 +68,7 @@ export default function VariableExpenses_Overview( props ) {
   // Variable Expense Data for Display
   const [allVariableExpenses, setAllVariableExpenses] = useState(null)
   const [selectedVariableExpenses, setSelectedVariableExpenses] = useState(null)
+  // year selection
   const [uniqueYearsWithinExpenses, setUniqueYearsWithinExpenses] = useState(null)
   const [yearSelectionData, setYearSelectionData] = useState(null)
   const [selectedYear, setSelectedYear] = useState(null)

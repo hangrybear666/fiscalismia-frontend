@@ -56,7 +56,7 @@ export default function ContentCard( props ) {
             sx={{ borderTop: `1px solid ${palette.border.light}`,
                   borderBottom: `1px solid ${palette.border.light}` }}
           >
-            <Stack >
+            <Stack alignItems="center">
               {amount ?
               <Typography  sx={{ mt: 0.2 }} variant="h5" >
                 {amount}€
