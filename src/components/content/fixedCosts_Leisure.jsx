@@ -260,7 +260,7 @@ export default function FixedCosts_Leisure( props ) {
         ? selectedEffectiveDate.substring(0,10) // Spezifische Kosten via ausgewähltem effective date
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
-        : '2023-08-01'); // Fallback auf übergebenes Datum
+        : res.FALLBACK_DATE); // Fallback auf übergebenes Datum
       let selectedFixedCosts = extractCardData(specificfixedCosts)
       setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth)
       setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment)

@@ -173,7 +173,7 @@ export default function Income_Overview( props ) {
         ? selectedEffectiveDate.substring(0,10) // Specific Income via selected effective date
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Specific Income via first entry in all effective dates
-        : '2023-08-01'); // Fallback to provided date
+        : res.FALLBACK_DATE); // Fallback to provided date
       let extractedFixedIncome = extractCardData(specificFixedIncome)
       setMonthlyNetIncomeCard(extractedFixedIncome.monthlyNetIncome)
       setMonthlyGrossIncomeCard(extractedFixedIncome.monthlyGrossIncome)

@@ -51,19 +51,33 @@ function constructContentChartObject( title, xAxis, dataSets, colors ) {
     return contentChartObj
 }
 
-function getUniqueEffectiveDates(fixedIncome, fixedCosts) {
-  const incomeSet = new Set(fixedIncome.map(e => e.effective_date))
-  if (fixedCosts) {
-    const costsSet = new Set(fixedCosts.map(e => e.effective_date))
-    return Array.from(new Set([...incomeSet,...costsSet])).sort()
-  }
-  else {
-    return Array.from(new Set(fixedIncome.map(e => e.effective_date)))
+/**
+ * extracts all uniqure effective dates from two result sets from the db
+ * @param {*} firstDataset
+ * @param {*} secondDataset
+ * @returns DESC sorted array of effective dates in the format 'yyyy-mm-dd'
+ */
+function getUniqueEffectiveDates(firstDataset, secondDataset) {
+  if (firstDataset && secondDataset) {
+    const incomeSet = new Set(firstDataset.map(e => e.effective_date))
+    const costsSet = new Set(secondDataset.map(e => e.effective_date))
+    return Array.from(new Set([...incomeSet,...costsSet])).sort((a,b) => a<b) // desc
   }
 }
 
 /**
- *
+ * extracts all uniqure effective dates of a single dataset
+ * @param {*} singleDataSet required
+ * @returns sorted array of effective dates in the format 'yyyy-mm-dd'
+ * It doesn't matter how it is sorted, as long as it is. This is because both
+ * income and fixed costs call this method and subsequently are passed to the
+ * chart component via incomeDataSets that both require to be sorted in the same way.
+ */
+function getUniqueEffectiveDatesSingle(singleDataSet) {
+  return Array.from(new Set(singleDataSet.map(e => e.effective_date))).sort()
+}
+
+/**
  * @param {*} allFixedIncome all fixed income data within db
  * @param {*} allFixedCosts all fixed income data within db
  * @param {*} palette theme palette for colors
@@ -81,7 +95,7 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
   const incomeFiltered = allFixedIncome.results
     .filter(e => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
   // unique effective dates as string array
-  const incomeDatesArr = getUniqueEffectiveDates(incomeFiltered)
+  const incomeDatesArr = getUniqueEffectiveDatesSingle(incomeFiltered)
   // only read date string from datetime
   let overviewDataset = []
   // for each unique date create an xAxis array with summed up monthly_cost values
@@ -100,7 +114,7 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
   // No Filtering of Costs
   const costsFiltered = allFixedCosts.results
   // unique effective dates as string array
-  const costsDatesArr = getUniqueEffectiveDates(costsFiltered)
+  const costsDatesArr = getUniqueEffectiveDatesSingle(costsFiltered)
   let costsDataset = []
   // for each unique date create an xAxis array with summed up monthly_cost values
   costsDatesArr.forEach( (xAxisEntry) => {
@@ -129,9 +143,8 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
   // 3 read date substring in the format yyyy-mm-dd // TODO
   const xAxisArray =
     Array.from(new Set(incomeDatesArr.concat(costsDatesArr)))
-    .sort()
     .map(e => e.substring(0,10))
-
+    .sort((a,b) => a>b) // ASC sorted so left side of x axis starts with prior date
   let overview = constructContentChartObject(res.INCOME_MONTHLY_BUDGET_CHART_HEADER, xAxisArray, incomeDataSets, colors)
 
   return { overview }
@@ -211,13 +224,13 @@ export default function Income_Monthly_Budget( props ) {
         ? selectedEffectiveDate.substring(0,10) // Specific Income via selected effective date
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Specific Income via first entry in all effective dates
-        : '2023-08-01'); // Fallback to provided date
+        : res.FALLBACK_DATE); // Fallback to provided date
       let specificFixedCost = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
         ? selectedEffectiveDate.substring(0,10) // Specific Income via selected effective date
         : effectiveDateSelectItems
         ? effectiveDateSelectItems[0].substring(0,10) // Specific Income via first entry in all effective dates
-        : '2023-08-01'); // Fallback to provided date
+        : res.FALLBACK_DATE); // Fallback to provided date
       let extractedFixedIncome = extractCardData(specificFixedIncome, specificFixedCost)
       setMonthlyNetIncomeCard(extractedFixedIncome.monthlyNetIncome)
       setOneTimeYearlyBonusCard(extractedFixedIncome.oneTimeYearlyBonus)

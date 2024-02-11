@@ -28,6 +28,7 @@ export const resourceProperties = {
   LOGIN: 'Login',
   LOGOUT: 'Logout',
   MONTHLY_BUDGET:'Monatliches Budget',
+  BUDGET: 'Budget',
   INVESTMENTS: 'Investments',
   SALES: 'Verkäufe',
   SORT_BY: 'Sortieren nach',
@@ -52,6 +53,8 @@ export const resourceProperties = {
   INTERVAL_QUARTERLY: 'quartalsweise',
   INTERVAL_HALFYEARLY: 'halbjährlich',
   INTERVAL_YEARLY: 'jährlich',
+  FALLBACK_DATE: '2024-01-01',
+  ERROR_MSG_INCOME_DATA_REQUIRED: 'Fixed Income data required to extract effective_dates',
 
   BAD_REQUEST: 'Bad Request',
   ERROR_FALLBACK_MESSAGE: 'Error has not been handled explicitly. Implementation should catch this properly.',
