@@ -82,7 +82,6 @@ export default function InputVariableExpensesFromTsvModal( props ) {
         onClose={handleClose}
       >
         <Box sx={style}>
-          {/* VARIABLE EXPENSES */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor="variable_expenses">{res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
             <Input

@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
 
-export default function ContentCard( props ) {
+export default function ContentCardCosts( props ) {
   const { palette } = useTheme();
   const { img, header, amount, subtitle, icon, details, elevation, imgHeight, detailHeader } = props
 

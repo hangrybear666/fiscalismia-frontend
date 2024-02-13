@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import ContentCardCosts from '../minor/ContentCardCosts';
+import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
 import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';

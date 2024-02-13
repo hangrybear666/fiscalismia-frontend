@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import ContentCardCosts from '../minor/ContentCardCosts';
+import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
 import CellWifiOutlinedIcon from '@mui/icons-material/CellWifiOutlined';

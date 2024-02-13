@@ -22,7 +22,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
-import ContentCardCosts from '../minor/ContentCardCosts';
+import ContentCardCosts from '../minor/ContentCard_Costs';
 import { getFabUtilityClass } from '@mui/material';
 import { localStorageKeys } from '../../resources/resource_properties';
 import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';

@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import InputVariableExpenseModal from '../minor/InputVariableExpenseModal';
+import InputVariableExpenseModal from '../minor/Modal_InputVariableExpense';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getAllVariableExpenses, getAllVariableExpenseStores, getAllVariableExpenseCategories, getAllVariableExpenseSensitivities } from '../../services/pgConnections';
 import Button from '@mui/material/Button';

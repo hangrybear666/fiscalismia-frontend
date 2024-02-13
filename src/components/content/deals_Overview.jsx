@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import InputFoodItemModal from '../minor/InputFoodItemModal';
+import InputFoodItemModal from '../minor/Modal_InputFoodItem';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 

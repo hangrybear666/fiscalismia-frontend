@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ContentCard from '../minor/ContentCardCosts';
+import ContentCard from '../minor/ContentCard_Costs';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';

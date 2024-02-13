@@ -8,10 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
-import ContentCardDiscounts from '../minor/ContentCardDiscounts';
+import ContentCardDiscounts from '../minor/ContentCard_Discounts';
 import { resourceProperties as res, fixedCostCategories as categories, serverConfig } from '../../resources/resource_properties';
 import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
-import InputFoodDiscountModal from '../minor/InputFoodDiscountModal';
+import InputFoodDiscountModal from '../minor/Modal_InputFoodDiscount';
 
 function constructContentCardObject(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, dealDuration, daysLeft, startsInDays, details, store, img) { // TODO img
   const contentCardObj =

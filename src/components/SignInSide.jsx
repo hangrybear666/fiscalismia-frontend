@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resourceProperties as res, localStorageKeys } from '../resources/resource_properties'
 import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
-import CreateAccountModal from './minor/CreateAccountModal';
+import CreateAccountModal from './minor/Modal_CreateAccount';
 
 function Copyright(props) {
   return (

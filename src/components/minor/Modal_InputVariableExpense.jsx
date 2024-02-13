@@ -83,7 +83,7 @@ function dateValidation(dateStr) {
   return { isValid: !isNaN(date), date: date }
 }
 
-export default function InputFoodItemModal( props ) {
+export default function InputVariableExpenseModal( props ) {
   const { palette } = useTheme();
   const { setAddedItemId, storeAutoCompleteItemArray, categoryAutoCompleteItemArray, indulgencesAutoCompleteItemArray} = props
   const [open, setOpen] = React.useState(false);
