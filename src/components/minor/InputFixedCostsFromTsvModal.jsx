@@ -82,7 +82,6 @@ export default function InputFixedCOstsFromTsvModal( props ) {
         onClose={handleClose}
       >
         <Box sx={style}>
-          {/* FIXED COSTS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor="fixed_costs">{res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
             <Input

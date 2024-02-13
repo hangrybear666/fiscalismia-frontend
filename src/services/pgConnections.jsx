@@ -496,6 +496,27 @@ export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
   }
 }
 
+/** receives TSV as input from admin
+ * MANDATORY HEADER STRUCTURE:
+ * execution_type,	description,	isin,	investment_type,	marketplace,	units,	price_per_unit,	total_price,	fees,	execution_date
+ * @param {*} investmentsTsvInput
+ * @returns INSERT INTO statements for manual validation and loading of db table
+ * or ERROR data
+ */
+export const postInvestmentsTsv = async investmentsTsvInput => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'text/plain',}
+    }
+    const response = await axios.post(`${baseUrl}/texttsv/investments`, investmentsTsvInput, config)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 /**
  * receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:

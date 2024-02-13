@@ -196,6 +196,10 @@ export const resourceProperties = {
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,	type,	monthly_interval,	value,	effective_date,	expiration_date',
 
+  MINOR_INPUT_INVESTMENTS_MODAL_OPEN: 'TSV Import Investments',
+  MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
+  MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: execution_type,	description,	isin,	investment_type,	marketplace,	units,	price_per_unit,	total_price,	fees,	execution_date',
+
   MINOR_FILTER_FOOD_PRICES_NAME_HEADER: 'Suche',
   MINOR_FILTER_FOOD_PRICES_FOOD_ITEM_INPUT_LABEL: 'Artikel',
   MINOR_FILTER_FOOD_PRICES_MACRO_HEADER: 'Auswahl Makronährstoff',

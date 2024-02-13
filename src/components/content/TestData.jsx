@@ -15,7 +15,7 @@ import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
 import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
 import InputFixedIncomeFromTsvModal from '../minor/InputFixedIncomeFromTsvModal';
 import InputVariableExpensesFromTsvModal from '../minor/InputVariableExpensesFromTsvModal';
-
+import InputInvestmentsFromTsvModal from '../minor/InputInvestmentsFromTsvModal';
 
 export default function Content({ show = true, value }) {
   const [result, setResult] = useState([])
@@ -125,8 +125,13 @@ export default function Content({ show = true, value }) {
         </Box>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
-      ? <Box sx={{mb:2}}>
+      ? <Box>
           <InputVariableExpensesFromTsvModal/>
+        </Box>
+      : null}
+      {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
+      ? <Box sx={{mb:2}}>
+          <InputInvestmentsFromTsvModal/>
         </Box>
       : null}
 

@@ -10,13 +10,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
-import { postFixedIncomeTsv } from '../../services/pgConnections';
+import { postInvestmentsTsv } from '../../services/pgConnections';
 
-export default function InputFixedIncomeFromTsvModal( props ) {
+export default function InputIncomeFromTsvModal( props ) {
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Inputs
-  const [fixedIncomeTsvInput, setFixedIncomeTsvInput] = React.useState('');
+  const [investmentsTsvInput, setInvestmentsTsvInput] = React.useState('');
   // Selection
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,30 +36,30 @@ export default function InputFixedIncomeFromTsvModal( props ) {
   /**
    * queries REST API for transformation of texttsv to INSERT INTO Statements
    * MANDATORY HEADER STRUCTURE:
-   * description,	type,	monthly_interval,	value,	effective_date,	expiration_date
+   * execution_type,	description,	isin,	investment_type,	marketplace,	units,	price_per_unit,	total_price,	fees,	execution_date
    */
   const transformTsvToInsertStatements = async() => {
-    const result = await postFixedIncomeTsv(fixedIncomeTsvInput)
+    const result = await postInvestmentsTsv(investmentsTsvInput)
     if (result?.status == 200 && result?.data?.length != 0) {
       console.log("INSERT STATEMENTS CREATED ")
-      setFixedIncomeTsvInput(result.data)
+      setInvestmentsTsvInput(result.data)
     } else if (result?.data?.length == 0) {
       console.error(result.response)
-      setFixedIncomeTsvInput('RESPONSE DATA IS EMPTY')
+      setInvestmentsTsvInput('RESPONSE DATA IS EMPTY')
     } else if (result?.response?.data?.error) {
       console.log("REQUEST FAILED WITH ERROR:")
       console.error(result.response.data.error)
-      setFixedIncomeTsvInput(JSON.stringify(result.response.data.error))
+      setInvestmentsTsvInput(JSON.stringify(result.response.data.error))
     } else {
       console.log("transformTsvToInsertStatements failed for unknown reason")
       console.error(result.response)
-      setFixedIncomeTsvInput('unknown error')
+      setInvestmentsTsvInput('unknown error')
     }
   }
 
   const inputChangeListener = (e) => {
       e.preventDefault();
-      setFixedIncomeTsvInput(e.target.value)
+      setInvestmentsTsvInput(e.target.value)
   }
 
   return (
@@ -75,7 +75,7 @@ export default function InputFixedIncomeFromTsvModal( props ) {
             }}
           startIcon={<AddCircleIcon />}
           >
-        {res.MINOR_INPUT_FIXED_INCOME_MODAL_OPEN}
+        {res.MINOR_INPUT_INVESTMENTS_MODAL_OPEN}
       </Button>
       <Modal
         open={open}
@@ -83,17 +83,17 @@ export default function InputFixedIncomeFromTsvModal( props ) {
       >
         <Box sx={style}>
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="fixed_income">{res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
+            <InputLabel htmlFor="investments">{res.MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}</InputLabel>
             <Input
-              id="fixed_income"
-              value={fixedIncomeTsvInput}
+              id="investments"
+              value={investmentsTsvInput}
               onChange={inputChangeListener}
               multiline
               minRows={15}
               maxRows={30}
               type="text"
             />
-            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
+            <FormHelperText sx={{ color: palette.secondary.main }}>{res.MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_HELPER}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button
