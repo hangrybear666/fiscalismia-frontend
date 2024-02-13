@@ -25,8 +25,6 @@ import pgConnections from '../../services/pgConnections';
 import ContentCardCosts from '../minor/ContentCard_Costs';
 import { getFabUtilityClass } from '@mui/material';
 import { localStorageKeys } from '../../resources/resource_properties';
-import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
-import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
 
 
 export default function PaletteAndThemeTest({ show = false }) {

@@ -11,11 +11,14 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import pgConnections from '../../services/pgConnections';
 import { localStorageKeys } from '../../resources/resource_properties';
-import InputFixedCostsFromTsvModal from '../minor/InputFixedCostsFromTsvModal';
-import InputAllFoodItemsFromTsvModal from '../minor/InputAllFoodItemsFromTsvModal';
-import InputFixedIncomeFromTsvModal from '../minor/InputFixedIncomeFromTsvModal';
-import InputVariableExpensesFromTsvModal from '../minor/InputVariableExpensesFromTsvModal';
-import InputInvestmentsFromTsvModal from '../minor/InputInvestmentsFromTsvModal';
+import InputTsvForDbInsertionModal from '../minor/Modal_InputTsvForDbInsertion';
+import { resourceProperties as res } from '../../resources/resource_properties';
+import {
+  postVariableExpensesTsv,
+  postAllFoodItemTsv,
+  postFixedIncomeTsv,
+  postFixedCostTsv,
+  postInvestmentsTsv } from '../../services/pgConnections';
 
 export default function Content({ show = true, value }) {
   const [result, setResult] = useState([])
@@ -112,26 +115,58 @@ export default function Content({ show = true, value }) {
         {value.path}
       </Typography>
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
-      ? <InputFixedCostsFromTsvModal/>
+      ? <Box >
+          <InputTsvForDbInsertionModal
+            id={"fixed_costs"}
+            postMethod={postFixedCostTsv}
+            btnString={res.MINOR_INPUT_FIXED_COSTS_MODAL_OPEN}
+            description={res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}
+            helperText={res.MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER}
+          />
+        </Box>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <Box >
-          <InputAllFoodItemsFromTsvModal/>
+          <InputTsvForDbInsertionModal
+            id={"food_items"}
+            postMethod={postAllFoodItemTsv}
+            btnString={res.MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_OPEN}
+            description={res.MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}
+            helperText={res.MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER}
+          />
         </Box>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <Box>
-          <InputFixedIncomeFromTsvModal/>
+          <InputTsvForDbInsertionModal
+            id={"fixed_income"}
+            postMethod={postFixedIncomeTsv}
+            btnString={res.MINOR_INPUT_FIXED_INCOME_MODAL_OPEN}
+            description={res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION}
+            helperText={res.MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER}
+          />
         </Box>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <Box>
-          <InputVariableExpensesFromTsvModal/>
+          <InputTsvForDbInsertionModal
+            id={"variable_expenses"}
+            postMethod={postVariableExpensesTsv}
+            btnString={res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_OPEN}
+            description={res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION}
+            helperText={res.MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER}
+          />
         </Box>
       : null}
       {window.localStorage.getItem(localStorageKeys.loginUserName) == 'admin'
       ? <Box sx={{mb:2}}>
-          <InputInvestmentsFromTsvModal/>
+          <InputTsvForDbInsertionModal
+            id={"investments"}
+            postMethod={postInvestmentsTsv}
+            btnString={res.MINOR_INPUT_INVESTMENTS_MODAL_OPEN}
+            description={res.MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION}
+            helperText={res.MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_HELPER}
+          />
         </Box>
       : null}
 
