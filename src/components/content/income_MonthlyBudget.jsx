@@ -7,28 +7,7 @@ import { resourceProperties as res, fixedCostCategories as categories } from '..
 import { getFixedIncomeByEffectiveDate, getAllFixedIncome, getAllFixedCosts, getFixedCostsByEffectiveDate } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
 import { Paper } from '@mui/material';
-
-function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
-  let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
-    : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
-    : subtitle === '6.00' ? res.INTERVAL_HALFYEARLY
-    : subtitle === '12.00' ? res.INTERVAL_YEARLY
-    : `alle ${subtitle} Monate`
-  const contentCardObj =
-   {
-    header: header.trim(),
-    amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
-    subtitle: turnus,
-    details: details,
-    img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
-    icon: icon
-  }
-  if (img === res.NO_IMG) {
-    contentCardObj.img = null
-  }
-  return contentCardObj
-}
-
+import { constructContentCardObject, getUniqueEffectiveDates, getCombinedUniqueEffectiveDates } from '../../utils/sharedFunctions';
 
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
   const contentChartObj =
@@ -51,31 +30,6 @@ function constructContentChartObject( title, xAxis, dataSets, colors ) {
     return contentChartObj
 }
 
-/**
- * extracts all uniqure effective dates from two result sets from the db
- * @param {*} firstDataset
- * @param {*} secondDataset
- * @returns DESC sorted array of effective dates in the format 'yyyy-mm-dd'
- */
-function getUniqueEffectiveDates(firstDataset, secondDataset) {
-  if (firstDataset && secondDataset) {
-    const incomeSet = new Set(firstDataset.map(e => e.effective_date))
-    const costsSet = new Set(secondDataset.map(e => e.effective_date))
-    return Array.from(new Set([...incomeSet,...costsSet])).sort((a,b) => a<b) // desc
-  }
-}
-
-/**
- * extracts all uniqure effective dates of a single dataset
- * @param {*} singleDataSet required
- * @returns sorted array of effective dates in the format 'yyyy-mm-dd'
- * It doesn't matter how it is sorted, as long as it is. This is because both
- * income and fixed costs call this method and subsequently are passed to the
- * chart component via incomeDataSets that both require to be sorted in the same way.
- */
-function getUniqueEffectiveDatesSingle(singleDataSet) {
-  return Array.from(new Set(singleDataSet.map(e => e.effective_date))).sort()
-}
 
 /**
  * @param {*} allFixedIncome all fixed income data within db
@@ -95,7 +49,7 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
   const incomeFiltered = allFixedIncome.results
     .filter(e => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
   // unique effective dates as string array
-  const incomeDatesArr = getUniqueEffectiveDatesSingle(incomeFiltered)
+  const incomeDatesArr = getUniqueEffectiveDates(incomeFiltered)
   // only read date string from datetime
   let overviewDataset = []
   // for each unique date create an xAxis array with summed up monthly_cost values
@@ -114,7 +68,7 @@ function extractChartData(allFixedIncome, allFixedCosts, palette) {
   // No Filtering of Costs
   const costsFiltered = allFixedCosts.results
   // unique effective dates as string array
-  const costsDatesArr = getUniqueEffectiveDatesSingle(costsFiltered)
+  const costsDatesArr = getUniqueEffectiveDates(costsFiltered)
   let costsDataset = []
   // for each unique date create an xAxis array with summed up monthly_cost values
   costsDatesArr.forEach( (xAxisEntry) => {
@@ -207,7 +161,7 @@ export default function Income_Monthly_Budget( props ) {
       // All income data in the DB
       let allFixedIncomeResponse = await getAllFixedIncome();
       let allFixedCostsResponse = await getAllFixedCosts();
-      let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedIncomeResponse.results, allFixedCostsResponse.results)
+      let effectiveDateSelectItems = getCombinedUniqueEffectiveDates(allFixedIncomeResponse.results, allFixedCostsResponse.results)
       setSelectedEffectiveDate(effectiveDateSelectItems[0])
       setEffectiveDateSelectItems(effectiveDateSelectItems)
       let allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, allFixedCostsResponse, palette)

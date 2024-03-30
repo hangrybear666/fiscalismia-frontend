@@ -13,7 +13,7 @@ import { resourceProperties as res, fixedCostCategories as categories, serverCon
 import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import InputFoodDiscountModal from '../minor/Modal_InputFoodDiscount';
 
-function constructContentCardObject(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, dealDuration, daysLeft, startsInDays, details, store, img) { // TODO img
+function constructContentCardObjectDeals(foodItemId, header, originalPrice, discountPrice, discountPercentage, subtitle, startDate, endDate, dealDuration, daysLeft, startsInDays, details, store, img) { // TODO img
   const contentCardObj =
    {
     foodItemId: foodItemId,
@@ -45,7 +45,7 @@ function constructContentCardObject(foodItemId, header, originalPrice, discountP
 function extractCardData(allFoodDiscounts) {
   let discountedFoodItemCards = new Array();
   allFoodDiscounts.forEach( e => {
-    let card = constructContentCardObject(
+    let card = constructContentCardObjectDeals(
       e.id,
       `${e.food_item} - ${e.brand}`,
       `${e.price}${res.CURRENCY_EURO}`,

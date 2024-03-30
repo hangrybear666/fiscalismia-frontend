@@ -34,7 +34,7 @@ function getUniqueEffectiveDateYears(allSales) {
   return [...uniqueYearSet].sort((a,b) => a > b) // return as ASC sorted Array
 }
 
-function constructContentCardObject(header, amount, subtitle, detailHeader, details, icon, img) { // TODO img
+function constructContentCardObjectSales(header, amount, subtitle, detailHeader, details, icon, img) { // TODO img
   const contentCardObj =
    {
     header: header.trim(),
@@ -75,7 +75,7 @@ function extractCardData(sales, selectedYear = 2023) {
   distinctSaleStores.forEach( store => {
     const storeFilteredSales = salesTransformed
       .filter(e=> e.store === store)
-    let distinctStoreCard = constructContentCardObject(store, null, `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}` ,res.INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER , null, null, res.NO_IMG)
+    let distinctStoreCard = constructContentCardObjectSales(store, null, `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}` ,res.INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER , null, null, res.NO_IMG)
     distinctStoreCard.amount = Math.round(storeFilteredSales
       .map((row) => row.cost)
       .reduce((partialSum, add) => partialSum + parseFloat(add), 0))
@@ -85,7 +85,7 @@ function extractCardData(sales, selectedYear = 2023) {
     storeBasedCards.push(distinctStoreCard)
   })
   // TOTAL SALES
-  let totalSales = constructContentCardObject(res.INCOME_SALES_CARD_TOTAL_SALES_HEADER, null, `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}` ,null, null, null, res.NO_IMG)
+  let totalSales = constructContentCardObjectSales(res.INCOME_SALES_CARD_TOTAL_SALES_HEADER, null, `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}` ,null, null, null, res.NO_IMG)
   totalSales.amount = Math.round(salesTransformed
     .map((row) => row.cost)
     .reduce((partialSum, add) => partialSum + parseFloat(add), 0));

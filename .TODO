@@ -3,5 +3,4 @@
 # pgConnections catch(error) mit user notification abfangen
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
   und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird
-# Pull up shared functionality into helper files such as getUniqueEffectiveDates and ConstructContentCards
-# TSV Input. Log to frontend how many rows have been received and how many insert statements have been output.
+# TSV Input. Make sure that an error is thrown if the wrong headers are supplied. currently all inputs (except variable costs) accept investment input...

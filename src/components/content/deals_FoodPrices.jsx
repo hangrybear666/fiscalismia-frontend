@@ -7,7 +7,7 @@ import FilterFoodPriceData from '../minor/FilterFoodPriceData';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Box, Typography } from '@mui/material';
 
-function constructContentCardObject(foodItemId, header, originalPrice, pricePerKg, kcalAmount, subtitle, lastUpdated, details, store, img) { // TODO img
+function constructContentCardObjectFoodPrices(foodItemId, header, originalPrice, pricePerKg, kcalAmount, subtitle, lastUpdated, details, store, img) { // TODO img
   const contentCardObj =
    {
     foodItemId: foodItemId,
@@ -32,7 +32,7 @@ function constructContentCardObject(foodItemId, header, originalPrice, pricePerK
 function extractCardData(allFoodDiscounts, initializeWithoutImage) {
   let discountedFoodItemCards = new Array();
   allFoodDiscounts.forEach( e => {
-    let card = constructContentCardObject(
+    let card = constructContentCardObjectFoodPrices(
       e.id,
       `${e.food_item} - ${e.brand}`,
       `${e.price}${res.CURRENCY_EURO}`,
