@@ -10,33 +10,13 @@ import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/p
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
 import { Paper } from '@mui/material';
+import { constructContentCardObject, getUniqueEffectiveDates } from '../../utils/sharedFunctions';
 
 const iconProperties = {
   fontSize: 55,
   opacity: 0.5,
   boxShadow: 10,
   borderRadius:1,
-}
-
-function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
-  let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
-    : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
-    : subtitle === '6.00' ? res.INTERVAL_HALFYEARLY
-    : interval === '12.00' ? res.INTERVAL_YEARLY
-    : `alle ${subtitle} Monate`
-  const contentCardObj =
-   {
-    header: header.trim(),
-    amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
-    subtitle: turnus,
-    details: details,
-    img: img ? img : `https://source.unsplash.com/random/?dollar&${Math.floor(Math.random() * 100)}`,
-    icon: icon
-  }
-  if (img === res.NO_IMG) {
-    contentCardObj.img = null
-  }
-  return contentCardObj
 }
 
 function filterSportsAndHealth(fixedCosts) {
@@ -51,9 +31,6 @@ function filterMediaAndEntertainment(fixedCosts) {
     row.category === categories.LEISURE_TV_CINEMA_KEY)
 }
 
-function getUniqueEffectiveDates(fixedCosts) {
-  return Array.from(new Set(fixedCosts.map(e => e.effective_date))).sort((a,b) => a<b) // SORT Desc to initialize with current value at index 0
-}
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
   const contentChartObj =
     {

@@ -12,6 +12,7 @@ import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import { Paper } from '@mui/material';
+import { constructContentCardObject, getUniqueEffectiveDates } from '../../utils/sharedFunctions';
 
 const iconProperties = {
   fontSize: 55,
@@ -20,35 +21,10 @@ const iconProperties = {
   borderRadius:1,
 }
 
-function constructContentCardObject(header, amount, subtitle, details, icon, img) {
-  let turnus = subtitle === '1.00' ? res.INTERVAL_MONTHLY
-    : subtitle === '3.00' ? res.INTERVAL_QUARTERLY
-    : subtitle === '6.00' ? res.INTERVAL_HALFYEARLY
-    : subtitle === '12.00' ? res.INTERVAL_YEARLY
-    : `alle ${subtitle} Monate`
-  const contentCardObj =
-   {
-    header: header.trim(),
-    amount: `${Math.round(amount)}${res.CURRENCY_EURO}`,
-    subtitle: turnus,
-    details: details,
-    img: img ? img : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
-    icon: icon
-  }
-  if (img === res.NO_IMG) {
-    contentCardObj.img = null
-  }
-  return contentCardObj
-}
-
 function filterLivingEssentials(specificFixedCosts) {
   return specificFixedCosts.results
     .filter((row) => row.category === categories.LIVING_ESSENTIALS_KEY || row.category === categories.STUDENT_LOANS_KEY ||
     row.category === categories.INTERNET_AND_PHONE_KEY ||  row.category === categories.INSURANCE_KEY)
-}
-
-function getUniqueEffectiveDates(fixedCosts) {
-  return Array.from(new Set(fixedCosts.map(e => e.effective_date))).sort((a,b) => a<b) // SORT Desc to initialize with current value at index 0
 }
 
 function constructContentChartObject( title, xAxis, dataSets, colors ) {
