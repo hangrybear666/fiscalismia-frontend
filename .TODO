@@ -1,6 +1,5 @@
 # User Notification on failed Login attempt
-# im Dark Mode die selected Filter (Sort) Optionen anders stylen UND in variable expenses year selection
-# pgConnections catch(error) mit user notification abfangen
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
   und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird
-# TSV Input. Make sure that an error is thrown if the wrong headers are supplied. currently all inputs (except variable costs) accept investment input...
+# pgConnections catch(error) mit user notification abfangen
+# console.error logging im Frontend ersetzen mit zentraler Logfile die Live Betrieb berücksichtigt / ODER mit user notifications

@@ -119,11 +119,11 @@ function SettingsAndProfileAppBar( props ) {
           onClose={handleGithubMenuClose}
           >
           <MenuItem onClick={handleGithubMenuClose} component={Link} href={res.GITHUB_FRONTEND_URL}>
-            <ListItemIcon sx={{color: '#333', margin:0}}><PreviewIcon/></ListItemIcon>
+            <ListItemIcon sx={{color: palette.text.primary, margin:0}}><PreviewIcon/></ListItemIcon>
             {res.FRONTEND}
           </MenuItem>
           <MenuItem onClick={handleGithubMenuClose} component={Link} href={res.GITHUB_BACKEND_URL}>
-            <ListItemIcon sx={{color: '#333', margin:0}}><HubIcon/></ListItemIcon>
+            <ListItemIcon sx={{color: palette.text.primary, margin:0}}><HubIcon/></ListItemIcon>
             {res.BACKEND}
           </MenuItem>
         </Menu>
