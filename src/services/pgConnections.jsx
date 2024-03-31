@@ -152,6 +152,23 @@ export const getAllVariableExpenses = async () => {
 }
 
 /**
+ * @returns Object containing a results array with all investments from the db
+ * @route /api/fiscalismia/investments
+ */
+export const getAllInvestments = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/investments`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
  * @returns Object containing a results array with all fixed income data from the db
  * @route /api/fiscalismia/fixed_costs
  */

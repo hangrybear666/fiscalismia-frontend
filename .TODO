@@ -3,3 +3,9 @@
   und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird
 # pgConnections catch(error) mit user notification abfangen
 # console.error logging im Frontend ersetzen mit zentraler Logfile die Live Betrieb berücksichtigt / ODER mit user notifications
+# Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
+
+# INVESTMENTS DATAGRID:
+- Custom Order Type Filter mit ToggleBtn
+- Custom Date Display with Month Names
+- Button to clear all Filters and Reset Sorting
