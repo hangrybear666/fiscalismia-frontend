@@ -169,6 +169,23 @@ export const getAllInvestments = async () => {
 }
 
 /**
+ * @returns Object containing a results array with all dividends of investments from the db
+ * @route /api/fiscalismia/investment_dividends
+ */
+export const getAllDividends = async () => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.get(`${baseUrl}/investment_dividends`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
  * @returns Object containing a results array with all fixed income data from the db
  * @route /api/fiscalismia/fixed_costs
  */

@@ -10,6 +10,7 @@ export const resourceProperties = {
   ALL: 'Alle',
   NO_IMG: 'no-img',
   SYMBOL_PERCENT: '%',
+  PIECES_SHORT: 'pcs',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
   SIGN_IN: 'Einloggen',
