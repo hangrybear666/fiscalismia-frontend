@@ -12,6 +12,7 @@ import CottageIcon from '@mui/icons-material/Cottage';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 // good icons for ADD functionality
 import AddCardIcon from '@mui/icons-material/AddCard';
 import AddchartIcon from '@mui/icons-material/Addchart';
@@ -39,6 +40,7 @@ export const menuEntries = [
       { id: res.OVERVIEW, path: paths.INCOME_OVERVIEW, icon: <AnalyticsIcon /> },
       { id: res.MONTHLY_BUDGET, path: paths.INCOME_MONTHLY_BUDGET, icon: <EuroIcon />},
       { id: res.INVESTMENTS, path: paths.INCOME_INVESTMENTS, icon: <SavingsIcon /> },
+      { id: res.PORTFOLIO, path: paths.INCOME_PORTFOLIO, icon: <ShowChartIcon /> },
       { id: res.SALES, path: paths.INCOME_SALES, icon: <CreditScoreIcon /> },
     ],
   },

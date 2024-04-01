@@ -11,6 +11,7 @@ export const paths = {
   INCOME_MONTHLY_BUDGET: "income/monthly_budget",
   INCOME_SALES: "income/sales",
   INCOME_INVESTMENTS: "income/investments",
+  INCOME_PORTFOLIO: "income/portfolio",
   DEALS_OVERVIEW: "deals/overview",
   DEALS_FOOD_PRICES: "deals/food_prices",
   DEALS_GROCERY_DEALS: "deals/grocery_deals",

@@ -6,6 +6,4 @@
 # Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
 
 # INVESTMENTS DATAGRID:
-- Custom Order Type Filter mit ToggleBtn
-- Custom Date Display with Month Names
-- Button to clear all Filters and Reset Sorting
+- Replace hardcoded Strings with resource_properties
