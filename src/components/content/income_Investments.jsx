@@ -14,15 +14,16 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Chip from '@mui/material/Chip';
-import { DateCellFormatter } from '../../utils/sharedFunctions';
+import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
+import { Stack } from '@mui/material';
 
 const STYLE_LIGHT = "ag-theme-quartz"
 const STYLE_DARK = "ag-theme-quartz-dark"
 
 const CustomBoughtSoldChip = (props) => {
   return props.value === 'buy'
-    ? <Chip label="buy" variant="outlined" color="primary" />
-    : <Chip label="sell" variant="outlined"  color="success" />
+    ? <Chip sx={{ borderWidth:0, fontWeight:600 }} label={res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY} variant="outlined" color="primary" />
+    : <Chip sx={{ borderWidth:0, fontWeight:600 }} label={res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY} variant="outlined"  color="success" />
 }
 
 /**
@@ -78,6 +79,53 @@ export default function Income_Investments( props ) {
   )
 
   /**
+   * Calculates Profits Minus Taxes from Total Sales Price
+   * @param {*} props
+   * @returns
+   * For Sales: Custom React Component listing Sales Price, with a Tooltip Overlay containing Profit and Tax Information
+   * For Purchases: Total Value in € for Purchases
+   */
+  const SalesProfitMinusTaxes = (props) => {
+    if (allInvestments && props?.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
+      const profitFromTaxTable = props.data.profit_amt
+      const taxPaid = props.data.tax_paid
+      return (
+        <HtmlTooltip
+          title={
+            <React.Fragment>
+              <Stack>
+                <Typography color="success">{profitFromTaxTable + ' ' + res.CURRENCY_EURO}</Typography>
+                <Typography color="error">{taxPaid + ' ' + res.CURRENCY_EURO}</Typography>
+
+              </Stack>
+            </React.Fragment>
+          }
+        >
+          <span>{props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}</span>
+          <Chip
+            sx={{ marginLeft:0.8, marginBottom:0.8, fontWeight:600, fontSize:'125%', borderWidth:2  }}
+              label="i"
+              variant="outlined"
+              color="success"
+            />
+        </HtmlTooltip>
+      )
+    } else {
+      return props.value.toFixed(2) + ' ' + res.CURRENCY_EURO
+    }
+  }
+
+  // TODO INSERT SELL
+/*     const filteredInvestments = allInvestments
+      .filter(e => e.isin === props.data.isin) // only prior purchases and sales with the same stock identifier
+      .filter(e => e.id !== props.data.id) // exclude selfallInvestments
+      .filter(e => new Date(e.execution_date) < new Date(props.data.execution_date)) // for profits only past transactions are relevant
+    if (filteredInvestments.map(e=> e.execution_type).includes(res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY)) {
+      // if past transactions already include a sale then profit and taxes become too complicated to calculate algorithmically
+      return "complicated logic"
+    } */
+
+  /**
    * After clicking on the number displaying aggregated Row Count a new Grid is displayed containing individual rows within the aggregate
    * @param {*} props
    * @returns Chip with onClick Listener displaying a DataGrid Modal with individual rows
@@ -87,72 +135,71 @@ export default function Income_Investments( props ) {
     // breakpoints
     const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down("lg"))
 
-    if (value && Number(value) > 1) {
+    if (allInvestments && value && Number(value) > 1) {
+      // Filter all Investments to the Ids contained within aggregated dividends
       const investmentIds = investments.split(',')
         .map(Number) // Map String Array to Number Array
-      // Filter all Investments to the Ids contained within aggregated dividends
-      if (allInvestments) {
-        const filteredInvestments = allInvestments.filter(e => investmentIds.includes(Number(e.id)))
-        return (
-          <>
-            <Tooltip
-              title="Click to reveal individual positions."
-              placement="left"
-            >
-              <Chip
-                onClick={() => setOpen(true)}
-                label={value}
-                variant="outlined"
-                color="secondary"
+      const filteredInvestments = allInvestments.filter(e => investmentIds.includes(Number(e.id)))
+      return (
+        <>
+          <Tooltip
+            title="Click to reveal individual positions."
+            placement="left"
+          >
+            <Chip
+              sx={{borderWidth:2}}
+              onClick={() => setOpen(true)}
+              label={value}
+              variant="outlined"
+              color="secondary"
+            />
+          </Tooltip>
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: isSmallScreen ? '100%' : '70%' ,
+              boxShadow: 24,
+            }}>
+              <div
+                className={palette.mode === 'light' ? STYLE_LIGHT : STYLE_DARK } // applying the grid theme
+                >
+              {allInvestments ?
+              <AgGridReact
+                domLayout='autoHeight'
+                rowData={filteredInvestments}
+                columnDefs={[
+                  { field: "description", flex: 1.5, minWidth:200},
+                  { field: "isin", headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN, cellRenderer: IsinNationalFlagRenderer, minWidth:150, },
+                  { field: "investment_type", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE,  flex: 0.5 },
+                  { field: "units",  valueFormatter: unitsFormatter, flex: 0.5 },
+                  { field: "price_per_unit", headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE, valueFormatter: currencyFormatter, flex: 0.5},
+                  { field: "fees", valueFormatter: currencyFormatter, flex: 0.5 },
+                  { field: "total_price", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL, valueFormatter: currencyFormatter, flex: 0.5 },
+                  { field: "execution_date", headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE, cellRenderer: DateCellFormatter, minWidth: 135 },
+                ]}
+                defaultColDef={{
+                  filter: false,
+                  floatingFilter: false,
+                  flex:1,
+                  resizable: false,
+                  minWidth: 95,
+                  wrapText: true,
+                  autoHeight: true,}
+                }
+                pagination={false}
               />
-            </Tooltip>
-            <Modal
-              open={open}
-              onClose={() => setOpen(false)}
-            >
-              <Box sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: isSmallScreen ? '100%' : '70%' ,
-                boxShadow: 24,
-              }}>
-                <div
-                  className={palette.mode === 'light' ? STYLE_LIGHT : STYLE_DARK } // applying the grid theme
-                  >
-                {allInvestments ?
-                <AgGridReact
-                  domLayout='autoHeight'
-                  rowData={filteredInvestments}
-                  columnDefs={[
-                    { field: "description", flex: 1.5, minWidth:200},
-                    { field: "isin", headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN, cellRenderer: IsinNationalFlagRenderer, minWidth:150, },
-                    { field: "investment_type", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE,  flex: 0.5 },
-                    { field: "units",  valueFormatter: unitsFormatter, flex: 0.5 },
-                    { field: "price_per_unit", headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE, valueFormatter: currencyFormatter, flex: 0.5},
-                    { field: "fees", valueFormatter: currencyFormatter, flex: 0.5 },
-                    { field: "total_price", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL, valueFormatter: currencyFormatter, flex: 0.5 },
-                    { field: "execution_date", headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE, cellRenderer: DateCellFormatter, minWidth: 135 },
-                  ]}
-                  defaultColDef={{
-                    filter: false,
-                    floatingFilter: false,
-                    flex:1,
-                    resizable: false,
-                    minWidth: 95,
-                    wrapText: true,
-                    autoHeight: true,}
-                  }
-                  pagination={false}
-                />
-                : null}
-                </div>
-              </Box>
-            </Modal>
-          </>
-        )
-      }
+              : null}
+              </div>
+            </Box>
+          </Modal>
+        </>
+      )
     } else {
       // if no aggregate is present, display nothing
       return null
@@ -198,7 +245,7 @@ export default function Income_Investments( props ) {
       { field: "units",  valueFormatter: unitsFormatter, floatingFilter: false, filter: false },
       { field: "price_per_unit", headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE, valueFormatter: currencyFormatter, floatingFilter: false },
       { field: "fees", valueFormatter: currencyFormatter, floatingFilter: false, filter: false },
-      { field: "total_price", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL, valueFormatter: currencyFormatter, floatingFilter: false  },
+      { field: "total_price", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL, cellRenderer: SalesProfitMinusTaxes, floatingFilter: false, minWidth: 140  },
       { field: "execution_date", headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE, cellRenderer: DateCellFormatter, minWidth:150 },
     ])
   }, [allInvestments]);

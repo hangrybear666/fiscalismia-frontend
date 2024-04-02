@@ -1,6 +1,9 @@
 
 import { resourceProperties as res} from '../resources/resource_properties';
 import Chip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
+import { tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * 
@@ -109,3 +112,18 @@ export const DateCellFormatter = (props) => {
     return props.value
   }
 }
+
+/**
+ * To use a Tooltip with custom React/HTML content just pass the content into the title Tag of HtmlTooltip
+ * <HtmlTooltip title={<React.Fragment></React.Fragment>}>
+ * </HtmlTooltip>
+ */
+export const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.background.default,
+    maxWidth: 250,
+    border: `2px solid ${theme.palette.mode === 'light' ? theme.palette.border.dark : theme.palette.border.light}`,
+  },
+}));
