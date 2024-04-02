@@ -72,7 +72,7 @@ export function getCombinedUniqueEffectiveDates(firstDataset, secondDataset) {
 export const DateCellFormatter = (props) => {
   const extractedDate = props.value ? new Date(props.value) : null
   if (extractedDate && extractedDate !== null) {
-    const day = String(extractedDate.getDay());
+    const day = String(extractedDate.getDate());
     const monthShort = extractedDate.toLocaleString('default', { month: 'short' });
     const yearShort = String(extractedDate.getFullYear()).substring(2,4);
     const dateString = `${day}. ${monthShort} ${yearShort}`

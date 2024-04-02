@@ -79,7 +79,7 @@ export default function Income_Investments( props ) {
   )
 
   /**
-   * Calculates Profits Minus Taxes from Total Sales Price
+   * Reads Profits, Taxes and Calculates Net Gain of any Sales, otherwise just returns the formatted Total Value
    * @param {*} props
    * @returns
    * For Sales: Custom React Component listing Sales Price, with a Tooltip Overlay containing Profit and Tax Information
@@ -87,16 +87,18 @@ export default function Income_Investments( props ) {
    */
   const SalesProfitMinusTaxes = (props) => {
     if (allInvestments && props?.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
-      const profitFromTaxTable = props.data.profit_amt
-      const taxPaid = props.data.tax_paid
+      console.log(props.data)
+      const grossProfit = props?.data?.profit_amt ? Number(props.data.profit_amt).toFixed(2) : null
+      const taxPaid =  props?.data?.tax_paid ? Number(props.data.tax_paid).toFixed(2) : null
+      const netProfit = grossProfit && taxPaid ? Number((grossProfit - taxPaid)).toFixed(2) : null
       return (
         <HtmlTooltip
           title={
             <React.Fragment>
               <Stack>
-                <Typography color="success">{profitFromTaxTable + ' ' + res.CURRENCY_EURO}</Typography>
-                <Typography color="error">{taxPaid + ' ' + res.CURRENCY_EURO}</Typography>
-
+                <Typography sx={{ color: palette.primary.main}}>{res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS + String(grossProfit) + ' ' + res.CURRENCY_EURO}</Typography>
+                <Typography sx={{ color: palette.error.main}}>{res.INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT + String(taxPaid) + ' ' + res.CURRENCY_EURO}</Typography>
+                <Typography sx={{ color: palette.success.main}}>{res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET + String(netProfit) + ' ' + res.CURRENCY_EURO}</Typography>
               </Stack>
             </React.Fragment>
           }
