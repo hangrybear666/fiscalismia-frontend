@@ -21,6 +21,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
 import { Autocomplete, Checkbox, FormControlLabel,  IconButton,  Stack, TextField, Tooltip, Typography } from '@mui/material';
+import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 
 function initializePresetData(palette) {
   return (
@@ -72,16 +73,6 @@ Date.prototype.yyyy_mm_dd = function() {
           (dd>9 ? '' : '0') + dd
          ].join('-');
 };
-
-/** helper function to validate decimal numbers */
-function isNumeric(value) {
-  return /^-?\d+(\.\d+)?$/.test(value);
-}
-/** helper function to validate dates in the format YYYY/MM/DD */
-function dateValidation(dateStr) {
-  const date = new Date(dateStr);
-  return { isValid: !isNaN(date), date: date }
-}
 
 export default function InputVariableExpenseModal( props ) {
   const { palette } = useTheme();
@@ -143,17 +134,18 @@ export default function InputVariableExpenseModal( props ) {
       description: description.trim(),
       category: categoryAutoComplete,
       store: storeAutoComplete,
-      cost:price,
+      cost: Number(price).toFixed(2),
       date:purchaseDate,
       is_planned: isPlanned,
       contains_indulgence: containsIndulgence,
       sensitivities: sensitivitiesString,
     }
     console.log(variableExpObj)
-    const response = await postNewFoodItem(variableExpObj)
+    const response = await postNewFoodItem(variableExpObj) //TODO
     if (response?.results[0]?.dimension_key) {
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added food item to DB:")
+      console.log("SUCCESSFULLY added food item to DB:")// TODO mit Growl und ID ersetzen
+      console.log(response.results[0])
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
       setAddedItemId(response?.results[0].id)

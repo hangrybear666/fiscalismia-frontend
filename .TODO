@@ -4,6 +4,6 @@
 # pgConnections catch(error) mit user notification abfangen
 # console.error logging im Frontend ersetzen mit zentraler Logfile die Live Betrieb berücksichtigt / ODER mit user notifications
 # Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
-
+# Date Validation in sharedFunctions to consider year range
 # INVESTMENTS DATAGRID:
 - Replace hardcoded Strings with resource_properties

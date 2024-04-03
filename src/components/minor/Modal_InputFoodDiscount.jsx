@@ -15,16 +15,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
-
-/** helper function to validate decimal numbers */
-function isNumeric(value) {
-  return /^-?\d+(\.\d+)?$/.test(value);
-}
-/** helper function to validate dates in the format YYYY/MM/DD */
-function dateValidation(dateStr) {
-  const date = new Date(dateStr);
-  return { isValid: !isNaN(date), date: date }
-}
+import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 
 export default function InputFoodDiscountModal( props ) {
   const { palette } = useTheme();
@@ -67,14 +58,15 @@ export default function InputFoodDiscountModal( props ) {
   const saveUserInput = async() => {
     const foodItemDiscountObj = {
       id:selectedFoodItemId,
-      price:discountPrice,
+      price:Number(discountPrice).toFixed(2),
       startDate:startDate,
       endDate:endDate,
     }
     const response = await postFoodItemDiscount(foodItemDiscountObj)
     if (response?.results[0]?.food_prices_dimension_key == selectedFoodItemId) {
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added discount to DB:")
+      console.log("SUCCESSFULLY added discount to DB:") // TODO mit Growl und ID ersetzen
+      console.log(response.results[0])
       setOpen(false)
       setDiscountAddedItemId(selectedFoodItemId)
     } else {

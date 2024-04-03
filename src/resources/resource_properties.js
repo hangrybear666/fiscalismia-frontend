@@ -74,6 +74,9 @@ export const resourceProperties = {
   USER_ALREADY_LOGGED_IN : (pos1) => (`User ${pos1} is already logged in.`),
   PATH_DOES_NOT_EXIST : (pos1) => (`Sorry, the requested path ${pos1} does not exist.`),
 
+  AG_GRID_STYLE_DARK: 'ag-theme-quartz-dark',
+  AG_GRID_STYLE_LIGHT: 'ag-theme-quartz',
+
   INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
   INCOME_FIXED_COST_CARD_HEADER: 'Fixkosten Gesamt',
   INCOME_MONTHLY_BUDGET_CHART_HEADER: 'Monatliches Budget',
@@ -132,6 +135,7 @@ export const resourceProperties = {
   DEALS_OVERVIEW_THEADER_PRICE_TOP: 'Preis',
   DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP: 'zuletzt geprüft',
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Gesamtverbrauch Hochrechnung',
+  DEALS_OVERVIEW_UPDATE_FOOD_PRICE: 'Aktuellen Preis pflegen',
 
   DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL: 'Auswahl Makronährstoff',
   DEALS_FOOD_PRICES_SELECTITEMS_DELETE_SELECTION: 'Auswahl löschen',
@@ -187,7 +191,7 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_PRICE: 'Preis in €',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_WEIGHT: 'Gewicht in Gramm',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_KCAL_AMOUNT: 'kcal/100g',
-  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE: 'Datum des letzten Preischecks',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE: 'Datum des Preischecks',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MAIN_MACRO: 'Hauptmakro',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_STORE: 'Laden',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_BRAND: 'Marke',

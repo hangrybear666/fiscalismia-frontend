@@ -17,9 +17,6 @@ import Chip from '@mui/material/Chip';
 import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
 import { Stack } from '@mui/material';
 
-const STYLE_LIGHT = "ag-theme-quartz"
-const STYLE_DARK = "ag-theme-quartz-dark"
-
 const CustomBoughtSoldChip = (props) => {
   return props.value === 'buy'
     ? <Chip sx={{ borderWidth:0, fontWeight:600 }} label={res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY} variant="outlined" color="primary" />
@@ -87,7 +84,6 @@ export default function Income_Investments( props ) {
    */
   const SalesProfitMinusTaxes = (props) => {
     if (allInvestments && props?.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
-      console.log(props.data)
       const grossProfit = props?.data?.profit_amt ? Number(props.data.profit_amt).toFixed(2) : null
       const taxPaid =  props?.data?.tax_paid ? Number(props.data.tax_paid).toFixed(2) : null
       const netProfit = grossProfit && taxPaid ? Number((grossProfit - taxPaid)).toFixed(2) : null
@@ -103,13 +99,15 @@ export default function Income_Investments( props ) {
             </React.Fragment>
           }
         >
-          <span>{props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}</span>
-          <Chip
-            sx={{ marginLeft:0.8, marginBottom:0.8, fontWeight:600, fontSize:'125%', borderWidth:2  }}
+          <React.Fragment>
+            <span>{props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}</span>
+            <Chip
+              sx={{ marginLeft:0.8, marginBottom:0.8, fontWeight:600, fontSize:'125%', borderWidth:2  }}
               label="i"
               variant="outlined"
               color="success"
             />
+          </React.Fragment>
         </HtmlTooltip>
       )
     } else {
@@ -169,7 +167,7 @@ export default function Income_Investments( props ) {
               boxShadow: 24,
             }}>
               <div
-                className={palette.mode === 'light' ? STYLE_LIGHT : STYLE_DARK } // applying the grid theme
+                className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK } // applying the grid theme
                 >
               {allInvestments ?
               <AgGridReact
@@ -208,13 +206,6 @@ export default function Income_Investments( props ) {
     }
   }
 
-  /**
-   * Resets the Grid to the initial state after page load.
-   */
-  const resetToInitial  = useCallback((gridRef) => {
-    gridRef.current.api.setFilterModel(null); // Reset Filters
-    gridRef.current.api.resetColumnState(); // Reset Sorting
-  }, []);
 
   const defaultColDef = useMemo(() => ({
     filter: true,
@@ -284,11 +275,11 @@ export default function Income_Investments( props ) {
       <Button
         color="error"
         variant="outlined"
-        onClick={() => resetToInitial(investmentGridRif)}>
+        onClick={() => resetAgGridToInitialState(investmentGridRif)}>
           {res.RESET}
       </Button>
       <div
-        className={palette.mode === 'light' ? STYLE_LIGHT : STYLE_DARK } // applying the grid theme
+        className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK } // applying the grid theme
       >
         {allInvestments ?
         <AgGridReact
@@ -306,11 +297,11 @@ export default function Income_Investments( props ) {
       <Button
         color="error"
         variant="outlined"
-        onClick={() => resetToInitial(dividendGridRif)}>
+        onClick={() => resetAgGridToInitialState(dividendGridRif)}>
           {res.RESET}
       </Button>
       <div
-        className={palette.mode === 'light' ? STYLE_LIGHT : STYLE_DARK } // applying the grid theme
+        className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK } // applying the grid theme
       >
       {allInvestments && allDividends ?
         <AgGridReact

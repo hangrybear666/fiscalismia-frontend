@@ -456,6 +456,18 @@ export const deleteFoodItemImg = async id => {
  *     \___/\_|   |___/ \_| |_/\_/ \____/
  */
 
+export const updateFoodItemPrice = async (id, newObject) => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.put(`${baseUrl}/update/food_item/price/${id}`, newObject, config)
+    return response
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 /***
  *     _____     _        _____                            _           _    _   _       _

@@ -18,16 +18,7 @@ import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res, foodItemInputCategories as selectionCategories } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
-
-/** helper function to validate decimal numbers */
-function isNumeric(value) {
-  return /^-?\d+(\.\d+)?$/.test(value);
-}
-/** helper function to validate dates in the format YYYY/MM/DD */
-function dateValidation(dateStr) {
-  const date = new Date(dateStr);
-  return { isValid: !isNaN(date), date: date }
-}
+import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 
 export default function InputFoodItemModal( props ) {
   const { palette } = useTheme();
@@ -82,15 +73,16 @@ export default function InputFoodItemModal( props ) {
       brand: brand.trim(),
       store: selectedStore,
       mainMacro: selectedMacro,
-      kcalAmount: kcalAmount,
-      weight: weight,
-      price:price,
+      kcalAmount: Number(kcalAmount).toFixed(0),
+      weight: Number(weight).toFixed(0),
+      price: Number(price).toFixed(2),
       lastUpdate:lastUpdateDate,
     }
     const response = await postNewFoodItem(foodItemObj)
     if (response?.results[0]?.dimension_key) {
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added food item to DB:")
+      console.log("SUCCESSFULLY added food item to DB:")// TODO mit Growl und ID ersetzen
+      console.log(response.results[0])
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
       setAddedItemId(response?.results[0].id)
@@ -169,7 +161,7 @@ export default function InputFoodItemModal( props ) {
         setBrand(e.target.value)
         break;
       case "kcal_amount":
-        setKcalAmount(e.target.value.replace('k','').replace('c','').replace('a','').replace('l',''))
+        setKcalAmount(e.target.value.replace('k','').replace('c','').replace('a','').replace('l','').replace('.','').replace(',',''))
         break;
       case "weight":
         setWeight(e.target.value.replace('g','').replace('.','').replace(',',''))
@@ -195,7 +187,7 @@ export default function InputFoodItemModal( props ) {
     <>
     <Button
         onClick={handleOpen}
-        variant="contained"
+        variant="outlined"
         color="secondary"
         sx={{ borderRadius:0,
           border: `1px solid  ${palette.border.dark}`,
