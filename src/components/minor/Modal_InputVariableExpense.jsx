@@ -21,7 +21,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
 import { Autocomplete, Checkbox, FormControlLabel,  IconButton,  Stack, TextField, Tooltip, Typography } from '@mui/material';
-import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
+import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 
 function initializePresetData(palette) {
   return (
@@ -95,7 +95,7 @@ export default function InputVariableExpenseModal( props ) {
   // Inputs
   const [isPlanned, setIsPlanned] = React.useState(false);
   const [containsIndulgence, setContainsIndulgence] = React.useState(false);
-  const [purchaseDate, setPurchaseDate] = React.useState('');
+  const [purchaseDate, setPurchaseDate] = React.useState(initializeReactDateInput(new Date()));
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
 
@@ -148,7 +148,7 @@ export default function InputVariableExpenseModal( props ) {
       console.log(response.results[0])
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
-      setAddedItemId(response?.results[0].id)
+      setAddedItemId(response.results[0].id)
     } else {
       // TODO User Notification
       console.error(response)
@@ -157,8 +157,10 @@ export default function InputVariableExpenseModal( props ) {
 
   const validateInput = (e) => {
     e.preventDefault();
+    let errorPresent = false
     // TODO category autocomplete
     if(!categoryAutoComplete || categoryAutoComplete == '' || categoryAutoComplete?.length < 3) {
+      errorPresent = true
       setIsCategoryAutoCompleteValidationError(true)
       setCategoryAutoCompleteValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY_AUTOCOMPLETE_VALIDATION_ERROR_MSG)
     } else {
@@ -167,6 +169,7 @@ export default function InputVariableExpenseModal( props ) {
     }
     // TODO store autocomplete
     if(!storeAutoComplete || storeAutoComplete == '' || storeAutoComplete?.length < 3) {
+      errorPresent = true
       setIsStoreAutoCompleteValidationError(true)
       setStoreAutoCompleteValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE_AUTOCOMPLETE_VALIDATION_ERROR_MSG)
     } else {
@@ -175,6 +178,7 @@ export default function InputVariableExpenseModal( props ) {
     }
     // TODO variable expense description validation
     if(!description || description == '' || description?.length < 5) {
+      errorPresent = true
       setIsDescriptionValidationError(true)
       setDescriptionValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG)
     } else {
@@ -183,6 +187,7 @@ export default function InputVariableExpenseModal( props ) {
     }
     // TODO Indulgences
     if(containsIndulgence && (!sensitivitiesString || sensitivitiesString == '' || sensitivitiesString?.length < 4)) {
+      errorPresent = true
       setIsIndulgencesValidationError(true)
       setIndulgencesValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INDULGENCE_VALIDATION_ERROR_MSG)
     } else {
@@ -191,6 +196,7 @@ export default function InputVariableExpenseModal( props ) {
     }
     // Price Validation
     if (!isNumeric(price)) {
+      errorPresent = true
       setIsPriceValidationError(true)
       setPriceValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRICE_VALIDATION_ERROR_MSG)
     } else {
@@ -199,13 +205,14 @@ export default function InputVariableExpenseModal( props ) {
     }
     // Generic Date Validation
     if (!dateValidation(purchaseDate).isValid) {
+      errorPresent = true
       setIsDateValidationError(true)
       setDateValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
     } else {
       setIsDateValidationError(false)
       setDateValidationErrorMessage('')
     }
-    if (isPriceValidationError || isDateValidationError || isIndulgencesValidationError || isDescriptionValidationError || isCategoryAutoCompleteValidationError || isStoreAutoCompleteValidationError) {
+    if (errorPresent) {
       // Errors present => return
       return
     } else {

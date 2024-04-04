@@ -393,7 +393,7 @@ export const postFoodItemDiscount = async foodItemDiscountObj => {
       headers: { Authorization: `Bearer ${token}` ,
       'Content-Type': 'application/json',}
     }
-    const response = await axios.post(`${baseUrl}/upload/food_item_discount`, foodItemDiscountObj, config)
+    const response = await axios.post(`${baseUrl}/food_item_discount`, foodItemDiscountObj, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -412,7 +412,7 @@ export const postNewFoodItem = async foodItemObj => {
       headers: { Authorization: `Bearer ${token}` ,
       'Content-Type': 'application/json',}
     }
-    const response = await axios.post(`${baseUrl}/upload/food_item`, foodItemObj, config)
+    const response = await axios.post(`${baseUrl}/food_item`, foodItemObj, config)
     return response.data
   } catch (error) {
     console.error(error);
@@ -447,6 +447,25 @@ export const deleteFoodItemImg = async id => {
   }
 }
 
+
+/**
+ * deletes the corresponding food item via its id from db
+ * @param {*} filepath
+ * @returns
+ */
+export const deleteFoodItem = async id => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+    const response = await axios.delete(`${baseUrl}/food_item/${id}`, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /***
  *     _   _____________  ___ _____ _____
  *    | | | | ___ \  _  \/ _ \_   _|  ___|
@@ -462,8 +481,8 @@ export const updateFoodItemPrice = async (id, newObject) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     }
-    const response = await axios.put(`${baseUrl}/update/food_item/price/${id}`, newObject, config)
-    return response
+    const response = await axios.put(`${baseUrl}/food_item/price/${id}`, newObject, config)
+    return response.data
   } catch (error) {
     console.error(error);
   }

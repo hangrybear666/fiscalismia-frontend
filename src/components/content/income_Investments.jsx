@@ -99,7 +99,7 @@ export default function Income_Investments( props ) {
             </React.Fragment>
           }
         >
-          <React.Fragment>
+          <Box>
             <span>{props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}</span>
             <Chip
               sx={{ marginLeft:0.8, marginBottom:0.8, fontWeight:600, fontSize:'125%', borderWidth:2  }}
@@ -107,7 +107,7 @@ export default function Income_Investments( props ) {
               variant="outlined"
               color="success"
             />
-          </React.Fragment>
+          </Box>
         </HtmlTooltip>
       )
     } else {

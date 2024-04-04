@@ -19,6 +19,8 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutBtn from './LogoutBtn';
 import Link from '@mui/material/Link';
+import FlagCircleIcon from '@mui/icons-material/FlagCircle';
+import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { postUpdatedUserSettings } from '../../services/pgConnections';
 import { useAuth } from '../../services/userAuthentication';
 import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
@@ -37,9 +39,10 @@ function SettingsAndProfileAppBar( props ) {
   const settingsMenuOpen = Boolean(settingsAnchorElement);
   // COLOR AND THEME
   const { loginUserName } = useAuth();
-  const isDarkMode = window.localStorage.getItem(localStorageKeys.selectedMode) == 'dark';
+  const isDarkMode = window.localStorage.getItem(localStorageKeys.selectedMode) === 'dark';
   const currentPalette = window.localStorage.getItem(localStorageKeys.selectedPalette)
   const currentColorMode = window.localStorage.getItem(localStorageKeys.selectedMode)
+  const currentLanguage = window.localStorage.getItem(localStorageKeys.selectedLanguage)
 
   const handleGithubMenuDropdown = (event) => {
     setGithubAnchorElement(event.currentTarget);
@@ -65,10 +68,20 @@ function SettingsAndProfileAppBar( props ) {
 
   const handlePaletteChange = async() => {
     setSettingsAnchorElement(null);
-    let newPalette = currentPalette == 'default' ? 'pastel' : 'default';
+    let newPalette = currentPalette === 'default' ? 'pastel' : 'default';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedPalette, newPalette)
     if (result?.results[0]?.username == loginUserName) {
       window.localStorage.setItem(localStorageKeys.selectedPalette, newPalette)
+      navigate(0);
+    }
+  };
+
+  const handleLanguageChange = async() => {
+    setSettingsAnchorElement(null);
+    let newLanguage = currentLanguage === 'en_US' ? 'de_DE' : 'en_US';
+    const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedLanguage, newLanguage)
+    if (result?.results[0]?.username == loginUserName) {
+      window.localStorage.setItem(localStorageKeys.selectedLanguage, newLanguage)
       navigate(0);
     }
   };
@@ -181,6 +194,15 @@ function SettingsAndProfileAppBar( props ) {
                 currentPalette
                 ? currentPalette
                 : ''}`}
+            </Typography>
+          </MenuItem>
+          <MenuItem onClick={handleLanguageChange}>
+            <ListItemIcon sx={{color: palette.text.primary, margin:0}}><FlagCircleIcon/></ListItemIcon>
+            <Typography sx={{whiteSpace: 'pre',}}>
+              {`${res.SELECTED_LANGUAGE}    ${
+                currentLanguage === 'en_US'
+                ? getUnicodeFlagIcon('US') + ' ' + currentLanguage
+                : getUnicodeFlagIcon('DE') + ' ' + currentLanguage}`}
             </Typography>
           </MenuItem>
         </Menu>

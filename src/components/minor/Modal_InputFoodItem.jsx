@@ -18,11 +18,11 @@ import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res, foodItemInputCategories as selectionCategories } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
-import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
+import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 
 export default function InputFoodItemModal( props ) {
   const { palette } = useTheme();
-  const { setAddedItemId } = props
+  const { refreshParent } = props
   const [open, setOpen] = React.useState(false);
   // Validation
   const [isFoodItemValidationError, setIsFoodItemValidationError] = React.useState(false);
@@ -43,7 +43,7 @@ export default function InputFoodItemModal( props ) {
   const [kcalAmount, setKcalAmount] = React.useState('');
   const [weight, setWeight] = React.useState('');
   const [price, setPrice] = React.useState('');
-  const [lastUpdateDate, setLastUpdateDate] = React.useState('');
+  const [lastUpdateDate, setLastUpdateDate] = React.useState(initializeReactDateInput(new Date()));
   // Selection
   const [storeSelectItems,] = React.useState(selectionCategories.ARRAY_STORES);
   const [selectedStore, setSelectedStore] = React.useState('');
@@ -79,13 +79,13 @@ export default function InputFoodItemModal( props ) {
       lastUpdate:lastUpdateDate,
     }
     const response = await postNewFoodItem(foodItemObj)
-    if (response?.results[0]?.dimension_key) {
+    if (response?.results[0]?.id) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added food item to DB:")// TODO mit Growl und ID ersetzen
       console.log(response.results[0])
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
-      setAddedItemId(response?.results[0].id)
+      refreshParent(response.results[0].id)
     } else {
       // TODO User Notification
       console.error(response)
@@ -94,8 +94,10 @@ export default function InputFoodItemModal( props ) {
 
  const validateInput = (e) => {
    e.preventDefault();
+   let errorPresent = false;
     // food item
     if(!foodItem || foodItem == '' || foodItem?.length < 5) {
+      errorPresent = true
       setIsFoodItemValidationError(true)
       setFoodItemValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_FOOD_ITEM_VALIDATION_ERROR_MSG)
     } else {
@@ -104,6 +106,7 @@ export default function InputFoodItemModal( props ) {
     }
     // brand TODO
     if(!brand || brand == '' || brand?.length < 4) {
+      errorPresent = true
       setIsBrandValidationError(true)
       setBrandValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG)
     } else {
@@ -112,6 +115,7 @@ export default function InputFoodItemModal( props ) {
     }
     // Kcal Amount
     if (!isNumeric(kcalAmount)) {
+      errorPresent = true
       setIskcalAmountValidationError(true)
       setKcalAmountValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_KCAL_AMOUNT_VALIDATION_ERROR_MSG)
     } else {
@@ -120,6 +124,7 @@ export default function InputFoodItemModal( props ) {
     }
     // weight
     if (!isNumeric(weight)) {
+      errorPresent = true
       setIsWeightValidationError(true)
       setWeightValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG)
     } else {
@@ -128,6 +133,7 @@ export default function InputFoodItemModal( props ) {
     }
     // Price Validation
     if (!isNumeric(price)) {
+      errorPresent = true
       setIsPriceValidationError(true)
       setPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG)
     } else {
@@ -136,13 +142,14 @@ export default function InputFoodItemModal( props ) {
     }
     // Generic Date Validation
     if (!dateValidation(lastUpdateDate).isValid) {
+      errorPresent = true
       setIsDateValidationError(true)
       setDateErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
     } else {
       setIsDateValidationError(false)
       setDateErrorMessage('')
     }
-    if (isPriceValidationError || isDateValidationError || isBrandValidationError || isWeightValidationError || isFoodItemValidationError || iskcalAmountValidationError) {
+    if (errorPresent) {
       // Errors present => return
       return
     } else {

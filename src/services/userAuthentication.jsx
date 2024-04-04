@@ -66,6 +66,7 @@ export const invalidateSession = ( setToken, setLoginUserName ) => {
   window.localStorage.removeItem(localStorageKeys.authenticated)
   window.localStorage.removeItem(localStorageKeys.selectedMode)
   window.localStorage.removeItem(localStorageKeys.selectedPalette)
+  window.localStorage.removeItem(localStorageKeys.selectedLanguage)
   setToken(null)
   setLoginUserName(null)
   console.info('Invalidated session.')

@@ -13,6 +13,8 @@ export const resourceProperties = {
   PIECES_SHORT: 'pcs',
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
+  OK: 'Bestätigen',
+  CANCEL: 'Abbrechen',
   SIGN_IN: 'Einloggen',
   CREATE_ACCOUNT: 'Account anlegen',
   USERNAME: 'Nutzername',
@@ -24,8 +26,10 @@ export const resourceProperties = {
   GROCERY_DEALS: 'Supermarkt Angebote',
   PLACEHOLDER: 'Platzhalter',
   LOGGED_IN_AS:'Nutzername:',
+  CONFIRMATION_DIALOG_TITLE_DELETE: 'Wirklich löschen?',
   SELECTED_MODE:'Farbmodus:',
   SELECTED_PALETTE:'Farbpalette:',
+  SELECTED_LANGUAGE:'Sprachwahl:',
   GROCERIES: 'Lebensmittel',
   OVER_TOTAL_PERIOD: 'Im gesamten Zeitraum',
   LOGIN: 'Login',
@@ -136,6 +140,7 @@ export const resourceProperties = {
   DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP: 'zuletzt geprüft',
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Gesamtverbrauch Hochrechnung',
   DEALS_OVERVIEW_UPDATE_FOOD_PRICE: 'Aktuellen Preis pflegen',
+  DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW: 'Zeile löschen',
 
   DEALS_FOOD_PRICES_SELECTITEMS_MACRO_LABEL: 'Auswahl Makronährstoff',
   DEALS_FOOD_PRICES_SELECTITEMS_DELETE_SELECTION: 'Auswahl löschen',
@@ -257,6 +262,7 @@ export const localStorageKeys = {
   authenticated: 'userAuthenticated',
   selectedMode: 'selected_mode',
   selectedPalette: 'selected_palette',
+  selectedLanguage: 'selected_language',
 }
 
 export const fixedCostCategories = {

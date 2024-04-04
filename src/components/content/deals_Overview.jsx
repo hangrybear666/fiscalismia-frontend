@@ -8,10 +8,11 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import SyncIcon from '@mui/icons-material/Sync';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { Tooltip } from '@mui/material';
 import { IconButton } from '@mui/material';
+import SyncIcon from '@mui/icons-material/Sync';
+import ClearIcon from '@mui/icons-material/Clear';
 import InputFoodItemModal from '../minor/Modal_InputFoodItem';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
@@ -19,8 +20,9 @@ import { Button, Stack } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { updateFoodItemPrice } from '../../services/pgConnections';
+import { updateFoodItemPrice, deleteFoodItem } from '../../services/pgConnections';
 import { DateCellFormatter, currencyFormatter, kcalFormatter, gramsFormatter, isNumeric, dateValidation, initializeReactDateInput} from '../../utils/sharedFunctions';
+import ConfirmationDialog from '../minor/Dialog_Confirmation';
 
 export default function Deals_Overview( props ) {
   const { palette } = useTheme();
@@ -28,7 +30,8 @@ export default function Deals_Overview( props ) {
   const [foodPricesRowData, setFoodPriceRowData] = useState([]);
   const [foodPricesColumnDefinitions, setFoodPriceColumnDefinitions] = useState([]);
   // to refresh table based on added food item after DB insertion
-  const [addedItemId, setAddedItemId] = useState('')
+  const [addedOrUpdatedFoodItems, setAddedOrUpdatedFoodItems] = useState('')
+  const [deletedFoodItem, setDeletedFoodItem] = useState('')
   // Reference to grid API
   const foodPricesGridRif = useRef();
   const quickFilterText = '';
@@ -40,18 +43,58 @@ export default function Deals_Overview( props ) {
       setFoodPriceRowData(allFoodPricesAndDiscounts.results)
     }
     getAllPricesAndDiscounts();
-  }, [addedItemId]
+  }, [addedOrUpdatedFoodItems, deletedFoodItem]
   )
+
+  const DeleteRowBtn = ( props ) => {
+    const { data, refreshParent } = props
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false);
+
+    const deleteRow = async() => {
+      const response = await deleteFoodItem(data.id)
+      if (response?.results[0]?.id) {
+        // this setter is called to force the frontend to update and refetch the data from db
+        console.log("SUCCESSFULLY deleted row from DB:")// TODO mit Growl und ID ersetzen
+        console.log(response.results[0])
+        // to refresh parent's table based on updated food item after successfull PUT request
+        // concatenating id to price guarantees that refresh is only triggered if price changes compared to a prior update
+        refreshParent(response.results[0].id)
+      } else {
+        // TODO User Notification
+        console.error(response)
+      }
+    }
+    return (
+      <React.Fragment>
+        <Tooltip placement="left" title={res.DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW}>
+          <IconButton
+            color="error"
+            sx={{paddingY:0.2, paddingX:1, marginRight:0, marginY:0,marginLeft:0.5, align:'right'}}
+            onClick={() => setConfirmDeleteOpen(true)}>
+            <ClearIcon />
+          </IconButton>
+        </Tooltip>
+        <ConfirmationDialog
+          title={res.CONFIRMATION_DIALOG_TITLE_DELETE}
+          text={data.food_item + ' - ' + data.store}
+          textColor="secondary"
+          open={confirmDeleteOpen}
+          setOpen={setConfirmDeleteOpen}
+          handleConfirm={deleteRow}
+        />
+      </React.Fragment>
+    )
+  }
 
   /**
      * WARNING: Extraction into individual REACT COMPONENT has failed. Perhaps because of AG-Grid cellRenderer implementation.
-     * Custom Cell Renderer displaying a button to update price information
+     * Custom Cell Renderer for AG-GRID displaying a button with Modal Input to update food price information in the db
      * @param {} param0
      * @returns
      */
   const UpdatePriceBtn = ( props ) => {
     const { palette } = useTheme();
-    const [open, setOpen] = useState(false);
+    const [priceUpdateOpen, setPriceUpdateOpen] = useState(false);
     const [isLastUpdateValidationError, setIsLastUpdateValidationError] = React.useState(false);
     const [lastUpdateDateErrorMessage, setLastUpdateDateErrorMessage] = React.useState('');
     const [isPriceValidationError, setIsPriceValidationError] = React.useState(false);
@@ -74,8 +117,10 @@ export default function Deals_Overview( props ) {
 
     const validateInput = (e) => {
       e.preventDefault();
+      let errorPresent = false;
       // Price Validation
       if (!isNumeric(price)) {
+        errorPresent = true
         setIsPriceValidationError(true)
         setPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG)
       } else {
@@ -84,13 +129,14 @@ export default function Deals_Overview( props ) {
       }
       // Generic Date Validation
       if (!dateValidation(lastUpdateDate).isValid) {
+        errorPresent = true
         setIsLastUpdateValidationError(true)
         setLastUpdateDateErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
       } else {
         setIsLastUpdateValidationError(false)
         setLastUpdateDateErrorMessage('')
       }
-      if (isPriceValidationError || isLastUpdateValidationError ) {
+      if (errorPresent) {
         // Errors present => return
         return
       } else {
@@ -100,22 +146,23 @@ export default function Deals_Overview( props ) {
     }
 
     const saveUserInput = async() => {
-    const foodItemUpdateObject = {
-      price: Number(price).toFixed(2),
-      lastUpdate: lastUpdateDate,
-    }
-    const response = await updateFoodItemPrice(props.id, foodItemUpdateObject)
-    if (response?.results[0]?.dimension_key) {
-      // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added food item to DB:")// TODO mit Growl und ID ersetzen
-      console.log(response.results[0])
-      setOpen(false)
-      // to refresh parent's table based on added food item after DB insertion
-      setAddedItemId(response?.results[0].id)
-    } else {
-      // TODO User Notification
-      console.error(response)
-    }
+      const foodItemUpdateObject = {
+        price: Number(price).toFixed(2),
+        lastUpdate: lastUpdateDate,
+      }
+      const response = await updateFoodItemPrice(props.id, foodItemUpdateObject)
+      if (response?.results[0]?.id) {
+        // this setter is called to force the frontend to update and refetch the data from db
+        console.log("SUCCESSFULLY updated price in DB:")// TODO mit Growl und ID ersetzen
+        console.log(response.results[0])
+        setPriceUpdateOpen(false)
+        // to refresh parent's table based on updated food item after successfull PUT request
+        // concatenating id to price guarantees that refresh is only triggered if price changes compared to a prior update
+        props.refreshParent(String(response.results[0].id).concat(String(response?.results[0]?.price)))
+      } else {
+        // TODO User Notification
+        console.error(response)
+      }
     }
 
     return (
@@ -124,13 +171,13 @@ export default function Deals_Overview( props ) {
           <IconButton
             color="secondary"
             sx={{paddingY:0.2, paddingX:1, marginRight:0, marginY:0,marginLeft:0.5, align:'right'}}
-            onClick={() => setOpen(true)}>
+            onClick={() => setPriceUpdateOpen(true)}>
             <SyncIcon />
           </IconButton>
         </Tooltip>
         <Modal
-          open={open}
-          onClose={() => setOpen(false)}
+          open={priceUpdateOpen}
+          onClose={() => setPriceUpdateOpen(false)}
         >
           <Box sx={{
             position: 'absolute',
@@ -209,16 +256,17 @@ export default function Deals_Overview( props ) {
   // AFTER foodPricesAndDiscounts have been filled on page load
   useEffect(() => {
     setFoodPriceColumnDefinitions([
-      { field: "id", headerName: "", cellRenderer: p => <UpdatePriceBtn id={p.data.id}/>, minWidth: 60, flex:0.4, filter: false, floatingFilter: false, sortable: false },
+      { field: "id", headerName: "", cellRenderer: p => <UpdatePriceBtn id={p.data.id} refreshParent={setAddedOrUpdatedFoodItems}/>, minWidth: 60, flex:0.4, filter: false, floatingFilter: false, sortable: false },
       { field: "food_item", headerName: res.DEALS_OVERVIEW_THEADER_FOODITEM, minWidth:200, flex:1.5 },
       { field: "brand", headerName: res.DEALS_OVERVIEW_THEADER_BRAND,},
       { field: "store", headerName: res.DEALS_OVERVIEW_THEADER_STORE,},
       { field: "main_macro", headerName: res.DEALS_OVERVIEW_THEADER_MAIN_MACRO,},
-      { field: "kcal_amount", headerName: res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP, valueFormatter: kcalFormatter, },
-      { field: "weight", headerName: res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP, valueFormatter: gramsFormatter, },
-      { field: "price", headerName: res.DEALS_OVERVIEW_THEADER_PRICE_TOP, valueFormatter: currencyFormatter, },
+      { field: "kcal_amount", headerName: res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP, valueFormatter: kcalFormatter, filter: false, floatingFilter: false, },
+      { field: "weight", headerName: res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP, valueFormatter: gramsFormatter, filter: false, floatingFilter: false, },
+      { field: "price", headerName: res.DEALS_OVERVIEW_THEADER_PRICE_TOP, valueFormatter: currencyFormatter, filter: false, floatingFilter: false, },
       { field: "last_update", headerName: res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP, cellRenderer: DateCellFormatter, minWidth:160 },
       { field: "normalized_price", headerName: res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP, valueFormatter: currencyFormatter, filter: false, floatingFilter: false  },
+      { headerName: "", cellRenderer: p => <DeleteRowBtn data={p.data} refreshParent={setDeletedFoodItem}/>, filter: false, floatingFilter: false, minWidth: 60, flex:0.4}
       // { field: "weight_per_100_kcal", valueFormatter: gramsFormatter, filter: false, floatingFilter: false },
       // { field: "price_per_kg", valueFormatter: currencyFormatter, filter: false, floatingFilter: false  },
       // { field: "effective_date", cellRenderer: DateCellFormatter, },
@@ -235,7 +283,7 @@ export default function Deals_Overview( props ) {
   return (
     <>
       <Stack>
-        <InputFoodItemModal setAddedItemId={setAddedItemId}/>
+        <InputFoodItemModal refreshParent={setAddedOrUpdatedFoodItems}/>
       </Stack>
       <div
         style={{position:'relative'}}

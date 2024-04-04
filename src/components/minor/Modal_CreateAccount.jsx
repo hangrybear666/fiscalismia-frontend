@@ -77,8 +77,9 @@ export default function CreateAccountModal( props ) {
 
   const validateInput = (e) => {
     e.preventDefault();
-
+    let errorPresent = false
     if (!username) {
+      errorPresent = true
       setIsUsernameValidationError(true)
       setUsernameValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1)
     } else {
@@ -86,6 +87,7 @@ export default function CreateAccountModal( props ) {
       setUsernameValidationErrorMessage('')
     }
     if (username?.length < 3) {
+      errorPresent = true
       setIsUsernameValidationError(true)
       setUsernameValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2)
     } else {
@@ -93,6 +95,7 @@ export default function CreateAccountModal( props ) {
       setUsernameValidationErrorMessage('')
     }
     if (!password) {
+      errorPresent = true
       setIsPasswordValidationError(true)
       setPasswordValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1)
     } else {
@@ -100,6 +103,7 @@ export default function CreateAccountModal( props ) {
       setPasswordValidationErrorMessage('')
     }
     if (password?.length < 8) {
+      errorPresent = true
       setIsPasswordValidationError(true)
       setPasswordValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2)
     } else {
@@ -107,13 +111,14 @@ export default function CreateAccountModal( props ) {
       setPasswordValidationErrorMessage('')
     }
     if (!regExEmail.test(email)) {
+      errorPresent = true
       setIsEmailValidationError(true)
       setEmailValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1)
     } else {
       setIsEmailValidationError(false)
       setEmailValidationErrorMessage('')
     }
-    if (isUsernameValidationError || isPasswordValidationError || isEmailValidationError) {
+    if (errorPresent) {
       // Errors present => return
       return
     } else {

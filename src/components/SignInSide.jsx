@@ -65,6 +65,7 @@ export default function SignInSide() {
             userSettingsMap.set(e.setting_key, e.setting_value)
           })
           window.localStorage.setItem(localStorageKeys.selectedMode, userSettingsMap.get(localStorageKeys.selectedMode))
+          window.localStorage.setItem(localStorageKeys.selectedLanguage, userSettingsMap.get(localStorageKeys.selectedLanguage))
           window.localStorage.setItem(localStorageKeys.selectedPalette, userSettingsMap.get(localStorageKeys.selectedPalette))
         }
       } finally {

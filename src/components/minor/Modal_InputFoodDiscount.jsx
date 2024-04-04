@@ -83,8 +83,10 @@ export default function InputFoodDiscountModal( props ) {
    */
   const validateInput = (e) => {
     e.preventDefault();
+    let errorPresent = false
     // Food Item Selection
     if (!isNumeric(selectedFoodItemId)) {
+      errorPresent = true
       setIsFoodItemSelectionError(true)
       setFoodItemSelectionErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG)
     } else {
@@ -93,6 +95,7 @@ export default function InputFoodDiscountModal( props ) {
     }
     // Price Validation
     if (!isNumeric(discountPrice)) {
+      errorPresent = true
       setIsPriceValidationError(true)
       setDiscountPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG)
     } else {
@@ -101,6 +104,7 @@ export default function InputFoodDiscountModal( props ) {
     }
     // Generic Start Date Validation
     if (!dateValidation(startDate).isValid) {
+      errorPresent = true
       setIsStartDateValidationError(true)
       setStartDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
     } else {
@@ -109,6 +113,7 @@ export default function InputFoodDiscountModal( props ) {
     }
     // Generic End Date Validation
     if (!dateValidation(startDate).isValid) {
+      errorPresent = true
       setIsEndDateValidationError(true)
       setEndDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
     } else {
@@ -117,12 +122,13 @@ export default function InputFoodDiscountModal( props ) {
     }
     // Specific Date Validation
     if (startDate > endDate) {
+      errorPresent = true
       setIsEndDateValidationError(true)
       setEndDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG)
       setIsStartDateValidationError(true)
       setStartDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG)
     }
-    if (isPriceValidationError || isStartDateValidationError || isEndDateValidationError) {
+    if (errorPresent) {
       // Errors present => return
       return
     } else {
