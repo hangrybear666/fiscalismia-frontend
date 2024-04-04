@@ -73,8 +73,8 @@ export default function InputFoodItemModal( props ) {
       brand: brand.trim(),
       store: selectedStore,
       mainMacro: selectedMacro,
-      kcalAmount: Number(kcalAmount).toFixed(0),
-      weight: Number(weight).toFixed(0),
+      kcalAmount: parseInt(kcalAmount),
+      weight: parseInt(weight),
       price: Number(price).toFixed(2),
       lastUpdate:lastUpdateDate,
     }

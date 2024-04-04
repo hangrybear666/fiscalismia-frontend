@@ -5,21 +5,20 @@ import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Modal from '@mui/material/Modal';
 import Input from '@mui/material/Input';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
+import PercentIcon from '@mui/icons-material/Percent';
+import MoneyIcon from '@mui/icons-material/Money';
 import TagIcon from '@mui/icons-material/Tag';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
-import ScaleIcon from '@mui/icons-material/Scale';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res, investmentInputCategories as selectionCategories } from '../../resources/resource_properties';
-import { postNewFoodItem } from '../../services/pgConnections';
+import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
@@ -40,6 +39,10 @@ export default function InputInvestmentDividendTaxesModal( props ) {
   const [isinValidationErrorMessage, setIsinValidationErrorMessage] = React.useState('');
   const [isDescriptionValidationError, setIsDescriptionValidationError] = React.useState(false);
   const [descriptionValidationErrorMessage, setDescriptionValidationErrorMessage] = React.useState('');
+  const [isProfitAmtValidationError, setIsProfitAmtValidationError] = React.useState(false);
+  const [profitAmtValidationErrorMessage, setProfitAmtValidationErrorMessage] = React.useState('');
+  const [isPctTaxedValidationError, setIsPctTaxedValidationError] = React.useState(false);
+  const [pctTaxedValidationErrorMessage, setPctTaxedValidationErrorMessage] = React.useState('');
 
   // Inputs
   const [description, setDescription] = React.useState('');
@@ -48,6 +51,9 @@ export default function InputInvestmentDividendTaxesModal( props ) {
   const [executionDate, setExecutionDate] = React.useState(initializeReactDateInput(new Date()));
   const [units, setUnits] = React.useState('');
   const [isin, setIsin] = React.useState('');
+  const [isOrderTypeSale, setIsOrderTypeSale] = React.useState(false);
+  const [profitAmt, setProfitAmt] = React.useState('');
+  const [pctTaxed, setPctTaxed] = React.useState(Number(100.00).toFixed(2));
 
   // Selection
   const [investmentTypeSelectItems,] = React.useState(selectionCategories.ARRAY_INVESTMENT_TYPE);
@@ -55,7 +61,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
   const [marketplaceSelectItems,] = React.useState(selectionCategories.ARRAY_MARKETPLACE);
   const [selectedMarketplace, setSelectedMarketplace] = React.useState(selectionCategories.ARRAY_MARKETPLACE[0]);
   const [orderTypeArray,] = React.useState(new Array(selectionCategories.ARRAY_ORDER_TYPE));
-  const [selectedOrderType, setSelectedOrderType] = React.useState('');
+  const [selectedOrderType, setSelectedOrderType] = React.useState(selectionCategories.ARRAY_ORDER_TYPE[0]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -64,31 +70,40 @@ export default function InputInvestmentDividendTaxesModal( props ) {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 500,
     bgcolor: 'background.paper',
-    border: `2px solid ${palette.primary.main}`,
+    border: `2px solid ${palette.secondary.main}`,
     boxShadow: 24,
     p: 4,
   };
 
   /**
-   * queries DB for food item insertion via REST API
+   * queries DB for investment and taxes insertion via REST API
    */
   const saveUserInput = async() => {
-    const foodItemObj = {
-      foodItem: description.trim(),
-      brand: isin.trim(),
-      store: selectedInvestmentType,
-      mainMacro: selectedMarketplace,
-      kcalAmount: Number(units).toFixed(0),
-      price: Number(unitPrice).toFixed(2),
-      lastUpdate:executionDate,
+    const investmentAndTaxesObject = {
+      executionType: selectedOrderType,
+      description: description.trim(),
+      isin: isin,
+      investmentType: selectedInvestmentType,
+      marketplace: selectedMarketplace,
+      units: parseInt(units),
+      pricePerUnit: Number(unitPrice).toFixed(2),
+      totalPrice: (parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2),
+      fees: Number(fees).toFixed(2),
+      executionDate: executionDate,
+      profitAmount: isOrderTypeSale ? profitAmt : null,
+      pctOfProfitTaxed: isOrderTypeSale ? pctTaxed : null
     }
-    const response = await postNewFoodItem(foodItemObj)
+    const response = await postInvestments(investmentAndTaxesObject)
     if (response?.results[0]?.id) {
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added food item to DB:")// TODO mit Growl und ID ersetzen
+      console.log("SUCCESSFULLY added investments to DB:")// TODO mit Growl und ID ersetzen
       console.log(response.results[0])
+      if (response?.taxesResults[0]?.id) {
+        console.log("SUCCESSFULLY added investment_taxes to DB:")// TODO mit Growl und ID ersetzen
+        console.log(response.taxesResults[0])
+      }
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion
       refreshParent(response.results[0].id)
@@ -111,7 +126,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
       setFeeValidationErrorMessage('')
     }
     // Price Validation
-    if (!isNumeric(unitPrice)) {
+    if (!isNumeric(unitPrice) || Number(unitPrice).toFixed(0) < 0) {
       errorPresent = true
       setIsUnitPriceValidationError(true)
       setUnitPriceValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG)
@@ -129,7 +144,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
       setDateErrorMessage('')
     }
     // Units
-    if (!isNumeric(units)) {
+    if (!isNumeric(units) || Number(units).toFixed(0) < 0) {
       errorPresent = true
       setIsUnitsValidationError(true)
       setUnitsValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG)
@@ -155,7 +170,27 @@ export default function InputInvestmentDividendTaxesModal( props ) {
       setIsDescriptionValidationError(false)
       setDescriptionValidationErrorMessage('')
     }
-    
+    // ONLY VALIDATE FOR SALES
+    if (isOrderTypeSale) {
+      // Pct Taxed Validation
+      if (!isNumeric(pctTaxed) || Number(pctTaxed).toFixed(2) > 100.00 || Number(pctTaxed).toFixed(0) < 0) {
+        errorPresent = true
+        setIsPctTaxedValidationError(true)
+        setPctTaxedValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG)
+      } else {
+        setIsPctTaxedValidationError(false)
+        setPctTaxedValidationErrorMessage('')
+      }
+      // Profit Amount
+      if (!isNumeric(profitAmt)) {
+        errorPresent = true
+        setIsProfitAmtValidationError(true)
+        setProfitAmtValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG)
+      } else {
+        setIsProfitAmtValidationError(false)
+        setProfitAmtValidationErrorMessage('')
+      }
+    }
     if (errorPresent) {
       // Errors present => return
       return
@@ -184,7 +219,13 @@ export default function InputInvestmentDividendTaxesModal( props ) {
         setDescription(e.target.value)
         break;
       case "isin":
-        setIsin(e.target.value).replace('-','')
+        setIsin(e.target.value.replace('-',''))
+        break;
+      case "profit_amt":
+        setProfitAmt(e.target.value.replace(',','.'))
+        break;
+      case "pct_taxed":
+        setPctTaxed(e.target.value.replace(',','.'))
         break;
 
     }
@@ -199,6 +240,11 @@ export default function InputInvestmentDividendTaxesModal( props ) {
   }
 
   const handleOrderTypeSelect = (event, newValue) => {
+    if (newValue === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
+      setIsOrderTypeSale(true)
+    } else {
+      setIsOrderTypeSale(false)
+    }
     setSelectedOrderType(newValue)
   }
 
@@ -215,7 +261,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
             }}
           startIcon={<AddCircleIcon />}
           >
-        {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN}
+        {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN_BUTTON}
       </Button>
       <Modal
         open={open}
@@ -232,18 +278,18 @@ export default function InputInvestmentDividendTaxesModal( props ) {
                 exclusive
                 value={selectedOrderType}
                 onChange={handleOrderTypeSelect}
-                sx={{mt:0.5,mb:1}}
+                sx={{mt:0.5,mb:1, justifyContent:'center', display:'flex',}}
               >
                 {parent.map((child, index) => {
                   return (
                   <ToggleButton
                     key={index}
-                    size="large"
+                    size="medium"
                     value={child}
                     selected={child===selectedOrderType}
                     sx={{
                       borderRadius:0,
-                      paddingX:3.25,
+                      paddingX:11.00,
                       '&:hover': {
                         bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
                         color: palette.common.white,
@@ -273,7 +319,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
           </Box>
           {/* INVESTMENT TYPE */}
           {investmentTypeSelectItems
-          ? <Box sx={{ ml:1, mr:0, mt:2 }}>
+          ? <Box sx={{ ml:1, mr:0, mt:2.5 }}>
               <SelectDropdown
                 sx={{ m:1 }}
                 selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT}
@@ -359,6 +405,36 @@ export default function InputInvestmentDividendTaxesModal( props ) {
             />
             <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{feeValidationErrorMessage}</FormHelperText>
           </FormControl>
+          { isOrderTypeSale ?
+          <>
+            {/* PROFIT AMOUNT */}
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <InputLabel htmlFor="profit_amt">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PROFIT_AMT}</InputLabel>
+              <Input
+                id="profit_amt"
+                value={profitAmt}
+                onChange={inputChangeListener}
+                type="text"
+                error={isProfitAmtValidationError}
+                startAdornment={<InputAdornment position="start"><MoneyIcon/></InputAdornment>}
+              />
+              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{profitAmtValidationErrorMessage}</FormHelperText>
+            </FormControl>
+            {/* PERCENTAGE OF PROFITS TAXED */}
+            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+              <InputLabel htmlFor="pct_taxed">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}</InputLabel>
+              <Input
+                id="pct_taxed"
+                value={pctTaxed}
+                onChange={inputChangeListener}
+                type="text"
+                error={isPctTaxedValidationError}
+                startAdornment={<InputAdornment position="start"><PercentIcon/></InputAdornment>}
+              />
+              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{pctTaxedValidationErrorMessage}</FormHelperText>
+            </FormControl>
+          </>
+          : null}
           {/* EXECUTION DATE */}
           <FormControl fullWidth sx={{ marginX: 1, mt:2 }} variant="standard">
             <InputLabel htmlFor="execution_date">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE}</InputLabel>

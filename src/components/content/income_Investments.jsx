@@ -76,7 +76,7 @@ export default function Income_Investments( props ) {
       setAllDividends(allDividends.results)
     }
     getInvestmentData();
-  }, []
+  }, [updatedOrAddedItemFlag]
   )
 
   /**
@@ -90,7 +90,7 @@ export default function Income_Investments( props ) {
     if (allInvestments && props?.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
       const grossProfit = props?.data?.profit_amt ? Number(props.data.profit_amt).toFixed(2) : null
       const taxPaid =  props?.data?.tax_paid ? Number(props.data.tax_paid).toFixed(2) : null
-      const netProfit = grossProfit && taxPaid ? Number((grossProfit - taxPaid)).toFixed(2) : null
+      const netProfit = grossProfit && taxPaid ? Number((grossProfit - taxPaid)).toFixed(2) : grossProfit
       return (
         <HtmlTooltip
           title={
@@ -210,6 +210,13 @@ export default function Income_Investments( props ) {
     }
   }
 
+  /**
+   * Resets the Grid to the initial state after page load.
+   */
+  const resetAgGridToInitialState  = useCallback((gridRef) => {
+    gridRef.current.api.setFilterModel(null); // Reset Filters
+    gridRef.current.api.resetColumnState(); // Reset Sorting
+  }, []);
 
   const defaultColDef = useMemo(() => ({
     filter: true,

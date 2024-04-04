@@ -419,6 +419,27 @@ export const postNewFoodItem = async foodItemObj => {
   }
 }
 
+
+/**
+ * performs db insertion of provided object
+ * @param {*} investmentAndTaxesObject with fields: executionType, description, isin, investmentType, marketplace, units, pricePerUnit, totalPrice, fees, executionDate, profitAmount, pctOfProfitTaxed
+ * @returns id of inserted investment row in results
+ * id(fk) of inserted taxes row in taxesResults or ERROR
+ */
+export const postInvestments = async investmentAndTaxesObject => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'application/json',}
+    }
+    const response = await axios.post(`${baseUrl}/investments`, investmentAndTaxesObject, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /***
  *    ______ _____ _      _____ _____ _____
  *    |  _  \  ___| |    |  ___|_   _|  ___|
