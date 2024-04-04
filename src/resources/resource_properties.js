@@ -207,6 +207,20 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG: 'Gewicht als Zahl in Gramm erwartet, zB.: 500',
   MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
 
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 14.00',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG: 'Stück als Zahl erwartet, zB.: 42',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG: 'ISIN Format erwartet. 12-stellig mit Länderkürzel',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG: 'Beschreibung darf zwischen 5 - 50 Zeichen enthalten',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE: 'Stückpreis in €',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MARKETPLACE_SELECT: 'Marktplatz',
+  MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT: 'Art der Investition',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_FEES: 'Gebühren in €',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_ISIN: 'ISIN',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_DESCRIPTION: 'Beschreibung der Wertanlage',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNITS: 'Stück',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE: 'Ausführungsdatum',
+
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_OPEN: 'TSV Import Supermarktartikel',
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update',
@@ -329,6 +343,31 @@ export const foodItemInputCategories = {
     carbs: 'Carbs',
     fiber: 'Fiber'
   }
+}
+export const investmentInputCategories = {
+  ARRAY_ORDER_TYPE: [
+    'buy',
+    'sell',
+  ],
+  ARRAY_INVESTMENT_TYPE: [
+    'stock',
+    'ETF',
+  ],
+  ARRAY_MARKETPLACE: [
+    'Tradegate',
+    'Berlin',
+    'Baader Bank',
+    'Frankfurt',
+    'Düsseldorf',
+    'Gettex',
+    'Hamburg',
+    'Hannover',
+    'München',
+    'Quotrix',
+    'XETRA',
+    'London',
+    'Wien',
+  ],
 }
 
 export const serverConfig = {

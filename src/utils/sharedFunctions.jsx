@@ -5,13 +5,13 @@ import { tooltipClasses } from '@mui/material/Tooltip';
 import Tooltip from '@mui/material/Tooltip';
 
 /**
- * 
- * @param {*} header 
- * @param {*} amount 
- * @param {*} subtitle 
- * @param {*} details 
- * @param {*} icon 
- * @param {*} img 
+ *
+ * @param {*} header
+ * @param {*} amount
+ * @param {*} subtitle
+ * @param {*} details
+ * @param {*} icon
+ * @param {*} img
  * @returns
  */
 export function constructContentCardObject(header, amount, subtitle, details, icon, img) { // TODO img
@@ -175,9 +175,29 @@ export function dateValidation(dateStr) {
 
 /**
  * React INPUT element with type="date" expects first 10 characters of ISO formatted dates
- * @param {*} date 
- * @returns 
+ * @param {*} date
+ * @returns
  */
 export function initializeReactDateInput(date) {
   return new Date(date).toISOString().substring(0,10)
+}
+
+/**
+ * Regular Expression testing for alphabetic characters in either case
+ * @param {*} str
+ * @returns
+ */
+export function stringAlphabeticOnly(str) {
+  const regExAlphabetic = /^[a-zA-Z]+$/
+  return regExAlphabetic.test(str)
+}
+
+/**
+ * * Regular Expression testing for alphaNumeric characters in either case as well as dots underscores and hyphens
+ * @param {*} str
+ * @returns
+ */
+export function stringAlphaNumericOnly(str) {
+  const regExAlphaNumeric = /^[a-zA-Z0-9._-]*$/g
+  return regExAlphaNumeric.test(str)
 }

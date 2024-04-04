@@ -7,7 +7,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { getAllInvestments, getAllDividends } from '../../services/pgConnections';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
-import { resourceProperties as res } from '../../resources/resource_properties';
+import { resourceProperties as res , investmentInputCategories } from '../../resources/resource_properties';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -16,9 +16,10 @@ import Modal from '@mui/material/Modal';
 import Chip from '@mui/material/Chip';
 import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
 import { Stack } from '@mui/material';
+import InputInvestmentDividendTaxesModal from '../minor/Modal_InputInvestmentDividendTaxes';
 
 const CustomBoughtSoldChip = (props) => {
-  return props.value === 'buy'
+  return props.value === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY
     ? <Chip sx={{ borderWidth:0, fontWeight:600 }} label={res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY} variant="outlined" color="primary" />
     : <Chip sx={{ borderWidth:0, fontWeight:600 }} label={res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY} variant="outlined"  color="success" />
 }
@@ -49,12 +50,15 @@ const percentageFormatter = (params) => {
 
 export default function Income_Investments( props ) {
   const { palette, breakpoints, mode } = useTheme();
+  // db data
   const [allInvestments, setAllInvestments] = useState(null)
   const [allDividends, setAllDividends] = useState(null)
+  // ag-grid
   const [investmentRowData, setInvestmentRowData] = useState([]);
   const [dividendRowData, setDividendRowData] = useState([]);
   const [investmentColumnDefinitions, setInvestmentColumnDefinitions] = useState([]);
   const [dividendColumnDefinitions, setDividendColumnDefinitions] = useState([]);
+  const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState(null)
   // Reference to grid API
   const investmentGridRif = useRef();
   const dividendGridRif = useRef();
@@ -272,6 +276,9 @@ export default function Income_Investments( props ) {
 
   return (
     <>
+      <Stack>
+        <InputInvestmentDividendTaxesModal refreshParent={setUpdatedOrAddedItemFlag}/>
+      </Stack>
       <Button
         color="error"
         variant="outlined"
