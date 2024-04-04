@@ -440,6 +440,27 @@ export const postInvestments = async investmentAndTaxesObject => {
   }
 }
 
+
+/**
+ * performs db insertion of provided object
+ * @param {*} dividendsObject with fields: isin, dividendAmount, dividendDate, pctOfProfitTaxed, profitAmount
+ * @returns id of inserted dividend row in results
+ * id(fk) of inserted taxes row in taxesResults or ERROR
+ */
+export const postDividends = async dividendsObject => {
+  setToken()
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` ,
+      'Content-Type': 'application/json',}
+    }
+    const response = await axios.post(`${baseUrl}/investment_dividends`, dividendsObject, config)
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 /***
  *    ______ _____ _      _____ _____ _____
  *    |  _  \  ___| |    |  ___|_   _|  ___|

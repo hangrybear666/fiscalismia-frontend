@@ -16,7 +16,8 @@ import Modal from '@mui/material/Modal';
 import Chip from '@mui/material/Chip';
 import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
 import { Stack } from '@mui/material';
-import InputInvestmentDividendTaxesModal from '../minor/Modal_InputInvestmentDividendTaxes';
+import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
+import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends'
 
 const CustomBoughtSoldChip = (props) => {
   return props.value === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY
@@ -53,6 +54,7 @@ export default function Income_Investments( props ) {
   // db data
   const [allInvestments, setAllInvestments] = useState(null)
   const [allDividends, setAllDividends] = useState(null)
+  const [uniqueIsinArray, setUniqueIsinArray] = useState(null)
   // ag-grid
   const [investmentRowData, setInvestmentRowData] = useState([]);
   const [dividendRowData, setDividendRowData] = useState([]);
@@ -74,6 +76,9 @@ export default function Income_Investments( props ) {
       setDividendRowData(allDividends.results)
       setAllInvestments(allInvestments.results)
       setAllDividends(allDividends.results)
+      setUniqueIsinArray(Array.from(new Set(allInvestments.results.map(e => e.isin))))
+      console.log("arr init")
+      console.log(Array.from(new Set(allInvestments.results.map(e => e.isin))))
     }
     getInvestmentData();
   }, [updatedOrAddedItemFlag]
@@ -284,7 +289,7 @@ export default function Income_Investments( props ) {
   return (
     <>
       <Stack>
-        <InputInvestmentDividendTaxesModal refreshParent={setUpdatedOrAddedItemFlag}/>
+        <InputInvestmentTaxesModal refreshParent={setUpdatedOrAddedItemFlag}/>
       </Stack>
       <Button
         color="error"
@@ -303,11 +308,16 @@ export default function Income_Investments( props ) {
           defaultColDef={defaultColDef}
           domLayout='autoHeight'
           pagination={true}
-          paginationPageSize={15}
-          paginationPageSizeSelector={[15,20,50]}
+          paginationPageSize={12}
+          paginationPageSizeSelector={[12,20,50]}
         />
       : null}
       </div>
+        {uniqueIsinArray ?
+          <Stack sx={{mt:2}}>
+            <InputInvestmentDividendsModal refreshParent={setUpdatedOrAddedItemFlag} isinSelection={uniqueIsinArray}/>
+          </Stack>
+        : null}
       <Button
         color="error"
         variant="outlined"
@@ -325,8 +335,8 @@ export default function Income_Investments( props ) {
           defaultColDef={defaultColDef}
           domLayout='autoHeight'
           pagination={true}
-          paginationPageSize={15}
-          paginationPageSizeSelector={[15,20,50]}
+          paginationPageSize={12}
+          paginationPageSizeSelector={[12,20,50]}
         />
         : null}
       </div>

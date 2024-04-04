@@ -22,7 +22,7 @@ import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-export default function InputInvestmentDividendTaxesModal( props ) {
+export default function InputInvestmentTaxesModal( props ) {
   const { palette } = useTheme();
   const { refreshParent } = props
   const [open, setOpen] = React.useState(false);
@@ -152,7 +152,7 @@ export default function InputInvestmentDividendTaxesModal( props ) {
       setIsUnitsValidationError(false)
       setUnitsValidationErrorMessage('')
     }
-    // ISIN TODO
+    // ISIN
     if(!isin || isin == '' || isin?.length != 12 || !stringAlphabeticOnly(isin.substring(0,2))) {
       errorPresent = true
       setIsIsinValidationError(true)
