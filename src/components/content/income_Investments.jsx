@@ -77,8 +77,6 @@ export default function Income_Investments( props ) {
       setAllInvestments(allInvestments.results)
       setAllDividends(allDividends.results)
       setUniqueIsinArray(Array.from(new Set(allInvestments.results.map(e => e.isin))))
-      console.log("arr init")
-      console.log(Array.from(new Set(allInvestments.results.map(e => e.isin))))
     }
     getInvestmentData();
   }, [updatedOrAddedItemFlag]
@@ -123,16 +121,6 @@ export default function Income_Investments( props ) {
       return props.value.toFixed(2) + ' ' + res.CURRENCY_EURO
     }
   }
-
-  // TODO INSERT SELL
-/*     const filteredInvestments = allInvestments
-      .filter(e => e.isin === props.data.isin) // only prior purchases and sales with the same stock identifier
-      .filter(e => e.id !== props.data.id) // exclude selfallInvestments
-      .filter(e => new Date(e.execution_date) < new Date(props.data.execution_date)) // for profits only past transactions are relevant
-    if (filteredInvestments.map(e=> e.execution_type).includes(res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY)) {
-      // if past transactions already include a sale then profit and taxes become too complicated to calculate algorithmically
-      return "complicated logic"
-    } */
 
   /**
    * After clicking on the number displaying aggregated Row Count a new Grid is displayed containing individual rows within the aggregate
@@ -236,7 +224,7 @@ export default function Income_Investments( props ) {
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
     setInvestmentColumnDefinitions([
-      /* { field: "id", }, */
+      { field: "id", },
       { headerName: 'Order Type',
         field: "execution_type",
         cellRenderer: p => <CustomBoughtSoldChip value={p.value}/>,
@@ -262,7 +250,7 @@ export default function Income_Investments( props ) {
   // AFTER allDividends have been filled on page load
   useEffect(() => {
     setDividendColumnDefinitions([
-      /* { field: "id", }, */
+      // { field: "id", },
       { field: "cnt",headerName: res.INCOME_INVESTMENTS_COL_HEADER_AGGREGATE,
         cellRenderer: p=> <VisualizeOnAggregateRows value={p.value} investments={p.data.investments} />,
         filter: false,
@@ -315,7 +303,7 @@ export default function Income_Investments( props ) {
       </div>
         {uniqueIsinArray ?
           <Stack sx={{mt:2}}>
-            <InputInvestmentDividendsModal refreshParent={setUpdatedOrAddedItemFlag} isinSelection={uniqueIsinArray}/>
+            <InputInvestmentDividendsModal refreshParent={setUpdatedOrAddedItemFlag} isinSelection={uniqueIsinArray} allInvestments={allInvestments} />
           </Stack>
         : null}
       <Button

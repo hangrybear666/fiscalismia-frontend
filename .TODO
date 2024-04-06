@@ -7,3 +7,6 @@
 # Date Validation in sharedFunctions to consider year range
 # INVESTMENTS DATAGRID:
 - Replace hardcoded Strings with resource_properties
+
+ESLINT/PRETTIER in VSCODE
+https://github.com/idahogurl/vs-code-prettier-eslint/tree/master/examples/typescript

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,7 +19,7 @@ import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOn
 
 export default function InputInvestmentDividendsModal( props ) {
   const { palette } = useTheme();
-  const { refreshParent, isinSelection } = props
+  const { refreshParent, isinSelection, allInvestments } = props
   const [open, setOpen] = React.useState(false);
   // Validation
   const [isDateValidationError, setIsDateValidationError] = React.useState(false);
@@ -37,10 +37,17 @@ export default function InputInvestmentDividendsModal( props ) {
   const [pctTaxed, setPctTaxed] = React.useState(Number(100.00).toFixed(2));
 
   // Selection
-  const [isinSelectItems,] = React.useState(isinSelection);
+  const [isinSelectItems, setIsinSelectItems] = React.useState(isinSelection);
   const [selectedIsin, setSelectedIsin] = React.useState('');
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // ON PAGE LOAD
+  useEffect(() => {
+    // after allInvestments change (after e.g. investment addition) refresh isin dropdown
+    setIsinSelectItems(isinSelection)
+  }, [allInvestments]
+  )
 
   const style = {
     position: 'absolute',
@@ -55,6 +62,146 @@ export default function InputInvestmentDividendsModal( props ) {
   };
 
   /**
+   * WARNING: complicated logic for partial sales
+   * When dividends are added, we want to assign them only to relevant stocks (which are still OWNED)
+   * - Calculates running averages for unit price of owned investments
+   * - Calculates which investments have been fully sold
+   * - Calculates which investments are still owned fully
+   * - Calculates which investment is only owned partially and the remaining units
+   * Returns remaining units and investment ids related to dividend payment
+   */
+  const extractRelatedInvestmentsOfDividend = (dividendDate, allInvestments) => {
+    let investmentIdsAndUnits = []
+    let filteredInvestments = allInvestments
+      .filter(e => e.isin === selectedIsin)
+      .filter(e => new Date(e.execution_date) < new Date(dividendDate))
+    if (filteredInvestments.map(e=> e.execution_type).includes(res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY)) {
+      /**
+       * applicable past investments include type 'sell'
+       * - calculate running average price of owned stocks
+       * - remove any investments fully sold to identify which are still owned for dividend aggregate
+       */
+      let ownedUnits = 0
+      let averageUnitPrice = 0
+      let ownedInvestmentIds = []
+      let partiallySoldInvestment
+      let fullySoldInvestmentIds = []
+      filteredInvestments.sort((a,b) => new Date(a.execution_date) > new Date(b.execution_date)) // Sort by ascending execution_date - earliest first
+      filteredInvestments.forEach((e, index, investments) => {
+        if (e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY) {
+          //   __
+          //  |__) |  | \ /
+          //  |__) \__/  |
+          if (partiallySoldInvestment) {
+            // calculate new average price from prior owned positions
+            let newAvgPrice = 0
+            let currentOwnedUnits = 0
+            investments
+              .filter(e => ownedInvestmentIds.includes(e.id))
+              .forEach(e => {
+                if (e.id === partiallySoldInvestment.id) {
+                  newAvgPrice = (newAvgPrice * currentOwnedUnits + partiallySoldInvestment.remainingUnits * partiallySoldInvestment.price_per_unit) / (currentOwnedUnits + partiallySoldInvestment.remainingUnits)
+                  currentOwnedUnits += partiallySoldInvestment.remainingUnits
+                } else {
+                  newAvgPrice = (newAvgPrice * currentOwnedUnits +  e.price_per_unit * e.units) / (currentOwnedUnits + Number(e.units))
+                }
+              })
+            // console.log("newAvgPrice")
+            // console.log(newAvgPrice)
+            // console.log("currentOwnedUnits")
+            // console.log(currentOwnedUnits)
+            averageUnitPrice = newAvgPrice
+          }
+          ownedInvestmentIds.push(e.id)
+          averageUnitPrice = ownedUnits === 0
+          ? Number(e.price_per_unit) // first invocation or owned Units were at 0 after sale --> avg Unit price is identical to current buy
+          : (averageUnitPrice * ownedUnits +  e.price_per_unit * e.units) / (ownedUnits + Number(e.units)) // subsequent invocation. calculate running average
+          // console.log("ownedUnits " + ownedUnits + " + " + Number(e.units) + " for " + e.price_per_unit + "€")
+          // console.log("averageUnitPrice " + averageUnitPrice)
+          ownedUnits += Number(e.units)
+        } else if (e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
+          //  __   ___
+          // /__` |__  |    |
+          // .__/ |___ |___ |___
+          ownedUnits -= Number(e.units)
+          if (ownedUnits < 0) {
+            // TODO LOG CRITICAL ERROR TO FRONTEND
+            console.error("WRONG DATA IN DB. OWNED UNITS NEGATIVE? FIX ASAP.")
+            throw new Error("WRONG DATA IN DB. OWNED UNITS NEGATIVE? FIX ASAP.")
+          } else if (ownedUnits === 0) {
+            // SOLD ALL OWNED UNITS
+            fullySoldInvestmentIds = Array.from(ownedInvestmentIds)
+            ownedInvestmentIds = []
+            partiallySoldInvestment = null
+            averageUnitPrice = 0
+          } else if (ownedUnits > 0) {
+            console.info("you are making my life hard by partially selling off stock")
+            //   __        __  ___                 __             ___
+            //  |__)  /\  |__)  |  |  /\  |       /__`  /\  |    |__
+            //  |    /~~\ |  \  |  | /~~\ |___    .__/ /~~\ |___ |___
+            const partialSaleDate = new Date(e.execution_date)
+            let partialSaleUnits = Number(e.units)
+            let currentInvestments = investments
+              .filter(e => e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY // only purchases
+                && new Date(e.execution_date) < partialSaleDate // only before sale date
+                && !fullySoldInvestmentIds.includes(e.id)) // exclude any fully sold investments
+            currentInvestments.every( current => { // every is like forEach but it breaks looping when callback receives a false value
+              if (Number(current.units) <= partialSaleUnits) {
+                if (partiallySoldInvestment && current.id === partiallySoldInvestment.id) {
+                  console.info("you are making my life even harder by selling off partially from multiple stock positions")
+                  partialSaleUnits -= partiallySoldInvestment.remainingUnits
+                  partiallySoldInvestment = []
+                } else {
+                  partialSaleUnits -= Number(current.units)
+                }
+                fullySoldInvestmentIds.push(current.id)
+                // WARNING: splice returns the removed element so don't assign this to a new array!
+                ownedInvestmentIds.splice(ownedInvestmentIds.indexOf(current.id), 1) // Splice with parameter 1 removes 1 element at indexOf current.id
+              } else if (Number(current.units) > partialSaleUnits) {
+                // partially sold investment position
+                partiallySoldInvestment = {remainingUnits: Number(current.units) - partialSaleUnits, ...current}
+                partialSaleUnits = 0
+                return false // breaks out of every loop
+              }
+              return true // continues every loop
+            })
+          }
+        }
+      })
+      // console.log("owned units at " + dividendDate + " is: " + ownedUnits)
+      // console.log("averageUnitPrice  at " + dividendDate + " is: " + averageUnitPrice)
+      // console.log("owned investment ids: " + ownedInvestmentIds)
+      // console.log("fully sold investment ids: " + fullySoldInvestmentIds)
+      // console.log("partiallySoldInvestment: ")
+      // console.log(partiallySoldInvestment)
+      //   __   __        __  ___  __        __  ___     __   ___ ___       __           __   __        ___  __  ___
+      //  /  ` /  \ |\ | /__`  |  |__) |  | /  `  |     |__) |__   |  |  | |__) |\ |    /  \ |__)    | |__  /  `  |
+      //  \__, \__/ | \| .__/  |  |  \ \__/ \__,  |     |  \ |___  |  \__/ |  \ | \|    \__/ |__) \__/ |___ \__,  |
+      if (partiallySoldInvestment) {
+        // push partially owned investment id and remaining units
+        investmentIdsAndUnits.push({investmentId: partiallySoldInvestment.id, remainingUnits: partiallySoldInvestment.remainingUnits})
+        // WARNING: splice returns the removed element so don't assign this to a new array!
+        ownedInvestmentIds.splice(ownedInvestmentIds.indexOf(partiallySoldInvestment.id), 1) // Splice with parameter 1 removes 1 element at indexOf id
+        // push fully owned investments with all units
+        filteredInvestments
+          .filter(e => ownedInvestmentIds.includes(e.id))
+          .forEach(e => {
+            investmentIdsAndUnits.push({investmentId: e.id, remainingUnits: e.units})
+          })
+      }
+    } else {
+      // all applicable past investments are of type 'buy' --> aggregate
+      filteredInvestments
+        .forEach(e => {
+          investmentIdsAndUnits.push({investmentId: e.id, remainingUnits: e.units})
+        })
+    }
+    console.log("investmentIdsAndUnits")
+    console.log(investmentIdsAndUnits)
+    return investmentIdsAndUnits
+  }
+
+  /**
    * queries DB for dividend and taxes insertion via REST API
    */
   const saveUserInput = async() => {
@@ -64,9 +211,10 @@ export default function InputInvestmentDividendsModal( props ) {
       dividendDate: dividendDate,
       pctOfProfitTaxed: pctTaxed,
       profitAmount: Number(dividendAmount).toFixed(2),
-
+      investmentIdsAndRemainingUnits: extractRelatedInvestmentsOfDividend(dividendDate, allInvestments)
     }
     const response = await postDividends(dividendsObject)
+    console.log(response)
     if (response?.results[0]?.id) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added investments to DB:")// TODO mit Growl und ID ersetzen
@@ -74,6 +222,10 @@ export default function InputInvestmentDividendsModal( props ) {
       if (response?.taxesResults[0]?.id) {
         console.log("SUCCESSFULLY added investment_taxes to DB:")// TODO mit Growl und ID ersetzen
         console.log(response.taxesResults[0])
+      }
+      if (response?.bridgeResults[0]?.id) {
+        console.log("SUCCESSFULLY added aggregated investments of dividend to DB:")// TODO mit Growl und ID ersetzen
+        console.log(response.bridgeResults)
       }
       setOpen(false)
       // to refresh parent's table based on added food item after DB insertion

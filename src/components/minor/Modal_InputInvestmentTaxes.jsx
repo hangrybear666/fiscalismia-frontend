@@ -100,7 +100,7 @@ export default function InputInvestmentTaxesModal( props ) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added investments to DB:")// TODO mit Growl und ID ersetzen
       console.log(response.results[0])
-      if (response?.taxesResults[0]?.id) {
+      if (selectedOrderType === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY && response?.taxesResults[0]?.id) {
         console.log("SUCCESSFULLY added investment_taxes to DB:")// TODO mit Growl und ID ersetzen
         console.log(response.taxesResults[0])
       }

@@ -140,7 +140,6 @@ export default function InputVariableExpenseModal( props ) {
       contains_indulgence: containsIndulgence,
       sensitivities: sensitivitiesString,
     }
-    console.log(variableExpObj)
     const response = await postNewFoodItem(variableExpObj) //TODO
     if (response?.results[0]?.dimension_key) {
       // this setter is called to force the frontend to update and refetch the data from db
