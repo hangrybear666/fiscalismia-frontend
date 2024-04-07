@@ -95,7 +95,7 @@ export default function InputVariableExpenseModal( props ) {
   // Inputs
   const [isPlanned, setIsPlanned] = React.useState(false);
   const [containsIndulgence, setContainsIndulgence] = React.useState(false);
-  const [purchaseDate, setPurchaseDate] = React.useState(initializeReactDateInput(new Date()));
+  const [purchasingDate, setPurchaseDate] = React.useState(initializeReactDateInput(new Date()));
   const [price, setPrice] = React.useState('');
   const [description, setDescription] = React.useState('');
 
@@ -135,7 +135,7 @@ export default function InputVariableExpenseModal( props ) {
       category: categoryAutoComplete,
       store: storeAutoComplete,
       cost: Number(price).toFixed(2),
-      date:purchaseDate,
+      purchasing_date: new Date(purchasingDate),
       is_planned: isPlanned,
       contains_indulgence: containsIndulgence,
       sensitivities: sensitivitiesString,
@@ -203,7 +203,7 @@ export default function InputVariableExpenseModal( props ) {
       setPriceValidationErrorMessage('')
     }
     // Generic Date Validation
-    if (!dateValidation(purchaseDate).isValid) {
+    if (!dateValidation(purchasingDate).isValid) {
       errorPresent = true
       setIsDateValidationError(true)
       setDateValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
@@ -429,7 +429,7 @@ export default function InputVariableExpenseModal( props ) {
             <InputLabel shrink={true} htmlFor="purchase_date">{res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_DATE_OF_PURCHASE}</InputLabel>
             <Input
               id="purchase_date"
-              value={purchaseDate}
+              value={purchasingDate}
               type="date"
               error={isDateValidationError}
               onChange={inputChangeListener}

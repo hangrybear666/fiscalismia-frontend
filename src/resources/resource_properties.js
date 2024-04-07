@@ -242,7 +242,7 @@ export const resourceProperties = {
 
   MINOR_INPUT_VARIABLE_EXPENSES_MODAL_OPEN: 'TSV Import Variable Ausgaben',
   MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,  category,  store cost,  date,  is_planned,  contains_indulgence, sensitivities',
+  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,  category,  store cost,  purchasing_date,  is_planned,  contains_indulgence, sensitivities',
 
   MINOR_INPUT_FIXED_INCOME_MODAL_OPEN: 'TSV Import Monatslohn',
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
