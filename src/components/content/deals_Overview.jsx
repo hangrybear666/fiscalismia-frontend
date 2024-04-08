@@ -78,6 +78,7 @@ export default function Deals_Overview( props ) {
           title={res.CONFIRMATION_DIALOG_TITLE_DELETE}
           text={data.food_item + ' - ' + data.store}
           textColor="secondary"
+          confirmBtnText={res.DELETE}
           open={confirmDeleteOpen}
           setOpen={setConfirmDeleteOpen}
           handleConfirm={deleteRow}

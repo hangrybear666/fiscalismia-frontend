@@ -14,6 +14,7 @@ export const resourceProperties = {
   UPLOAD_IMG: 'Bild hochladen',
   KCAL: 'kcal',
   OK: 'Bestätigen',
+  DELETE: 'Löschen',
   CANCEL: 'Abbrechen',
   SIGN_IN: 'Einloggen',
   CREATE_ACCOUNT: 'Account anlegen',

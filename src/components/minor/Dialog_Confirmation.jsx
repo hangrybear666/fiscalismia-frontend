@@ -12,7 +12,7 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 
 export default function ConfirmationDialog(props) {
     const { palette } = useTheme();
-    const { title, text, textColor, open, setOpen, handleConfirm } = props
+    const { title, text, textColor, open, setOpen, handleConfirm, confirmBtnText } = props
 
     const handleCancel = () => {
         setOpen(false);
@@ -58,7 +58,7 @@ export default function ConfirmationDialog(props) {
                                 size="large"
                                 onClick={handleOk}
                             >
-                                {res.OK}
+                                {confirmBtnText ? confirmBtnText : res.OK}
                             </Button>
                         </Grid>
                     </Grid>

@@ -196,8 +196,8 @@ export default function InputInvestmentDividendsModal( props ) {
           investmentIdsAndUnits.push({investmentId: e.id, remainingUnits: e.units})
         })
     }
-    console.log("investmentIdsAndUnits")
-    console.log(investmentIdsAndUnits)
+    // console.log("investmentIdsAndUnits")
+    // console.log(investmentIdsAndUnits)
     return investmentIdsAndUnits
   }
 
@@ -214,7 +214,6 @@ export default function InputInvestmentDividendsModal( props ) {
       investmentIdsAndRemainingUnits: extractRelatedInvestmentsOfDividend(dividendDate, allInvestments)
     }
     const response = await postDividends(dividendsObject)
-    console.log(response)
     if (response?.results[0]?.id) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log("SUCCESSFULLY added investments to DB:")// TODO mit Growl und ID ersetzen
