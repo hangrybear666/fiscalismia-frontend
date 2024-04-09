@@ -1,4 +1,3 @@
-
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { palette } from './PaletteAndColors';
@@ -6,20 +5,36 @@ import { localStorageKeys } from '../../resources/resource_properties';
 
 export const contentMaxWidth = '1680px';
 
-export default function CustomThemeProvider({ children }) {
+type CustomThemeProviderProps = {
+  children: React.ReactNode;
+};
 
-  const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode)
-  const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette)
+// Augment the palette to include an ochre color
+declare module '@mui/material/styles' {
+  interface Palette {
+    menu: Palette['primary'];
+    header: Palette['primary'];
+  }
 
-  const selectedPaletteStr = userPalette ? userPalette : 'default'
-  const selectedMode = userColorMode ? userColorMode : 'light'
-  const paletteKey = `${selectedPaletteStr}${selectedMode}`
-  const selectedPalette = palette.get(paletteKey)
+  interface PaletteOptions {
+    menu?: PaletteOptions['primary'];
+    header?: PaletteOptions['primary'];
+  }
+}
+
+export default function CustomThemeProvider({ children }: CustomThemeProviderProps) {
+  const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode);
+  const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette);
+
+  const selectedPaletteStr = userPalette ? userPalette : 'default';
+  const selectedMode = userColorMode ? userColorMode : 'light';
+  const paletteKey = `${selectedPaletteStr}${selectedMode}`;
+  const selectedPalette = palette.get(paletteKey);
 
   let theme = createTheme({
     palette: {
       mode: selectedMode,
-      ...selectedPalette,
+      ...selectedPalette
     },
     breakpoints: {
       values: {
@@ -27,31 +42,31 @@ export default function CustomThemeProvider({ children }) {
         sm: 700,
         md: 1000,
         lg: 1300,
-        xl: 1680,
-      },
+        xl: 1680
+      }
     },
     typography: {
       h5: {
         fontWeight: 500,
         fontSize: 26,
-        letterSpacing: 0.5,
-      },
+        letterSpacing: 0.5
+      }
     },
     shape: {
-      borderRadius: 8,
+      borderRadius: 8
     },
     components: {
       MuiTab: {
         defaultProps: {
-          disableRipple: true,
-        },
-      },
+          disableRipple: true
+        }
+      }
     },
     mixins: {
       toolbar: {
-        minHeight: 48,
-      },
-    },
+        minHeight: 48
+      }
+    }
   });
 
   theme = createTheme(theme, {
@@ -59,42 +74,42 @@ export default function CustomThemeProvider({ children }) {
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            backgroundColor: theme.palette.menu.main,
-          },
-        },
+            backgroundColor: theme.palette.menu.main
+          }
+        }
       },
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: theme.palette.header.main,
-          },
+            backgroundColor: theme.palette.header.main
+          }
         }
       },
       MuiButton: {
         styleOverrides: {
           root: {
-            textTransform: 'none',
+            textTransform: 'none'
           },
           contained: {
             boxShadow: 'none',
             '&:active': {
-              boxShadow: 'none',
-            },
-          },
-        },
+              boxShadow: 'none'
+            }
+          }
+        }
       },
       MuiTabs: {
         styleOverrides: {
           root: {
-            marginLeft: theme.spacing(1),
+            marginLeft: theme.spacing(1)
           },
           indicator: {
             height: 3,
             borderTopLeftRadius: 3,
             borderTopRightRadius: 3,
-            backgroundColor: theme.palette.common.white,
-          },
-        },
+            backgroundColor: theme.palette.common.white
+          }
+        }
       },
       MuiTab: {
         styleOverrides: {
@@ -105,73 +120,73 @@ export default function CustomThemeProvider({ children }) {
             padding: 0,
             [theme.breakpoints.up('md')]: {
               padding: 0,
-              minWidth: 0,
-            },
-          },
-        },
+              minWidth: 0
+            }
+          }
+        }
       },
       MuiCardContent: {
         styleOverrides: {
           root: {
             padding: 0,
-            "&:last-child": {
-              paddingBottom: '0px',
-            },
-          },
-        },
+            '&:last-child': {
+              paddingBottom: '0px'
+            }
+          }
+        }
       },
       MuiIconButton: {
         styleOverrides: {
           root: {
-            padding: theme.spacing(1),
-          },
-        },
+            padding: theme.spacing(1)
+          }
+        }
       },
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
-            borderRadius: 4,
-          },
-        },
+            borderRadius: 4
+          }
+        }
       },
       MuiDivider: {
         styleOverrides: {
           root: {
             backgroundColor: selectedMode == 'light' ? 'rgb(255,255,255,0.6)' : 'rgb(232,232,232,0.4)',
-            borderColor: selectedMode == 'light' ? 'rgba(128,128,128,0.6)' : 'rgba(128,128,128,0.4)',
-          },
-        },
+            borderColor: selectedMode == 'light' ? 'rgba(128,128,128,0.6)' : 'rgba(128,128,128,0.4)'
+          }
+        }
       },
       MuiInputBase: {
         styleOverrides: {
           root: {
-            borderRadius:0,
-          },
-        },
+            borderRadius: 0
+          }
+        }
       },
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            borderRadius:0,
-          },
-        },
+            borderRadius: 0
+          }
+        }
       },
       MuiListItemButton: {
         styleOverrides: {
           root: {
             '&.Mui-selected': {
-              color: '#4fc3f7',
-            },
-          },
-        },
+              color: '#4fc3f7'
+            }
+          }
+        }
       },
       MuiListItemText: {
         styleOverrides: {
           primary: {
             fontSize: 14,
-            fontWeight: theme.typography.fontWeightMedium,
-          },
-        },
+            fontWeight: theme.typography.fontWeightMedium
+          }
+        }
       },
       MuiListItemIcon: {
         styleOverrides: {
@@ -180,25 +195,20 @@ export default function CustomThemeProvider({ children }) {
             minWidth: 'auto',
             marginRight: theme.spacing(2),
             '& svg': {
-              fontSize: 20,
-            },
-          },
-        },
+              fontSize: 20
+            }
+          }
+        }
       },
       MuiAvatar: {
         styleOverrides: {
           root: {
             width: 32,
-            height: 32,
-          },
-        },
-      },
-    },
+            height: 32
+          }
+        }
+      }
+    }
   });
-  return (
-    <ThemeProvider theme={theme}>
-      {children}
-    </ThemeProvider>
-  )
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
-

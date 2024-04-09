@@ -1,5 +1,5 @@
 export const resourceProperties = {
-  APP_NAME: "Fiscalismia",
+  APP_NAME: 'Fiscalismia',
   APP_URL: 'http://localhost:5173/',
   OVERVIEW: 'Übersicht',
   HOME: 'Home',
@@ -7,7 +7,6 @@ export const resourceProperties = {
   DATE: 'Datum',
   ALL: 'Alle',
   GRAMS: 'g',
-  ALL: 'Alle',
   NO_IMG: 'no-img',
   SYMBOL_PERCENT: '%',
   PIECES_SHORT: 'pcs',
@@ -26,34 +25,34 @@ export const resourceProperties = {
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
   PLACEHOLDER: 'Platzhalter',
-  LOGGED_IN_AS:'Nutzername:',
+  LOGGED_IN_AS: 'Nutzername:',
   CONFIRMATION_DIALOG_TITLE_DELETE: 'Wirklich löschen?',
-  SELECTED_MODE:'Farbmodus:',
-  SELECTED_PALETTE:'Farbpalette:',
-  SELECTED_LANGUAGE:'Sprachwahl:',
+  SELECTED_MODE: 'Farbmodus:',
+  SELECTED_PALETTE: 'Farbpalette:',
+  SELECTED_LANGUAGE: 'Sprachwahl:',
   GROCERIES: 'Lebensmittel',
   OVER_TOTAL_PERIOD: 'Im gesamten Zeitraum',
   LOGIN: 'Login',
   LOGOUT: 'Logout',
   RESET: 'Reset',
-  MONTHLY_BUDGET:'Monatliches Budget',
+  MONTHLY_BUDGET: 'Monatliches Budget',
   BUDGET: 'Budget',
   INVESTMENTS: 'Investments',
   PORTFOLIO: 'Portfolio',
   SALES: 'Verkäufe',
   SORT_BY: 'Sortieren nach',
-  LIVING_ESSENTIALS:'Wohnen & Essentielles',
-  RECREATION_RELAXATION:'Freizeit & Erholung',
+  LIVING_ESSENTIALS: 'Wohnen & Essentielles',
+  RECREATION_RELAXATION: 'Freizeit & Erholung',
   STORES: 'Verkaufsplattformen',
-  INDULGENCES:'Genussmittel',
+  INDULGENCES: 'Genussmittel',
   COPYRIGHT: 'Copyright ©',
   VARIABLE_EXPENSES: 'Variable Ausgaben',
   EMAIL: 'Email Adresse',
   INCOME: 'Einkommen',
   FIXED_COSTS: 'Fixkosten',
   SETTINGS: 'Einstellungen',
-  GITHUB_REPO:'Github Repository',
-  GITHUB_REPOS:'Github Repositories',
+  GITHUB_REPO: 'Github Repository',
+  GITHUB_REPOS: 'Github Repositories',
   FRONTEND: 'Frontend',
   BACKEND: 'Backend',
   CURRENCY_EURO: '\u20AC',
@@ -76,8 +75,8 @@ export const resourceProperties = {
   GENERIC_ERROR_MESSAGE: 'Sorry, an unexpected error has occurred.',
   NOT_DEFINED: 'Not defined',
   // Functions with placeholder vars
-  USER_ALREADY_LOGGED_IN : (pos1) => (`User ${pos1} is already logged in.`),
-  PATH_DOES_NOT_EXIST : (pos1) => (`Sorry, the requested path ${pos1} does not exist.`),
+  USER_ALREADY_LOGGED_IN: (pos1: string) => `User ${pos1} is already logged in.`,
+  PATH_DOES_NOT_EXIST: (pos1: string) => `Sorry, the requested path ${pos1} does not exist.`,
 
   AG_GRID_STYLE_DARK: 'ag-theme-quartz-dark',
   AG_GRID_STYLE_LIGHT: 'ag-theme-quartz',
@@ -164,13 +163,14 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG: 'Kein Artikel ausgewählt.',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 12.05',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
-  MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG: 'Das Startdatum muss vor dem Enddatum liegen.',
+  MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG:
+    'Das Startdatum muss vor dem Enddatum liegen.',
 
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_OPEN: 'Variable Ausgabe hinzufügen',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_INDULGENCE: 'Unverträglichkeiten',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_DATE_OF_PURCHASE: 'Datum',
-  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE:  'Preis in €',
-  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION:  'Ausgaben(-liste)',
+  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE: 'Preis in €',
+  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION: 'Ausgaben(-liste)',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE: 'Laden',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY: 'Art der Ausgabe',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_IS_PLANNED_LABEL: 'War die Ausgabe geplant?',
@@ -180,7 +180,8 @@ export const resourceProperties = {
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG: 'Todo beschreibung',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE_AUTOCOMPLETE_VALIDATION_ERROR_MSG: 'Todo store',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY_AUTOCOMPLETE_VALIDATION_ERROR_MSG: 'Todo category',
-  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
+  MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
+    'Datum im folgenden Format erwartet: DD.MM.YYYY',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_TODAY: 'date_today',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_TODAY: 'Heutiges Datum',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COFFEE: 'coffee_in_shop',
@@ -209,13 +210,18 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
 
   MINOR_INPUT_FOOD_ITEM_MODAL_OPEN_BUTTON: 'Investment hinzufügen',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG: 'Datum im folgenden Format erwartet: DD.MM.YYYY',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
+    'Datum im folgenden Format erwartet: DD.MM.YYYY',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 14.00',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG: 'Anteil am Profit der versteuert wird zwischen 0 - 100.00%',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG: 'Profit im folgenden Format erwartet: 330.00',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG:
+    'Anteil am Profit der versteuert wird zwischen 0 - 100.00%',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG:
+    'Profit im folgenden Format erwartet: 330.00',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG: 'Stück als Zahl erwartet, zB.: 42',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG: 'ISIN Format erwartet. 12-stellig mit Länderkürzel',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG: 'Beschreibung darf zwischen 5 - 50 Zeichen enthalten',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG:
+    'ISIN Format erwartet. 12-stellig mit Länderkürzel',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG:
+    'Beschreibung darf zwischen 5 - 50 Zeichen enthalten',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE: 'Stückpreis in €',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MARKETPLACE_SELECT: 'Marktplatz',
   MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT: 'Art der Investition',
@@ -235,23 +241,28 @@ export const resourceProperties = {
 
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_OPEN: 'TSV Import Supermarktartikel',
   MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update',
+  MINOR_INPUT_ALL_FOOD_ITEMS_MODAL_INPUT_TEXT_AREA_HELPER:
+    'MANDATORY HEADERS: food_item, brand, store,  main_macro, kcal_amount, weight, price, last_update',
 
   MINOR_INPUT_FIXED_COSTS_MODAL_OPEN: 'TSV Import Fixkosten',
   MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
+  MINOR_INPUT_FIXED_COSTS_MODAL_INPUT_TEXT_AREA_HELPER:
+    'MANDATORY HEADERS: category, description,  monthly_interval,  billed_cost, monthly_cost,  effective_date,  expiration_date',
 
   MINOR_INPUT_VARIABLE_EXPENSES_MODAL_OPEN: 'TSV Import Variable Ausgaben',
   MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,  category,  store cost,  purchasing_date,  is_planned,  contains_indulgence, sensitivities',
+  MINOR_INPUT_VARIABLE_EXPENSES_MODAL_INPUT_TEXT_AREA_HELPER:
+    'MANDATORY HEADERS: description,  category,  store cost,  purchasing_date,  is_planned,  contains_indulgence, sensitivities',
 
   MINOR_INPUT_FIXED_INCOME_MODAL_OPEN: 'TSV Import Monatslohn',
   MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: description,	type,	monthly_interval,	value,	effective_date,	expiration_date',
+  MINOR_INPUT_FIXED_INCOME_MODAL_INPUT_TEXT_AREA_HELPER:
+    'MANDATORY HEADERS: description,	type,	monthly_interval,	value,	effective_date,	expiration_date',
 
   MINOR_INPUT_INVESTMENTS_MODAL_OPEN: 'TSV Import Investments',
   MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_DESCRIPTION: 'TSV Input/Output',
-  MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_HELPER: 'MANDATORY HEADERS: execution_type,	description,	isin,	investment_type,	marketplace,	units,	price_per_unit,	total_price,	fees,	execution_date',
+  MINOR_INPUT_INVESTMENTS_MODAL_INPUT_TEXT_AREA_HELPER:
+    'MANDATORY HEADERS: execution_type,	description,	isin,	investment_type,	marketplace,	units,	price_per_unit,	total_price,	fees,	execution_date',
 
   MINOR_FILTER_FOOD_PRICES_NAME_HEADER: 'Suche',
   MINOR_FILTER_FOOD_PRICES_FOOD_ITEM_INPUT_LABEL: 'Artikel',
@@ -267,7 +278,8 @@ export const resourceProperties = {
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_DESC: 'Nach € absteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_ASC: 'Nach € aufsteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE: 'Preis für Tag',
-  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE: 'Wenn nur dieses Nahrungsmittel 3500kcal abdecken müsste, was wäre der Preis?',
+  MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE:
+    'Wenn nur dieses Nahrungsmittel 3500kcal abdecken müsste, was wäre der Preis?',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_DESC: 'Nach € absteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_ASC: 'Nach kcal/100g aufsteigend.',
   MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT: 'KCAL',
@@ -279,7 +291,7 @@ export const resourceProperties = {
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2: 'Passwort muss mindestens 8 Zeichen enthalten.',
 
-  MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1: 'Email ist keine valide Adresse',
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1: 'Email ist keine valide Adresse'
 };
 
 export const localStorageKeys = {
@@ -288,8 +300,8 @@ export const localStorageKeys = {
   authenticated: 'userAuthenticated',
   selectedMode: 'selected_mode',
   selectedPalette: 'selected_palette',
-  selectedLanguage: 'selected_language',
-}
+  selectedLanguage: 'selected_language'
+};
 
 export const fixedCostCategories = {
   LIVING_ESSENTIALS_KEY: 'LIVING_ESSENTIALS',
@@ -313,8 +325,8 @@ export const fixedCostCategories = {
   SUPPLEMENTS_PERFORMANCE_KEY: 'SUPPLEMENTS_PERFORMANCE',
   SUPPLEMENTS_PERFORMANCE_VALUE: 'Supplemente: Leistung',
   PHYSIO_AND_HEALTH_COURSES_KEY: 'PHYSIO_AND_HEALTH_COURSES',
-  PHYSIO_AND_HEALTH_COURSES_VALUE: 'Physio & Gesundheitskurse',
-}
+  PHYSIO_AND_HEALTH_COURSES_VALUE: 'Physio & Gesundheitskurse'
+};
 
 export const foodItemInputCategories = {
   ARRAY_STORES: [
@@ -328,7 +340,7 @@ export const foodItemInputCategories = {
     'Edeka',
     'Metzger',
     'Online',
-    'Alle',
+    'Alle'
   ],
   JSON_STORES: {
     aldi: 'Aldi Süd',
@@ -341,30 +353,19 @@ export const foodItemInputCategories = {
     edeka: 'Edeka',
     butcher: 'Metzger',
     online: 'Online',
-    all: 'Alle',
+    all: 'Alle'
   },
-  ARRAY_MACROS: [
-    'Protein',
-    'Fat',
-    'Carbs',
-    'Fiber'
-  ],
+  ARRAY_MACROS: ['Protein', 'Fat', 'Carbs', 'Fiber'],
   JSON_MACROS: {
     protein: 'Protein',
     fat: 'Fat',
     carbs: 'Carbs',
     fiber: 'Fiber'
   }
-}
+};
 export const investmentInputCategories = {
-  ARRAY_ORDER_TYPE: [
-    'buy',
-    'sell',
-  ],
-  ARRAY_INVESTMENT_TYPE: [
-    'stock',
-    'ETF',
-  ],
+  ARRAY_ORDER_TYPE: ['buy', 'sell'],
+  ARRAY_INVESTMENT_TYPE: ['stock', 'ETF'],
   ARRAY_MARKETPLACE: [
     'Tradegate',
     'Berlin',
@@ -378,13 +379,13 @@ export const investmentInputCategories = {
     'Quotrix',
     'XETRA',
     'London',
-    'Wien',
-  ],
-}
+    'Wien'
+  ]
+};
 
 export const serverConfig = {
   NODE_ROOT_URL: 'http://localhost:3002/',
-  API_BASE_URL: 'http://localhost:3002/api/fiscalismia',
+  API_BASE_URL: 'http://localhost:3002/api/fiscalismia'
   // API_BASE_URL: `http://172.19.64.1:3002/api/fiscalismia`, // WSL for Jenkins
   // API_BASE_URL: `http://192.168.178.37:3002/api/fiscalismia`,
-}
+};

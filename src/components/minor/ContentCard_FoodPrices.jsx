@@ -1,6 +1,6 @@
-import React, {useReducer} from 'react';
+import React, { useReducer } from 'react';
 import { useTheme } from '@mui/material/styles';
-import {AxiosError} from 'axios'
+import { AxiosError } from 'axios';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Card from '@mui/material/Card';
@@ -18,21 +18,25 @@ import CancelIcon from '@mui/icons-material/CancelSharp';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import Stack from '@mui/system/Stack';
 import Paper from '@mui/material/Paper';
-import aldi from '../../public/imgs/supermarkets/aldi1.png'
-import metro from '../../public/imgs/supermarkets/metro1.png'
-import kaufland from '../../public/imgs/supermarkets/kaufland1.png'
-import lidl from '../../public/imgs/supermarkets/lidl1.png'
-import netto from '../../public/imgs/supermarkets/netto1.png'
-import rewe from '../../public/imgs/supermarkets/rewe1.png'
-import amazon from '../../public/imgs/supermarkets/amazon1.png'
-import edeka from '../../public/imgs/supermarkets/edeka1.png'
-import butcher from '../../public/imgs/supermarkets/butcher1.png'
-import online from '../../public/imgs/supermarkets/online1.png'
-import online2 from '../../public/imgs/supermarkets/online2.png'
-import all from '../../public/imgs/supermarkets/alle1.png'
+import aldi from '/imgs/supermarkets/aldi1.png';
+import metro from '/imgs/supermarkets/metro1.png';
+import kaufland from '/imgs/supermarkets/kaufland1.png';
+import lidl from '/imgs/supermarkets/lidl1.png';
+import netto from '/imgs/supermarkets/netto1.png';
+import rewe from '/imgs/supermarkets/rewe1.png';
+import amazon from '/imgs/supermarkets/amazon1.png';
+import edeka from '/imgs/supermarkets/edeka1.png';
+import butcher from '/imgs/supermarkets/butcher1.png';
+import online from '/imgs/supermarkets/online1.png';
+import online2 from '/imgs/supermarkets/online2.png';
+import all from '/imgs/supermarkets/alle1.png';
 import { styled } from '@mui/material/styles';
-import { resourceProperties as res, serverConfig, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
-import { postFoodItemImg, FileSizeError, deleteFoodItemImg} from '../../services/pgConnections';
+import {
+  resourceProperties as res,
+  serverConfig,
+  foodItemInputCategories as foodCategories
+} from '../../resources/resource_properties';
+import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../services/pgConnections';
 import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
@@ -50,12 +54,25 @@ const VisuallyHiddenInput = styled('input')({
   bottom: 0,
   left: 0,
   whiteSpace: 'nowrap',
-  width: 1,
+  width: 1
 });
 
-export default function ContentCardFoodPrices( props ) {
+export default function ContentCardFoodPrices(props) {
   const { palette } = useTheme();
-  const { foodItemId, header, originalPrice, subtitle, store, pricePerKg, kcalAmount, lastUpdated, details, elevation, img, imgHeight } = props
+  const {
+    foodItemId,
+    header,
+    originalPrice,
+    subtitle,
+    store,
+    pricePerKg,
+    kcalAmount,
+    lastUpdated,
+    details,
+    elevation,
+    img,
+    imgHeight
+  } = props;
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
@@ -95,7 +112,7 @@ export default function ContentCardFoodPrices( props ) {
       default:
         break;
     }
-  }
+  };
 
   /**
    * Validation of user input is done in postFoodItemImg
@@ -107,54 +124,54 @@ export default function ContentCardFoodPrices( props ) {
    * - 400 unknown error
    * @param {*} event file is contained in event.target.files[0]
    */
-  const handleFileUpload =  async(event) => {
+  const handleFileUpload = async (event) => {
     const response = await postFoodItemImg(event, foodItemId);
     if (response instanceof AxiosError) {
       // User Notification via Snackbar
-      setNotificationMessage(response.message)
-      setNotificationSeverity('warning')
-      setOpen(true)
+      setNotificationMessage(response.message);
+      setNotificationSeverity('warning');
+      setOpen(true);
     } else if (response instanceof FileSizeError) {
       // User Notification via Snackbar
-      setNotificationMessage(response.message)
-      setNotificationSeverity('warning')
-      setOpen(true)
+      setNotificationMessage(response.message);
+      setNotificationSeverity('warning');
+      setOpen(true);
     }
     if (response?.status == 200) {
-      const filepath = response.data
-      setImgFilePath(serverConfig.API_BASE_URL.concat('/').concat(filepath))
+      const filepath = response.data;
+      setImgFilePath(serverConfig.API_BASE_URL.concat('/').concat(filepath));
       // User Notification via Snackbar
-      setNotificationMessage(`File persisted in path: ${filepath}`)
-      setNotificationSeverity('success')
-      setOpen(true)
+      setNotificationMessage(`File persisted in path: ${filepath}`);
+      setNotificationSeverity('success');
+      setOpen(true);
     } else if (response?.status == 409) {
-      console.error(response.data)
+      console.error(response.data);
       // User Notification via Snackbar
-      setNotificationMessage("STATUS 409: choose a different image.")
-      setNotificationSeverity('error')
-      setOpen(true)
+      setNotificationMessage('STATUS 409: choose a different image.');
+      setNotificationSeverity('error');
+      setOpen(true);
     } else if (response?.status == 400) {
-      console.error(response.data)
+      console.error(response.data);
       // User Notification via Snackbar
-      setNotificationMessage("STATUS 400: image could not be processed.")
-      setNotificationSeverity('error')
-      setOpen(true)
+      setNotificationMessage('STATUS 400: image could not be processed.');
+      setNotificationSeverity('error');
+      setOpen(true);
     }
-  }
+  };
 
-  const handleImgDeletion = async(event) => {
+  const handleImgDeletion = async (event) => {
     event.preventDefault();
-    const response = await deleteFoodItemImg(foodItemId)
+    const response = await deleteFoodItemImg(foodItemId);
     if (response.data?.results[0]?.filepath) {
       // // User Notification via Snackbar
-      setNotificationMessage(`Image successfully deleted from path: ${response.data.results[0].filepath}`)
-      setNotificationSeverity('info')
-      setImgFilePath(null)
-      setOpen(true)
+      setNotificationMessage(`Image successfully deleted from path: ${response.data.results[0].filepath}`);
+      setNotificationSeverity('info');
+      setImgFilePath(null);
+      setOpen(true);
     } else {
-      setNotificationMessage("Image could not be deleted")
-      setNotificationSeverity('error')
-      setOpen(true)
+      setNotificationMessage('Image could not be deleted');
+      setNotificationSeverity('error');
+      setOpen(true);
     }
   };
 
@@ -169,12 +186,7 @@ export default function ContentCardFoodPrices( props ) {
         onClose={handleSnackbarClose}
         message={notificationMessage}
         action={
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={handleSnackbarClose}
-          >
+          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
             <CloseIcon fontSize="small" />
           </IconButton>
         }
@@ -188,165 +200,201 @@ export default function ContentCardFoodPrices( props ) {
         elevation={elevation ? elevation : 4}
         variant="elevation"
         sx={{
-          margin:0,
-          height:img == res.NO_IMG ? '240px' : `${imgHeight+240}px`,
+          margin: 0,
+          height: img == res.NO_IMG ? '240px' : `${imgHeight + 240}px`,
           border: `1px solid ${palette.border.light}`,
-          paddingBottom:1.5
-          }}
+          paddingBottom: 1.5
+        }}
         square
       >
-        {img == res.NO_IMG ?
-        <></>
-        :
-        img || imgFilePath ?
-        <Box sx={{position: 'relative'}}>
-          {/* IMAGE queried from server */}
-          <CardMedia
-            sx={{ height: imgHeight ? imgHeight : 200 }}
-            image={img ? img : imgFilePath ? imgFilePath : null}
-            title={header}
+        {img == res.NO_IMG ? (
+          <></>
+        ) : img || imgFilePath ? (
+          <Box sx={{ position: 'relative' }}>
+            {/* IMAGE queried from server */}
+            <CardMedia
+              sx={{ height: imgHeight ? imgHeight : 200 }}
+              image={img ? img : imgFilePath ? imgFilePath : null}
+              title={header}
             />
-          {/* DELETE IMG Btn */}
-          <IconButton size="large"
-            sx={{position: 'absolute', right:0, top:0}}
-            onClick={handleImgDeletion}
-            >
-            <CancelIcon sx={{ borderRadius:5, backgroundColor:'#cccccc'}} fontSize="inherit" />
-          </IconButton>
-        </Box>
-        :
-        // UPLOAD IMAGE
-        <CardActions
-                sx={{
-                  justifyContent:'center',
-                  alignItems:'center',
-                  display:'flex'}}>
+            {/* DELETE IMG Btn */}
+            <IconButton size="large" sx={{ position: 'absolute', right: 0, top: 0 }} onClick={handleImgDeletion}>
+              <CancelIcon sx={{ borderRadius: 5, backgroundColor: '#cccccc' }} fontSize="inherit" />
+            </IconButton>
+          </Box>
+        ) : (
+          // UPLOAD IMAGE
+          <CardActions
+            sx={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex'
+            }}
+          >
             <Paper elevation={4}>
               <Button
-                sx={{ borderRadius:0,
-                  paddingY:2,
-                  color:'#ffffff',
+                sx={{
+                  borderRadius: 0,
+                  paddingY: 2,
+                  color: '#ffffff',
                   border: `1px solid ${palette.border.light}`,
                   backgroundColor: 'rgba(128,128,128,0.3)'
                 }}
-                  component='label'
-                  variant='contained'
-                  startIcon={<CloudUploadIcon />}>
-                  {res.UPLOAD_IMG}
-                <VisuallyHiddenInput type="file" onChange={handleFileUpload}/>
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+              >
+                {res.UPLOAD_IMG}
+                <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
               </Button>
             </Paper>
-          </CardActions>}
-        <CardContent sx={{ padding:0 }}>
-          <Grid container spacing={1} sx={{ padding:0 }}>
-
+          </CardActions>
+        )}
+        <CardContent sx={{ padding: 0 }}>
+          <Grid container spacing={1} sx={{ padding: 0 }}>
             {/* HEADER */}
             <Grid
               display="flex"
               justifyContent="center"
               alignItems="center"
               xs={header ? 12 : 0}
-              sx={{ padding:0,
-                height:'75px', }}
+              sx={{ padding: 0, height: '75px' }}
             >
-            {header ?
-            <Typography variant="overline" sx={{ fontSize: 14, paddingX: 2, letterSpacing:2 }} color="text.secondary" >
-              {header}
-            </Typography>
-            : null }
+              {header ? (
+                <Typography
+                  variant="overline"
+                  sx={{ fontSize: 14, paddingX: 2, letterSpacing: 2 }}
+                  color="text.secondary"
+                >
+                  {header}
+                </Typography>
+              ) : null}
             </Grid>
 
             {/* store */}
             <Grid
               xs={4}
-              display='flex'
-              justifyContent='center'
+              display="flex"
+              justifyContent="center"
               alignItems="center"
-              sx={{ paddingLeft:2,
-                    borderTop: `1px solid ${palette.border.light}` }}
+              sx={{ paddingLeft: 2, borderTop: `1px solid ${palette.border.light}` }}
             >
-              {store ?
+              {store ? (
                 <Box
                   component="img"
                   sx={{
                     height: 56,
                     width: 56,
                     maxHeight: { xs: 96, md: 96 },
-                    maxWidth: { xs: 96, md: 96 },
+                    maxWidth: { xs: 96, md: 96 }
                   }}
                   alt={store}
                   src={getSupermarketLogo()}
-              />
-              : null}
+                />
+              ) : null}
             </Grid>
 
             {/* title & subtitle */}
             <Grid
               xs={4}
-              display={( originalPrice || subtitle) ? 'flex' : 'none'}
-              justifyContent='center'
+              display={originalPrice || subtitle ? 'flex' : 'none'}
+              justifyContent="center"
               alignItems="center"
               sx={{ borderTop: `1px solid ${palette.border.light}` }}
             >
-              <Stack >
-                {originalPrice ?
-                <Typography sx={{  ml:2,fontWeight:500, fontSize:16, }} variant="h6" >
-                  {originalPrice}
-                </Typography>
-                : null}
-                {subtitle ?
-                <Typography variant="subtitle1" sx={{ mb: 0.2, ml:1.5,fontSize:15, letterSpacing:1 }} color="text.secondary">
-                  {subtitle}
-                </Typography>
-                : null}
+              <Stack>
+                {originalPrice ? (
+                  <Typography sx={{ ml: 2, fontWeight: 500, fontSize: 16 }} variant="h6">
+                    {originalPrice}
+                  </Typography>
+                ) : null}
+                {subtitle ? (
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 0.2, ml: 1.5, fontSize: 15, letterSpacing: 1 }}
+                    color="text.secondary"
+                  >
+                    {subtitle}
+                  </Typography>
+                ) : null}
               </Stack>
             </Grid>
-
 
             {/* price per kg */}
             <Grid
               xs={4}
-              display='flex'
-              justifyContent='flex-start'
+              display="flex"
+              justifyContent="flex-start"
               alignItems="center"
-              sx={{ display: 'flex',
-                    borderTop: `1px solid ${palette.border.light}` }}
+              sx={{ display: 'flex', borderTop: `1px solid ${palette.border.light}` }}
             >
-              {pricePerKg ?
-              <Paper elevation={0}>
-                <Chip
-                  label={pricePerKg}
-                  sx={{
-                    borderRadius:0,
-                    paddingX: 0,
-                    paddingY: 2,
-                    border: `1px solid ${palette.border.light}`,
-                    fontSize:14,
-                    fontWeight:400,}}
-                />
-              </Paper>
-              : null}
+              {pricePerKg ? (
+                <Paper elevation={0}>
+                  <Chip
+                    label={pricePerKg}
+                    sx={{
+                      borderRadius: 0,
+                      paddingX: 0,
+                      paddingY: 2,
+                      border: `1px solid ${palette.border.light}`,
+                      fontSize: 14,
+                      fontWeight: 400
+                    }}
+                  />
+                </Paper>
+              ) : null}
             </Grid>
 
             {/* DETAILS */}
-            <Grid xs={12}
+            <Grid
+              xs={12}
               display={details || lastUpdated ? 'flex' : 'none'}
               justifyContent="center"
               alignItems="center"
-              sx={{ paddingLeft:2, paddingRight:2, paddingBottom:0,paddingTop:0}}>
-              <Stack sx={{ mt: 0.5,minWidth: '100%' }}>
-                <Chip label={kcalAmount} sx={{ borderRadius:0, borderWidth:2,letterSpacing:1, fontSize:13, fontWeight:400, height:'31px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<LocalFireDepartmentIcon />} />
-                <Chip label={lastUpdated} sx={{ mt:0.7, borderRadius:0,letterSpacing:1, borderWidth:2, fontSize:13, fontWeight:400, height:'31px;', paddingTop:'2px' }} variant="outlined" color="primary" icon={<EventAvailableIcon />} />
-                {details ?
-                <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
-                  {details.map((e,i) => (
-                    <React.Fragment key={e}>
-                      • {e}
-                      {i < details.length -1 ? <br /> : null}
-                    </React.Fragment>
-                  ))}
-                </Typography>
-                : null}
+              sx={{ paddingLeft: 2, paddingRight: 2, paddingBottom: 0, paddingTop: 0 }}
+            >
+              <Stack sx={{ mt: 0.5, minWidth: '100%' }}>
+                <Chip
+                  label={kcalAmount}
+                  sx={{
+                    borderRadius: 0,
+                    borderWidth: 2,
+                    letterSpacing: 1,
+                    fontSize: 13,
+                    fontWeight: 400,
+                    height: '31px;',
+                    paddingTop: '2px'
+                  }}
+                  variant="outlined"
+                  color="primary"
+                  icon={<LocalFireDepartmentIcon />}
+                />
+                <Chip
+                  label={lastUpdated}
+                  sx={{
+                    mt: 0.7,
+                    borderRadius: 0,
+                    letterSpacing: 1,
+                    borderWidth: 2,
+                    fontSize: 13,
+                    fontWeight: 400,
+                    height: '31px;',
+                    paddingTop: '2px'
+                  }}
+                  variant="outlined"
+                  color="primary"
+                  icon={<EventAvailableIcon />}
+                />
+                {details ? (
+                  <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
+                    {details.map((e, i) => (
+                      <React.Fragment key={e}>
+                        • {e}
+                        {i < details.length - 1 ? <br /> : null}
+                      </React.Fragment>
+                    ))}
+                  </Typography>
+                ) : null}
               </Stack>
             </Grid>
           </Grid>
