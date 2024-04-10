@@ -2,6 +2,7 @@
 
 ## Technologies Used
 
+- **TypeScript:** Statically typed JS with high strictness level and compile target ESNext. Mid-project Migration from plain JavaScript (ECMAScript 2016).
 - **React:** A JavaScript library for building user interfaces, maintained by Facebook.
 - **Material UI:** A popular React UI framework developed by Google, providing a set of pre-designed components for a consistent and visually appealing interface.
 - **Jenkins:** A DevOps automation server that orchestrates the development pipeline, helping in building, testing, and deploying the application fully automated.
@@ -19,21 +20,24 @@
 1. **Node.js:** Ensure that Node.js is installed on your local machine, with a minimum version of 20.9. You can download Node.js via Node Version Switcher [here](https://github.com/jasongin/nvs) or directly from the source [here](https://nodejs.org/).
 
 2. **Clone the Repository:**
-git clone https://github.com/your-username/fiscalismia-frontend.git
+   git clone https://github.com/your-username/fiscalismia-frontend.git
 
 **Installation**
 
 1. **Navigate to the Project Folder:**
+
 ```bash
 cd fiscalismia-frontend
 ```
 
 2. **Install Dependencies:**
+
 ```bash
 npm install
 ```
 
 3. **Run the Frontend Development Server:**
+
 ```bash
 npm run dev
 ```

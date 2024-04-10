@@ -1,13 +1,21 @@
-import axios from 'axios'
+import axios from 'axios';
 import { serverConfig, localStorageKeys } from '../resources/resource_properties';
-const baseUrl = serverConfig.API_BASE_URL
+import {
+  DividendsRelatedInvestmentsAndTaxes,
+  FoodItem,
+  FoodItemDiscount,
+  FoodItemUpdateObject,
+  InvestmentAndTaxes,
+  UserCredentials,
+  UserSettingObject
+} from '../types/custom/customTypes';
+const baseUrl = serverConfig.API_BASE_URL;
 export class FileSizeError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = 'FileSizeError';
   }
 }
-
 
 /***
  *      ___  _   _ _____ _   _  _____ _   _ _____ _____ _____   ___ _____ _____ _____ _   _
@@ -19,43 +27,36 @@ export class FileSizeError extends Error {
  */
 
 // set from local storage variable on each request, to avoid caching of local variable in this file between logouts
-let token;
+let token: string;
 
 const setToken = () => {
-  token = window.localStorage.getItem(localStorageKeys.token)
-}
+  token = window.localStorage.getItem(localStorageKeys.token)!;
+};
 
-export const login = async (credentials) => {
+export const login = async (credentials: UserCredentials) => {
   try {
-    const response = await axios.post(`${baseUrl}/um/login`, credentials)
-    return response.data
+    const response = await axios.post(`${baseUrl}/um/login`, credentials);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * 0) WARNING: THE BACKEND CURRENTLY CONTAINS A WHITELIST OF USERNAMES TO LIMIT ACCESS
  * 1) performs DB INSERTION into um_users
  * 2) initializes um_user_settings such as mode (light) and palette(default)
- * @param {*} username
- * @param {*} email
- * @param {*} password
+ * @param {*} accountObject {username, email, password}
  * @returns username if successful OR error otherwise
  */
-export const createUserCredentials = async (username, email, password) => {
+export const createUserCredentials = async (credentials: UserCredentials) => {
   try {
-    const accountObject = {
-      username:username,
-      email:email,
-      password:password
-    }
-    const response = await axios.post(`${baseUrl}/um/credentials`, accountObject )
-    return response.data
+    const response = await axios.post(`${baseUrl}/um/credentials`, credentials);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /***
  *     _____  _____ _____      ___   _      _
@@ -71,136 +72,136 @@ export const createUserCredentials = async (username, email, password) => {
  * @route /api/fiscalismia/fixed_costs
  */
 export const getAllFixedCosts = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/fixed_costs`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/fixed_costs`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all sensitivities within variable expenses in db
  * @route /api/fiscalismia/sensitivity
  */
 export const getAllVariableExpenseSensitivities = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/sensitivity`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/sensitivity`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all stores within variable expenses in db
  * @route /api/fiscalismia/store
  */
 export const getAllVariableExpenseStores = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/store`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/store`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all categories within variable expenses in db
  * @route /api/fiscalismia/category
  */
 export const getAllVariableExpenseCategories = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/category`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/category`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all variable Expenses from the db
  * @route /api/fiscalismia/variable_expenses
  */
 export const getAllVariableExpenses = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/variable_expenses`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/variable_expenses`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all investments from the db
  * @route /api/fiscalismia/investments
  */
 export const getAllInvestments = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/investments`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/investments`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all dividends of investments from the db
  * @route /api/fiscalismia/investment_dividends
  */
 export const getAllDividends = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/investment_dividends`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/investment_dividends`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * @returns Object containing a results array with all fixed income data from the db
  * @route /api/fiscalismia/fixed_costs
  */
 export const getAllFixedIncome = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/fixed_income`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/fixed_income`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * Returns food prices and discounts valid at the time of request (current_date)
@@ -208,17 +209,17 @@ export const getAllFixedIncome = async () => {
  * @route /api/fiscalismia/food_prices_and_discounts
  */
 export const getAllFoodPricesAndDiscounts = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * Returns discounted foods valid at the time of request (current_date)
@@ -226,17 +227,17 @@ export const getAllFoodPricesAndDiscounts = async () => {
  * @route /api/fiscalismia/discounted_foods_current
  */
 export const getCurrentFoodDiscounts = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 /***
  *     _____  _____ _____     ___________ _____ _____ ___________ _____ _____
  *    |  __ \|  ___|_   _|   /  ___| ___ \  ___/  __ \_   _|  ___|_   _/  __ \
@@ -246,37 +247,37 @@ export const getCurrentFoodDiscounts = async () => {
  *     \____/\____/  \_/     \____/\_|   \____/ \____/\___/\_|    \___/ \____/
  */
 
-export const getUserSpecificSettings = async (username) => {
-  setToken()
+export const getUserSpecificSettings = async (username: string) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/um/settings/${username}`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/um/settings/${username}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
- * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * Returns fixed costs valid for a specific provided date in the format (yyyy-mm-dd)
  * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
  * @returns Object containing a results array with all fixed costs valid at provided date from the db
  * @route /api/fiscalismia/fixed_costs/valid/:date
  */
- export const getFixedCostsByEffectiveDate = async (validDate) => {
-  setToken()
+export const getFixedCostsByEffectiveDate = async (validDate: Date) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * Returns variable expenses dependent on provided category description as string
@@ -284,37 +285,37 @@ export const getUserSpecificSettings = async (username) => {
  * @returns Object containing a results array with all variable expenses with provided category
  * @route /api/fiscalismia/variable_expenses/category/:category
  */
-export const getVariableExpenseByCategory = async (category) => {
-  setToken()
+export const getVariableExpenseByCategory = async (category: string) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/variable_expenses/category/${category}`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/variable_expenses/category/${category}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
- * Returns fixed income valid for a specific provided date in the format (yyyy-mm-dd) // TODO
+ * Returns fixed income valid for a specific provided date in the format (yyyy-mm-dd)
  * @param {*} validDate Date currently required to be in english date format (yyyy-mm-dd)
  * @returns Object containing a results array with all fixed income data valid at provided date from the db
  * @route /api/fiscalismia/fixed_income/valid/:date
  */
-export const getFixedIncomeByEffectiveDate = async (validDate) => {
-  setToken()
+export const getFixedIncomeByEffectiveDate = async (validDate: Date) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(`${baseUrl}/fixed_income/valid/${validDate}`, config)
-    return response.data
+    };
+    const response = await axios.get(`${baseUrl}/fixed_income/valid/${validDate}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /***
  *    ______ _____ _____ _____
@@ -329,28 +330,24 @@ export const getFixedIncomeByEffectiveDate = async (validDate) => {
  * performs db UPSERT statement for um_user_settings for:
  * SET setting_value='value'
  * WHERE user_id = (subselect loginUserName) AND setting_key='key'
- * @param {*} loginUserName SELECT id FROM public.um_users WHERE username = 'loginUserName'
- * @param {*} key setting_key column of um_user_settings
- * @param {*} value setting_value column of um_user_settings
+ * @param {*} username SELECT id FROM public.um_users WHERE username = 'loginUserName'
+ * @param {*} settingKey setting_key column of um_user_settings
+ * @param {*} settingValue setting_value column of um_user_settings
  * @returns username associated with updated row
  */
-export const postUpdatedUserSettings = async (loginUserName, key, value) => {
-  setToken()
+export const postUpdatedUserSettings = async (username: string, settingKey: string, settingValue: string) => {
+  const userSettingObj: UserSettingObject = { username, settingKey, settingValue };
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}`, }
-    }
-    const userSettingObj = {
-      username: loginUserName,
-      settingKey: key,
-      settingValue: value
-    }
-    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj , config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * User Upload of images such as jpg/webp/png requiring:
@@ -358,67 +355,67 @@ export const postUpdatedUserSettings = async (loginUserName, key, value) => {
  * @param {*} postContent
  * @returns
  */
-export const postFoodItemImg = async (event, foodItemId) => {
-  setToken()
+export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>, foodItemId: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data' }
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+    };
+    if (!event.target.files) {
+      console.error('No file provided in image upload');
+      return;
     }
     let file = event.target.files[0];
     if (file?.size > 1 * 1024 * 1024) {
-      return new FileSizeError('File size is limited to 1MB.')
+      return new FileSizeError('File size is limited to 1MB.');
     }
     if (file?.type !== 'image/png' && file?.type !== 'image/jpeg' && file?.type !== 'image/webp') {
       return new axios.AxiosError('Images must be uploaded as either png, jpeg or webp!');
     }
     const formData = new FormData();
     formData.append('foodItemImg', file);
-    formData.append("id", foodItemId);
-    const response = await axios.post(`${baseUrl}/upload/food_item_img`, formData, config)
-    return response
+    formData.append('id', foodItemId);
+    const response = await axios.post(`${baseUrl}/upload/food_item_img`, formData, config);
+    return response;
   } catch (error) {
     console.error(error);
   }
-}
+};
 /**
  * performs db insertion of provided object
  * @param {*} foodItemDiscountObj with fields: id,price,startDate,endDate
  * @returns
  */
-export const postFoodItemDiscount = async foodItemDiscountObj => {
-  setToken()
+export const postFoodItemDiscount = async (foodItemDiscountObj: FoodItemDiscount) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(`${baseUrl}/food_item_discount`, foodItemDiscountObj, config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    };
+    const response = await axios.post(`${baseUrl}/food_item_discount`, foodItemDiscountObj, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /**
  * performs db insertion of provided object
  * @param {*} foodItemObj with fields: foodItem, brand, store, mainMacro, kcalAmount, weight, price, lastUpdate
  * @returns dimension_key of inserted object or ERROR
  */
-export const postNewFoodItem = async foodItemObj => {
-  setToken()
+export const postNewFoodItem = async (foodItemObj: FoodItem) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(`${baseUrl}/food_item`, foodItemObj, config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    };
+    const response = await axios.post(`${baseUrl}/food_item`, foodItemObj, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
-
+};
 
 /**
  * performs db insertion of provided object
@@ -426,20 +423,18 @@ export const postNewFoodItem = async foodItemObj => {
  * @returns id of inserted investment row in results
  * id(fk) of inserted taxes row in taxesResults or ERROR
  */
-export const postInvestments = async investmentAndTaxesObject => {
-  setToken()
+export const postInvestments = async (investmentAndTaxesObject: InvestmentAndTaxes) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(`${baseUrl}/investments`, investmentAndTaxesObject, config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    };
+    const response = await axios.post(`${baseUrl}/investments`, investmentAndTaxesObject, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
-
+};
 
 /**
  * performs db insertion of provided object
@@ -447,19 +442,18 @@ export const postInvestments = async investmentAndTaxesObject => {
  * @returns id of inserted dividend row in results
  * id(fk) of inserted taxes row in taxesResults or ERROR
  */
-export const postDividends = async dividendsObject => {
-  setToken()
+export const postDividends = async (dividendsObject: DividendsRelatedInvestmentsAndTaxes) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(`${baseUrl}/investment_dividends`, dividendsObject, config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    };
+    const response = await axios.post(`${baseUrl}/investment_dividends`, dividendsObject, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /***
  *    ______ _____ _      _____ _____ _____
@@ -473,40 +467,37 @@ export const postDividends = async dividendsObject => {
 
 /**
  * deletes server side images and removes filepath entry from db
- * @param {*} filepath
  * @returns
  */
-export const deleteFoodItemImg = async id => {
-  setToken()
+export const deleteFoodItemImg = async (id: number) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config)
-    return response
+    };
+    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
-
+};
 
 /**
  * deletes the corresponding food item via its id from db
- * @param {*} filepath
  * @returns
  */
-export const deleteFoodItem = async id => {
-  setToken()
+export const deleteFoodItem = async (id: number) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.delete(`${baseUrl}/food_item/${id}`, config)
-    return response.data
+    };
+    const response = await axios.delete(`${baseUrl}/food_item/${id}`, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /***
  *     _   _____________  ___ _____ _____
@@ -517,18 +508,18 @@ export const deleteFoodItem = async id => {
  *     \___/\_|   |___/ \_| |_/\_/ \____/
  */
 
-export const updateFoodItemPrice = async (id, newObject) => {
-  setToken()
+export const updateFoodItemPrice = async (id: number, newObject: FoodItemUpdateObject) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.put(`${baseUrl}/food_item/price/${id}`, newObject, config)
-    return response.data
+    };
+    const response = await axios.put(`${baseUrl}/food_item/price/${id}`, newObject, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 /***
  *     _____     _        _____                            _           _    _   _       _
@@ -547,19 +538,18 @@ export const updateFoodItemPrice = async (id, newObject) => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postFixedCostTsv = async fixedCostsTsvInput => {
-  setToken()
+export const postFixedCostTsv = async (fixedCostsTsvInput: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'text/plain',}
-    }
-    const response = await axios.post(`${baseUrl}/texttsv/fixed_costs`, fixedCostsTsvInput, config)
-    return response
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
+    };
+    const response = await axios.post(`${baseUrl}/texttsv/fixed_costs`, fixedCostsTsvInput, config);
+    return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 /** receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:
  * description,  category,  store cost,  date,  is_planned,  contains_indulgence, sensitivities
@@ -567,20 +557,18 @@ export const postFixedCostTsv = async fixedCostsTsvInput => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postVariableExpensesTsv = async variableExpensesTsvInput => {
-  setToken()
+export const postVariableExpensesTsv = async (variableExpensesTsvInput: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'text/plain',}
-    }
-    const response = await axios.post(`${baseUrl}/texttsv/variable_expenses`, variableExpensesTsvInput, config)
-    return response
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
+    };
+    const response = await axios.post(`${baseUrl}/texttsv/variable_expenses`, variableExpensesTsvInput, config);
+    return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
-
+};
 
 /** receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:
@@ -589,19 +577,18 @@ export const postVariableExpensesTsv = async variableExpensesTsvInput => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
-  setToken()
+export const postFixedIncomeTsv = async (fixedIncomeTsvInput: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'text/plain',}
-    }
-    const response = await axios.post(`${baseUrl}/texttsv/fixed_income`, fixedIncomeTsvInput, config)
-    return response
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
+    };
+    const response = await axios.post(`${baseUrl}/texttsv/fixed_income`, fixedIncomeTsvInput, config);
+    return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 /** receives TSV as input from admin
  * MANDATORY HEADER STRUCTURE:
@@ -610,19 +597,18 @@ export const postFixedIncomeTsv = async fixedIncomeTsvInput => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postInvestmentsTsv = async investmentsTsvInput => {
-  setToken()
+export const postInvestmentsTsv = async (investmentsTsvInput: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'text/plain',}
-    }
-    const response = await axios.post(`${baseUrl}/texttsv/investments`, investmentsTsvInput, config)
-    return response
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
+    };
+    const response = await axios.post(`${baseUrl}/texttsv/investments`, investmentsTsvInput, config);
+    return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 /**
  * receives TSV as input from admin
@@ -632,19 +618,18 @@ export const postInvestmentsTsv = async investmentsTsvInput => {
  * @returns INSERT INTO statements for manual validation and loading of db table
  * or ERROR data
  */
-export const postAllFoodItemTsv = async foodItemTsvInput => {
-  setToken()
+export const postAllFoodItemTsv = async (foodItemTsvInput: string) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'text/plain',}
-    }
-    const response = await axios.post(`${baseUrl}/texttsv/new_food_items`, foodItemTsvInput, config)
-    return response
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
+    };
+    const response = await axios.post(`${baseUrl}/texttsv/new_food_items`, foodItemTsvInput, config);
+    return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 /***
  *     _____ _____ _____ _____
@@ -656,61 +641,60 @@ export const postAllFoodItemTsv = async foodItemTsvInput => {
  */
 
 const getTest = async () => {
-  setToken()
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.get(baseUrl, config)
-    return response.data
+    };
+    const response = await axios.get(baseUrl, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
-const postTest = async newObject => {
-  setToken()
+const postTest = async (newObject: any) => {
+  setToken();
   try {
     const config = {
-      headers: { Authorization: `Bearer ${token}` ,
-      'Content-Type': 'application/json',}
-    }
-    const response = await axios.post(baseUrl, newObject, config)
-    return response.data
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    };
+    const response = await axios.post(baseUrl, newObject, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
-const putTest = async (id, newObject) => {
-  setToken()
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
-    return response
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const deleteTest = async id => {
-  setToken()
+const putTest = async (id: number, newObject: any) => {
+  setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-    }
-    const response = await axios.delete(`${baseUrl}/${id}`, config)
-    return response
+    };
+    const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
+
+const deleteTest = async (id: number) => {
+  setToken();
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axios.delete(`${baseUrl}/${id}`, config);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export default {
   getTest,
   postTest,
   putTest,
   deleteTest
-}
+};

@@ -162,9 +162,9 @@ export default function ContentCardFoodPrices(props) {
   const handleImgDeletion = async (event) => {
     event.preventDefault();
     const response = await deleteFoodItemImg(foodItemId);
-    if (response.data?.results[0]?.filepath) {
+    if (response.results[0]?.filepath) {
       // // User Notification via Snackbar
-      setNotificationMessage(`Image successfully deleted from path: ${response.data.results[0].filepath}`);
+      setNotificationMessage(`Image successfully deleted from path: ${response.results[0].filepath}`);
       setNotificationSeverity('info');
       setImgFilePath(null);
       setOpen(true);

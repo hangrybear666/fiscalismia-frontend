@@ -23,6 +23,7 @@ import getUnicodeFlagIcon from 'country-flag-icons/unicode';
 import { postUpdatedUserSettings } from '../../services/pgConnections';
 import { useAuth } from '../../services/userAuthentication';
 import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
+import { AuthInfo } from '../../types/custom/customTypes';
 
 interface SettingsAndProfileAppBarProps {
   onDrawerToggle: () => void;

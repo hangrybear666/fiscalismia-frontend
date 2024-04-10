@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { invalidateSession, useAuth } from '../../services/userAuthentication';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { paths } from '../../resources/router_navigation_paths';
+import { AuthInfo } from '../../types/custom/customTypes';
 
 export default function LogoutBtn({ fullWidth }: { fullWidth: boolean }) {
   const navigate = useNavigate();

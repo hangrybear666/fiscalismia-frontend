@@ -17,14 +17,17 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { resourceProperties as res, investmentInputCategories as selectionCategories } from '../../resources/resource_properties';
+import {
+  resourceProperties as res,
+  investmentInputCategories as selectionCategories
+} from '../../resources/resource_properties';
 import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-export default function InputInvestmentTaxesModal( props ) {
+export default function InputInvestmentTaxesModal(props) {
   const { palette } = useTheme();
-  const { refreshParent } = props
+  const { refreshParent } = props;
   const [open, setOpen] = React.useState(false);
   // Validation
   const [isUnitPriceValidationError, setIsUnitPriceValidationError] = React.useState(false);
@@ -53,14 +56,16 @@ export default function InputInvestmentTaxesModal( props ) {
   const [isin, setIsin] = React.useState('');
   const [isOrderTypeSale, setIsOrderTypeSale] = React.useState(false);
   const [profitAmt, setProfitAmt] = React.useState('');
-  const [pctTaxed, setPctTaxed] = React.useState(Number(100.00).toFixed(2));
+  const [pctTaxed, setPctTaxed] = React.useState(Number(100.0).toFixed(2));
 
   // Selection
-  const [investmentTypeSelectItems,] = React.useState(selectionCategories.ARRAY_INVESTMENT_TYPE);
-  const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(selectionCategories.ARRAY_INVESTMENT_TYPE[0]);
-  const [marketplaceSelectItems,] = React.useState(selectionCategories.ARRAY_MARKETPLACE);
+  const [investmentTypeSelectItems] = React.useState(selectionCategories.ARRAY_INVESTMENT_TYPE);
+  const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(
+    selectionCategories.ARRAY_INVESTMENT_TYPE[0]
+  );
+  const [marketplaceSelectItems] = React.useState(selectionCategories.ARRAY_MARKETPLACE);
   const [selectedMarketplace, setSelectedMarketplace] = React.useState(selectionCategories.ARRAY_MARKETPLACE[0]);
-  const [orderTypeArray,] = React.useState(new Array(selectionCategories.ARRAY_ORDER_TYPE));
+  const [orderTypeArray] = React.useState(new Array(selectionCategories.ARRAY_ORDER_TYPE));
   const [selectedOrderType, setSelectedOrderType] = React.useState(selectionCategories.ARRAY_ORDER_TYPE[0]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -74,13 +79,13 @@ export default function InputInvestmentTaxesModal( props ) {
     bgcolor: 'background.paper',
     border: `2px solid ${palette.secondary.main}`,
     boxShadow: 24,
-    p: 4,
+    p: 4
   };
 
   /**
    * queries DB for investment and taxes insertion via REST API
    */
-  const saveUserInput = async() => {
+  const saveUserInput = async () => {
     const investmentAndTaxesObject = {
       executionType: selectedOrderType,
       description: description.trim(),
@@ -88,250 +93,253 @@ export default function InputInvestmentTaxesModal( props ) {
       investmentType: selectedInvestmentType,
       marketplace: selectedMarketplace,
       units: parseInt(units),
-      pricePerUnit: Number(unitPrice).toFixed(2),
-      totalPrice: (parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2),
-      fees: Number(fees).toFixed(2),
+      pricePerUnit: parseFloat(Number(unitPrice).toFixed(2)),
+      totalPrice: parseFloat((parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2)),
+      fees: parseFloat(Number(fees).toFixed(2)),
       executionDate: executionDate,
       profitAmount: isOrderTypeSale ? profitAmt : null,
       pctOfProfitTaxed: isOrderTypeSale ? pctTaxed : null
-    }
-    const response = await postInvestments(investmentAndTaxesObject)
+    };
+    const response = await postInvestments(investmentAndTaxesObject);
     if (response?.results[0]?.id) {
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log("SUCCESSFULLY added investments to DB:")// TODO mit Growl und ID ersetzen
-      console.log(response.results[0])
+      console.log('SUCCESSFULLY added investments to DB:'); // TODO mit Growl und ID ersetzen
+      console.log(response.results[0]);
       if (selectedOrderType === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY && response?.taxesResults[0]?.id) {
-        console.log("SUCCESSFULLY added investment_taxes to DB:")// TODO mit Growl und ID ersetzen
-        console.log(response.taxesResults[0])
+        console.log('SUCCESSFULLY added investment_taxes to DB:'); // TODO mit Growl und ID ersetzen
+        console.log(response.taxesResults[0]);
       }
-      setOpen(false)
+      setOpen(false);
       // to refresh parent's table based on added food item after DB insertion
-      refreshParent(response.results[0].id)
+      refreshParent(response.results[0].id);
     } else {
       // TODO User Notification
-      console.error(response)
+      console.error(response);
     }
-  }
+  };
 
- const validateInput = (e) => {
-   e.preventDefault();
-   let errorPresent = false;
+  const validateInput = (e) => {
+    e.preventDefault();
+    let errorPresent = false;
     // Fees Validation
     if (!isNumeric(fees)) {
-      errorPresent = true
-      setIsFeeValidationError(true)
-      setFeeValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG)
+      errorPresent = true;
+      setIsFeeValidationError(true);
+      setFeeValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
-      setIsFeeValidationError(false)
-      setFeeValidationErrorMessage('')
+      setIsFeeValidationError(false);
+      setFeeValidationErrorMessage('');
     }
     // Price Validation
     if (!isNumeric(unitPrice) || Number(unitPrice).toFixed(0) < 0) {
-      errorPresent = true
-      setIsUnitPriceValidationError(true)
-      setUnitPriceValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG)
+      errorPresent = true;
+      setIsUnitPriceValidationError(true);
+      setUnitPriceValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
-      setIsUnitPriceValidationError(false)
-      setUnitPriceValidationErrorMessage('')
+      setIsUnitPriceValidationError(false);
+      setUnitPriceValidationErrorMessage('');
     }
     // Generic Date Validation
     if (!dateValidation(executionDate).isValid) {
-      errorPresent = true
-      setIsDateValidationError(true)
-      setDateErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG)
+      errorPresent = true;
+      setIsDateValidationError(true);
+      setDateErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
-      setIsDateValidationError(false)
-      setDateErrorMessage('')
+      setIsDateValidationError(false);
+      setDateErrorMessage('');
     }
     // Units
     if (!isNumeric(units) || Number(units).toFixed(0) < 0) {
-      errorPresent = true
-      setIsUnitsValidationError(true)
-      setUnitsValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG)
+      errorPresent = true;
+      setIsUnitsValidationError(true);
+      setUnitsValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG);
     } else {
-      setIsUnitsValidationError(false)
-      setUnitsValidationErrorMessage('')
+      setIsUnitsValidationError(false);
+      setUnitsValidationErrorMessage('');
     }
     // ISIN
-    if(!isin || isin == '' || isin?.length != 12 || !stringAlphabeticOnly(isin.substring(0,2))) {
-      errorPresent = true
-      setIsIsinValidationError(true)
-      setIsinValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG)
+    if (!isin || isin == '' || isin?.length != 12 || !stringAlphabeticOnly(isin.substring(0, 2))) {
+      errorPresent = true;
+      setIsIsinValidationError(true);
+      setIsinValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG);
     } else {
-      setIsIsinValidationError(false)
-      setIsinValidationErrorMessage('')
+      setIsIsinValidationError(false);
+      setIsinValidationErrorMessage('');
     }
     // description
-    if(!description || description == '' || description?.length < 5 || description?.length > 50) {
-      errorPresent = true
-      setIsDescriptionValidationError(true)
-      setDescriptionValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG)
+    if (!description || description == '' || description?.length < 5 || description?.length > 50) {
+      errorPresent = true;
+      setIsDescriptionValidationError(true);
+      setDescriptionValidationErrorMessage(
+        res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG
+      );
     } else {
-      setIsDescriptionValidationError(false)
-      setDescriptionValidationErrorMessage('')
+      setIsDescriptionValidationError(false);
+      setDescriptionValidationErrorMessage('');
     }
     // ONLY VALIDATE FOR SALES
     if (isOrderTypeSale) {
       // Pct Taxed Validation
-      if (!isNumeric(pctTaxed) || Number(pctTaxed).toFixed(2) > 100.00 || Number(pctTaxed).toFixed(0) < 0) {
-        errorPresent = true
-        setIsPctTaxedValidationError(true)
-        setPctTaxedValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG)
+      if (!isNumeric(pctTaxed) || Number(pctTaxed).toFixed(2) > 100.0 || Number(pctTaxed).toFixed(0) < 0) {
+        errorPresent = true;
+        setIsPctTaxedValidationError(true);
+        setPctTaxedValidationErrorMessage(
+          res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG
+        );
       } else {
-        setIsPctTaxedValidationError(false)
-        setPctTaxedValidationErrorMessage('')
+        setIsPctTaxedValidationError(false);
+        setPctTaxedValidationErrorMessage('');
       }
       // Profit Amount
       if (!isNumeric(profitAmt)) {
-        errorPresent = true
-        setIsProfitAmtValidationError(true)
-        setProfitAmtValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG)
+        errorPresent = true;
+        setIsProfitAmtValidationError(true);
+        setProfitAmtValidationErrorMessage(
+          res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG
+        );
       } else {
-        setIsProfitAmtValidationError(false)
-        setProfitAmtValidationErrorMessage('')
+        setIsProfitAmtValidationError(false);
+        setProfitAmtValidationErrorMessage('');
       }
     }
     if (errorPresent) {
       // Errors present => return
-      return
+      return;
     } else {
       // Errors missing => save to db
-      saveUserInput()
+      saveUserInput();
     }
-  }
+  };
 
   const inputChangeListener = (e) => {
     e.preventDefault();
     switch (e.target.id) {
-      case "unit_price":
-        setUnitPrice(e.target.value.replace(',','.'))
+      case 'unit_price':
+        setUnitPrice(e.target.value.replace(',', '.'));
         break;
-      case "fees":
-        setFees(e.target.value.replace(',','.'))
+      case 'fees':
+        setFees(e.target.value.replace(',', '.'));
         break;
-      case "execution_date":
-        setExecutionDate(e.target.value)
+      case 'execution_date':
+        setExecutionDate(e.target.value);
         break;
-      case "units":
-        setUnits(e.target.value.replace('.','').replace(',',''))
+      case 'units':
+        setUnits(e.target.value.replace('.', '').replace(',', ''));
         break;
-      case "description":
-        setDescription(e.target.value)
+      case 'description':
+        setDescription(e.target.value);
         break;
-      case "isin":
-        setIsin(e.target.value.replace('-',''))
+      case 'isin':
+        setIsin(e.target.value.replace('-', ''));
         break;
-      case "profit_amt":
-        setProfitAmt(e.target.value.replace(',','.'))
+      case 'profit_amt':
+        setProfitAmt(e.target.value.replace(',', '.'));
         break;
-      case "pct_taxed":
-        setPctTaxed(e.target.value.replace(',','.'))
+      case 'pct_taxed':
+        setPctTaxed(e.target.value.replace(',', '.'));
         break;
-
     }
-  }
+  };
 
   const handleInvestmentTypeSelect = (selection) => {
-    setSelectedInvestmentType(selection)
-  }
+    setSelectedInvestmentType(selection);
+  };
 
   const handleMarketplaceSelect = (selection) => {
-    setSelectedMarketplace(selection)
-  }
+    setSelectedMarketplace(selection);
+  };
 
   const handleOrderTypeSelect = (event, newValue) => {
     if (newValue === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
-      setIsOrderTypeSale(true)
+      setIsOrderTypeSale(true);
     } else {
-      setIsOrderTypeSale(false)
+      setIsOrderTypeSale(false);
     }
-    setSelectedOrderType(newValue)
-  }
+    setSelectedOrderType(newValue);
+  };
 
   return (
     <>
-    <Button
+      <Button
         onClick={handleOpen}
         variant="outlined"
         color="secondary"
-        sx={{ borderRadius:0,
+        sx={{
+          borderRadius: 0,
           border: `1px solid  ${palette.border.dark}`,
-          boxShadow: palette.mode === 'light' ?  `3px 3px 8px 2px ${palette.grey[700]}` : '',
-          mb:0.8
-            }}
-          startIcon={<AddCircleIcon />}
-          >
+          boxShadow: palette.mode === 'light' ? `3px 3px 8px 2px ${palette.grey[700]}` : '',
+          mb: 0.8
+        }}
+        startIcon={<AddCircleIcon />}
+      >
         {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN_BUTTON}
       </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
+      <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-        <Box>
+          <Box>
             {orderTypeArray
-            ? orderTypeArray.map((parent, index) => {
-              return (
-              <ToggleButtonGroup
-                key={index}
-                variant="contained"
-                exclusive
-                value={selectedOrderType}
-                onChange={handleOrderTypeSelect}
-                sx={{mt:0.5,mb:1, justifyContent:'center', display:'flex',}}
-              >
-                {parent.map((child, index) => {
+              ? orderTypeArray.map((parent, index) => {
                   return (
-                  <ToggleButton
-                    key={index}
-                    size="medium"
-                    value={child}
-                    selected={child===selectedOrderType}
-                    sx={{
-                      borderRadius:0,
-                      paddingX:11.00,
-                      '&:hover': {
-                        bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
-                        color: palette.common.white,
-                      },
-                      '&.Mui-selected:hover': {
-                        bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500],
-                      },
-                      '&.Mui-selected': {
-                        bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
-                        color: palette.mode === 'light' ? palette.common.white : palette.common.black,
-                        boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
-                        transition: 'box-shadow 0.2s linear 0s'},
-                      '&.Mui-disabled' : {
-                        color: palette.text.disabled
-                      },
-                    }}
-                  >
-                    {child}
-                  </ToggleButton>
-                  )
-                }
-                )}
-              </ToggleButtonGroup>
-              )
-            })
+                    <ToggleButtonGroup
+                      key={index}
+                      variant="contained"
+                      exclusive
+                      value={selectedOrderType}
+                      onChange={handleOrderTypeSelect}
+                      sx={{ mt: 0.5, mb: 1, justifyContent: 'center', display: 'flex' }}
+                    >
+                      {parent.map((child, index) => {
+                        return (
+                          <ToggleButton
+                            key={index}
+                            size="medium"
+                            value={child}
+                            selected={child === selectedOrderType}
+                            sx={{
+                              borderRadius: 0,
+                              paddingX: 11.0,
+                              '&:hover': {
+                                bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
+                                color: palette.common.white
+                              },
+                              '&.Mui-selected:hover': {
+                                bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500]
+                              },
+                              '&.Mui-selected': {
+                                bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
+                                color: palette.mode === 'light' ? palette.common.white : palette.common.black,
+                                boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
+                                transition: 'box-shadow 0.2s linear 0s'
+                              },
+                              '&.Mui-disabled': {
+                                color: palette.text.disabled
+                              }
+                            }}
+                          >
+                            {child}
+                          </ToggleButton>
+                        );
+                      })}
+                    </ToggleButtonGroup>
+                  );
+                })
               : null}
           </Box>
           {/* INVESTMENT TYPE */}
-          {investmentTypeSelectItems
-          ? <Box sx={{ ml:1, mr:0, mt:2.5 }}>
+          {investmentTypeSelectItems ? (
+            <Box sx={{ ml: 1, mr: 0, mt: 2.5 }}>
               <SelectDropdown
-                sx={{ m:1 }}
+                sx={{ m: 1 }}
                 selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT}
                 selectItems={investmentTypeSelectItems}
                 selectedValue={selectedInvestmentType}
                 handleSelect={handleInvestmentTypeSelect}
               />
             </Box>
-          : null}
+          ) : null}
           {/* MARKETPLACE SELECTION */}
-          {marketplaceSelectItems
-          ? <Box sx={{ ml:1, mr:0, mt:2.5, mb:1.5 }}>
+          {marketplaceSelectItems ? (
+            <Box sx={{ ml: 1, mr: 0, mt: 2.5, mb: 1.5 }}>
               <SelectDropdown
                 selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MARKETPLACE_SELECT}
                 selectItems={marketplaceSelectItems}
@@ -339,19 +347,25 @@ export default function InputInvestmentTaxesModal( props ) {
                 handleSelect={handleMarketplaceSelect}
               />
             </Box>
-          : null}
+          ) : null}
           {/* DESCRIPTION */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="description">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_DESCRIPTION}</InputLabel>
+            <InputLabel htmlFor="description">
+              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_DESCRIPTION}
+            </InputLabel>
             <Input
               id="description"
               value={description}
               onChange={inputChangeListener}
               type="text"
               error={isDescriptionValidationError}
-              startAdornment={<InputAdornment position="start"><DriveFileRenameOutlineIcon/></InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">
+                  <DriveFileRenameOutlineIcon />
+                </InputAdornment>
+              }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{descriptionValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{descriptionValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* ISIN */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -362,9 +376,13 @@ export default function InputInvestmentTaxesModal( props ) {
               onChange={inputChangeListener}
               type="text"
               error={isIsinValidationError}
-              startAdornment={<InputAdornment position="start"><QueryStatsIcon/></InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">
+                  <QueryStatsIcon />
+                </InputAdornment>
+              }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{isinValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{isinValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* UNITS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -375,22 +393,32 @@ export default function InputInvestmentTaxesModal( props ) {
               onChange={inputChangeListener}
               type="text"
               error={isUnitsValidationError}
-              startAdornment={<InputAdornment position="start"><TagIcon/></InputAdornment>}
-              />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{unitsValidationErrorMessage}</FormHelperText>
+              startAdornment={
+                <InputAdornment position="start">
+                  <TagIcon />
+                </InputAdornment>
+              }
+            />
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{unitsValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* UNIT PRICE */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="unit_price">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE}</InputLabel>
+            <InputLabel htmlFor="unit_price">
+              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE}
+            </InputLabel>
             <Input
               id="unit_price"
               value={unitPrice}
               onChange={inputChangeListener}
               type="text"
               error={isUnitPriceValidationError}
-              startAdornment={<InputAdornment position="start"><EuroSymbolIcon/></InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">
+                  <EuroSymbolIcon />
+                </InputAdornment>
+              }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{unitPriceValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{unitPriceValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* FEES */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -401,43 +429,61 @@ export default function InputInvestmentTaxesModal( props ) {
               onChange={inputChangeListener}
               type="text"
               error={isFeeValidationError}
-              startAdornment={<InputAdornment position="start"><EuroSymbolIcon/></InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">
+                  <EuroSymbolIcon />
+                </InputAdornment>
+              }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{feeValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{feeValidationErrorMessage}</FormHelperText>
           </FormControl>
-          { isOrderTypeSale ?
-          <>
-            {/* PROFIT AMOUNT */}
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <InputLabel htmlFor="profit_amt">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PROFIT_AMT}</InputLabel>
-              <Input
-                id="profit_amt"
-                value={profitAmt}
-                onChange={inputChangeListener}
-                type="text"
-                error={isProfitAmtValidationError}
-                startAdornment={<InputAdornment position="start"><MoneyIcon/></InputAdornment>}
-              />
-              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{profitAmtValidationErrorMessage}</FormHelperText>
-            </FormControl>
-            {/* PERCENTAGE OF PROFITS TAXED */}
-            <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <InputLabel htmlFor="pct_taxed">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}</InputLabel>
-              <Input
-                id="pct_taxed"
-                value={pctTaxed}
-                onChange={inputChangeListener}
-                type="text"
-                error={isPctTaxedValidationError}
-                startAdornment={<InputAdornment position="start"><PercentIcon/></InputAdornment>}
-              />
-              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{pctTaxedValidationErrorMessage}</FormHelperText>
-            </FormControl>
-          </>
-          : null}
+          {isOrderTypeSale ? (
+            <>
+              {/* PROFIT AMOUNT */}
+              <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                <InputLabel htmlFor="profit_amt">
+                  {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PROFIT_AMT}
+                </InputLabel>
+                <Input
+                  id="profit_amt"
+                  value={profitAmt}
+                  onChange={inputChangeListener}
+                  type="text"
+                  error={isProfitAmtValidationError}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <MoneyIcon />
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{profitAmtValidationErrorMessage}</FormHelperText>
+              </FormControl>
+              {/* PERCENTAGE OF PROFITS TAXED */}
+              <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                <InputLabel htmlFor="pct_taxed">
+                  {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}
+                </InputLabel>
+                <Input
+                  id="pct_taxed"
+                  value={pctTaxed}
+                  onChange={inputChangeListener}
+                  type="text"
+                  error={isPctTaxedValidationError}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <PercentIcon />
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{pctTaxedValidationErrorMessage}</FormHelperText>
+              </FormControl>
+            </>
+          ) : null}
           {/* EXECUTION DATE */}
-          <FormControl fullWidth sx={{ marginX: 1, mt:2 }} variant="standard">
-            <InputLabel htmlFor="execution_date">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE}</InputLabel>
+          <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
+            <InputLabel htmlFor="execution_date">
+              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE}
+            </InputLabel>
             <Input
               id="execution_date"
               value={executionDate}
@@ -445,21 +491,23 @@ export default function InputInvestmentTaxesModal( props ) {
               type="date"
               error={isDateValidationError}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)'}}>{dateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{dateErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button
             onClick={validateInput}
-            sx={{ borderRadius:0,
-                  margin:'0 auto',
-                  mt:2,
-                  ml:1,
-                  border: `1px solid ${palette.border.dark}`,
-                  width:'100%',
-                  boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)',
-                  }}
+            sx={{
+              borderRadius: 0,
+              margin: '0 auto',
+              mt: 2,
+              ml: 1,
+              border: `1px solid ${palette.border.dark}`,
+              width: '100%',
+              boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)'
+            }}
             variant="contained"
-            endIcon={<FileDownloadDoneIcon />}>
+            endIcon={<FileDownloadDoneIcon />}
+          >
             {res.SAVE}
           </Button>
         </Box>

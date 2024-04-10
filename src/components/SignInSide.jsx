@@ -14,7 +14,7 @@ import { IconButton } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { resourceProperties as res, localStorageKeys } from '../resources/resource_properties'
+import { resourceProperties as res, localStorageKeys } from '../resources/resource_properties';
 import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
 import CreateAccountModal from './minor/Modal_CreateAccount';
@@ -38,57 +38,68 @@ const theme = createTheme({
     primary: {
       light: '#63ccff',
       main: '#63ccff',
-      dark: '#006db3',
+      dark: '#006db3'
     },
     secondary: {
       light: '#68456e',
       main: '#bd9fc2',
-      dark: '#d3bcd6',
-    },
-  },
+      dark: '#d3bcd6'
+    }
+  }
 });
 
 export default function SignInSide() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [authenticated, setAuthenticated] = useState(window.localStorage.getItem(localStorageKeys.token)  === "true" ?  true : false)
-  const navigate = useNavigate()
-  const { loginUserName, setToken, setLoginUserName } = useAuth()
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [authenticated, setAuthenticated] = useState(
+    window.localStorage.getItem(localStorageKeys.token) === 'true' ? true : false
+  );
+  const navigate = useNavigate();
+  const { loginUserName, setToken, setLoginUserName } = useAuth();
   // After successfully logging in and authenticating the token, user settings are queried from the DB and redirect to Homepage is triggered
   useEffect(() => {
-    const getUserSettings = async() => {
+    const getUserSettings = async () => {
       try {
         const response = await getUserSpecificSettings(loginUserName);
         if (response?.results?.length > 0) {
           let userSettingsMap = new Map();
-          response.results.forEach(e=> {
-            userSettingsMap.set(e.setting_key, e.setting_value)
-          })
-          window.localStorage.setItem(localStorageKeys.selectedMode, userSettingsMap.get(localStorageKeys.selectedMode))
-          window.localStorage.setItem(localStorageKeys.selectedLanguage, userSettingsMap.get(localStorageKeys.selectedLanguage))
-          window.localStorage.setItem(localStorageKeys.selectedPalette, userSettingsMap.get(localStorageKeys.selectedPalette))
+          response.results.forEach((e) => {
+            userSettingsMap.set(e.setting_key, e.setting_value);
+          });
+          window.localStorage.setItem(
+            localStorageKeys.selectedMode,
+            userSettingsMap.get(localStorageKeys.selectedMode)
+          );
+          window.localStorage.setItem(
+            localStorageKeys.selectedLanguage,
+            userSettingsMap.get(localStorageKeys.selectedLanguage)
+          );
+          window.localStorage.setItem(
+            localStorageKeys.selectedPalette,
+            userSettingsMap.get(localStorageKeys.selectedPalette)
+          );
         }
       } finally {
         navigate(paths.APP_ROOT_PATH, { replace: true });
       }
-    }
+    };
     if (authenticated) {
       getUserSettings();
     }
-  }, [authenticated])
+  }, [authenticated]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const user = { username:username, password:password }
-    const response = await login(user)
+    const user = { username: username, email: null, password: password };
+    const response = await login(user);
     if (isJwtToken(response)) {
-      window.localStorage.setItem(localStorageKeys.token, response)
-      window.localStorage.setItem(localStorageKeys.loginUserName, username)
-      setLoginUserName(username)
-      setToken(response)
+      window.localStorage.setItem(localStorageKeys.token, response);
+      window.localStorage.setItem(localStorageKeys.loginUserName, username);
+      setLoginUserName(username);
+      setToken(response);
       if (isUserTokenValid(response, username)) {
-        window.localStorage.setItem(localStorageKeys.authenticated, "true")
-        setAuthenticated(true)
+        window.localStorage.setItem(localStorageKeys.authenticated, 'true');
+        setAuthenticated(true);
       }
     } else {
       // TODO notify user of failed login
@@ -98,32 +109,35 @@ export default function SignInSide() {
   const inputChangeListener = (e) => {
     e.preventDefault();
     switch (e.target.id) {
-      case "username":
-        setUsername(e.target.value)
+      case 'username':
+        setUsername(e.target.value);
         break;
-      case "password":
-        setPassword(e.target.value)
+      case 'password':
+        setPassword(e.target.value);
         break;
     }
-  }
+  };
 
   // because user settings are still being loaded after loginUserName has been set, only display this page after a timeout
   // if useNavigate has already forwarded to a different page, nothing is rendered for the user
   if (window.localStorage.getItem(localStorageKeys.loginUserName)) {
-    setTimeout(function(){
+    setTimeout(function () {
       return (
         <>
           <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName))}</p>
           <IconButton
             color="primary"
             variant="text"
-            onClick={() => {navigate(paths.APP_ROOT_PATH, { replace: true })}}>
+            onClick={() => {
+              navigate(paths.APP_ROOT_PATH, { replace: true });
+            }}
+          >
             <HomeIcon />
             {res.HOME}
           </IconButton>
         </>
-      )
-  }, 2000);
+      );
+    }, 2000);
   }
 
   return (
@@ -138,10 +152,9 @@ export default function SignInSide() {
           sx={{
             backgroundImage: 'url(https://source.unsplash.com/random/?forest)',
             backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundPosition: 'center'
           }}
         />
         <Grid xs={12} md={6} lg={4} component={Paper} elevation={6} square>
@@ -152,10 +165,10 @@ export default function SignInSide() {
               mt: '20vh',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
-            <Avatar sx={{ m: 1,  bgcolor: 'primary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -188,11 +201,11 @@ export default function SignInSide() {
                 onClick={handleLogin}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 1, mb:2.5, bgcolor: 'primary.main'}}
+                sx={{ mt: 1, mb: 2.5, bgcolor: 'primary.main' }}
               >
                 {res.LOGIN}
               </Button>
-              <CreateAccountModal/>
+              <CreateAccountModal />
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
