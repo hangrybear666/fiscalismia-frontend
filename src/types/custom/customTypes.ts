@@ -92,7 +92,7 @@ export type FoodItem = {
   last_update: Date; // DIFFERENT FROM BACKEND WHERE IT IS A STRING
 };
 
-type TwelveCharacterString = `${string & { length: 12 }}`;
+export type TwelveCharacterString = `${string & { length: 12 }}`;
 /**
  * Complex Type for inserting into 3 tables that have relations to each other.
  * @table public.investment_dividends, public.investment_taxes, public.bridge_investment_dividends
@@ -112,7 +112,7 @@ export type DividendsRelatedInvestmentsAndTaxes = {
   investmentIdsAndRemainingUnits: {
     investmentId: number;
     remainingUnits: number;
-  };
+  }[];
 };
 
 /**

@@ -3,12 +3,19 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SelectDropdown( { selectLabel, selectItems, selectedValue, handleSelect } ) {
+interface SelectDropdownProps {
+  selectLabel: string,
+  selectItems: string[],
+  selectedValue: string,
+  handleSelect: (selection: string) => void
+}
 
-  const handleChange = (event) => {
-    handleSelect(event.target.value);
+export default function SelectDropdown( { selectLabel, selectItems, selectedValue, handleSelect } : SelectDropdownProps ) {
+
+  const handleChange = (event: SelectChangeEvent) => {
+    handleSelect(event.target.value as string);
   };
 
   return (

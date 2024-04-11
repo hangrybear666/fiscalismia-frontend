@@ -14,11 +14,13 @@ declare module '@mui/material/styles' {
   interface Palette {
     menu: Palette['primary'];
     header: Palette['primary'];
+    border: Palette['primary'];
   }
 
   interface PaletteOptions {
     menu?: PaletteOptions['primary'];
     header?: PaletteOptions['primary'];
+    border?: PaletteOptions['primary'];
   }
 }
 

@@ -24,8 +24,13 @@ import {
 import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { TwelveCharacterString } from '../../types/custom/customTypes';
 
-export default function InputInvestmentTaxesModal(props) {
+interface InputInvestmentTaxesModalProps {
+  refreshParent: React.Dispatch<React.SetStateAction<null>>;
+}
+
+export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
   const { palette } = useTheme();
   const { refreshParent } = props;
   const [open, setOpen] = React.useState(false);
@@ -89,16 +94,16 @@ export default function InputInvestmentTaxesModal(props) {
     const investmentAndTaxesObject = {
       execution_type: selectedOrderType,
       description: description.trim(),
-      isin: isin,
+      isin: isin as TwelveCharacterString,
       investment_type: selectedInvestmentType,
       marketplace: selectedMarketplace,
       units: parseInt(units),
       price_per_unit: parseFloat(Number(unitPrice).toFixed(2)),
       total_price: parseFloat((parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2)),
       fees: parseFloat(Number(fees).toFixed(2)),
-      execution_date: executionDate,
-      pct_of_profit_taxed: isOrderTypeSale ? pctTaxed : null,
-      profit_amt: isOrderTypeSale ? profitAmt : null
+      execution_date: new Date(executionDate),
+      pct_of_profit_taxed: isOrderTypeSale ? parseFloat(Number(pctTaxed).toFixed(2)) : null,
+      profit_amt: isOrderTypeSale ? parseFloat(Number(profitAmt).toFixed(2)) : null
     };
     const response = await postInvestments(investmentAndTaxesObject);
     if (response?.results[0]?.id) {
@@ -118,7 +123,7 @@ export default function InputInvestmentTaxesModal(props) {
     }
   };
 
-  const validateInput = (e) => {
+  const validateInput = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let errorPresent = false;
     // Fees Validation
@@ -131,7 +136,7 @@ export default function InputInvestmentTaxesModal(props) {
       setFeeValidationErrorMessage('');
     }
     // Price Validation
-    if (!isNumeric(unitPrice) || Number(unitPrice).toFixed(0) < 0) {
+    if (!isNumeric(unitPrice) || parseInt(Number(unitPrice).toFixed(0)) < 0) {
       errorPresent = true;
       setIsUnitPriceValidationError(true);
       setUnitPriceValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
@@ -149,7 +154,7 @@ export default function InputInvestmentTaxesModal(props) {
       setDateErrorMessage('');
     }
     // Units
-    if (!isNumeric(units) || Number(units).toFixed(0) < 0) {
+    if (!isNumeric(units) || parseInt(Number(units).toFixed(0)) < 0) {
       errorPresent = true;
       setIsUnitsValidationError(true);
       setUnitsValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG);
@@ -180,7 +185,11 @@ export default function InputInvestmentTaxesModal(props) {
     // ONLY VALIDATE FOR SALES
     if (isOrderTypeSale) {
       // Pct Taxed Validation
-      if (!isNumeric(pctTaxed) || Number(pctTaxed).toFixed(2) > 100.0 || Number(pctTaxed).toFixed(0) < 0) {
+      if (
+        !isNumeric(pctTaxed) ||
+        parseFloat(Number(pctTaxed).toFixed(2)) > 100.0 ||
+        parseInt(Number(pctTaxed).toFixed(0)) < 0
+      ) {
         errorPresent = true;
         setIsPctTaxedValidationError(true);
         setPctTaxedValidationErrorMessage(
@@ -211,7 +220,7 @@ export default function InputInvestmentTaxesModal(props) {
     }
   };
 
-  const inputChangeListener = (e) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'unit_price':
@@ -241,15 +250,15 @@ export default function InputInvestmentTaxesModal(props) {
     }
   };
 
-  const handleInvestmentTypeSelect = (selection) => {
+  const handleInvestmentTypeSelect = (selection: string) => {
     setSelectedInvestmentType(selection);
   };
 
-  const handleMarketplaceSelect = (selection) => {
+  const handleMarketplaceSelect = (selection: string) => {
     setSelectedMarketplace(selection);
   };
 
-  const handleOrderTypeSelect = (event, newValue) => {
+  const handleOrderTypeSelect = (_event: React.MouseEvent<HTMLElement>, newValue: string) => {
     if (newValue === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
       setIsOrderTypeSale(true);
     } else {
@@ -282,11 +291,10 @@ export default function InputInvestmentTaxesModal(props) {
                   return (
                     <ToggleButtonGroup
                       key={index}
-                      variant="contained"
                       exclusive
                       value={selectedOrderType}
                       onChange={handleOrderTypeSelect}
-                      sx={{ mt: 0.5, mb: 1, justifyContent: 'center', display: 'flex' }}
+                      sx={{ mt: 0.5, mb: 1, ml: 1, justifyContent: 'center', display: 'flex' }}
                     >
                       {parent.map((child, index) => {
                         return (
@@ -329,7 +337,6 @@ export default function InputInvestmentTaxesModal(props) {
           {investmentTypeSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2.5 }}>
               <SelectDropdown
-                sx={{ m: 1 }}
                 selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT}
                 selectItems={investmentTypeSelectItems}
                 selectedValue={selectedInvestmentType}
