@@ -87,18 +87,18 @@ export default function InputInvestmentTaxesModal(props) {
    */
   const saveUserInput = async () => {
     const investmentAndTaxesObject = {
-      executionType: selectedOrderType,
+      execution_type: selectedOrderType,
       description: description.trim(),
       isin: isin,
-      investmentType: selectedInvestmentType,
+      investment_type: selectedInvestmentType,
       marketplace: selectedMarketplace,
       units: parseInt(units),
-      pricePerUnit: parseFloat(Number(unitPrice).toFixed(2)),
-      totalPrice: parseFloat((parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2)),
+      price_per_unit: parseFloat(Number(unitPrice).toFixed(2)),
+      total_price: parseFloat((parseInt(units) * Number(unitPrice) + Number(fees)).toFixed(2)),
       fees: parseFloat(Number(fees).toFixed(2)),
-      executionDate: executionDate,
-      profitAmount: isOrderTypeSale ? profitAmt : null,
-      pctOfProfitTaxed: isOrderTypeSale ? pctTaxed : null
+      execution_date: executionDate,
+      pct_of_profit_taxed: isOrderTypeSale ? pctTaxed : null,
+      profit_amt: isOrderTypeSale ? profitAmt : null
     };
     const response = await postInvestments(investmentAndTaxesObject);
     if (response?.results[0]?.id) {

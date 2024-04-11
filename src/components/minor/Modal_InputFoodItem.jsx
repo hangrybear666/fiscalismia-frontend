@@ -69,14 +69,14 @@ export default function InputFoodItemModal( props ) {
    */
   const saveUserInput = async() => {
     const foodItemObj = {
-      foodItem: foodItem.trim(),
+      food_item: foodItem.trim(),
       brand: brand.trim(),
       store: selectedStore,
-      mainMacro: selectedMacro,
-      kcalAmount: parseInt(kcalAmount),
+      main_macro: selectedMacro,
+      kcal_amount: parseInt(kcalAmount),
       weight: parseInt(weight),
-      price: Number(price).toFixed(2),
-      lastUpdate:lastUpdateDate,
+      price: parseFloat(Number(price).toFixed(2)),
+      last_update: new Date(lastUpdateDate),
     }
     const response = await postNewFoodItem(foodItemObj)
     if (response?.results[0]?.id) {

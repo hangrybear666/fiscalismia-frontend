@@ -30,12 +30,12 @@ export type User = {
  * User Credentials Object used for e.g. Account Creation and INSERT into table public.um_users.
  * @table public.um_users
  * @property {number} username SELECT id FROM public.um_users
- * @property {string} email SELECT username FROM public.um_users
- * @property {string} password SELECT email FROM public.um_users
+ * @property {string | null} email SELECT email FROM public.um_users
+ * @property {string} password salted and hashed via pgcrypto crypt('PASSWORD', gen_salt('bf',ITER_COUNT))
  */
 export type UserCredentials = {
   username: string;
-  email: string;
+  email: string | null;
   password: string;
 };
 
@@ -69,25 +69,27 @@ export type FoodItemDiscount = {
 
 /**
  * id, price and date range for a temporarily discounted food item
+ * @description For DB INSERTION via Frontend manual data entry, rather than TSV bulk Inserts directly handled in the backend.
+ * @see https://github.com/hangrybear666/fiscalismia-backend/blob/main/utils/customTypes.ts
  * @table public.food_price_discounts
- * @property {string} foodItem string of a food item
+ * @property {string} food_item string of a food item
  * @property {string} brand Brand of the food item
  * @property {string} store Store where the food item is purchased
- * @property {string} mainMacro Main macronutrient of the food item
- * @property {number} kcalAmount Caloric amount of the food item
+ * @property {string} main_macro Main macronutrient of the food item
+ * @property {number} kcal_amount Caloric amount of the food item
  * @property {number} weight Weight of the food item
  * @property {number} price Price of the food item
- * @property {Date} lastUpdate Date of the last update for the food item
+ * @property {Date} last_update DIFFERENT FROM BACKEND WHERE IT IS A STRING - Date of last price check
  */
 export type FoodItem = {
-  foodItem: string;
+  food_item: string;
   brand: string;
   store: string;
-  mainMacro: string;
-  kcalAmount: number;
+  main_macro: string;
+  kcal_amount: number;
   weight: number;
   price: number;
-  lastUpdate: Date;
+  last_update: Date; // DIFFERENT FROM BACKEND WHERE IT IS A STRING
 };
 
 type TwelveCharacterString = `${string & { length: 12 }}`;
@@ -114,34 +116,36 @@ export type DividendsRelatedInvestmentsAndTaxes = {
 };
 
 /**
- * Bought investments are stored in investments table, if the execution type is sell, tax information is added for investment_taxes table
+ * Bought investments are stored in investments table, if the execution type is sell, tax information is added for investment_taxes table.
+ * @description For DB INSERTION via Frontend manual data entry, rather than TSV bulk Inserts directly handled in the backend.
+ * @see https://github.com/hangrybear666/fiscalismia-backend/blob/main/utils/customTypes.ts
  * @table public.investments, public.investment_taxes
- * @property {string} executionType string containing the type of execution -> 'buy' or 'sell' *
+ * @property {string} execution_type string containing the type of execution -> 'buy' or 'sell' *
  * @property {string} description Description of the investment
- * @property {TwelveCharacterString} isin International Security Identification Number -> 12 character string beginning with country short
- * @property {string} investmentType Type of investment
+ * @property {TwelveCharacterString} isin DIFFERENT FROM BACKEND WHERE IT IS A STRING - International Security Identification Number -> 12 character string beginning with country short
+ * @property {string} investment_type Type of investment
  * @property {string} marketplace Marketplace where the investment was bought from or sold at
  * @property {number} units Number of shares purchased or sold
- * @property {number} pricePerUnit Price per unit of the share
- * @property {number} totalPrice Total price of the investment including fees
+ * @property {number} price_per_unit Price per unit of the share
+ * @property {number} total_price Total price of the investment including fees
  * @property {number} fees Fees paid for the investment execution
- * @property {Date} executionDate Date of the investment transaction execution
- * @property {number | null} profitAmount Amount of profit generated from the investment (nullable for executionType buy)
- * @property {number | null} pctOfProfitTaxed Percentage of profit taxed (nullable for executionType buy)
+ * @property {Date} execution_date DIFFERENT FROM BACKEND WHERE IT IS A STRING - Date of the investment transaction execution
+ * @property {number | null} pct_of_profit_taxed Percentage of profit taxed (nullable for execution_type buy)
+ * @property {number | null} profit_amt Amount of profit generated from the investment (nullable for execution_type buy)
  */
 export type InvestmentAndTaxes = {
-  executionType: string;
+  execution_type: string;
   description: string;
-  isin: TwelveCharacterString;
-  investmentType: string;
+  isin: TwelveCharacterString; // DIFFERENT FROM BACKEND WHERE IT IS A STRING
+  investment_type: string;
   marketplace: string;
   units: number;
-  pricePerUnit: number;
-  totalPrice: number;
+  price_per_unit: number;
+  total_price: number;
   fees: number;
-  executionDate: Date;
-  profitAmount: number | null;
-  pctOfProfitTaxed: number | null;
+  execution_date: Date; // DIFFERENT FROM BACKEND WHERE IT IS A STRING
+  pct_of_profit_taxed: number | null;
+  profit_amt: number | null;
 };
 
 /**

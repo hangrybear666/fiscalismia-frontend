@@ -401,7 +401,7 @@ export const postFoodItemDiscount = async (foodItemDiscountObj: FoodItemDiscount
 
 /**
  * performs db insertion of provided object
- * @param {*} foodItemObj with fields: foodItem, brand, store, mainMacro, kcalAmount, weight, price, lastUpdate
+ * @param {*} foodItemObj with fields: food_item | brand | store | main_macro | kcal_amount | weight | price | last_update
  * @returns dimension_key of inserted object or ERROR
  */
 export const postNewFoodItem = async (foodItemObj: FoodItem) => {
@@ -419,7 +419,7 @@ export const postNewFoodItem = async (foodItemObj: FoodItem) => {
 
 /**
  * performs db insertion of provided object
- * @param {*} investmentAndTaxesObject with fields: executionType, description, isin, investmentType, marketplace, units, pricePerUnit, totalPrice, fees, executionDate, profitAmount, pctOfProfitTaxed
+ * @param {*} investmentAndTaxesObject with fields: execution_type, description, isin, investment_type, marketplace, units, price_per_unit, total_price, fees, execution_date, pct_of_profit_taxed, profit_amt
  * @returns id of inserted investment row in results
  * id(fk) of inserted taxes row in taxesResults or ERROR
  */

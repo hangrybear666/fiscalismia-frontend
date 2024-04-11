@@ -18,10 +18,11 @@ import { resourceProperties as res, localStorageKeys } from '../resources/resour
 import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
 import CreateAccountModal from './minor/Modal_CreateAccount';
+import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
 
-function Copyright(props) {
+function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
       {'Copyright © '}
       <Link color="inherit" href={res.APP_URL}>
         {res.APP_NAME}
@@ -55,28 +56,28 @@ export default function SignInSide() {
     window.localStorage.getItem(localStorageKeys.token) === 'true' ? true : false
   );
   const navigate = useNavigate();
-  const { loginUserName, setToken, setLoginUserName } = useAuth();
+  const { loginUserName, setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
   // After successfully logging in and authenticating the token, user settings are queried from the DB and redirect to Homepage is triggered
   useEffect(() => {
     const getUserSettings = async () => {
       try {
         const response = await getUserSpecificSettings(loginUserName);
         if (response?.results?.length > 0) {
-          let userSettingsMap = new Map();
-          response.results.forEach((e) => {
-            userSettingsMap.set(e.setting_key, e.setting_value);
+          let userSettingsMap: Map<string,string> = new Map();
+          response.results.forEach(({setting_key, setting_value} : {setting_key :string, setting_value:string}) => {
+            userSettingsMap.set(setting_key, setting_value);
           });
           window.localStorage.setItem(
             localStorageKeys.selectedMode,
-            userSettingsMap.get(localStorageKeys.selectedMode)
+            userSettingsMap.get(localStorageKeys.selectedMode)!
           );
           window.localStorage.setItem(
             localStorageKeys.selectedLanguage,
-            userSettingsMap.get(localStorageKeys.selectedLanguage)
+            userSettingsMap.get(localStorageKeys.selectedLanguage)!
           );
           window.localStorage.setItem(
             localStorageKeys.selectedPalette,
-            userSettingsMap.get(localStorageKeys.selectedPalette)
+            userSettingsMap.get(localStorageKeys.selectedPalette)!
           );
         }
       } finally {
@@ -88,9 +89,9 @@ export default function SignInSide() {
     }
   }, [authenticated]);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const user = { username: username, email: null, password: password };
+    const user: UserCredentials = { username: username, email: null, password: password };
     const response = await login(user);
     if (isJwtToken(response)) {
       window.localStorage.setItem(localStorageKeys.token, response);
@@ -106,7 +107,7 @@ export default function SignInSide() {
     }
   };
 
-  const inputChangeListener = (e) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'username':
@@ -121,10 +122,10 @@ export default function SignInSide() {
   // because user settings are still being loaded after loginUserName has been set, only display this page after a timeout
   // if useNavigate has already forwarded to a different page, nothing is rendered for the user
   if (window.localStorage.getItem(localStorageKeys.loginUserName)) {
-    setTimeout(function () {
+    // setTimeout(function () { // TODO avoid briefly displaying "logged in already" after click on Login
       return (
         <>
-          <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName))}</p>
+          <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName)!)}</p>
           <IconButton
             color="primary"
             variant="text"
@@ -137,7 +138,7 @@ export default function SignInSide() {
           </IconButton>
         </>
       );
-    }, 2000);
+    // }, 2000);
   }
 
   return (
@@ -206,7 +207,7 @@ export default function SignInSide() {
                 {res.LOGIN}
               </Button>
               <CreateAccountModal />
-              <Copyright sx={{ mt: 5 }} />
+              <Copyright/>
             </Box>
           </Box>
         </Grid>
