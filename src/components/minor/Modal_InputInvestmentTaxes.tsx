@@ -27,7 +27,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface InputInvestmentTaxesModalProps {
-  refreshParent: React.Dispatch<React.SetStateAction<null>>;
+  refreshParent: React.Dispatch<React.SetStateAction<Number>>;
 }
 
 export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
@@ -116,7 +116,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
       }
       setOpen(false);
       // to refresh parent's table based on added food item after DB insertion
-      refreshParent(response.results[0].id);
+      refreshParent(Number(response.results[0].id));
     } else {
       // TODO User Notification
       console.error(response);

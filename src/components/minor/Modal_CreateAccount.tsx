@@ -120,7 +120,7 @@ export default function CreateAccountModal() {
     }
   };
 
-  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'create_username':

@@ -59,6 +59,10 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
   };
 
   const handleColorModeChange = async () => {
+    if (!loginUserName) {
+      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      return;
+    }
     setSettingsAnchorElement(undefined);
     let newColorMode = isDarkMode ? 'light' : 'dark';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedMode, newColorMode);
@@ -69,6 +73,10 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
   };
 
   const handlePaletteChange = async () => {
+    if (!loginUserName) {
+      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      return;
+    }
     setSettingsAnchorElement(undefined);
     let newPalette = currentPalette === 'default' ? 'pastel' : 'default';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedPalette, newPalette);
@@ -79,6 +87,10 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
   };
 
   const handleLanguageChange = async () => {
+    if (!loginUserName) {
+      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      return;
+    }
     setSettingsAnchorElement(undefined);
     let newLanguage = currentLanguage === 'en_US' ? 'de_DE' : 'en_US';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedLanguage, newLanguage);

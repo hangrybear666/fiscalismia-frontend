@@ -19,7 +19,7 @@ import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils
 import { DividendsRelatedInvestmentsAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface InputInvestmentDividendsModalProps {
-  refreshParent: React.Dispatch<React.SetStateAction<null>>;
+  refreshParent: React.Dispatch<React.SetStateAction<Number>>;
   isinSelection: TwelveCharacterString[];
   allInvestments: any;
 }
@@ -258,7 +258,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
       }
       setOpen(false);
       // to refresh parent's table based on added food item after DB insertion
-      refreshParent(response.results[0].id);
+      refreshParent(Number(response.results[0].id));
     } else {
       // TODO User Notification
       console.error(response);
@@ -317,7 +317,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     }
   };
 
-  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'dividend_date':

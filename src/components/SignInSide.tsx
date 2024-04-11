@@ -61,10 +61,14 @@ export default function SignInSide() {
   useEffect(() => {
     const getUserSettings = async () => {
       try {
+        if (!loginUserName) {
+          console.error('loginUserName not set. User Settings could not be loaded.'); // TODO critical error. notify admin
+          return;
+        }
         const response = await getUserSpecificSettings(loginUserName);
         if (response?.results?.length > 0) {
-          let userSettingsMap: Map<string,string> = new Map();
-          response.results.forEach(({setting_key, setting_value} : {setting_key :string, setting_value:string}) => {
+          let userSettingsMap: Map<string, string> = new Map();
+          response.results.forEach(({ setting_key, setting_value }: { setting_key: string; setting_value: string }) => {
             userSettingsMap.set(setting_key, setting_value);
           });
           window.localStorage.setItem(
@@ -123,21 +127,20 @@ export default function SignInSide() {
   // if useNavigate has already forwarded to a different page, nothing is rendered for the user
   if (window.localStorage.getItem(localStorageKeys.loginUserName)) {
     // setTimeout(function () { // TODO avoid briefly displaying "logged in already" after click on Login
-      return (
-        <>
-          <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName)!)}</p>
-          <IconButton
-            color="primary"
-            variant="text"
-            onClick={() => {
-              navigate(paths.APP_ROOT_PATH, { replace: true });
-            }}
-          >
-            <HomeIcon />
-            {res.HOME}
-          </IconButton>
-        </>
-      );
+    return (
+      <>
+        <p>{res.USER_ALREADY_LOGGED_IN(window.localStorage.getItem(localStorageKeys.loginUserName)!)}</p>
+        <IconButton
+          color="primary"
+          onClick={() => {
+            navigate(paths.APP_ROOT_PATH, { replace: true });
+          }}
+        >
+          <HomeIcon />
+          {res.HOME}
+        </IconButton>
+      </>
+    );
     // }, 2000);
   }
 
@@ -207,7 +210,7 @@ export default function SignInSide() {
                 {res.LOGIN}
               </Button>
               <CreateAccountModal />
-              <Copyright/>
+              <Copyright />
             </Box>
           </Box>
         </Grid>

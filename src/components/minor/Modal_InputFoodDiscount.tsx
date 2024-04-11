@@ -17,7 +17,12 @@ import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
 import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 
-export default function InputFoodDiscountModal(props) {
+interface InputFoodDiscountModalProps {
+  setDiscountAddedItemId: React.Dispatch<React.SetStateAction<number>>;
+  autoCompleteItemArray: { label: string; id: number }[];
+}
+
+export default function InputFoodDiscountModal(props: InputFoodDiscountModalProps) {
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   // Selection
@@ -63,12 +68,12 @@ export default function InputFoodDiscountModal(props) {
       endDate: new Date(endDate)
     };
     const response = await postFoodItemDiscount(foodItemDiscountObj);
-    if (response?.results[0]?.food_prices_dimension_key == selectedFoodItemId) {
+    if (parseInt(response?.results[0]?.food_prices_dimension_key) === parseInt(selectedFoodItemId)) {
       // this setter is called to force the frontend to update and refetch the data from db
       console.log('SUCCESSFULLY added discount to DB:'); // TODO mit Growl und ID ersetzen
       console.log(response.results[0]);
       setOpen(false);
-      setDiscountAddedItemId(selectedFoodItemId);
+      setDiscountAddedItemId(Number(selectedFoodItemId));
     } else {
       // TODO User Notification
       console.error(response);
@@ -81,7 +86,7 @@ export default function InputFoodDiscountModal(props) {
    * - discount_start_date
    * - discount_end_date
    */
-  const validateInput = (e) => {
+  const validateInput = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let errorPresent = false;
     // Food Item Selection
@@ -137,7 +142,7 @@ export default function InputFoodDiscountModal(props) {
     }
   };
 
-  const inputChangeListener = (e) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'discount_price':
@@ -152,8 +157,13 @@ export default function InputFoodDiscountModal(props) {
     }
   };
 
-  const handleAutoCompleteSelection = (event, newValue) => {
-    setSelectedFoodItemId(newValue?.id ? newValue.id : null);
+  const handleAutoCompleteSelection = (
+    _event: React.SyntheticEvent,
+    newValue: { label: string; id: number } | null
+  ) => {
+    if (newValue?.id && newValue.id > 0) {
+      setSelectedFoodItemId(newValue.id.toFixed(0));
+    }
   };
 
   return (

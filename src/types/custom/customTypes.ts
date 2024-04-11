@@ -1,3 +1,4 @@
+import { JwtPayload } from 'jwt-decode';
 /**
  * Guarantee that user is authenticated before accessing protected routes.
  * Also provides a token to add to http requests against the express server to access protected API endpoints
@@ -7,10 +8,10 @@
  * @property {string} setLoginUserName setter for a username string
  */
 export type AuthInfo = {
-  token: string;
-  setToken: (token: string) => void;
-  loginUserName: string;
-  setLoginUserName: (username: string) => void;
+  token: string | null;
+  setToken: (token: string | null) => void;
+  loginUserName: string | null;
+  setLoginUserName: (username: string | null) => void;
 };
 
 /**
@@ -24,6 +25,16 @@ export type User = {
   userId: number;
   userName: string;
   userEmail: string;
+};
+
+/**
+ * Extending the JWT Auth Payload Object with my User type to be able to directly access
+ * - user.userId
+ * - user.userName
+ * - user.userEmail
+ */
+export type CustomJwtToken = JwtPayload & {
+  user: User;
 };
 
 /**
