@@ -11,13 +11,26 @@ import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 
-export default function InputTsvForDbInsertionModal( props ) {
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    tertiary: true;
+  }
+}
 
-  const modalId = props.id
-  const postTsvInputMethod = props.postMethod
-  const openModalStr = props.btnString
-  const textAreaDescription = props.description
-  const textAreaHelper = props.helperText
+interface InputTsvForDbInsertionModalProps {
+  id: string;
+  postMethod: any;
+  btnString: string;
+  description: string;
+  helperText: string;
+}
+
+export default function InputTsvForDbInsertionModal(props: InputTsvForDbInsertionModalProps) {
+  const modalId = props.id;
+  const postTsvInputMethod = props.postMethod;
+  const openModalStr = props.btnString;
+  const textAreaDescription = props.description;
+  const textAreaHelper = props.helperText;
 
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -33,55 +46,53 @@ export default function InputTsvForDbInsertionModal( props ) {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     minWidth: '50%',
-    width:'600px',
+    width: '600px',
     bgcolor: 'background.paper',
     border: `2px solid ${palette.secondary.main}`,
     boxShadow: 24,
-    p: 4,
+    p: 4
   };
-  const transformTsvToInsertStatements = async() => {
-    const result = await postTsvInputMethod(tsvInput)
+  const transformTsvToInsertStatements = async () => {
+    const result = await postTsvInputMethod(tsvInput);
     if (result?.status == 200 && result?.data?.length != 0) {
-      console.log("INSERT STATEMENTS CREATED ")
-      setTsvInput(result.data)
+      console.log('INSERT STATEMENTS CREATED ');
+      setTsvInput(result.data);
     } else if (result?.data?.length == 0) {
-      console.error(result.response)
-      setTsvInput('RESPONSE DATA IS EMPTY')
+      console.error(result.response);
+      setTsvInput('RESPONSE DATA IS EMPTY');
     } else if (result?.response?.data?.error) {
-      console.log("REQUEST FAILED WITH ERROR:")
-      console.error(result.response.data.error)
-      setTsvInput(JSON.stringify(result.response.data.error))
+      console.log('REQUEST FAILED WITH ERROR:');
+      console.error(result.response.data.error);
+      setTsvInput(JSON.stringify(result.response.data.error));
     } else {
-      console.log("transformTsvToInsertStatements failed for unknown reason")
-      console.error(result.response)
-      setTsvInput('unknown error')
+      console.log('transformTsvToInsertStatements failed for unknown reason');
+      console.error(result.response);
+      setTsvInput('unknown error');
     }
-  }
+  };
 
-  const inputChangeListener = (e) => {
-      e.preventDefault();
-      setTsvInput(e.target.value)
-  }
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    e.preventDefault();
+    setTsvInput(e.target.value);
+  };
 
   return (
     <>
-    <Button
+      <Button
         onClick={handleOpen}
         variant="contained"
         color="tertiary"
-        sx={{ borderRadius:0,
+        sx={{
+          borderRadius: 0,
           border: `1px solid  ${palette.border.dark}`,
-          boxShadow: palette.mode === 'light' ?  `3px 3px 8px 2px ${palette.grey[700]}` : '',
-          mb:0.8
-            }}
-          startIcon={<AddCircleIcon />}
-          >
+          boxShadow: palette.mode === 'light' ? `3px 3px 8px 2px ${palette.grey[700]}` : '',
+          mb: 0.8
+        }}
+        startIcon={<AddCircleIcon />}
+      >
         {openModalStr}
       </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
+      <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor={modalId}>{textAreaDescription}</InputLabel>
@@ -99,16 +110,18 @@ export default function InputTsvForDbInsertionModal( props ) {
           {/* SAVE */}
           <Button
             onClick={transformTsvToInsertStatements}
-            sx={{ borderRadius:0,
-                  margin:'0 auto',
-                  mt:2,
-                  ml:1,
-                  border: `1px solid ${palette.border.dark}`,
-                  width:'100%',
-                  boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)',
-                  }}
+            sx={{
+              borderRadius: 0,
+              margin: '0 auto',
+              mt: 2,
+              ml: 1,
+              border: `1px solid ${palette.border.dark}`,
+              width: '100%',
+              boxShadow: '3px 3px 5px 2px rgba(64,64,64, 0.7)'
+            }}
             variant="contained"
-            endIcon={<FileDownloadDoneIcon />}>
+            endIcon={<FileDownloadDoneIcon />}
+          >
             {res.SAVE}
           </Button>
         </Box>
