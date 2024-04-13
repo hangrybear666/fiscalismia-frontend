@@ -24,6 +24,7 @@ export const resourceProperties = {
   UPLOAD_AREA: 'DB Upload',
   FOOD_PRICES: 'Lebensmittelpreise',
   GROCERY_DEALS: 'Supermarkt Angebote',
+  DAYS: 'Tage',
   PLACEHOLDER: 'Platzhalter',
   LOGGED_IN_AS: 'Nutzername:',
   CONFIRMATION_DIALOG_TITLE_DELETE: 'Wirklich löschen?',
@@ -154,6 +155,10 @@ export const resourceProperties = {
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT: 'Ersparnis',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE: 'gültig von',
   DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE: 'gültig bis',
+  DEALS_GROCERY_DEALS_CONTENT_CARD_WEIGHT: 'Gewicht',
+  DEALS_GROCERY_DEALS_CONTENT_CARD_START_DATE_STR: 'gültig von',
+  DEALS_GROCERY_DEALS_CONTENT_CARD_END_DATE_STR: 'gültig bis',
+  DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_DURATION_STR: 'Angebotsdauer',
 
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_OPEN: 'Angebot hinzufügen',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_DISCOUNT_AMOUNT: 'Angebotspreis',

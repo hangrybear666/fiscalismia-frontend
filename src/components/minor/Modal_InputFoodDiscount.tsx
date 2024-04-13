@@ -18,7 +18,7 @@ import { Autocomplete, Stack } from '@mui/material';
 import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 
 interface InputFoodDiscountModalProps {
-  setDiscountAddedItemId: React.Dispatch<React.SetStateAction<number>>;
+  setDiscountAddedItemId: React.Dispatch<React.SetStateAction<number | undefined>>;
   autoCompleteItemArray: { label: string; id: number }[];
 }
 

@@ -469,7 +469,7 @@ export const postDividends = async (dividendsObject: DividendsRelatedInvestments
  * deletes server side images and removes filepath entry from db
  * @returns
  */
-export const deleteFoodItemImg = async (id: number) => {
+export const deleteFoodItemImg = async (id: string) => {
   setToken();
   try {
     const config = {

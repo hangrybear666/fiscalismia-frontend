@@ -24,7 +24,7 @@ import {
   foodItemInputCategories as foodCategories
 } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../services/pgConnections';
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
@@ -40,7 +40,7 @@ import butcher from '/imgs/supermarkets/butcher1.png';
 import online from '/imgs/supermarkets/online1.png';
 import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -56,33 +56,52 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-export default function ContentCardDiscounts(props) {
+export type ContentCardDiscount = {
+  foodItemId: string;
+  header: string;
+  subtitle: string;
+  originalPrice: string;
+  discountPrice: string;
+  discountPercentage: string;
+  store: string;
+  startDate: string;
+  endDate: string;
+  dealDuration: string;
+  daysLeft: string | null;
+  startsInDays: string | null;
+  details: string[] | null;
+  img: string | null;
+  elevation?: number;
+  imgHeight?: number;
+};
+
+export default function ContentCardDiscounts(props: ContentCardDiscount) {
   const { palette } = useTheme();
   const {
     foodItemId,
     header,
+    subtitle,
     originalPrice,
     discountPrice,
-    subtitle,
-    store,
     discountPercentage,
+    store,
     startDate,
     endDate,
     dealDuration,
     daysLeft,
     startsInDays,
     details,
-    elevation,
     img,
+    elevation,
     imgHeight
   } = props;
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
-  const [imgFilePath, setImgFilePath] = React.useState(undefined);
+  const [imgFilePath, setImgFilePath] = React.useState<string | undefined>(undefined);
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
+  const handleSnackbarClose = (_event: React.SyntheticEvent<any> | Event, reason: SnackbarCloseReason): void => {
+    if (reason && reason === 'clickaway') {
       return;
     }
     setOpen(false);
@@ -127,18 +146,20 @@ export default function ContentCardDiscounts(props) {
    * - 400 unknown error
    * @param {*} event file is contained in event.target.files[0]
    */
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const response = await postFoodItemImg(event, foodItemId);
     if (response instanceof AxiosError) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
       setOpen(true);
+      return;
     } else if (response instanceof FileSizeError) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
       setOpen(true);
+      return;
     }
     if (response?.status == 200) {
       const filepath = response.data;
@@ -162,14 +183,14 @@ export default function ContentCardDiscounts(props) {
     }
   };
 
-  const handleImgDeletion = async (event) => {
+  const handleImgDeletion = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const response = await deleteFoodItemImg(foodItemId);
     if (response.results[0]?.filepath) {
       // // User Notification via Snackbar
       setNotificationMessage(`Image successfully deleted from path: ${response.results[0].filepath}`);
       setNotificationSeverity('info');
-      setImgFilePath(null);
+      setImgFilePath(undefined);
       setOpen(true);
     } else {
       setNotificationMessage('Image could not be deleted');
@@ -189,7 +210,7 @@ export default function ContentCardDiscounts(props) {
         onClose={handleSnackbarClose}
         message={notificationMessage}
         action={
-          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+          <IconButton size="small" aria-label="close" color="inherit" onClick={() => handleSnackbarClose}>
             <CloseIcon fontSize="small" />
           </IconButton>
         }
@@ -215,7 +236,7 @@ export default function ContentCardDiscounts(props) {
             {/* IMAGE queried from server */}
             <CardMedia
               sx={{ height: imgHeight ? imgHeight : 200 }}
-              image={img ? img : imgFilePath ? imgFilePath : null}
+              image={img ? img : imgFilePath ? imgFilePath : undefined}
               title={header}
             />
             {/* DELETE IMG Btn */}
@@ -413,7 +434,7 @@ export default function ContentCardDiscounts(props) {
                 <Chip label={endDate} sx={{ borderRadius: 0, mt: 0.5 }} variant="outlined" icon={<EventBusyIcon />} />
                 {details ? (
                   <Typography noWrap sx={{ mt: 0.3 }} variant="body2">
-                    {details.map((e, i) => (
+                    {details.map((e: string, i: number) => (
                       <React.Fragment key={e}>
                         • {e}
                         {i < details.length - 1 ? <br /> : null}
