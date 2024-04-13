@@ -12,6 +12,7 @@ import ContentCardDiscounts, { ContentCardDiscount } from '../minor/ContentCard_
 import { resourceProperties as res, serverConfig } from '../../resources/resource_properties';
 import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import InputFoodDiscountModal from '../minor/Modal_InputFoodDiscount';
+import { RouteInfo } from '../../types/custom/customTypes';
 
 /**
  * extracts relevant fields from the db query result
@@ -80,7 +81,9 @@ function getFoodItemSelectionDataStructures(allFoodPrices: any): {
   return { autoCompleteItemArray };
 }
 
-interface Deals_GroceryDealsProps {}
+interface Deals_GroceryDealsProps {
+  routeInfo: RouteInfo;
+}
 
 export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps) {
   const { palette } = useTheme();

@@ -10,7 +10,6 @@ import { Typography } from '@mui/material';
 import { resourceProperties as res } from '../../resources/resource_properties';
 
 interface ConfirmationDialogProps {
-  onDrawerToggle: () => void;
   title: string;
   text: string;
   textColor: string;

@@ -64,6 +64,17 @@ export type UserSettingObject = {
 };
 
 /**
+ * Contains navigation info such as header, subHeader and relative path
+ * @property {string} header
+ * @property {string} subHeader
+ * @property {string} path
+ */
+export type RouteInfo = {
+  header: string;
+  subHeader: string;
+  path: string;
+};
+/**
  * id, price and date range for a temporarily discounted food item
  * @table public.food_price_discounts
  * @property {number} id SELECT id FROM public.um_users WHERE username = 'username'

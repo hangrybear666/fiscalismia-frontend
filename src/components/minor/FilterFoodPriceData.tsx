@@ -31,8 +31,7 @@ import {
   TextField,
   ToggleButtonGroup,
   ToggleButton,
-  Switch,
-  Tooltip
+  Switch
 } from '@mui/material';
 
 const SORT_BY_IDS = {
@@ -46,7 +45,12 @@ const SORT_BY_IDS = {
   normalizedPriceAsc: 8
 };
 // HINWEIS: Tooltips aktuell nicht eingebaut weil selected styling der Buttons dann nicht funktioniert hat
-let sortCriteria = new Array();
+type SortCriteria = {
+  id: number | string;
+  tooltip: string | null;
+  icon: React.ReactNode | null;
+};
+let sortCriteria: SortCriteria[][] = [];
 sortCriteria.push([
   {
     id: SORT_BY_IDS.pricePerKgDesc,
@@ -116,12 +120,12 @@ sortCriteria.push([
   }
 ]);
 
-function getMacroNutrientCategories(allFoodPrices) {
-  return Array.from(new Set(allFoodPrices.map((e) => e.main_macro)));
+function getMacroNutrientCategories(allFoodPrices: any): string[] {
+  return Array.from(new Set(allFoodPrices.map((e: any) => e.main_macro)));
 }
 
-function getStoreItems(allFoodPrices) {
-  return Array.from(new Set(allFoodPrices.map((e) => e.store)));
+function getStoreItems(allFoodPrices: any): string[] {
+  return Array.from(new Set(allFoodPrices.map((e: any) => e.store)));
 }
 
 /**
@@ -129,9 +133,9 @@ function getStoreItems(allFoodPrices) {
  * @param {*} allFoodPrices autoCompleteItemArray: Array with label for input completion and any other desired information
  * @returns
  */
-function getFoodItemSelectionDataStructures(allFoodPrices) {
+function getFoodItemSelectionDataStructures(allFoodPrices: any) {
   const autoCompleteItemArray = new Array();
-  allFoodPrices.forEach((e, i) => {
+  allFoodPrices.forEach((e: any, i: number) => {
     autoCompleteItemArray[i] = {
       label: `${e.food_item} - ${e.brand} | ${e.store}`,
       id: e.id
@@ -140,22 +144,38 @@ function getFoodItemSelectionDataStructures(allFoodPrices) {
   return autoCompleteItemArray;
 }
 
-export default function FilterFoodPriceData(props) {
+interface FilterFoodPriceDataProps {
+  displayHorizontally: boolean;
+  foodPrices: any;
+  filteredFoodPrices: any;
+  setFilteredFoodPrices: React.Dispatch<React.SetStateAction<any>>;
+  setHasBeenSortedBy: React.Dispatch<React.SetStateAction<number | null>>;
+  hasBeenSortedBy: number | null;
+  renderImages: boolean;
+  setRenderImages: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
   const { palette } = useTheme();
-  const { displayHorizontally } = props;
-  // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
-  const { foodPrices, filteredFoodPrices, setFilteredFoodPrices, setHasBeenSortedBy, hasBeenSortedBy } = props;
+  const {
+    displayHorizontally,
+    foodPrices, // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
+    filteredFoodPrices,
+    setFilteredFoodPrices,
+    setHasBeenSortedBy,
+    hasBeenSortedBy,
+    renderImages,
+    setRenderImages
+  } = props;
 
   // React re-renders components with their default value when their key changes
   const [resetAutocompleteHelper, setResetAutocompleteHelper] = useState(0);
   // FILTERING
-  const [autoCompleteItemArray, setAutoCompleteItemArray] = useState([]);
-  const [macroNutrientItems, setMacroNutrientItems] = useState([]);
-  const [storeItems, setStoreItems] = useState([]);
+  const [autoCompleteItemArray, setAutoCompleteItemArray] = useState<{ label: string; id: number }[]>([]);
+  const [macroNutrientItems, setMacroNutrientItems] = useState<string[]>([]);
+  const [storeItems, setStoreItems] = useState<string[]>([]);
   const [selectedMacroNutrient, setSelectedMacroNutrient] = useState('');
   const [selectedStore, setSelectedStore] = useState('');
-  // Render Images yes or no switch
-  const [renderImages, setRenderImages] = React.useState(false);
 
   const headerStyle = {
     letterSpacing: 2,
@@ -174,7 +194,7 @@ export default function FilterFoodPriceData(props) {
     }
   }, []);
 
-  const getSupermarketLogo = (store) => {
+  const getSupermarketLogo = (store: string) => {
     switch (store) {
       case foodCategories.JSON_STORES.aldi:
         return aldi;
@@ -203,43 +223,50 @@ export default function FilterFoodPriceData(props) {
     }
   };
 
-  const handleRenderImagesSwitch = (event) => {
-    setRenderImages(event.target.checked);
-    if (!event.target.checked) {
+  const handleRenderImagesSwitch = (_event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setRenderImages(checked);
+    if (!checked) {
+      // HIDE IMAGES
       setFilteredFoodPrices(
         filteredFoodPrices
-          ? filteredFoodPrices.map((e) => {
+          ? filteredFoodPrices.map((e: any) => {
               e.img = res.NO_IMG;
               return e;
             })
-          : foodPrices.map((e) => {
+          : foodPrices.map((e: any) => {
               e.img = res.NO_IMG;
               return e;
             })
       );
-      // setHasBeenSortedBy(Math.random *10)
     } else {
+      // DISPLAY IMAGES
       setFilteredFoodPrices(
         filteredFoodPrices
-          ? filteredFoodPrices.map((e) => {
-              e.img = null;
+          ? filteredFoodPrices.map((e: any) => {
+              e.img = null; // if img is null ContentCard_FoodPrices defaults to imgFilePath (server side persisted image location queried via REST API)
               return e;
             })
-          : foodPrices.map((e) => {
-              e.img = null;
+          : foodPrices.map((e: any) => {
+              e.img = null; // if img is null ContentCard_FoodPrices defaults to imgFilePath (server side persisted image location queried via REST API)
               return e;
             })
       );
     }
   };
 
-  const handleAutoCompleteSelection = (event, newValue) => {
+  const handleAutoCompleteSelection = (
+    _event: React.SyntheticEvent<Element, Event>,
+    value: {
+      label: string;
+      id: number;
+    }[]
+  ) => {
     setHasBeenSortedBy(null);
-    if (newValue?.length > 0) {
+    if (value?.length > 0) {
       setSelectedMacroNutrient('');
       setSelectedStore('');
-      const foodItemArr = newValue.map((e) => e.id);
-      setFilteredFoodPrices(foodPrices.filter((e) => foodItemArr.includes(e.id)));
+      const foodItemArr = value.map((e: { label: string; id: number }) => e.id);
+      setFilteredFoodPrices(foodPrices.filter((e: any) => foodItemArr.includes(e.id)));
     } else {
       setFilteredFoodPrices(null);
     }
@@ -255,77 +282,81 @@ export default function FilterFoodPriceData(props) {
     setFilteredFoodPrices(null);
   };
 
-  const handleMacroSelect = (event, newValue) => {
+  const handleMacroSelect = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
     setHasBeenSortedBy(null);
-    setSelectedMacroNutrient(newValue);
+    setSelectedMacroNutrient(value);
     setSelectedStore('');
     setResetAutocompleteHelper(Math.random() * 1000000);
     // set parent's filtered food item list based on selection
-    if (newValue) {
-      setFilteredFoodPrices(foodPrices.filter((e) => e.main_macro == newValue));
+    if (value) {
+      setFilteredFoodPrices(foodPrices.filter((e: any) => e.main_macro === value));
     } else {
       setFilteredFoodPrices(foodPrices);
     }
   };
 
-  const handleSortListener = (event, newValue) => {
-    if (hasBeenSortedBy != newValue) {
-      setHasBeenSortedBy(newValue);
-      switch (newValue) {
+  const handleSortListener = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: number) => {
+    if (hasBeenSortedBy != value) {
+      setHasBeenSortedBy(value);
+      switch (value) {
         case SORT_BY_IDS.priceAsc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.price > b.price ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.price > b.price ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price) > Number(b.price) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.price) > Number(b.price) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.priceDesc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.price < b.price ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.price < b.price ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price) < Number(b.price) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.price) < Number(b.price) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.kcalAmountAsc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.kcal_amount > b.kcal_amount ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.kcal_amount > b.kcal_amount ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.kcal_amount) > Number(b.kcal_amount) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.kcal_amount) > Number(b.kcal_amount) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.kcalAmountDesc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.kcal_amount < b.kcal_amount ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.kcal_amount < b.kcal_amount ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.kcal_amount) < Number(b.kcal_amount) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.kcal_amount) < Number(b.kcal_amount) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.pricePerKgAsc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.price_per_kg > b.price_per_kg ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.price_per_kg > b.price_per_kg ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) > Number(b.price_per_kg) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) > Number(b.price_per_kg) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.pricePerKgDesc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.price_per_kg < b.price_per_kg ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.price_per_kg < b.price_per_kg ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(a.price_per_kg) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(a.price_per_kg) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.normalizedPriceAsc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.normalized_price > b.normalized_price ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.normalized_price > b.normalized_price ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) =>
+                  Number(a.normalized_price) > Number(b.normalized_price) ? 1 : -1
+                )
+              : foodPrices.sort((a: any, b: any) => (Number(a.normalized_price) > Number(b.normalized_price) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.normalizedPriceDesc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a, b) => (a.normalized_price < b.normalized_price ? 1 : -1))
-              : foodPrices.sort((a, b) => (a.normalized_price < b.normalized_price ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) =>
+                  Number(a.normalized_price) < Number(b.normalized_price) ? 1 : -1
+                )
+              : foodPrices.sort((a: any, b: any) => (Number(a.normalized_price) < Number(b.normalized_price) ? 1 : -1))
           );
           break;
         default:
@@ -336,13 +367,13 @@ export default function FilterFoodPriceData(props) {
     }
   };
 
-  const handleStoreSelect = (event, newValue) => {
-    setSelectedStore(newValue);
+  const handleStoreSelect = (_event: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
+    setSelectedStore(value);
     setSelectedMacroNutrient('');
     setResetAutocompleteHelper(Math.random() * 1000000);
     // set parent's filtered food item list based on selection
-    if (newValue) {
-      setFilteredFoodPrices(foodPrices.filter((e) => e.store == newValue));
+    if (value) {
+      setFilteredFoodPrices(foodPrices.filter((e: any) => e.store === value));
     } else {
       setFilteredFoodPrices(foodPrices);
     }
@@ -354,7 +385,7 @@ export default function FilterFoodPriceData(props) {
         <Paper elevation={4} sx={{ borderRadius: 0, border: `1px solid ${palette.border.light}` }}>
           <Box sx={{ padding: 1.2 }}>
             <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL}</Typography>
-            <Switch size="large" checked={renderImages} onChange={handleRenderImagesSwitch} />
+            <Switch size="medium" checked={renderImages} onChange={handleRenderImagesSwitch} />
           </Box>
         </Paper>
       </Grid>
@@ -529,7 +560,6 @@ export default function FilterFoodPriceData(props) {
               <Grid xs={12} sx={{ display: displayHorizontally ? 'none' : 'block' }}>
                 <IconButton
                   onClick={handleClearSelection}
-                  variant="outlined"
                   color="primary"
                   sx={{
                     borderRadius: 0,

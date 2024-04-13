@@ -3,7 +3,6 @@ import { menuEntries } from './minor/MenuEntries';
 import { paths } from '../resources/router_navigation_paths';
 import { Route, Routes } from 'react-router-dom';
 import TestData from './content/TestData';
-import AG_GRID_DEMO from './content/AG_GRID_DEMO';
 import FixedCosts_Overview from './content/fixedCosts_Overview';
 import FixedCosts_LivingEssentials from './content/fixedCosts_LivingEssentials';
 import FixedCosts_Leisure from './content/fixedCosts_Leisure';
@@ -18,47 +17,46 @@ import Income_Monthly_Budget from './content/income_MonthlyBudget';
 import Income_Investments from './content/income_Investments';
 import Income_Sales from './content/income_Sales';
 import VariableExpenses_Overview from './content/variableExpenses_Overview';
+import { RouteInfo } from '../types/custom/customTypes';
 
 interface ContentProps {}
 
 export default function Content(_props: ContentProps) {
   const renderedElement = (parentId: string, childId: string, path: string) => {
-    const value = {
+    const routeInfo: RouteInfo = {
       header: parentId,
       subHeader: childId,
       path: path
     };
     switch (path) {
       case paths.VARIABLE_EXPENSES_OVERVIEW:
-        return <VariableExpenses_Overview value={value} />;
+        return <VariableExpenses_Overview routeInfo={routeInfo} />;
       case paths.VARIABLE_EXPENSES_STORES:
-        return <TestData value={value} />;
+        return <TestData routeInfo={routeInfo} />;
       case paths.VARIABLE_EXPENSES_INDULGENCES:
-        return <TestData value={value} />;
+        return <TestData routeInfo={routeInfo} />;
       case paths.FIXED_COSTS_OVERVIEW:
-        return <FixedCosts_Overview value={value} />;
+        return <FixedCosts_Overview routeInfo={routeInfo} />;
       case paths.FIXED_COSTS_LIVING_ESSENTIALS:
-        return <FixedCosts_LivingEssentials value={value} />;
+        return <FixedCosts_LivingEssentials routeInfo={routeInfo} />;
       case paths.FIXED_COSTS_RECREATION_RELAXATION:
-        return <FixedCosts_Leisure value={value} />;
+        return <FixedCosts_Leisure routeInfo={routeInfo} />;
       case paths.INCOME_OVERVIEW:
-        return <Income_Overview value={value} />;
+        return <Income_Overview routeInfo={routeInfo} />;
       case paths.INCOME_MONTHLY_BUDGET:
-        return <Income_Monthly_Budget value={value} />;
+        return <Income_Monthly_Budget routeInfo={routeInfo} />;
       case paths.INCOME_SALES:
-        return <Income_Sales value={value} />;
+        return <Income_Sales routeInfo={routeInfo} />;
       case paths.INCOME_INVESTMENTS:
-        return <Income_Investments value={value} />;
+        return <Income_Investments routeInfo={routeInfo} />;
       case paths.DEALS_OVERVIEW:
-        return <Deals_Overview value={value} />;
+        return <Deals_Overview routeInfo={routeInfo} />;
       case paths.DEALS_FOOD_PRICES:
-        return <Deals_FoodPrices value={value} />;
+        return <Deals_FoodPrices routeInfo={routeInfo} />;
       case paths.DEALS_GROCERY_DEALS:
-        return <Deals_GroceryDeals value={value} />;
+        return <Deals_GroceryDeals routeInfo={routeInfo} />;
       case paths.ADMIN_UPLOAD_AREA:
-        return <TestData value={value} />;
-      case 'admin/test1':
-        return <AG_GRID_DEMO value={value} />;
+        return <TestData routeInfo={routeInfo} />;
       default:
         <React.Fragment></React.Fragment>;
         break;

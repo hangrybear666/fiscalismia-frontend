@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { AxiosError } from 'axios';
 import Box from '@mui/material/Box';
@@ -12,7 +12,6 @@ import Chip from '@mui/material/Chip';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/CancelSharp';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
@@ -37,11 +36,11 @@ import {
   foodItemInputCategories as foodCategories
 } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../services/pgConnections';
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -57,28 +56,43 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-export default function ContentCardFoodPrices(props) {
+export type ContentCardFoodPriceType = {
+  foodItemId: string;
+  header: string;
+  subtitle: string;
+  originalPrice: string;
+  store: string;
+  pricePerKg: string;
+  kcalAmount: string;
+  lastUpdated: string;
+  details: string[] | null;
+  img: string | null;
+  elevation?: number;
+  imgHeight?: number;
+};
+
+export default function ContentCardFoodPrices(props: ContentCardFoodPriceType) {
   const { palette } = useTheme();
   const {
     foodItemId,
     header,
-    originalPrice,
     subtitle,
+    originalPrice,
     store,
     pricePerKg,
     kcalAmount,
     lastUpdated,
     details,
-    elevation,
     img,
+    elevation,
     imgHeight
   } = props;
   const [open, setOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
-  const [imgFilePath, setImgFilePath] = React.useState(undefined);
+  const [imgFilePath, setImgFilePath] = React.useState<string | undefined>(undefined);
 
-  const handleSnackbarClose = (event, reason) => {
+  const handleSnackbarClose = (_event: React.SyntheticEvent<any> | Event, reason: SnackbarCloseReason): void => {
     if (reason === 'clickaway') {
       return;
     }
@@ -124,18 +138,20 @@ export default function ContentCardFoodPrices(props) {
    * - 400 unknown error
    * @param {*} event file is contained in event.target.files[0]
    */
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const response = await postFoodItemImg(event, foodItemId);
     if (response instanceof AxiosError) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
       setOpen(true);
+      return;
     } else if (response instanceof FileSizeError) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
       setOpen(true);
+      return;
     }
     if (response?.status == 200) {
       const filepath = response.data;
@@ -159,14 +175,14 @@ export default function ContentCardFoodPrices(props) {
     }
   };
 
-  const handleImgDeletion = async (event) => {
+  const handleImgDeletion = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const response = await deleteFoodItemImg(foodItemId);
     if (response.results[0]?.filepath) {
       // // User Notification via Snackbar
       setNotificationMessage(`Image successfully deleted from path: ${response.results[0].filepath}`);
       setNotificationSeverity('info');
-      setImgFilePath(null);
+      setImgFilePath(undefined);
       setOpen(true);
     } else {
       setNotificationMessage('Image could not be deleted');
@@ -186,7 +202,7 @@ export default function ContentCardFoodPrices(props) {
         onClose={handleSnackbarClose}
         message={notificationMessage}
         action={
-          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+          <IconButton size="small" aria-label="close" color="inherit" onClick={() => handleSnackbarClose}>
             <CloseIcon fontSize="small" />
           </IconButton>
         }
@@ -201,20 +217,20 @@ export default function ContentCardFoodPrices(props) {
         variant="elevation"
         sx={{
           margin: 0,
-          height: img == res.NO_IMG ? '240px' : `${imgHeight + 240}px`,
+          height: img === res.NO_IMG ? '240px' : imgHeight ? `${imgHeight + 240}px` : '440px',
           border: `1px solid ${palette.border.light}`,
           paddingBottom: 1.5
         }}
         square
       >
-        {img == res.NO_IMG ? (
+        {img === res.NO_IMG ? (
           <></>
         ) : img || imgFilePath ? (
           <Box sx={{ position: 'relative' }}>
             {/* IMAGE queried from server */}
             <CardMedia
               sx={{ height: imgHeight ? imgHeight : 200 }}
-              image={img ? img : imgFilePath ? imgFilePath : null}
+              image={img ? img : imgFilePath ? imgFilePath : undefined}
               title={header}
             />
             {/* DELETE IMG Btn */}

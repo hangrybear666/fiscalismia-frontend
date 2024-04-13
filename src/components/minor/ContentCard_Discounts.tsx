@@ -40,6 +40,7 @@ import butcher from '/imgs/supermarkets/butcher1.png';
 import online from '/imgs/supermarkets/online1.png';
 import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
+
 const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });

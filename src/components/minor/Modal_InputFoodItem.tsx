@@ -24,7 +24,7 @@ import { postNewFoodItem } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 
 interface InputFoodItemModalProps {
-  refreshParent: React.Dispatch<React.SetStateAction<Number>>;
+  refreshParent: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function InputFoodItemModal(props: InputFoodItemModalProps) {
@@ -92,7 +92,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
       console.log(response.results[0]);
       setOpen(false);
       // to refresh parent's table based on added food item after DB insertion
-      refreshParent(Number(response.results[0].id));
+      refreshParent(response.results[0].id);
     } else {
       // TODO User Notification
       console.error(response);
