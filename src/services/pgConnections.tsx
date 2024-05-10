@@ -266,7 +266,7 @@ export const getUserSpecificSettings = async (username: string) => {
  * @returns Object containing a results array with all fixed costs valid at provided date from the db
  * @route /api/fiscalismia/fixed_costs/valid/:date
  */
-export const getFixedCostsByEffectiveDate = async (validDate: Date) => {
+export const getFixedCostsByEffectiveDate = async (validDate: string) => {
   setToken();
   try {
     const config = {
@@ -304,7 +304,7 @@ export const getVariableExpenseByCategory = async (category: string) => {
  * @returns Object containing a results array with all fixed income data valid at provided date from the db
  * @route /api/fiscalismia/fixed_income/valid/:date
  */
-export const getFixedIncomeByEffectiveDate = async (validDate: Date) => {
+export const getFixedIncomeByEffectiveDate = async (validDate: string) => {
   setToken();
   try {
     const config = {

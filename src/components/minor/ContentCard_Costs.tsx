@@ -9,9 +9,9 @@ import Stack from '@mui/system/Stack';
 
 interface ContentCardCostsProps {
   header: string;
-  amount: number | null;
+  amount: string | null;
   subtitle: string;
-  details: string[];
+  details: string[] | null;
   icon: React.ReactNode;
   img: string | null;
   detailHeader?: string;

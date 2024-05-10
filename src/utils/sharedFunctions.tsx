@@ -3,6 +3,7 @@ import { resourceProperties as res } from '../resources/resource_properties';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
+import { ContentCardObject } from '../types/custom/customTypes';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -28,7 +29,7 @@ export function constructContentCardObject(
   details: string[] | null,
   icon: React.ReactNode | string,
   img: string | null
-) {
+): ContentCardObject {
   let turnus =
     subtitle === '1.00'
       ? res.INTERVAL_MONTHLY

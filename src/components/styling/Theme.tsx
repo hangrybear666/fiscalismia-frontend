@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { palette } from './PaletteAndColors';
 import { localStorageKeys } from '../../resources/resource_properties';
+import React from 'react';
 
 export const contentMaxWidth = '1680px';
 

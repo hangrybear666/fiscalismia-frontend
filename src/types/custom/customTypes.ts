@@ -180,3 +180,29 @@ export type FoodItemUpdateObject = {
   price: number;
   lastUpdate: Date;
 };
+
+export type ContentChartVerticalBarObject = {
+  chartTitle: string;
+  labels: string[];
+  dataSet1: any;
+  dataSet2: any;
+  dataSet3: any;
+  dataSet4: any;
+  dataSet1Name: any;
+  dataSet2Name: any;
+  dataSet3Name: any;
+  dataSet4Name?: any;
+  color1: any;
+  color2: any;
+  color3: any;
+  color4?: any;
+};
+
+export type ContentCardObject = {
+  header: string;
+  amount: string | null;
+  subtitle: string;
+  details: string[] | null;
+  img: string | null;
+  icon: React.ReactNode;
+};
