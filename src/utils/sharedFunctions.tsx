@@ -3,7 +3,7 @@ import { resourceProperties as res } from '../resources/resource_properties';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
-import { ContentCardObject } from '../types/custom/customTypes';
+import { ContentCardObject, ContentChartLineObject } from '../types/custom/customTypes';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -12,16 +12,6 @@ declare module '@mui/material/Chip' {
   }
 }
 
-/**
- *
- * @param {string} header
- * @param {number | null} amount
- * @param {string} subtitle
- * @param {string[] | null} details
- * @param {React.ReactNode | string} icon
- * @param {string | null} img
- * @returns
- */
 export function constructContentCardObject(
   header: string,
   amount: number | null,
@@ -53,6 +43,35 @@ export function constructContentCardObject(
     icon: icon
   };
   return contentCardObj;
+}
+
+/**
+ * Used for constructing chart.js line charts with a single line.
+ * @param title Card Title
+ * @param xAxis typically a string representation of a date array
+ * @param dataSets typically number arrays for the y axis
+ * @param colors color overrides for line, point and active selection
+ * @returns a ContentChartLineObject
+ */
+export function constructContentLineChartObject(
+  title: string,
+  xAxis: string[],
+  dataSets: {
+    dataSet1: any;
+    dataSet1Name: string;
+  },
+  colors: { pointColor1: string; lineColor1: string; selectionColor: string }
+): ContentChartLineObject {
+  const contentChartObj = {
+    chartTitle: title,
+    labels: xAxis,
+    dataSet1: dataSets?.dataSet1,
+    dataSet1Name: dataSets?.dataSet1Name,
+    pointColor1: colors.pointColor1,
+    lineColor1: colors.lineColor1,
+    selectionColor: colors.selectionColor
+  };
+  return contentChartObj;
 }
 
 /**

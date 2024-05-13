@@ -40,13 +40,13 @@ interface ContentLineChartProps {
   pointColor1?: string;
   dataSet1Name: string;
   lineColor1?: string;
-  dataSet1Order: number;
+  dataSet1Order?: number;
   dataSet2Name?: string;
   pointColor2?: string;
   lineColor2?: string;
   dataSet2Order?: number;
-  chartOptions: ChartOptions<'line'>;
-  chartData: ChartData<'line'>;
+  chartOptions?: ChartOptions<'line'>;
+  chartData?: ChartData<'line'>;
 }
 
 type DateComparison = {

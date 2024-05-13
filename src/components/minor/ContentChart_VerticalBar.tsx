@@ -48,6 +48,8 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
     chartTitle,
     selectedLabel,
     dataSetCount,
+    chartOptions,
+    chartData,
     dataSet1,
     dataSet2,
     dataSet3,
@@ -92,6 +94,7 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
   }
 
   const options = {
+    ...chartOptions,
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -129,6 +132,7 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
   };
 
   let data = {
+    ...chartData,
     labels,
     datasets: [
       {

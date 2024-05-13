@@ -198,6 +198,16 @@ export type ContentChartVerticalBarObject = {
   color4?: any;
 };
 
+export type ContentChartLineObject = {
+  chartTitle: string;
+  labels: string[];
+  dataSet1: any;
+  dataSet1Name: string;
+  pointColor1: string;
+  lineColor1: string;
+  selectionColor: string;
+};
+
 export type ContentCardObject = {
   header: string;
   amount: string | null;

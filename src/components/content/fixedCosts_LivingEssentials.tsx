@@ -84,10 +84,10 @@ function extractChartData(allFixedCosts: any) {
   livingEssentialsEffectiveDatesArr.sort();
   // only read dates from datetime
   const livingEssentialsXaxis = livingEssentialsEffectiveDatesArr.map((e: string) => e.substring(0, 10));
-  let livingEssentialsDs1: any[] = [];
-  let livingEssentialsDs2: any[] = [];
-  let livingEssentialsDs3: any[] = [];
-  let livingEssentialsDs4: any[] = [];
+  let livingEssentialsDs1: number[] = [];
+  let livingEssentialsDs2: number[] = [];
+  let livingEssentialsDs3: number[] = [];
+  let livingEssentialsDs4: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   livingEssentialsEffectiveDatesArr.forEach((xAxisEntry) => {
     livingEssentialsDs1.push(
