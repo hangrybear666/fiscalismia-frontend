@@ -72,7 +72,7 @@ function initializePresetData(palette: Palette): VariableExpensePreset[] {
   ];
 }
 interface InputVariableExpenseModalProps {
-  setAddedItemId: React.Dispatch<React.SetStateAction<Number>>;
+  setAddedItemId: React.Dispatch<React.SetStateAction<Number | undefined>>;
   storeAutoCompleteItemArray: string[];
   categoryAutoCompleteItemArray: string[];
   indulgencesAutoCompleteItemArray: string[];

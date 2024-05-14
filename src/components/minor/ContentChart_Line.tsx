@@ -78,7 +78,6 @@ export default function ContentLineChart(props: ContentLineChartProps) {
   const labels = props.labels
     ? props.labels
     : ['Mai 2020 - Juni 2022', 'Juli 2022 - Dezember 2022', 'Januar 2023 - Mai 2023', 'Juni 2023 - aktuell'];
-  console.log(labels ? 'defined' : 'undefined');
 
   let maxValueYaxis: number = 0;
   let selectedLabelIndex: number = -1;

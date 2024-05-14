@@ -17,6 +17,7 @@ import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
 import { Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
 import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends';
+import { TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface CustomBoughtSoldChipProps {
   value: string;
@@ -72,20 +73,18 @@ interface Income_InvestmentsProps {}
 export default function Income_Investments(_props: Income_InvestmentsProps) {
   const { palette } = useTheme();
   // db data
-  const [allInvestments, setAllInvestments] = useState(null);
-  const [allDividends, setAllDividends] = useState(null);
-  const [uniqueIsinArray, setUniqueIsinArray] = useState(null);
+  const [allInvestments, setAllInvestments] = useState<any>();
+  const [allDividends, setAllDividends] = useState<any>();
+  const [uniqueIsinArray, setUniqueIsinArray] = useState<TwelveCharacterString[]>([]);
   // ag-grid
   const [investmentRowData, setInvestmentRowData] = useState([]);
   const [dividendRowData, setDividendRowData] = useState([]);
-  const [investmentColumnDefinitions, setInvestmentColumnDefinitions] = useState([]);
-  const [dividendColumnDefinitions, setDividendColumnDefinitions] = useState([]);
-  const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState(null);
+  const [investmentColumnDefinitions, setInvestmentColumnDefinitions] = useState<any[]>([]);
+  const [dividendColumnDefinitions, setDividendColumnDefinitions] = useState<any[]>([]);
+  const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState<React.SetStateAction<Number>>();
   // Reference to grid API
-  const investmentGridRif = useRef();
-  const dividendGridRif = useRef();
-  // breakpoints
-  const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
+  const investmentGridRef = useRef<AgGridReact>(null);
+  const dividendGridRef = useRef<AgGridReact>(null);
 
   // ON PAGE LOAD
   useEffect(() => {
@@ -96,7 +95,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       setDividendRowData(allDividends.results);
       setAllInvestments(allInvestments.results);
       setAllDividends(allDividends.results);
-      setUniqueIsinArray(Array.from(new Set(allInvestments.results.map((e) => e.isin))));
+      setUniqueIsinArray(Array.from(new Set(allInvestments.results.map((e: any) => e.isin))));
     };
     getInvestmentData();
   }, [updatedOrAddedItemFlag]);
@@ -110,22 +109,22 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
    */
   const SalesProfitMinusTaxes = (props: any) => {
     if (allInvestments && props?.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
-      const grossProfit = props?.data?.profit_amt ? Number(props.data.profit_amt).toFixed(2) : null;
-      const taxPaid = props?.data?.tax_paid ? Number(props.data.tax_paid).toFixed(2) : null;
-      const netProfit = grossProfit && taxPaid ? Number(grossProfit - taxPaid).toFixed(2) : grossProfit;
+      const grossProfit = props?.data?.profit_amt ? parseFloat(props.data.profit_amt) : null;
+      const taxPaid = props?.data?.tax_paid ? parseFloat(props.data.tax_paid) : null;
+      const netProfit = grossProfit && taxPaid ? grossProfit - taxPaid : grossProfit;
       return (
         <HtmlTooltip
           title={
             <React.Fragment>
               <Stack>
                 <Typography sx={{ color: palette.primary.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS + String(grossProfit) + ' ' + res.CURRENCY_EURO}
+                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS + grossProfit?.toFixed(2) + ' ' + res.CURRENCY_EURO}
                 </Typography>
                 <Typography sx={{ color: palette.error.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT + String(taxPaid) + ' ' + res.CURRENCY_EURO}
+                  {res.INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT + taxPaid?.toFixed(2) + ' ' + res.CURRENCY_EURO}
                 </Typography>
                 <Typography sx={{ color: palette.success.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET + String(netProfit) + ' ' + res.CURRENCY_EURO}
+                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET + netProfit?.toFixed(2) + ' ' + res.CURRENCY_EURO}
                 </Typography>
               </Stack>
             </React.Fragment>
@@ -152,15 +151,15 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
    * @param {*} props
    * @returns Chip with onClick Listener displaying a DataGrid Modal with individual rows
    */
-  const VisualizeOnAggregateRows = ({ value, investments }) => {
+  const VisualizeOnAggregateRows = ({ value, investments }: any) => {
     const [open, setOpen] = useState(false);
     // breakpoints
-    const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
 
-    if (allInvestments && value && Number(value) > 1) {
+    if (allInvestments && value && value > 1) {
       // Filter all Investments to the Ids contained within aggregated dividends
       const investmentIds = investments.split(',').map(Number); // Map String Array to Number Array
-      const filteredInvestments = allInvestments.filter((e) => investmentIds.includes(Number(e.id)));
+      const filteredInvestments = allInvestments.filter((e: any) => investmentIds.includes(Number(e.id)));
       return (
         <>
           <Tooltip title="Click to reveal individual positions." placement="left">
@@ -246,20 +245,23 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   /**
    * Resets the Grid to the initial state after page load.
    */
-  const resetAgGridToInitialState = useCallback((gridRef) => {
+  const resetAgGridToInitialState = useCallback((gridRef: any) => {
     gridRef.current.api.setFilterModel(null); // Reset Filters
     gridRef.current.api.resetColumnState(); // Reset Sorting
   }, []);
 
-  const defaultColDef = useMemo(() => ({
-    filter: true,
-    floatingFilter: true,
-    flex: 1,
-    resizable: false,
-    minWidth: 100,
-    wrapText: false,
-    autoHeight: false
-  }));
+  const defaultColDef = useMemo(
+    () => ({
+      filter: true,
+      floatingFilter: true,
+      flex: 1,
+      resizable: false,
+      minWidth: 100,
+      wrapText: false,
+      autoHeight: false
+    }),
+    []
+  );
 
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
@@ -268,7 +270,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       {
         headerName: 'Order Type',
         field: 'execution_type',
-        cellRenderer: (p) => <CustomBoughtSoldChip value={p.value} />,
+        cellRenderer: (p: any) => <CustomBoughtSoldChip value={p.value} />,
         minWidth: 80,
         cellStyle: () => ({
           display: 'flex',
@@ -317,7 +319,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       {
         field: 'cnt',
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_AGGREGATE,
-        cellRenderer: (p) => <VisualizeOnAggregateRows value={p.value} investments={p.data.investments} />,
+        cellRenderer: (p: any) => <VisualizeOnAggregateRows value={p.value} investments={p.data.investments} />,
         filter: false,
         minWidth: 70,
         cellStyle: () => ({
@@ -363,7 +365,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       <Stack>
         <InputInvestmentTaxesModal refreshParent={setUpdatedOrAddedItemFlag} />
       </Stack>
-      <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(investmentGridRif)}>
+      <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(investmentGridRef)}>
         {res.RESET}
       </Button>
       <div
@@ -371,7 +373,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       >
         {allInvestments ? (
           <AgGridReact
-            ref={investmentGridRif}
+            ref={investmentGridRef}
             rowData={investmentRowData}
             columnDefs={investmentColumnDefinitions}
             defaultColDef={defaultColDef}
@@ -391,7 +393,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           />
         </Stack>
       ) : null}
-      <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(dividendGridRif)}>
+      <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(dividendGridRef)}>
         {res.RESET}
       </Button>
       <div
@@ -399,7 +401,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       >
         {allInvestments && allDividends ? (
           <AgGridReact
-            ref={dividendGridRif}
+            ref={dividendGridRef}
             rowData={dividendRowData}
             columnDefs={dividendColumnDefinitions}
             defaultColDef={defaultColDef}

@@ -12,15 +12,7 @@ import ContentCard from '../minor/ContentCard_Costs';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
-
-/**
- * extracts all unique dates within sales into an array
- * @param {*} allSales
- * @returns array of date strings in the format yyyy-mm-dd
- */
-function getUniqueSalesDates(allSales: any) {
-  return Array.from(new Set(allSales.map((e: any) => e.purchasing_date)));
-}
+import { getUniquePurchasingDates } from '../../utils/sharedFunctions';
 
 /**
  * extracts all unique years within unique date array into an array
@@ -28,7 +20,7 @@ function getUniqueSalesDates(allSales: any) {
  * @returns array of year strings in the format yyyy
  */
 function getUniqueEffectiveDateYears(allSales: any) {
-  const uniqueEffectiveDateArray = getUniqueSalesDates(allSales);
+  const uniqueEffectiveDateArray = getUniquePurchasingDates(allSales);
   const uniqueYearSet = new Set(uniqueEffectiveDateArray.map((e: any) => e.substring(0, 4)));
   return [...uniqueYearSet].sort((a, b) => (a > b ? 1 : -1)); // return as ASC sorted Array
 }

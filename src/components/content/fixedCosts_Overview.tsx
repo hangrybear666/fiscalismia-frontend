@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -19,7 +19,7 @@ import { ContentCardObject, ContentChartLineObject } from '../../types/custom/cu
  * @param {*} allFixedCosts all fixed costs within db
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
-function extractChartData(allFixedCosts: any) {
+function extractChartData(allFixedCosts: any): { overview: ContentChartLineObject } {
   const overviewColors = {
     pointColor1: 'rgba(220, 193, 111,0.6)',
     lineColor1: 'black',

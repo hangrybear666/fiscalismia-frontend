@@ -59,10 +59,12 @@ export function constructContentLineChartObject(
   dataSets: {
     dataSet1: any;
     dataSet1Name: string;
+    dataSet2?: any;
+    dataSet2Name?: string;
   },
-  colors: { pointColor1: string; lineColor1: string; selectionColor: string }
+  colors: { pointColor1: string; lineColor1: string; pointColor2?: string; lineColor2?: string; selectionColor: string }
 ): ContentChartLineObject {
-  const contentChartObj = {
+  let contentChartObj: ContentChartLineObject = {
     chartTitle: title,
     labels: xAxis,
     dataSet1: dataSets?.dataSet1,
@@ -71,6 +73,19 @@ export function constructContentLineChartObject(
     lineColor1: colors.lineColor1,
     selectionColor: colors.selectionColor
   };
+  if (dataSets.dataSet2) {
+    contentChartObj.dataSet2 = dataSets.dataSet2;
+  }
+  if (dataSets.dataSet2Name) {
+    contentChartObj.dataSet2Name = dataSets.dataSet2Name;
+  }
+  if (colors.pointColor2) {
+    contentChartObj.pointColor2 = colors.pointColor2;
+  }
+  if (colors.lineColor2) {
+    contentChartObj.lineColor2 = colors.lineColor2;
+  }
+  console.log(contentChartObj);
   return contentChartObj;
 }
 
@@ -102,6 +117,15 @@ export function getCombinedUniqueEffectiveDates(firstDataset: any, secondDataset
   } else {
     return null;
   }
+}
+
+/**
+ * extracts all unique purchasing_date values from given array
+ * @param {*} singleDataSet
+ * @returns array of date strings in the format yyyy-mm-dd
+ */
+export function getUniquePurchasingDates(singleDataSet: any) {
+  return Array.from(new Set(singleDataSet.map((e: any) => e.purchasing_date)));
 }
 
 /**

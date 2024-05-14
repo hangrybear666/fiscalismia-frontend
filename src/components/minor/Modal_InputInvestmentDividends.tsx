@@ -70,6 +70,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
   /**
    * WARNING: complicated logic for partial sales
    * When dividends are added, we want to assign them only to relevant stocks (which are still OWNED)
+   * Principle applied is First in First Out (FiFo) so stocks are sold off in chronological order of purchase (older ones first)
    * - Calculates running averages for unit price of owned investments
    * - Calculates which investments have been fully sold
    * - Calculates which investments are still owned fully

@@ -205,6 +205,10 @@ export type ContentChartLineObject = {
   dataSet1Name: string;
   pointColor1: string;
   lineColor1: string;
+  dataSet2?: any;
+  dataSet2Name?: string;
+  pointColor2?: string;
+  lineColor2?: string;
   selectionColor: string;
 };
 

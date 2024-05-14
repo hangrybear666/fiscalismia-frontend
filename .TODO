@@ -10,6 +10,7 @@
 # BUG: when pressing f5 or entering food prices from the menu, refresh food prices after image deletion is not triggered. it is triggered for prior added images
 # fix useAuth as unknown
 # getUniqueEffectiveDates(allFixedCosts.results) as string[] code search und in sharedFunction returntype auslagern
+# When entering dividend with tax percentage above 100% throw validation error
 
 ESLINT/PRETTIER in VSCODE
 https://github.com/idahogurl/vs-code-prettier-eslint/tree/master/examples/typescript
