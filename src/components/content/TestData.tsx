@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -9,27 +9,36 @@ import TempDeleteTable from '../minor/TempDeleteTable';
 import FilledInput from '@mui/material/FilledInput';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import pgConnections from '../../services/pgConnections';
-import { localStorageKeys } from '../../resources/resource_properties';
-import InputTsvForDbInsertionModal from '../minor/Modal_InputTsvForDbInsertion';
-import { resourceProperties as res } from '../../resources/resource_properties';
 import {
+  getTest as getDbTest,
+  postTest,
+  putTest,
+  deleteTest,
+  getFixedCostsByEffectiveDate as getDbFixedCostsByEffectiveDate,
   postVariableExpensesTsv,
   postAllFoodItemTsv,
   postFixedIncomeTsv,
   postFixedCostTsv,
   postInvestmentsTsv
 } from '../../services/pgConnections';
+import { localStorageKeys } from '../../resources/resource_properties';
+import InputTsvForDbInsertionModal from '../minor/Modal_InputTsvForDbInsertion';
+import { resourceProperties as res } from '../../resources/resource_properties';
+import { RouteInfo } from '../../types/custom/customTypes';
 
-export default function Content({ show = true, routeInfo }) {
-  const [result, setResult] = useState([]);
+interface ContentProps {
+  show?: boolean;
+  routeInfo: RouteInfo;
+}
+const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
+  const [result, setResult] = useState<any>([]);
   const [showResult, setShowResult] = useState(false);
   const [postInput, setPostInput] = useState('');
   const [putId, setPutId] = useState('');
   const [putInput, setPutInput] = useState('');
   const [deleteInput, setDeleteInput] = useState('');
 
-  const inputChangeListener = (e) => {
+  const inputChangeListener = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     switch (e.target.id) {
       case 'postInput':
@@ -48,52 +57,52 @@ export default function Content({ show = true, routeInfo }) {
   };
 
   const getTest = async () => {
-    const response = await pgConnections.getTest();
+    const response = await getDbTest();
     setResult(response);
     setShowResult(true);
   };
 
   const getFixedCostsByEffectiveDate = async () => {
-    const response = await pgConnections.getFixedCostsByEffectiveDate('01.08.2023');
+    const response = await getDbFixedCostsByEffectiveDate('01.08.2023');
     console.log(response);
     setResult(response);
     setShowResult(true);
   };
 
-  const processPost = async (e) => {
+  const processPost = async (e: any) => {
     e.preventDefault();
     if (postInput === '') {
       alert(`please provide a value for POST`);
     }
     const newEntry = { description: postInput };
-    await pgConnections.postTest(newEntry);
-    const response = await pgConnections.getTest();
+    await postTest(newEntry);
+    const response = await getDbTest();
     setResult(response);
     setPostInput('');
   };
 
-  const processPut = async (e) => {
+  const processPut = async (e: any) => {
     e.preventDefault();
     if (putInput === '' || putId === '') {
       alert(`please provide values for PUT`);
     }
     const updatedEntry = { description: putInput };
-    await pgConnections.putTest(putId, updatedEntry);
-    const response = await pgConnections.getTest();
+    await putTest(Number(putId), updatedEntry);
+    const response = await getDbTest();
     setResult(response);
     setPutId('');
     setPutInput('');
   };
 
-  const processDelete = async (e) => {
+  const processDelete = async (e: any) => {
     e.preventDefault();
     if (deleteInput === '') {
       alert(`please provide a value for DELETE`);
     }
     console.log('deleting entry with ID:');
     console.log(deleteInput);
-    await pgConnections.deleteTest(deleteInput);
-    const response = await pgConnections.getTest();
+    await deleteTest(Number(deleteInput));
+    const response = await getDbTest();
     console.log(response);
     setResult(response);
     setDeleteInput('');
@@ -272,4 +281,6 @@ export default function Content({ show = true, routeInfo }) {
       {/* DB REST TESTING */}
     </Paper>
   );
-}
+};
+
+export default Content;

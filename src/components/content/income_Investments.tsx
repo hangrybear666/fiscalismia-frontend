@@ -17,7 +17,7 @@ import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
 import { Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
 import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends';
-import { TwelveCharacterString } from '../../types/custom/customTypes';
+import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface CustomBoughtSoldChipProps {
   value: string;
@@ -68,7 +68,9 @@ const percentageFormatter = (params: any) => {
   return params.value.toFixed(2) + ' ' + res.SYMBOL_PERCENT;
 };
 
-interface Income_InvestmentsProps {}
+interface Income_InvestmentsProps {
+  routeInfo: RouteInfo;
+}
 
 export default function Income_Investments(_props: Income_InvestmentsProps) {
   const { palette } = useTheme();

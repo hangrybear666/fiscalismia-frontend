@@ -12,7 +12,7 @@ import amazon from '/imgs/supermarkets/amazon1.png';
 import edeka from '/imgs/supermarkets/edeka1.png';
 import butcher from '/imgs/supermarkets/butcher1.png';
 import online from '/imgs/supermarkets/online1.png';
-import online2 from '/imgs/supermarkets/online2.png';
+// import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
@@ -337,8 +337,8 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
         case SORT_BY_IDS.pricePerKgDesc:
           setFilteredFoodPrices(
             filteredFoodPrices
-              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(a.price_per_kg) ? 1 : -1))
-              : foodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(a.price_per_kg) ? 1 : -1))
+              ? filteredFoodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(b.price_per_kg) ? 1 : -1))
+              : foodPrices.sort((a: any, b: any) => (Number(a.price_per_kg) < Number(b.price_per_kg) ? 1 : -1))
           );
           break;
         case SORT_BY_IDS.normalizedPriceAsc:

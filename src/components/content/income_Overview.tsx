@@ -12,7 +12,7 @@ import {
   constructContentLineChartObject,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
-import { ContentCardObject, ContentChartLineObject } from '../../types/custom/customTypes';
+import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 
 /**
  *
@@ -111,7 +111,9 @@ function extractCardData(specificFixedIncome: any) {
   oneTimeYearlyBonus.details = oneTimeYearlyBonusFiltered.map((row: any) => row.description.trim());
   return { monthlyNetIncome, monthlyGrossIncome, yearlyGrossIncome, oneTimeYearlyBonus };
 }
-interface Income_OverviewProps {}
+interface Income_OverviewProps {
+  routeInfo: RouteInfo;
+}
 export default function Income_Overview(_props: Income_OverviewProps) {
   const { palette } = useTheme();
   // Selected Specific Fixed Income

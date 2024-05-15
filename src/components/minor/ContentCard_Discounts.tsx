@@ -38,7 +38,7 @@ import amazon from '/imgs/supermarkets/amazon1.png';
 import edeka from '/imgs/supermarkets/edeka1.png';
 import butcher from '/imgs/supermarkets/butcher1.png';
 import online from '/imgs/supermarkets/online1.png';
-import online2 from '/imgs/supermarkets/online2.png';
+// import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
 
 const Alert = React.forwardRef(function Alert(props: any, ref: any) {

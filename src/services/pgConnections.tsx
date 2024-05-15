@@ -352,7 +352,6 @@ export const postUpdatedUserSettings = async (username: string, settingKey: stri
 /**
  * User Upload of images such as jpg/webp/png requiring:
  * - <input type="file" /> within a <Button component='label'/>
- * @param {*} postContent
  * @returns
  */
 export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>, foodItemId: string) => {
@@ -640,7 +639,7 @@ export const postAllFoodItemTsv = async (foodItemTsvInput: string) => {
  *      \_/ \____/\____/  \_/
  */
 
-const getTest = async () => {
+export const getTest = async (): Promise<any> => {
   setToken();
   try {
     const config = {
@@ -653,7 +652,7 @@ const getTest = async () => {
   }
 };
 
-const postTest = async (newObject: any) => {
+export const postTest = async (newObject: any): Promise<any> => {
   setToken();
   try {
     const config = {
@@ -666,7 +665,7 @@ const postTest = async (newObject: any) => {
   }
 };
 
-const putTest = async (id: number, newObject: any) => {
+export const putTest = async (id: number, newObject: any): Promise<any> => {
   setToken();
   try {
     const config = {
@@ -679,7 +678,7 @@ const putTest = async (id: number, newObject: any) => {
   }
 };
 
-const deleteTest = async (id: number) => {
+export const deleteTest = async (id: number): Promise<any> => {
   setToken();
   try {
     const config = {
@@ -690,11 +689,4 @@ const deleteTest = async (id: number) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-export default {
-  getTest,
-  postTest,
-  putTest,
-  deleteTest
 };

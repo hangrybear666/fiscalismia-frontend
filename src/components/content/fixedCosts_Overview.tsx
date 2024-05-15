@@ -12,7 +12,7 @@ import {
   constructContentLineChartObject,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
-import { ContentCardObject, ContentChartLineObject } from '../../types/custom/customTypes';
+import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 
 /**
  *
@@ -167,7 +167,9 @@ function extractCardData(specificFixedCosts: any) {
   };
 }
 
-interface FixedCosts_OverviewProps {}
+interface FixedCosts_OverviewProps {
+  routeInfo: RouteInfo;
+}
 
 export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
   const { palette } = useTheme();

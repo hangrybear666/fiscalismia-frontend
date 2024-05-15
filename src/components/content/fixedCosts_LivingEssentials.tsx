@@ -13,7 +13,7 @@ import { resourceProperties as res, fixedCostCategories as categories } from '..
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import { Paper, Theme } from '@mui/material';
 import { constructContentCardObject, getUniqueEffectiveDates } from '../../utils/sharedFunctions';
-import { ContentCardObject, ContentChartVerticalBarObject } from '../../types/custom/customTypes';
+import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 
 const iconProperties = {
   fontSize: 55,
@@ -228,7 +228,9 @@ function extractCardData(specificFixedCosts: any) {
   return { rentAndUtilities, dslAndPhone, insurance, studentLoans };
 }
 
-interface FixedCosts_LivingEssentialsProps {}
+interface FixedCosts_LivingEssentialsProps {
+  routeInfo: RouteInfo;
+}
 
 export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEssentialsProps) {
   const { palette, breakpoints } = useTheme();

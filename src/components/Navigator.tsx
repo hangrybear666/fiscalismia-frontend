@@ -39,6 +39,11 @@ interface NavigatorProps {
       path: string;
     }>
   >;
+  open?: boolean;
+  onClose?: () => void;
+  variant?: 'permanent' | 'persistent' | 'temporary' | undefined;
+  sxProps?: any;
+  drawerWidth: number;
 }
 
 /**
@@ -47,6 +52,7 @@ interface NavigatorProps {
 export default function Navigator(props: NavigatorProps) {
   const [selectedRelativePath, setSelectedRelativePath] = useState<string | null>('');
   const { ...other } = props;
+  const { open, onClose, variant, sxProps, drawerWidth } = props;
   const navigate = useNavigate();
   let location = useLocation();
 
@@ -75,7 +81,14 @@ export default function Navigator(props: NavigatorProps) {
   };
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer
+      variant={variant}
+      sx={sxProps}
+      {...other}
+      open={open}
+      onClose={onClose}
+      PaperProps={{ style: { width: drawerWidth } }}
+    >
       <List disablePadding>
         {/* FISCALISMIA */}
         <ListItem sx={{ paddingY: 2, color: '#fff' }}>

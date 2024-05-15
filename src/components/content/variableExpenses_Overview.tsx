@@ -17,6 +17,7 @@ import {
 } from '../../services/pgConnections';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { getUniquePurchasingDates } from '../../utils/sharedFunctions';
+import { RouteInfo } from '../../types/custom/customTypes';
 
 /**
  * extracts all unique years within unique date array into an array
@@ -55,7 +56,9 @@ function getStoreDataStructuresForAutocomplete(allStores: any[], allCategories: 
   return { storeAutoCompleteItemArray, categoryAutoCompleteItemArray, indulgencesAutoCompleteItemArray };
 }
 
-interface VariableExpenses_OverviewProps {}
+interface VariableExpenses_OverviewProps {
+  routeInfo: RouteInfo;
+}
 export default function VariableExpenses_Overview(_props: VariableExpenses_OverviewProps) {
   const { palette } = useTheme();
   // Variable Expense Data for Display

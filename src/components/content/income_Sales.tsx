@@ -13,6 +13,7 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { getUniquePurchasingDates } from '../../utils/sharedFunctions';
+import { RouteInfo } from '../../types/custom/customTypes';
 
 /**
  * extracts all unique years within unique date array into an array
@@ -122,7 +123,9 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
   return { totalSales, storeBasedCards };
 }
 
-interface Income_SalesProps {}
+interface Income_SalesProps {
+  routeInfo: RouteInfo;
+}
 
 export default function Income_Sales(_props: Income_SalesProps) {
   const { palette, breakpoints } = useTheme();

@@ -94,16 +94,11 @@ export const isUserTokenValid = (token: string, loginUserName: string | null = n
 /**
  * 1) calls the helper function isUserTokenValid to guarantee that the token's user's userName and loginUserName match
  * 2) Intercepts HTTP API RESPONSES to check for status 401 = UNAUTHORIZED which gets thrown by authentication.js in backend
- * @param {*} param0 an object containing the optional redirectPath and all of the children components being rendered
+ * @param {*} param0 an object containing all of the children components being rendered
  * @returns all children Routes being Protected if true; Navigates to redirectPath if false
  */
-export const ProtectedRoute = ({
-  redirectPath = paths.LOGIN,
-  children
-}: {
-  redirectPath: string;
-  children: React.ReactNode;
-}) => {
+export const ProtectedRoute = () => {
+  const redirectPath = paths.LOGIN;
   const location = useLocation();
   const { token, loginUserName, setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
   // intercepts each axios response and in case of error and status code 401 = UNAUTHORIZED, invalidates session
@@ -130,6 +125,6 @@ export const ProtectedRoute = ({
     invalidateSession(setToken, setLoginUserName);
     return <Navigate to={redirectPath} replace state={{ from: location }} />;
   } else {
-    return children ? children : <Outlet />;
+    return <Outlet />;
   }
 };

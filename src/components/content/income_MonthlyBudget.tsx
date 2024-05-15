@@ -18,7 +18,7 @@ import {
   getCombinedUniqueEffectiveDates,
   constructContentLineChartObject
 } from '../../utils/sharedFunctions';
-import { ContentCardObject, ContentChartLineObject } from '../../types/custom/customTypes';
+import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 
 /**
  * @param {*} allFixedIncome all fixed income data within db
@@ -139,7 +139,9 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
   return { monthlyNetIncome, oneTimeYearlyBonus, monthlyTotalCost };
 }
 
-interface Income_Monthly_BudgetProps {}
+interface Income_Monthly_BudgetProps {
+  routeInfo: RouteInfo;
+}
 export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps) {
   const { palette } = useTheme();
   // Selected Specific Fixed Income

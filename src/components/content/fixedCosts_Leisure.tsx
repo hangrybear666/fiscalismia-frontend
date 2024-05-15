@@ -11,7 +11,7 @@ import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
 import { Paper, Theme } from '@mui/material';
 import { constructContentCardObject, getUniqueEffectiveDates } from '../../utils/sharedFunctions';
-import { ContentCardObject, ContentChartVerticalBarObject } from '../../types/custom/customTypes';
+import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 
 const iconProperties = {
   fontSize: 55,
@@ -249,7 +249,9 @@ function extractCardData(specificFixedCosts: any) {
   return { sportsAndHealth, mediaAndEntertainment };
 }
 
-interface FixedCosts_LeisureProps {}
+interface FixedCosts_LeisureProps {
+  routeInfo: RouteInfo;
+}
 
 export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps) {
   const { palette, breakpoints } = useTheme();
