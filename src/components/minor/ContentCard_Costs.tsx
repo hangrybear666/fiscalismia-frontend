@@ -6,10 +6,11 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
+import { resourceProperties as res } from '../../resources/resource_properties';
 
 interface ContentCardCostsProps {
   header: string;
-  amount: string | null;
+  amount: number | null;
   subtitle: string;
   details: string[] | null;
   icon: React.ReactNode;
@@ -57,7 +58,7 @@ export default function ContentCardCosts(props: ContentCardCostsProps) {
             <Stack alignItems="center">
               {amount ? (
                 <Typography sx={{ mt: 0.2 }} variant="h5">
-                  {amount}€
+                  {Math.round(amount)} {res.CURRENCY_EURO}
                 </Typography>
               ) : null}
               {subtitle ? (

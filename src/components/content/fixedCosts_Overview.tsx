@@ -6,7 +6,7 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
-import { Paper } from '@mui/material';
+import { Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
   constructContentLineChartObject,
@@ -19,11 +19,11 @@ import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../type
  * @param {*} allFixedCosts all fixed costs within db
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
-function extractChartData(allFixedCosts: any): { overview: ContentChartLineObject } {
+function extractChartData(allFixedCosts: any, palette: Palette): { overview: ContentChartLineObject } {
   const overviewColors = {
-    pointColor1: 'rgba(220, 193, 111,0.6)',
+    pointColor1: palette.secondary.light,
     lineColor1: 'black',
-    selectionColor: 'rgba(255, 77, 77,0.8)'
+    selectionColor: palette.error.main
   };
   // No filtering of overall results required
   const overviewFiltered = allFixedCosts.results;
@@ -86,30 +86,27 @@ function extractCardData(specificFixedCosts: any) {
   let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
   let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, res.NO_IMG);
   // Monthly Total Amount
-  monthlyTotalCost.amount = Math.round(
-    specificFixedCosts.results
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  monthlyTotalCost.amount = specificFixedCosts.results
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   // Rent and Utilities
   let rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.LIVING_ESSENTIALS_KEY
   );
-  rentAndUtilities.amount = Math.round(
-    rentAndUtilitiesFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  rentAndUtilities.amount = rentAndUtilitiesFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   rentAndUtilities.details = rentAndUtilitiesFiltered.map((row: any) => row.description.trim());
   // DSL & Telephone
   let dslAndPhoneFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.INTERNET_AND_PHONE_KEY
   );
-  dslAndPhone.amount = Math.round(
-    dslAndPhoneFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  dslAndPhone.amount = dslAndPhoneFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   dslAndPhone.details = dslAndPhoneFiltered.map((row: any) => row.description.trim());
   // Sports and Health
   let sportsAndHealthFiltered = specificFixedCosts.results.filter(
@@ -119,11 +116,10 @@ function extractCardData(specificFixedCosts: any) {
       row.category === categories.SUPPLEMENTS_PERFORMANCE_KEY ||
       row.category === categories.PHYSIO_AND_HEALTH_COURSES_KEY
   );
-  sportsAndHealth.amount = Math.round(
-    sportsAndHealthFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  sportsAndHealth.amount = sportsAndHealthFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   sportsAndHealth.details = sportsAndHealthFiltered.map((row: any) => row.description.trim());
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = specificFixedCosts.results.filter(
@@ -132,29 +128,26 @@ function extractCardData(specificFixedCosts: any) {
       row.category === categories.LEISURE_MUSIC_PODCASTS_KEY ||
       row.category === categories.LEISURE_TV_CINEMA_KEY
   );
-  mediaAndEntertainment.amount = Math.round(
-    mediaAndEntertainmentFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  mediaAndEntertainment.amount = mediaAndEntertainmentFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered.map((row: any) => row.description.trim());
   // Insurance
   let insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
-  insurance.amount = Math.round(
-    insuranceFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  insurance.amount = insuranceFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   insurance.details = insuranceFiltered.map((row: any) => row.description.trim());
   // Student Loans
   let studentLoansFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.STUDENT_LOANS_KEY
   );
-  studentLoans.amount = Math.round(
-    studentLoansFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  studentLoans.amount = studentLoansFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   studentLoans.details = studentLoansFiltered.map((row: any) => row.description.trim());
   return {
     monthlyTotalCost,
@@ -197,7 +190,7 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
       let effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedCostsChartData = extractChartData(allFixedCosts);
+      let allFixedCostsChartData = extractChartData(allFixedCosts, palette);
       setAllFixedCostsChart(allFixedCostsChartData.overview);
     };
     queryAllFixedCosts();

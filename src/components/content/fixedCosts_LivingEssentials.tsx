@@ -183,11 +183,9 @@ function extractCardData(specificFixedCosts: any) {
   let rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.LIVING_ESSENTIALS_KEY
   );
-  rentAndUtilities.amount = Math.round(
-    rentAndUtilitiesFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  rentAndUtilities.amount = rentAndUtilitiesFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   rentAndUtilities.details = rentAndUtilitiesFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
@@ -195,21 +193,19 @@ function extractCardData(specificFixedCosts: any) {
   let dslAndPhoneFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.INTERNET_AND_PHONE_KEY
   );
-  dslAndPhone.amount = Math.round(
-    dslAndPhoneFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  dslAndPhone.amount = dslAndPhoneFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   dslAndPhone.details = dslAndPhoneFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
   // Insurance
   let insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
-  insurance.amount = Math.round(
-    insuranceFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  insurance.amount = insuranceFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   insurance.details = insuranceFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
@@ -217,11 +213,10 @@ function extractCardData(specificFixedCosts: any) {
   let studentLoansFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.STUDENT_LOANS_KEY
   );
-  studentLoans.amount = Math.round(
-    studentLoansFiltered
-      .map((row: any) => parseFloat(row.monthly_cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  studentLoans.amount = studentLoansFiltered
+    .map((row: any) => parseFloat(row.monthly_cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   studentLoans.details = studentLoansFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );

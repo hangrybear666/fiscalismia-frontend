@@ -32,7 +32,7 @@ export function constructContentCardObject(
             : `alle ${subtitle} Monate`;
   const contentCardObj = {
     header: header.trim(),
-    amount: amount ? `${Math.round(amount)}${res.CURRENCY_EURO}` : null,
+    amount: amount ? amount : null,
     subtitle: turnus,
     details: details,
     img: img
@@ -85,7 +85,6 @@ export function constructContentLineChartObject(
   if (colors.lineColor2) {
     contentChartObj.lineColor2 = colors.lineColor2;
   }
-  console.log(contentChartObj);
   return contentChartObj;
 }
 
@@ -126,6 +125,16 @@ export function getCombinedUniqueEffectiveDates(firstDataset: any, secondDataset
  */
 export function getUniquePurchasingDates(singleDataSet: any) {
   return Array.from(new Set(singleDataSet.map((e: any) => e.purchasing_date)));
+}
+
+/**
+ * Extracts the year string from an array of date strings in the format yyyy-mm-dd
+ * @param {string[]} uniqueEffectiveDateArray array of date strings in the format yyyy-mm-dd
+ * @returns ASC sorted array of year strings in the format yyyy
+ */
+export function getUniqueEffectiveYears(uniqueEffectiveDateArray: unknown[]) {
+  const uniqueYearSet = new Set(uniqueEffectiveDateArray.map((e: any) => e.substring(0, 4)));
+  return [...uniqueYearSet].sort((a, b) => (a > b ? 1 : -1));
 }
 
 /**

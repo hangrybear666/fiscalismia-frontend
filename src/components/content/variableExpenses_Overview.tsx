@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
 import InputVariableExpenseModal from '../minor/Modal_InputVariableExpense';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import {
@@ -16,18 +17,17 @@ import {
   getAllVariableExpenseSensitivities
 } from '../../services/pgConnections';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { getUniquePurchasingDates } from '../../utils/sharedFunctions';
-import { RouteInfo } from '../../types/custom/customTypes';
+import {
+  constructContentCardObject,
+  getUniqueEffectiveYears,
+  getUniquePurchasingDates
+} from '../../utils/sharedFunctions';
+import { ContentCardObject, RouteInfo } from '../../types/custom/customTypes';
+import ContentCardCosts from '../minor/ContentCard_Costs';
 
-/**
- * extracts all unique years within unique date array into an array
- * @param {*} allVariableExpenses
- * @returns array of year strings in the format yyyy
- */
 function getUniqueEffectiveDateYears(allVariableExpenses: any) {
   const uniqueEffectiveDateArray = getUniquePurchasingDates(allVariableExpenses);
-  const uniqueYearSet = new Set(uniqueEffectiveDateArray.map((e: any) => e.substring(0, 4)));
-  return [...uniqueYearSet].sort(); // return as Array
+  return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
 /**
@@ -56,14 +56,74 @@ function getStoreDataStructuresForAutocomplete(allStores: any[], allCategories: 
   return { storeAutoCompleteItemArray, categoryAutoCompleteItemArray, indulgencesAutoCompleteItemArray };
 }
 
+/**
+ * Extracts the total expenses per category and returns an array of the categories with the largest expenses.
+ * @param allVariableExpenses
+ */
+function aggregateCostsPerCategory(allVariableExpenses: any): (string | number)[][] {
+  type CategoryCostObj = { category: string; cost: number };
+  const categoryCostsArr: CategoryCostObj[] = allVariableExpenses
+    .filter((row: any) => row.category.toLowerCase() !== 'sale')
+    .map((e: any) => {
+      return { category: e.category, cost: parseFloat(e.cost) };
+    });
+
+  // creates a Map with category as the key and the summed up cost as value
+  const categorySumMap = categoryCostsArr.reduce((map, item) => {
+    if (!map.has(item.category)) {
+      map.set(item.category, 0);
+    }
+    map.set(item.category, map.get(item.category)! + item.cost);
+    return map;
+  }, new Map<string, number>());
+
+  // Creates a <string,string> Array containing the 6 categories with the largest expense total
+  return Array.from(categorySumMap.entries())
+    .sort((a: [string, number], b: [string, number]) => (a[1] < b[1] ? 1 : -1))
+    .slice(0, 6)
+    .map((e: [string, number]) => {
+      return Array.from([e[0], parseFloat(e[1].toFixed(2))]);
+    });
+}
+
+// TODO create custom type for purchase info
+function extractAggregatedPurchaseInformation(allVariableExpenses: any) {
+  let yearlyTotalExpenseCard = constructContentCardObject(
+    res.FIXED_COSTS_MONHTLY_COST,
+    null,
+    '12.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  let categoryCards: ContentCardObject[] = [];
+
+  const costsPerCategory: (string | number)[][] = aggregateCostsPerCategory(allVariableExpenses);
+  costsPerCategory.forEach((e: (string | number)[]) => {
+    categoryCards.push(constructContentCardObject(e[0].toString(), Number(e[1]), '12.00', null, null, res.NO_IMG));
+  });
+
+  yearlyTotalExpenseCard.amount = allVariableExpenses
+    .filter((row: any) => row.category.toLowerCase() !== 'sale')
+    .map((row: any) => parseFloat(row.cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+  const purchaseInfo = {
+    totalCard: yearlyTotalExpenseCard,
+    categoryCards: categoryCards
+  };
+  return purchaseInfo;
+}
+
 interface VariableExpenses_OverviewProps {
   routeInfo: RouteInfo;
 }
+
 export default function VariableExpenses_Overview(_props: VariableExpenses_OverviewProps) {
   const { palette } = useTheme();
   // Variable Expense Data for Display
   const [allVariableExpenses, setAllVariableExpenses] = useState<any>(null);
   const [selectedVariableExpenses, setSelectedVariableExpenses] = useState<any>();
+  const [aggregatedPurchaseInformation, setAggregatedPurchaseInformation] = useState<any>();
   // year selection
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
   const [selectedYear, setSelectedYear] = useState<string>();
@@ -107,7 +167,12 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
 
   const handleYearSelection = (_event: React.MouseEvent<HTMLElement>, newValue: string) => {
     setSelectedYear(newValue);
-    setSelectedVariableExpenses(allVariableExpenses.filter((e: any) => e.purchasing_date.substring(0, 4) === newValue));
+    const filteredYearVarExpenses = allVariableExpenses.filter(
+      (e: any) => e.purchasing_date.substring(0, 4) === newValue
+    );
+    setSelectedVariableExpenses(filteredYearVarExpenses);
+    const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredYearVarExpenses);
+    setAggregatedPurchaseInformation(aggregatePurchaseInfo);
   };
 
   return (
@@ -166,26 +231,38 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
             })
           : null}
       </Box>
-      <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+      {aggregatedPurchaseInformation ? (
+        <Grid container spacing={3}>
+          <React.Fragment>
+            <Grid xs={12}>
+              <ContentCardCosts elevation={12} {...aggregatedPurchaseInformation.totalCard} />
+            </Grid>
+            {aggregatedPurchaseInformation.categoryCards
+              ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject) => (
+                  <Grid xs={6} md={4} xl={2}>
+                    <ContentCardCosts elevation={12} {...e} />
+                  </Grid>
+                ))
+              : null}
+          </React.Fragment>
+        </Grid>
+      ) : null}
+      <TableContainer component={Paper} sx={{ borderRadius: 0, mt: 2 }}>
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow sx={tableHeadStyling}>
-              <TableCell>{res.DEALS_OVERVIEW_THEADER_FOODITEM}</TableCell>
-              <TableCell>{res.DEALS_OVERVIEW_THEADER_BRAND}</TableCell>
-              <TableCell>{res.DEALS_OVERVIEW_THEADER_STORE}</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
-                {res.DEALS_OVERVIEW_THEADER_MAIN_MACRO}
+              <TableCell>description</TableCell>
+              <TableCell>category</TableCell>
+              <TableCell>store</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>cost</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
+                purchasing_date
               </TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                {res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP}
+                is_planned
               </TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                {res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP}
-              </TableCell>
-              <TableCell align="right">{res.DEALS_OVERVIEW_THEADER_PRICE_TOP}</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
-                {res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP}
-              </TableCell>
+              <TableCell align="right">contains_indulgence</TableCell>
+              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>sensitivities</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

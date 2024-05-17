@@ -12,7 +12,7 @@ import ContentCard from '../minor/ContentCard_Costs';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { getUniquePurchasingDates } from '../../utils/sharedFunctions';
+import { getUniqueEffectiveYears, getUniquePurchasingDates } from '../../utils/sharedFunctions';
 import { RouteInfo } from '../../types/custom/customTypes';
 
 /**
@@ -22,13 +22,12 @@ import { RouteInfo } from '../../types/custom/customTypes';
  */
 function getUniqueEffectiveDateYears(allSales: any) {
   const uniqueEffectiveDateArray = getUniquePurchasingDates(allSales);
-  const uniqueYearSet = new Set(uniqueEffectiveDateArray.map((e: any) => e.substring(0, 4)));
-  return [...uniqueYearSet].sort((a, b) => (a > b ? 1 : -1)); // return as ASC sorted Array
+  return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
 export type ContentCardSales = {
   header: string;
-  amount: string | null;
+  amount: number | null;
   subtitle: string;
   details: string[] | null;
   icon: React.ReactNode;
@@ -50,7 +49,7 @@ function constructContentCardObjectSales(
   // TODO img
   const contentCardObj = {
     header: header.trim(),
-    amount: `${amount ? Math.round(amount) : ''}${res.CURRENCY_EURO}`,
+    amount: amount ? amount : null,
     subtitle: subtitle,
     detailHeader: detailHeader, // logic unique to this function
     details: details,
@@ -95,11 +94,10 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
       null,
       res.NO_IMG
     );
-    distinctStoreCard.amount = Math.round(
-      storeFilteredSales
-        .map((row: any) => parseFloat(row.cost))
-        .reduce((partialSum: number, add: number) => partialSum + add, 0)
-    ).toFixed(2);
+    distinctStoreCard.amount = storeFilteredSales
+      .map((row: any) => parseFloat(row.cost))
+      .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
     distinctStoreCard.details = storeFilteredSales
       .filter((row: any) => row.cost > 100)
       .map((row: any) => row.description.trim());
@@ -115,11 +113,10 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     null,
     res.NO_IMG
   );
-  totalSales.amount = Math.round(
-    salesTransformed
-      .map((row: any) => parseFloat(row.cost))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  totalSales.amount = salesTransformed
+    .map((row: any) => parseFloat(row.cost))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
+
   return { totalSales, storeBasedCards };
 }
 

@@ -214,7 +214,7 @@ export type ContentChartLineObject = {
 
 export type ContentCardObject = {
   header: string;
-  amount: string | null;
+  amount: number | null;
   subtitle: string;
   details: string[] | null;
   img: string | null;

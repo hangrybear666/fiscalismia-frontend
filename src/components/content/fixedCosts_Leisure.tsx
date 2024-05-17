@@ -227,22 +227,18 @@ function extractCardData(specificFixedCosts: any) {
 
   // Sports and Health
   let sportsAndHealthFiltered = filterSportsAndHealth(specificFixedCosts);
-  sportsAndHealth.amount = Math.round(
-    sportsAndHealthFiltered
-      .map((row: any) => row.monthly_cost)
-      .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0)
-  ).toFixed(2);
+  sportsAndHealth.amount = sportsAndHealthFiltered
+    .map((row: any) => row.monthly_cost)
+    .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0);
   sportsAndHealth.details = sportsAndHealthFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
 
   // Media and Entertainment
   let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts);
-  mediaAndEntertainment.amount = Math.round(
-    mediaAndEntertainmentFiltered
-      .map((row: any) => row.monthly_cost)
-      .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0)
-  ).toFixed(2);
+  mediaAndEntertainment.amount = mediaAndEntertainmentFiltered
+    .map((row: any) => row.monthly_cost)
+    .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0);
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered.map((row: any) =>
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );

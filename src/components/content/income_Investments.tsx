@@ -133,9 +133,17 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           }
         >
           <Box>
-            <span>{props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}</span>
+            {props.value.toFixed(2) + ' ' + res.CURRENCY_EURO}
             <Chip
-              sx={{ marginLeft: 0.8, marginBottom: 0.8, fontWeight: 600, fontSize: '125%', borderWidth: 2 }}
+              sx={{
+                marginLeft: 0.8,
+                marginBottom: 0.8,
+                marginTop: 0.4,
+                fontWeight: 500,
+                fontSize: '120%',
+                borderWidth: 2,
+                float: 'right'
+              }}
               label="i"
               variant="outlined"
               color="success"

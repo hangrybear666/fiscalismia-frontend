@@ -113,28 +113,22 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
   let monthlyNetIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
-  monthlyNetIncome.amount = Math.round(
-    monthlyNetIncomeFiltered
-      .map((row: any) => Math.floor(row.value / row.monthly_interval))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  monthlyNetIncome.amount = monthlyNetIncomeFiltered
+    .map((row: any) => Math.floor(row.value / row.monthly_interval))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   monthlyNetIncome.details = monthlyNetIncomeFiltered.map((row: any) => row.description.trim());
   // One Time Yearly Bonus
   let oneTimeYearlyBonusFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => e.description.toLowerCase().includes('bonus'));
-  oneTimeYearlyBonus.amount = Math.round(
-    oneTimeYearlyBonusFiltered
-      .map((row: any) => row.value)
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  oneTimeYearlyBonus.amount = oneTimeYearlyBonusFiltered
+    .map((row: any) => row.value)
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   oneTimeYearlyBonus.details = oneTimeYearlyBonusFiltered.map((row: any) => row.description.trim());
   // Total Fixed Costs
-  monthlyTotalCost.amount = Math.round(
-    specificFixedCosts.results
-      .map((row: any) => row.monthly_cost)
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  monthlyTotalCost.amount = specificFixedCosts.results
+    .map((row: any) => row.monthly_cost)
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   monthlyTotalCost.details = [res.LIVING_ESSENTIALS, res.RECREATION_RELAXATION];
   return { monthlyNetIncome, oneTimeYearlyBonus, monthlyTotalCost };
 }

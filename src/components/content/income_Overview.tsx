@@ -6,7 +6,7 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getFixedIncomeByEffectiveDate, getAllFixedIncome } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
-import { Paper } from '@mui/material';
+import { Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
   constructContentLineChartObject,
@@ -19,11 +19,11 @@ import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../type
  * @param {*} allFixedIncome all fixed income data within db
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
-function extractChartData(allFixedIncome: any) {
+function extractChartData(allFixedIncome: any, palette: Palette) {
   const overviewColors = {
-    pointColor1: 'rgba(220, 193, 111,0.6)',
+    pointColor1: palette.success.light,
     lineColor1: 'black',
-    selectionColor: 'rgba(255, 77, 77,0.8)'
+    selectionColor: palette.error.main
   };
   // No filtering of overall results required
   const overviewFiltered = allFixedIncome.results;
@@ -73,41 +73,33 @@ function extractCardData(specificFixedIncome: any) {
   let monthlyNetIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
-  monthlyNetIncome.amount = Math.round(
-    monthlyNetIncomeFiltered
-      .map((row: any) => Math.floor(row.value / row.monthly_interval))
-      .reduce((partialSum: number, a: number) => partialSum + a, 0)
-  ).toFixed(2);
+  monthlyNetIncome.amount = monthlyNetIncomeFiltered
+    .map((row: any) => Math.floor(row.value / row.monthly_interval))
+    .reduce((partialSum: number, a: number) => partialSum + a, 0);
   monthlyNetIncome.details = monthlyNetIncomeFiltered.map((row: any) => row.description.trim());
   // Monthly Gross Income
   let monthlyGrossIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_GROSS_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
-  monthlyGrossIncome.amount = Math.round(
-    monthlyGrossIncomeFiltered
-      .map((row: any) => Math.floor(row.value / row.monthly_interval))
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  monthlyGrossIncome.amount = monthlyGrossIncomeFiltered
+    .map((row: any) => Math.floor(row.value / row.monthly_interval))
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   monthlyGrossIncome.details = monthlyGrossIncomeFiltered.map((row: any) => row.description.trim());
   // Yearly Gross Income
   let yearlyGrossIncomeFiltered = specificFixedIncome.results.filter(
     (row: any) => row.type.toLowerCase() === res.INCOME_GROSS_SALARY_KEY
   );
-  yearlyGrossIncome.amount = Math.round(
-    yearlyGrossIncomeFiltered
-      .map((row: any) => Math.floor(row.value / row.monthly_interval) * 12)
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  yearlyGrossIncome.amount = yearlyGrossIncomeFiltered
+    .map((row: any) => Math.floor(row.value / row.monthly_interval) * 12)
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   yearlyGrossIncome.details = yearlyGrossIncomeFiltered.map((row: any) => row.description.trim());
   // One Time Yearly Bonus
   let oneTimeYearlyBonusFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => e.description.toLowerCase().includes('bonus'));
-  oneTimeYearlyBonus.amount = Math.round(
-    oneTimeYearlyBonusFiltered
-      .map((row: any) => row.value)
-      .reduce((partialSum: number, add: number) => partialSum + add, 0)
-  ).toFixed(2);
+  oneTimeYearlyBonus.amount = oneTimeYearlyBonusFiltered
+    .map((row: any) => row.value)
+    .reduce((partialSum: number, add: number) => partialSum + add, 0);
   oneTimeYearlyBonus.details = oneTimeYearlyBonusFiltered.map((row: any) => row.description.trim());
   return { monthlyNetIncome, monthlyGrossIncome, yearlyGrossIncome, oneTimeYearlyBonus };
 }
@@ -137,7 +129,7 @@ export default function Income_Overview(_props: Income_OverviewProps) {
       let effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedIncomeResponse.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedIncomeChartData = extractChartData(allFixedIncomeResponse);
+      let allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, palette);
       setMonthlyNetIncomeChart(allFixedIncomeChartData.overview);
     };
     queryAllFixedIncomeData();
