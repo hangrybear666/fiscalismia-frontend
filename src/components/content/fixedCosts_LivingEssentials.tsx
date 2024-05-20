@@ -12,7 +12,11 @@ import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import { Paper, Theme } from '@mui/material';
-import { constructContentCardObject, getUniqueEffectiveDates } from '../../utils/sharedFunctions';
+import {
+  constructContentBarChartObject,
+  constructContentCardObject,
+  getUniqueEffectiveDates
+} from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 
 const iconProperties = {
@@ -32,44 +36,10 @@ function filterLivingEssentials(specificFixedCosts: any) {
   );
 }
 
-function constructContentChartObject(
-  title: string,
-  xAxis: string[],
-  dataSets: {
-    dataSet1: any;
-    dataSet2: any;
-    dataSet3: any;
-    dataSet4: any;
-    dataSet1Name: string;
-    dataSet2Name: string;
-    dataSet3Name: string;
-    dataSet4Name: string;
-  },
-  colors: { color1: string; color2: string; color3: string; color4: string }
-): ContentChartVerticalBarObject {
-  const contentChartObj = {
-    chartTitle: title,
-    labels: xAxis,
-    dataSet1: dataSets?.dataSet1,
-    dataSet2: dataSets?.dataSet2,
-    dataSet3: dataSets?.dataSet3,
-    dataSet4: dataSets?.dataSet4,
-    dataSet1Name: dataSets?.dataSet1Name,
-    dataSet2Name: dataSets?.dataSet2Name,
-    dataSet3Name: dataSets?.dataSet3Name,
-    dataSet4Name: dataSets?.dataSet4Name,
-    color1: colors?.color1,
-    color2: colors?.color2,
-    color3: colors?.color3,
-    color4: colors?.color4
-  };
-  return contentChartObj;
-}
-
 /**
  *
  * @param {*} allFixedCosts all fixed costs within db
- * @returns contentChartObj constructed via helper method constructContentChartObject
+ * @returns contentChartObj constructed via helper method constructContentBarChartObject
  */
 function extractChartData(allFixedCosts: any) {
   const livingEssentialsColors = {
@@ -130,7 +100,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.INTERNET_AND_PHONE_VALUE,
     dataSet4Name: categories.INSURANCE_VALUE
   };
-  let livingEssentials = constructContentChartObject(
+  let livingEssentials = constructContentBarChartObject(
     res.LIVING_ESSENTIALS,
     livingEssentialsXaxis,
     livingEssentialsDataSets,

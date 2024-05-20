@@ -200,8 +200,8 @@ export default function ContentLineChart(props: ContentLineChartProps) {
   const line1Config = {
     point: {
       pointStyle: 'circle',
-      radius: 7,
-      hoverRadius: 14,
+      radius: 5,
+      hoverRadius: 10,
       borderWidth: 2
     },
     line: {

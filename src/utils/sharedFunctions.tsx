@@ -3,7 +3,7 @@ import { resourceProperties as res } from '../resources/resource_properties';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
-import { ContentCardObject, ContentChartLineObject } from '../types/custom/customTypes';
+import { ContentCardObject, ContentChartLineObject, ContentChartVerticalBarObject } from '../types/custom/customTypes';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -51,7 +51,7 @@ export function constructContentCardObject(
  * @param xAxis typically a string representation of a date array
  * @param dataSets typically number arrays for the y axis
  * @param colors color overrides for line, point and active selection
- * @returns a ContentChartLineObject
+ * @returns {ContentChartLineObject} a ContentChartLineObject
  */
 export function constructContentLineChartObject(
   title: string,
@@ -85,6 +85,48 @@ export function constructContentLineChartObject(
   if (colors.lineColor2) {
     contentChartObj.lineColor2 = colors.lineColor2;
   }
+  return contentChartObj;
+}
+
+/**
+ * Used for constructing chart.js line charts with multiple vertical bars.
+ * @param title Card Title
+ * @param xAxis typically a string representation of a date array
+ * @param dataSets typically number arrays for the y axis
+ * @param colors color overrides for bar colors
+ * @returns {ContentChartVerticalBarObject} a ContentChartVerticalBarObject
+ */
+export function constructContentBarChartObject(
+  title: string,
+  xAxis: string[],
+  dataSets: {
+    dataSet1: any;
+    dataSet2: any;
+    dataSet3: any;
+    dataSet4?: any;
+    dataSet1Name: string;
+    dataSet2Name: string;
+    dataSet3Name: string;
+    dataSet4Name?: string;
+  },
+  colors: { color1: string; color2: string; color3: string; color4?: string }
+): ContentChartVerticalBarObject {
+  const contentChartObj = {
+    chartTitle: title,
+    labels: xAxis,
+    dataSet1: dataSets?.dataSet1,
+    dataSet2: dataSets?.dataSet2,
+    dataSet3: dataSets?.dataSet3,
+    dataSet4: dataSets?.dataSet4,
+    dataSet1Name: dataSets?.dataSet1Name,
+    dataSet2Name: dataSets?.dataSet2Name,
+    dataSet3Name: dataSets?.dataSet3Name,
+    dataSet4Name: dataSets?.dataSet4Name,
+    color1: colors?.color1,
+    color2: colors?.color2,
+    color3: colors?.color3,
+    color4: colors?.color4
+  };
   return contentChartObj;
 }
 
@@ -123,8 +165,19 @@ export function getCombinedUniqueEffectiveDates(firstDataset: any, secondDataset
  * @param {*} singleDataSet
  * @returns array of date strings in the format yyyy-mm-dd
  */
-export function getUniquePurchasingDates(singleDataSet: any) {
-  return Array.from(new Set(singleDataSet.map((e: any) => e.purchasing_date)));
+export function getUniquePurchasingDates(singleDataSet: unknown[]) {
+  const uniquePurchasingDateSet = new Set(singleDataSet.map((e: any) => e.purchasing_date));
+  return [...uniquePurchasingDateSet].sort((a, b) => (a > b ? 1 : -1));
+}
+
+/**
+ * Extracts the month-year string from an array of date strings in the format yyyy-mm-dd
+ * @param {string[]} uniqueEffectiveDateArray array of date strings in the format yyyy-mm-dd
+ * @returns ASC sorted array of year strings in the format yyyy-mm
+ */
+export function getUniqueEffectiveMonthYears(uniqueEffectiveDateArray: unknown[]) {
+  const uniqueMonthYearSet = new Set(uniqueEffectiveDateArray.map((e: any) => e.substring(0, 7)));
+  return [...uniqueMonthYearSet].sort((a, b) => (a > b ? 1 : -1));
 }
 
 /**

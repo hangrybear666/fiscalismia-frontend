@@ -24,7 +24,7 @@ import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../type
  * @param {*} allFixedIncome all fixed income data within db
  * @param {*} allFixedCosts all fixed income data within db
  * @param {*} palette theme palette for colors
- * @returns contentChartObj constructed via helper method constructContentChartObject
+ * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
 function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Palette) {
   const colors = {

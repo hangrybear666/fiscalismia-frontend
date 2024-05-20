@@ -113,7 +113,7 @@ export default function Income_Overview(_props: Income_OverviewProps) {
   const [monthlyGrossIncomeCard, setMonthlyGrossIncomeCard] = useState<ContentCardObject>();
   const [yearlyGrossIncomeCard, setYearlyGrossIncomeCard] = useState<ContentCardObject>();
   const [oneTimeYearlyBonusCard, setOneTimeYearlyBonusCard] = useState<ContentCardObject>();
-  // Monthly Net income Visualized in Barchart
+  // Monthly Net income Visualized in Linechart
   const [monthlyNetIncomeChart, setMonthlyNetIncomeChart] = useState<ContentChartLineObject>();
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState<string[]>([]);

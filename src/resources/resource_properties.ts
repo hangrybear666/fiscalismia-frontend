@@ -160,6 +160,19 @@ export const resourceProperties = {
   DEALS_GROCERY_DEALS_CONTENT_CARD_END_DATE_STR: 'gültig bis',
   DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_DURATION_STR: 'Angebotsdauer',
 
+  VARIABLE_EXPENSES_OVERVIEW_TOTAL_EXPENSES: 'Gesamtausgaben',
+  VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER: 'Monatliche Ausgaben',
+  VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP: 'Vorheriger Monat',
+  VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP: 'Nächster Monat',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES: 'Groceries',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE: 'Leisure',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT: 'Gift',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HEALTH: 'Health',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_SUPPLEMENTS: 'Supplements',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HYGIENE: 'Hygiene',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_MEDICAL_EXPENSES: 'Medical Expenses',
+  VARIABLE_EXPENSES_OVERVIEW_CATEGORY_COMBINED_HEALTH_AND_BODY: 'Health & Body',
+
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_OPEN: 'Angebot hinzufügen',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_DISCOUNT_AMOUNT: 'Angebotspreis',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_START_DATE: 'gültig von',
@@ -387,6 +400,24 @@ export const investmentInputCategories = {
     'XETRA',
     'London',
     'Wien'
+  ]
+};
+
+export const monthYearSelection = {
+  ARRAY_MONTH_ALL: [
+    [resourceProperties.ALL, /\b(0[1-9]|1[0-2])\b/], // regular expression matching months between 01-12
+    ['Januar', '01'],
+    ['Februar', '02'],
+    ['März', '03'],
+    ['April', '04'],
+    ['Mai', '05'],
+    ['Juni', '06'],
+    ['Juli', '07'],
+    ['August', '08'],
+    ['September', '09'],
+    ['Oktober', '10'],
+    ['November', '11'],
+    ['Dezember', '12']
   ]
 };
 

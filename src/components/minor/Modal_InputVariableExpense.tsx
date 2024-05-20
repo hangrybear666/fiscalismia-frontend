@@ -346,12 +346,14 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
       <Button
         onClick={handleOpen}
         variant="contained"
+        fullWidth
         color="secondary"
         sx={{
           borderRadius: 0,
           border: `1px solid  ${palette.border.dark}`,
           boxShadow: palette.mode === 'light' ? `3px 3px 8px 2px ${palette.grey[700]}` : '',
-          mb: 0.8
+          mb: 0.8,
+          paddingY: 2
         }}
         startIcon={<AddCircleIcon />}
       >
