@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -22,6 +21,13 @@ interface ContentPieChartProps extends ContentChartBooleanPieObject {
   chartOptions?: ChartOptions<'pie'>;
   chartData?: ChartData<'pie'>;
 }
+
+/**
+ * Pie Chart receiving between 1 and 2 datasets which form a nested piechart.
+ * Primarily designed for datasets with two values best suited for total counts of true/false flags.
+ * @param props
+ * @returns
+ */
 export function ContentBooleanPieChart(props: ContentPieChartProps) {
   const { palette } = useTheme();
 
@@ -38,7 +44,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
     dataSet2Name,
     dataSet2Colors
   } = props;
-  const labels = props.labels ? props.labels : ['Red', 'Blue', 'Yellow'];
+  const labels = props.labels ? props.labels : ['Red', 'Blue'];
 
   const data = {
     ...chartData,
@@ -46,7 +52,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
     datasets: [
       {
         label: dataSet1Name ? dataSet1Name : 'Dataset 1',
-        data: dataSet1 ? dataSet1 : [12, 19, 3],
+        data: dataSet1 ? dataSet1 : [12, 19],
         backgroundColor: dataSet1Colors?.backgroundColor
           ? Object.values(dataSet1Colors.backgroundColor)
           : [palette.primary.dark, palette.primary.light],
@@ -60,7 +66,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
 
       {
         label: dataSet2Name ? dataSet2Name : 'Dataset 2',
-        data: dataSet2 ? dataSet2 : [4, 2, 7],
+        data: dataSet2 ? dataSet2 : [4, 2],
         backgroundColor: dataSet2Colors?.backgroundColor
           ? Object.values(dataSet2Colors.backgroundColor)
           : [palette.secondary.dark, palette.secondary.light],
@@ -167,7 +173,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
         },
         color: '#fff', // default without dataset specific override
         formatter: (value: any, chartObject: any) => {
-          const label = chartObject.chart.data.labels[chartObject.dataIndex];
+          // const label = chartObject.chart.data.labels[chartObject.dataIndex];
           const totalValue = chartObject.dataset.data.reduce((add: number, val: number) => {
             return add + val;
           }, 0);

@@ -41,6 +41,7 @@ import {
 import {
   ContentCardObject,
   ContentChartBooleanPieObject,
+  ContentChartHorizontalBarObject,
   ContentChartLineObject,
   ContentChartVerticalBarObject,
   RouteInfo
@@ -50,6 +51,7 @@ import SelectDropdown from '../minor/SelectDropdown';
 import ContentLineChart from '../minor/ContentChart_Line';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { ContentBooleanPieChart } from '../minor/ContentChart_BooleanPie';
+import ContentHorizontalBarChart from '../minor/ContentChart_HorizontalBar';
 
 const chartBackgroundProperties = (palette: Palette) => {
   return {
@@ -66,6 +68,76 @@ function getUniqueEffectiveDateYears(allVariableExpenses: any) {
   return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
+/**
+ * Extracts all rows with contains_indulgence flag set to true, splits individual indulgences off and counts the total occurence,
+ * subsequently used to populate a horizontal barchart.
+ * @param allVariableExpenses
+ * @param palette
+ * @returns
+ */
+function extractHorizontalBarChartData(allVariableExpenses: any, palette: Palette): ContentChartHorizontalBarObject {
+  const allVariableExpensesFiltered = allVariableExpenses
+    .filter((row: any) => row.category.toLowerCase() !== 'sale')
+    .filter((row: any) => row.contains_indulgence)
+    .map((e: any): string => (e.indulgences ? e.indulgences.trim() : null));
+
+  // creates a Map with the indulgence as the key and the summed up occurences as value
+  const indulgenceSumMap: Map<string, number> = allVariableExpensesFiltered.reduce(
+    (map: Map<string, number>, indulgences: string) => {
+      if (!indulgences) {
+        console.error(
+          'indulgences is null, please check that each row with the contains_indulgence flag set to true has entries here.'
+        );
+      } else {
+        const individualIndulgences: string[] = indulgences.split(',');
+        individualIndulgences.forEach((item: string) => {
+          const indulgence = item.trim();
+          if (!map.has(indulgence)) {
+            map.set(indulgence, 0);
+          }
+          map.set(indulgence, map.get(indulgence)! + 1);
+        });
+      }
+      return map;
+    },
+    new Map<string, number>()
+  );
+
+  // Creates a <string,number> Array containing the 6 top indulgences and their number of occurence
+  const topIndulgenceArray = Array.from(indulgenceSumMap.entries())
+    .sort((a: [string, number], b: [string, number]) => (a[1] < b[1] ? 1 : -1))
+    .slice(0, 6)
+    .map((e: [string, number]) => {
+      return Array.from([e[0], parseInt(e[1].toFixed(0))]);
+    });
+
+  const booleanPieChartObj: ContentChartHorizontalBarObject = {
+    chartTitle: res.VARIABLE_EXPENSES_OVERVIEW_INDULGENCE_BAR_CHART_TITLE,
+    labels: [''], // To have only one dataset entry rendered without a label, empty label within an array has to be passed.
+    dataSetCount: 6,
+    skipTitle: true,
+    dataSet1: [topIndulgenceArray[0][1] as number],
+    dataSet2: [topIndulgenceArray[1][1] as number],
+    dataSet3: [topIndulgenceArray[2][1] as number],
+    dataSet4: [topIndulgenceArray[3][1] as number],
+    dataSet5: [topIndulgenceArray[4][1] as number],
+    dataSet6: [topIndulgenceArray[5][1] as number],
+    dataSet1Name: topIndulgenceArray[0][0] as string,
+    dataSet2Name: topIndulgenceArray[1][0] as string,
+    dataSet3Name: topIndulgenceArray[2][0] as string,
+    dataSet4Name: topIndulgenceArray[3][0] as string,
+    dataSet5Name: topIndulgenceArray[4][0] as string,
+    dataSet6Name: topIndulgenceArray[5][0] as string
+  };
+  return booleanPieChartObj;
+}
+
+/**
+ * Extracts the two flags is_planned and contains_indulgence and displays the true/false count in two intertwined pie charts with custom labels.
+ * @param allVariableExpenses
+ * @param palette
+ * @returns ContentChartBooleanPieObject
+ */
 function extractPieChartData(allVariableExpenses: any, palette: Palette): ContentChartBooleanPieObject {
   const allVariableExpensesFiltered = allVariableExpenses.filter((row: any) => row.category.toLowerCase() !== 'sale');
 
@@ -366,6 +438,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const [expenseVerticalBarChartData, setExpenseVerticalBarChartData] = useState<ContentChartVerticalBarObject>();
   // Dual Pie Chart is_planned yes/no piechart & contains indulgence yes/no pie chart
   const [expensePieChartData, setExpensePieChartData] = useState<ContentChartBooleanPieObject>();
+  // Horizontal Bar Chart Aggregating Indulgences/Sensitivities
+  const [indulgencesHorizontalBarChartData, setIndulgencesHorizontalBarChartData] =
+    useState<ContentChartHorizontalBarObject>();
   const [selectedChartLabel, setSelectedChartLabel] = useState<string>('');
   // year selection
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
@@ -444,6 +519,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     // Pie Chart displaying is_planned and contains_indulgence flags
     const varExpenseBooleanPieChart = extractPieChartData(filteredYearVarExpenses, palette);
     setExpensePieChartData(varExpenseBooleanPieChart);
+    // Horizontal Bar Chart Aggregating Indulgences/Sensitivities
+    const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredYearVarExpenses, palette);
+    setIndulgencesHorizontalBarChartData(varExpenseHorizontalBarChart);
     // Content Cards with aggregated costs per largest category
     const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredYearVarExpenses, false);
     setAggregatedPurchaseInformation(aggregatePurchaseInfo);
@@ -471,6 +549,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       // Pie Chart displaying is_planned and contains_indulgence flags
       const varExpenseBooleanPieChart = extractPieChartData(filteredMonthVarExpenses, palette);
       setExpensePieChartData(varExpenseBooleanPieChart);
+      // Horizontal Bar Chart Aggregating Indulgences/Sensitivities
+      const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredMonthVarExpenses, palette);
+      setIndulgencesHorizontalBarChartData(varExpenseHorizontalBarChart);
       // Content Cards with aggregated costs per largest category
       const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredMonthVarExpenses, true);
       setAggregatedPurchaseInformation(aggregatePurchaseInfo);
@@ -641,7 +722,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                       <ContentLineChart {...expenseLineChartData} dataSetCount={1} selectedLabel={selectedChartLabel} />
                     </Paper>
                   ) : (
-                    <Skeleton variant="rectangular" width={breakpointWidth} height={300} />
+                    <Skeleton variant="rectangular" height={300} />
                   )}
                 </Grid>
                 <Grid xs={12} md={4} xl={3}>
@@ -654,12 +735,13 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                       }}
                     >
                       <ContentBooleanPieChart {...expensePieChartData} />
-                      {/* <ContentBooleanMultiPieChart /> */}
                     </Paper>
-                  ) : null}
+                  ) : (
+                    <Skeleton variant="rectangular" height={300} />
+                  )}
                 </Grid>
                 {/* CATEGORY SUMS VERTICAL BAR CHART */}
-                <Grid xs={12}>
+                <Grid xs={12} md={8} xl={9}>
                   {expenseVerticalBarChartData ? (
                     <Paper
                       elevation={6}
@@ -676,7 +758,22 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                       />
                     </Paper>
                   ) : (
-                    <Skeleton variant="rectangular" width={breakpointWidth} height={400} />
+                    <Skeleton variant="rectangular" height={400} />
+                  )}
+                </Grid>
+                <Grid xs={12} md={4} xl={3}>
+                  {indulgencesHorizontalBarChartData ? (
+                    <Paper
+                      elevation={6}
+                      sx={{
+                        ...chartBackgroundProperties(palette),
+                        height: 400
+                      }}
+                    >
+                      <ContentHorizontalBarChart {...indulgencesHorizontalBarChartData} />
+                    </Paper>
+                  ) : (
+                    <Skeleton variant="rectangular" height={400} />
                   )}
                 </Grid>
               </Grid>

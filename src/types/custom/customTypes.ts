@@ -205,13 +205,38 @@ export type ContentChartBooleanPieObject = {
   dataSet2Colors: BooleanPieColors;
 };
 
+export type ContentChartHorizontalBarObject = {
+  chartTitle: string;
+  skipTitle?: boolean;
+  labels: string[];
+  dataSetCount: number;
+  dataSet1: any;
+  dataSet2: any;
+  dataSet3: any;
+  dataSet4: any;
+  dataSet5: any;
+  dataSet6: any;
+  dataSet1Name: string;
+  dataSet2Name: string;
+  dataSet3Name: string;
+  dataSet4Name: string;
+  dataSet5Name: string;
+  dataSet6Name: string;
+  color1?: any;
+  color2?: any;
+  color3?: any;
+  color4?: any;
+  color5?: any;
+  color6?: any;
+};
+
 export type ContentChartVerticalBarObject = {
   chartTitle: string;
   labels: string[];
   dataSet1: any;
   dataSet2: any;
   dataSet3: any;
-  dataSet4: any;
+  dataSet4?: any;
   dataSet1Name: any;
   dataSet2Name: any;
   dataSet3Name: any;
