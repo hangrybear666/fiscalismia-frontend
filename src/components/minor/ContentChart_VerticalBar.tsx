@@ -12,9 +12,10 @@ import {
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { faker } from '@faker-js/faker';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, annotationPlugin);
+ChartJS.register(CategoryScale, LinearScale, BarElement, ChartDataLabels, Title, Tooltip, Legend, annotationPlugin);
 
 interface ContentVerticalBarChartProps {
   chartTitle: string;
@@ -98,6 +99,9 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      datalabels: {
+        display: false
+      },
       legend: {
         position: legendPos ? legendPos : 'left'
       },

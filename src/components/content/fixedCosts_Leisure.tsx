@@ -11,7 +11,7 @@ import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
 import { Paper, Theme } from '@mui/material';
 import {
-  constructContentBarChartObject,
+  constructContentVerticalBarChartObject,
   constructContentCardObject,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
@@ -46,7 +46,7 @@ function filterMediaAndEntertainment(fixedCosts: any) {
 /**
  *
  * @param {*} allFixedCosts all fixed costs within db
- * @returns contentChartObj constructed via helper method constructContentBarChartObject
+ * @returns contentChartObj constructed via helper method constructContentVerticalBarChartObject
  */
 function extractChartData(allFixedCosts: any) {
   // Sports and Health
@@ -108,7 +108,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.SUPPLEMENTS_PERFORMANCE_VALUE,
     dataSet4Name: categories.PHYSIO_AND_HEALTH_COURSES_VALUE
   };
-  let sportsAndHealth = constructContentBarChartObject(
+  let sportsAndHealth = constructContentVerticalBarChartObject(
     res.FIXED_COSTS_SPORTS_HEALTH,
     sportsXaxis,
     sportsDataSets,
@@ -162,7 +162,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet2Name: categories.LEISURE_TV_CINEMA_VALUE,
     dataSet3Name: categories.LEISURE_MUSIC_PODCASTS_VALUE
   };
-  let mediaAndEntertainment = constructContentBarChartObject(
+  let mediaAndEntertainment = constructContentVerticalBarChartObject(
     res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
     mediaXaxis,
     mediaDataSets,

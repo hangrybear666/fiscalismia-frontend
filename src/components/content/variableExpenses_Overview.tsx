@@ -22,6 +22,7 @@ import {
   Container,
   IconButton,
   Palette,
+  Skeleton,
   Stack,
   Theme,
   ToggleButton,
@@ -30,7 +31,7 @@ import {
   useMediaQuery
 } from '@mui/material';
 import {
-  constructContentBarChartObject,
+  constructContentVerticalBarChartObject,
   constructContentCardObject,
   constructContentLineChartObject,
   getUniqueEffectiveMonthYears,
@@ -47,18 +48,94 @@ import ContentCardCosts from '../minor/ContentCard_Costs';
 import SelectDropdown from '../minor/SelectDropdown';
 import ContentLineChart from '../minor/ContentChart_Line';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
+import { ContentBooleanPieChart } from '../minor/ContentChart_BooleanPie';
+
+const chartBackgroundProperties = (palette: Palette) => {
+  return {
+    borderRadius: 0,
+    border: `1px solid ${palette.border.dark}`,
+    padding: 1,
+    backgroundColor: palette.background.default,
+    width: '100%'
+  };
+};
 
 function getUniqueEffectiveDateYears(allVariableExpenses: any) {
   const uniqueEffectiveDateArray = getUniquePurchasingDates(allVariableExpenses);
   return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
+function extractPieChartData(allVariableExpenses: any, palette: Palette) {
+  const allVariableExpensesFiltered = allVariableExpenses.filter((row: any) => row.category.toLowerCase() !== 'sale');
+
+  let varExpensesPieChartDs1: number[] = [];
+  let varExpensesPieChartDs2: number[] = [];
+
+  varExpensesPieChartDs1 = allVariableExpensesFiltered
+    .map((e: any) => e.is_planned)
+    .reduce(
+      (booleanCountArr: number[], currentBooleanValue: boolean) => {
+        if (currentBooleanValue) {
+          booleanCountArr[0] += 1;
+        } else {
+          booleanCountArr[1] += 1;
+        }
+        return booleanCountArr;
+      },
+      [0, 0]
+    );
+
+  varExpensesPieChartDs2 = allVariableExpensesFiltered
+    .map((e: any) => e.contains_indulgence)
+    .reduce(
+      (booleanCountArr: number[], currentBooleanValue: boolean) => {
+        if (currentBooleanValue) {
+          booleanCountArr[0] += 1;
+        } else {
+          booleanCountArr[1] += 1;
+        }
+        return booleanCountArr;
+      },
+      [0, 0]
+    );
+  const pieChart1Colors = {
+    backgroundColor: {
+      pieColor1: palette.success.light,
+      pieColor2: palette.error.light
+    },
+    borderColor: {
+      borderColor1: palette.success.dark,
+      borderColor2: palette.error.dark
+    }
+  };
+  const pieChart2Colors = {
+    backgroundColor: {
+      pieColor1: palette.info.light,
+      pieColor2: palette.warning.light
+    },
+    borderColor: {
+      borderColor1: palette.info.dark,
+      borderColor2: palette.warning.dark
+    }
+  };
+  return {
+    chartTitle: 'Boolean Flags',
+    labels: ['planned', 'not planned'],
+    dataSetCount: 2,
+    dataSet1: varExpensesPieChartDs1,
+    dataSet1Name: 'is planned?',
+    dataSet1Colors: pieChart1Colors,
+    dataSet2: varExpensesPieChartDs2,
+    dataSet2Name: 'contains indulgence?',
+    dataSet2Colors: pieChart2Colors
+  };
+}
 /**
  * Extracts vertical bars for each filtered category, especially Groceries, Leisure, Gift and the combined aggregate Category Health & Body
  * @param {*} allVariableExpenses all variable expenses within db
- * @returns contentChartObj constructed via helper method constructContentBarChartObject
+ * @returns contentChartObj constructed via helper method constructContentVerticalBarChartObject
  */
-function extractBarChartData(allVariableExpenses: any) {
+function extractVerticalBarChartData(allVariableExpenses: any) {
   const barChartColors = {
     color1: '',
     color2: '',
@@ -68,15 +145,15 @@ function extractBarChartData(allVariableExpenses: any) {
   const allVariableExpensesFiltered = allVariableExpenses.filter((row: any) => row.category.toLowerCase() !== 'sale');
   // unique purchasing date substrings in the format yyyy-mm as string array
   const uniqueExpenseDates: string[] = getUniquePurchasingDates(allVariableExpensesFiltered) as string[];
-  const varExpensesBarChartXaxis: string[] = getUniqueEffectiveMonthYears(uniqueExpenseDates) as string[];
+  const varExpensesVerticalBarChartXaxis: string[] = getUniqueEffectiveMonthYears(uniqueExpenseDates) as string[];
   // only read dates from datetime
-  let varExpensesBarChartDs1: number[] = [];
-  let varExpensesBarChartDs2: number[] = [];
-  let varExpensesBarChartDs3: number[] = [];
-  let varExpensesBarChartDs4: number[] = [];
+  let varExpensesVerticalBarChartDs1: number[] = [];
+  let varExpensesVerticalBarChartDs2: number[] = [];
+  let varExpensesVerticalBarChartDs3: number[] = [];
+  let varExpensesVerticalBarChartDs4: number[] = [];
   // for each unique date create an xAxis array with summed up expense values per filtered category
-  varExpensesBarChartXaxis.forEach((xAxisEntry) => {
-    varExpensesBarChartDs1.push(
+  varExpensesVerticalBarChartXaxis.forEach((xAxisEntry) => {
+    varExpensesVerticalBarChartDs1.push(
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
@@ -85,7 +162,7 @@ function extractBarChartData(allVariableExpenses: any) {
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
     );
-    varExpensesBarChartDs2.push(
+    varExpensesVerticalBarChartDs2.push(
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
@@ -94,14 +171,14 @@ function extractBarChartData(allVariableExpenses: any) {
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
     );
-    varExpensesBarChartDs3.push(
+    varExpensesVerticalBarChartDs3.push(
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter((row: any) => row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT.toLowerCase())
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
     );
-    varExpensesBarChartDs4.push(
+    varExpensesVerticalBarChartDs4.push(
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
@@ -116,20 +193,20 @@ function extractBarChartData(allVariableExpenses: any) {
     );
   });
 
-  const livingEssentialsDataSets = {
-    dataSet1: varExpensesBarChartDs1,
-    dataSet2: varExpensesBarChartDs2,
-    dataSet3: varExpensesBarChartDs3,
-    dataSet4: varExpensesBarChartDs3,
+  const varExpensesVerticalBarChartDataSet = {
+    dataSet1: varExpensesVerticalBarChartDs1,
+    dataSet2: varExpensesVerticalBarChartDs2,
+    dataSet3: varExpensesVerticalBarChartDs3,
+    dataSet4: varExpensesVerticalBarChartDs3,
     dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES,
     dataSet2Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE,
     dataSet3Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT,
     dataSet4Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_COMBINED_HEALTH_AND_BODY
   };
-  let varExpensesBarChart = constructContentBarChartObject(
-    res.LIVING_ESSENTIALS,
-    varExpensesBarChartXaxis,
-    livingEssentialsDataSets,
+  let varExpensesBarChart = constructContentVerticalBarChartObject(
+    res.VARIABLE_EXPENSES_OVERVIEW_BAR_CHART_HEADER,
+    varExpensesVerticalBarChartXaxis,
+    varExpensesVerticalBarChartDataSet,
     barChartColors
   );
 
@@ -278,7 +355,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   // Monthly/Yearly Expenses Visualized in Linechart
   const [expenseLineChartData, setExpenseLineChartData] = useState<ContentChartLineObject>();
   // Monthly/Yearly Expenses Visualized in Vertical Barchart
-  const [expenseBarChartData, setExpenseBarChartData] = useState<ContentChartVerticalBarObject>();
+  const [expenseVerticalBarChartData, setExpenseVerticalBarChartData] = useState<ContentChartVerticalBarObject>();
+  // Dual Pie Chart is_planned yes/no piechart & contains indulgence yes/no pie chart
+  const [expensePieChartData, setExpensePieChartData] = useState<any>();
   const [selectedChartLabel, setSelectedChartLabel] = useState<string>('');
   // year selection
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
@@ -322,11 +401,6 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       let allVariableExpenses = await getAllVariableExpenses();
       const uniqueYears = getUniqueEffectiveDateYears(allVariableExpenses.results);
       setYearSelectionData(new Array(uniqueYears)); // 2D Array for mapping ToggleButtonGroup as parent
-      // Line Chart aggregating total expenses per month
-      const varExpenseLineChartAggregate = extractLineChartData(allVariableExpenses.results, palette);
-      setExpenseLineChartData(varExpenseLineChartAggregate.overview);
-      const varExpenseBarChartAggregate = extractBarChartData(allVariableExpenses.results);
-      setExpenseBarChartData(varExpenseBarChartAggregate.varExpensesBarChart);
       // setSelectedYear(uniqueYears[0]);
       // handleYearSelection(null, uniqueYears[0]);
       let allStores = await getAllVariableExpenseStores();
@@ -351,7 +425,17 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       (e: any) => e.purchasing_date.substring(0, 4) === newValue
     );
     handleSelectMonth(res.ALL);
+    // Set Selected Variable Expenses
     setSelectedVariableExpenses(filteredYearVarExpenses);
+    // Line Chart aggregating total expenses per month
+    const varExpenseLineChartAggregate = extractLineChartData(filteredYearVarExpenses, palette);
+    setExpenseLineChartData(varExpenseLineChartAggregate.overview);
+    // Bar Chart Displaying Sum per predefined Categories
+    const varExpenseVerticalBarChartAggregate = extractVerticalBarChartData(filteredYearVarExpenses);
+    setExpenseVerticalBarChartData(varExpenseVerticalBarChartAggregate.varExpensesBarChart);
+    // Pie Chart displaying is_planned and contains_indulgence flags
+    const varExpensePieChartFlags = extractPieChartData(filteredYearVarExpenses, palette);
+    setExpensePieChartData(varExpensePieChartFlags);
     const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredYearVarExpenses, false);
     setAggregatedPurchaseInformation(aggregatePurchaseInfo);
     setSelectedChartLabel('');
@@ -407,12 +491,14 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
         <Grid container>
           <Grid xs={0} xl={1}></Grid>
           <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
+            {/* DETERMINES RESPONSIVE LAYOUT */}
             <Box
               sx={{
                 width: breakpointWidth
               }}
             >
-              <Grid container spacing={3}>
+              {/* MAIN CENTERED GRID */}
+              <Grid container spacing={1.5}>
                 {/* NEW EXPENSE INPUT MODAL */}
                 <Grid xs={12} md={3.5} xl={2}>
                   <InputVariableExpenseModal
@@ -424,11 +510,12 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                 </Grid>
 
                 {/* MONTH SELECTION */}
-                <Grid xs={12} md={3} xl={2}>
+                <Grid xs={12} md={3.5} xl={2.5}>
                   <Stack direction="row">
                     <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
                       <IconButton
                         color="inherit"
+                        disabled={selectedYear ? false : true}
                         onClick={() => handleMonthDirectionChanged('left')}
                         sx={{ paddingX: 2, width: 1 / 9 }}
                       >
@@ -441,11 +528,13 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                         selectItems={monthYearSelection.ARRAY_MONTH_ALL.map((e) => e[0] as string)}
                         selectedValue={selectedMonth}
                         handleSelect={handleSelectMonth}
+                        disabled={selectedYear ? false : true}
                       />
                     </Container>
                     <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
                       <IconButton
                         color="inherit"
+                        disabled={selectedYear ? false : true}
                         onClick={() => handleMonthDirectionChanged('right')}
                         sx={{ paddingX: 2, width: 1 / 9 }}
                       >
@@ -459,7 +548,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                   </Stack>
                 </Grid>
                 {/* YEAR SELECTION */}
-                <Grid xs={12} md={5.5} xl={8}>
+                <Grid xs={12} md={5} xl={7.5}>
                   {yearSelectionData
                     ? yearSelectionData.map((parent, index) => {
                         return (
@@ -504,9 +593,6 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                 {/* CONTENT CARDS WITH AGGREGATE VALUES PER MONTH/YEAR */}
                 {aggregatedPurchaseInformation ? (
                   <React.Fragment>
-                    {/* <Grid xs={12}>
-                <ContentCardCosts elevation={12} {...aggregatedPurchaseInformation.totalCard} />
-              </Grid> */}
                     {aggregatedPurchaseInformation.categoryCards
                       ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject) => (
                           <Grid xs={6} md={4} xl={2} key={e.header + e.amount}>
@@ -522,60 +608,63 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                         ))
                       : null}
                   </React.Fragment>
-                ) : null}
+                ) : (
+                  [...new Array(6)].map((e) => (
+                    <Grid xs={6} md={4} xl={2} key={e}>
+                      <Skeleton variant="rectangular" height={120} />
+                    </Grid>
+                  ))
+                )}
 
-                {expenseLineChartData ? (
-                  <Grid xs={12}>
-                    <Grid xs={0} xl={1}></Grid>
-                    <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-                      <Paper
-                        elevation={6}
-                        sx={{
-                          borderRadius: 0,
-                          border: `1px solid ${palette.border.dark}`,
-                          padding: 1,
-                          backgroundColor: palette.background.default,
-                          width: '100%',
-                          height: 300
-                        }}
-                      >
-                        <ContentLineChart
-                          {...expenseLineChartData}
-                          dataSetCount={1}
-                          selectedLabel={selectedChartLabel}
-                        />
-                      </Paper>
-                    </Grid>
-                    <Grid xs={0} xl={1}></Grid>
-                  </Grid>
-                ) : null}
+                <Grid xs={12} md={8} xl={9}>
+                  {expenseLineChartData ? (
+                    <Paper
+                      elevation={6}
+                      sx={{
+                        ...chartBackgroundProperties(palette),
+                        height: 300
+                      }}
+                    >
+                      <ContentLineChart {...expenseLineChartData} dataSetCount={1} selectedLabel={selectedChartLabel} />
+                    </Paper>
+                  ) : (
+                    <Skeleton variant="rectangular" width={breakpointWidth} height={300} />
+                  )}
+                </Grid>
+                <Grid xs={12} md={4} xl={3}>
+                  {expensePieChartData ? (
+                    <Paper
+                      elevation={6}
+                      sx={{
+                        ...chartBackgroundProperties(palette),
+                        height: 300
+                      }}
+                    >
+                      <ContentBooleanPieChart {...expensePieChartData} />
+                    </Paper>
+                  ) : null}
+                </Grid>
                 {/* CATEGORY SUMS VERTICAL BAR CHART */}
-                {expenseBarChartData ? (
-                  <Grid xs={12}>
-                    <Grid xs={0} xl={1}></Grid>
-                    <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-                      <Paper
-                        elevation={6}
-                        sx={{
-                          borderRadius: 0,
-                          border: `1px solid ${palette.border.dark}`,
-                          padding: 1,
-                          backgroundColor: palette.background.default,
-                          width: '100%',
-                          height: 400
-                        }}
-                      >
-                        <ContentVerticalBarChart
-                          {...expenseBarChartData}
-                          dataSetCount={4}
-                          selectedLabel={selectedChartLabel}
-                          legendPos={isXs || isSm ? 'top' : 'left'}
-                        />
-                      </Paper>
-                    </Grid>
-                    <Grid xs={0} xl={1}></Grid>
-                  </Grid>
-                ) : null}
+                <Grid xs={12}>
+                  {expenseVerticalBarChartData ? (
+                    <Paper
+                      elevation={6}
+                      sx={{
+                        ...chartBackgroundProperties(palette),
+                        height: 400
+                      }}
+                    >
+                      <ContentVerticalBarChart
+                        {...expenseVerticalBarChartData}
+                        dataSetCount={4}
+                        selectedLabel={selectedChartLabel}
+                        legendPos="top"
+                      />
+                    </Paper>
+                  ) : (
+                    <Skeleton variant="rectangular" width={breakpointWidth} height={400} />
+                  )}
+                </Grid>
               </Grid>
             </Box>
           </Grid>

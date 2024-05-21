@@ -14,6 +14,7 @@ import {
 import { resourceProperties as res } from '../../resources/resource_properties';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useTheme } from '@mui/material/styles';
 import { faker } from '@faker-js/faker';
 
@@ -22,6 +23,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ChartDataLabels,
   Title,
   Tooltip,
   Filler,
@@ -150,6 +152,9 @@ export default function ContentLineChart(props: ContentLineChartProps) {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      datalabels: {
+        display: false
+      },
       legend: {
         position: 'top' as const
       },

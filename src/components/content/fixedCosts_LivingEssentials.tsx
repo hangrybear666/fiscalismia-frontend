@@ -13,7 +13,7 @@ import { resourceProperties as res, fixedCostCategories as categories } from '..
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import { Paper, Theme } from '@mui/material';
 import {
-  constructContentBarChartObject,
+  constructContentVerticalBarChartObject,
   constructContentCardObject,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
@@ -39,7 +39,7 @@ function filterLivingEssentials(specificFixedCosts: any) {
 /**
  *
  * @param {*} allFixedCosts all fixed costs within db
- * @returns contentChartObj constructed via helper method constructContentBarChartObject
+ * @returns contentChartObj constructed via helper method constructContentVerticalBarChartObject
  */
 function extractChartData(allFixedCosts: any) {
   const livingEssentialsColors = {
@@ -100,7 +100,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.INTERNET_AND_PHONE_VALUE,
     dataSet4Name: categories.INSURANCE_VALUE
   };
-  let livingEssentials = constructContentBarChartObject(
+  let livingEssentials = constructContentVerticalBarChartObject(
     res.LIVING_ESSENTIALS,
     livingEssentialsXaxis,
     livingEssentialsDataSets,

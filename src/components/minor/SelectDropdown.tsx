@@ -9,16 +9,23 @@ interface SelectDropdownProps {
   selectItems: string[];
   selectedValue: string;
   handleSelect: (selection: string) => void;
+  disabled?: boolean;
 }
 
-export default function SelectDropdown({ selectLabel, selectItems, selectedValue, handleSelect }: SelectDropdownProps) {
+export default function SelectDropdown({
+  selectLabel,
+  selectItems,
+  selectedValue,
+  handleSelect,
+  disabled
+}: SelectDropdownProps) {
   const handleChange = (event: SelectChangeEvent) => {
     handleSelect(event.target.value as string);
   };
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth disabled={disabled ? disabled : false}>
         <InputLabel id={selectLabel.replace(/\s/g, '').concat('-inputLabel')}>{selectLabel}</InputLabel>
         <Select
           id={selectLabel.replace(/\s/g, '').concat('-selectItems')}

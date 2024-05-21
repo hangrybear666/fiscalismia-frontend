@@ -96,7 +96,7 @@ export function constructContentLineChartObject(
  * @param colors color overrides for bar colors
  * @returns {ContentChartVerticalBarObject} a ContentChartVerticalBarObject
  */
-export function constructContentBarChartObject(
+export function constructContentVerticalBarChartObject(
   title: string,
   xAxis: string[],
   dataSets: {
