@@ -1,36 +1,24 @@
 import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, ChartOptions, ChartData } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartOptions,
+  ChartData,
+  LegendItem,
+  Color
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
+import { resourceProperties as res } from '../../resources/resource_properties';
+import { ContentChartBooleanPieObject } from '../../types/custom/customTypes';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
-type PieColors = {
-  backgroundColor: {
-    pieColor1: string;
-    pieColor2: string;
-    pieColor3?: string;
-    pieColor4?: string;
-  };
-  borderColor: {
-    borderColor1: string;
-    borderColor2: string;
-    borderColor3?: string;
-    borderColor4?: string;
-  };
-};
-
-interface ContentPieChartProps {
-  chartTitle: string;
-  labels: string[];
-  dataSetCount: number;
-  dataSet1: any;
-  dataSet1Name: string;
-  dataSet1Colors?: PieColors;
-  dataSet2?: any;
-  dataSet2Name?: string;
-  dataSet2Colors?: PieColors;
+interface ContentPieChartProps extends ContentChartBooleanPieObject {
   chartOptions?: ChartOptions<'pie'>;
   chartData?: ChartData<'pie'>;
 }
@@ -39,6 +27,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
 
   const {
     chartTitle,
+    skipTitle,
     dataSet1,
     dataSet2,
     dataSetCount,
@@ -60,11 +49,12 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
         data: dataSet1 ? dataSet1 : [12, 19, 3],
         backgroundColor: dataSet1Colors?.backgroundColor
           ? Object.values(dataSet1Colors.backgroundColor)
-          : ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+          : [palette.primary.dark, palette.primary.light],
         borderColor: dataSet1Colors?.borderColor
           ? Object.values(dataSet1Colors.borderColor)
-          : ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-        borderWidth: 1,
+          : [palette.grey[900], palette.grey[900]],
+        datalabels: { color: palette.primary.contrastText },
+        borderWidth: 2,
         order: 1
       },
 
@@ -73,10 +63,11 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
         data: dataSet2 ? dataSet2 : [4, 2, 7],
         backgroundColor: dataSet2Colors?.backgroundColor
           ? Object.values(dataSet2Colors.backgroundColor)
-          : ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+          : [palette.secondary.dark, palette.secondary.light],
         borderColor: dataSet2Colors?.borderColor
           ? Object.values(dataSet2Colors.borderColor)
-          : ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+          : [palette.grey[700], palette.grey[700]],
+        datalabels: { color: palette.secondary.contrastText },
         borderWidth: 1,
         order: 0
       }
@@ -88,25 +79,94 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const
+        position: 'top' as const,
+        reverse: true,
+        labels: {
+          //                ___    __   ___  __     ___  __      __     ___     __             __  ___     __        ___  __   __     __   ___
+          // |\/| |  | |     |  | /__` |__  |__) | |__  /__`    |__) | |__     /  ` |__|  /\  |__)  |     /  \ \  / |__  |__) |__) | |  \ |__
+          // |  | \__/ |___  |  | .__/ |___ |  \ | |___ .__/    |    | |___    \__, |  | /~~\ |  \  |     \__/  \/  |___ |  \ |  \ | |__/ |___
+          generateLabels: function (chart: ChartJS) {
+            // Get the default label list
+            const original = ChartJS.overrides.pie.plugins.legend.labels.generateLabels;
+            const labelsOriginal = original.call(this, chart);
+            // Build an array of colors used in the datasets of the chart
+            let datasetColors = chart.data.datasets.map(function (e) {
+              return e.backgroundColor;
+            });
+            datasetColors = datasetColors.flat();
+            // Modify the color and hide state of each label
+            labelsOriginal.forEach((label: LegendItem) => {
+              if (label && label.index !== undefined) {
+                // There are twice as many labels as there are datasets. This converts the label index into the corresponding dataset index
+                label.datasetIndex = (label.index - (label.index % 2)) / 2;
+                // The hidden state must match the dataset's hidden state
+                label.hidden = !chart.isDatasetVisible(label.datasetIndex);
+                // Change the color to match the dataset
+                label.fillStyle = datasetColors[label.index] as Color;
+              }
+            });
+            return labelsOriginal;
+          }
+        },
+        onClick: function (
+          _mouseEvent: MouseEvent,
+          legendItem: LegendItem,
+          legend: {
+            chart: {
+              getDatasetMeta: (arg0: number | undefined) => { (): any; new (): any; hidden: any };
+              isDatasetVisible: (arg0: number | undefined) => any;
+              update: () => void;
+            };
+          }
+        ) {
+          // toggle the visibility of the dataset from what it currently is
+          legend.chart.getDatasetMeta(legendItem.datasetIndex).hidden = legend.chart.isDatasetVisible(
+            legendItem.datasetIndex
+          );
+          legend.chart.update();
+        }
       },
-      // Data Label Plugin for Percentage Overlay
+      tooltip: {
+        callbacks: {
+          // see https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-callbacks
+          label: function (context: any) {
+            const labelIndex = context.datasetIndex * 2 + context.dataIndex;
+            return context.chart.data.labels[labelIndex] + ': ' + context.formattedValue;
+          },
+          title: function (context: any) {
+            if (context && context.length > 0 && context[0]?.dataset?.label) {
+              return context[0].dataset.label;
+            } else {
+              return '';
+            }
+          },
+          footer: function (context: any) {
+            console.log(context);
+            if (context && context.length > 0 && context[0]?.dataIndex !== undefined) {
+              const dataIndex = context[0].dataIndex;
+              if (dataIndex === 0) {
+                return `${res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet1[0] + dataSet1[1]}`;
+              } else if (dataIndex === 1) {
+                return `${res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet2[0] + dataSet2[1]}`;
+              }
+            }
+            return null;
+          }
+        }
+      },
+      //   __        __  ___  __            __       ___                    __   ___       __
+      //  /  ` |  | /__`  |  /  \  |\/|    |  \  /\   |   /\     |     /\  |__) |__  |    /__`
+      //  \__, \__/ .__/  |  \__/  |  |    |__/ /~~\  |  /~~\    |___ /~~\ |__) |___ |___ .__/
       datalabels: {
         display: true,
         align: 'center',
-        borderColor: palette.grey[700],
-        borderWidth: 1,
-        borderRadius: 0,
-        padding: 4,
         font: {
-          weight: 400,
+          weight: 500,
           family: 'Roboto',
           size: 15
         },
-        color: '#000',
-        backgroundColor: palette.grey[400],
+        color: '#fff', // default without dataset specific override
         formatter: (value: any, chartObject: any) => {
-          console.log(chartObject);
           const label = chartObject.chart.data.labels[chartObject.dataIndex];
           const totalValue = chartObject.dataset.data.reduce((add: number, val: number) => {
             return add + val;
@@ -115,7 +175,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
         }
       },
       title: {
-        display: dataSetCount === 1 ? false : true,
+        display: dataSetCount === 1 || skipTitle ? false : true,
         text: chartTitle ? chartTitle : 'Chart.js Pie Chart'
       }
     }

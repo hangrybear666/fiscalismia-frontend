@@ -207,10 +207,10 @@ export default function ContentLineChart(props: ContentLineChartProps) {
       pointStyle: 'circle',
       radius: 5,
       hoverRadius: 10,
-      borderWidth: 2
+      borderWidth: 1
     },
     line: {
-      borderWidth: 4,
+      borderWidth: 2,
       tension: 0.1,
       borderJoinStyle: 'bevel'
     }
@@ -219,12 +219,12 @@ export default function ContentLineChart(props: ContentLineChartProps) {
   const line2Config = {
     point: {
       pointStyle: 'rect',
-      borderWidth: 2,
+      borderWidth: 1,
       radius: 8,
       hoverRadius: 16
     },
     line: {
-      borderWidth: 4,
+      borderWidth: 2,
       tension: 0.1,
       borderJoinStyle: 'bevel'
     }

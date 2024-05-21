@@ -40,6 +40,7 @@ import {
 } from '../../utils/sharedFunctions';
 import {
   ContentCardObject,
+  ContentChartBooleanPieObject,
   ContentChartLineObject,
   ContentChartVerticalBarObject,
   RouteInfo
@@ -65,7 +66,7 @@ function getUniqueEffectiveDateYears(allVariableExpenses: any) {
   return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
-function extractPieChartData(allVariableExpenses: any, palette: Palette) {
+function extractPieChartData(allVariableExpenses: any, palette: Palette): ContentChartBooleanPieObject {
   const allVariableExpensesFiltered = allVariableExpenses.filter((row: any) => row.category.toLowerCase() !== 'sale');
 
   let varExpensesPieChartDs1: number[] = [];
@@ -76,9 +77,9 @@ function extractPieChartData(allVariableExpenses: any, palette: Palette) {
     .reduce(
       (booleanCountArr: number[], currentBooleanValue: boolean) => {
         if (currentBooleanValue) {
-          booleanCountArr[0] += 1;
+          booleanCountArr[0] += 1; // planned
         } else {
-          booleanCountArr[1] += 1;
+          booleanCountArr[1] += 1; // not planned
         }
         return booleanCountArr;
       },
@@ -89,10 +90,10 @@ function extractPieChartData(allVariableExpenses: any, palette: Palette) {
     .map((e: any) => e.contains_indulgence)
     .reduce(
       (booleanCountArr: number[], currentBooleanValue: boolean) => {
-        if (currentBooleanValue) {
-          booleanCountArr[0] += 1;
+        if (!currentBooleanValue) {
+          booleanCountArr[0] += 1; // Clean
         } else {
-          booleanCountArr[1] += 1;
+          booleanCountArr[1] += 1; // Indulgence
         }
         return booleanCountArr;
       },
@@ -100,35 +101,42 @@ function extractPieChartData(allVariableExpenses: any, palette: Palette) {
     );
   const pieChart1Colors = {
     backgroundColor: {
-      pieColor1: palette.success.light,
-      pieColor2: palette.error.light
+      pieColor1: palette.tertiary.light,
+      pieColor2: palette.tertiary.dark
     },
     borderColor: {
-      borderColor1: palette.success.dark,
-      borderColor2: palette.error.dark
+      borderColor1: palette.grey[900],
+      borderColor2: palette.grey[900]
     }
   };
   const pieChart2Colors = {
     backgroundColor: {
-      pieColor1: palette.info.light,
-      pieColor2: palette.warning.light
+      pieColor1: palette.secondary.light,
+      pieColor2: palette.secondary.dark
     },
     borderColor: {
-      borderColor1: palette.info.dark,
-      borderColor2: palette.warning.dark
+      borderColor1: palette.grey[800],
+      borderColor2: palette.grey[800]
     }
   };
-  return {
+  const booleanPieChartObj: ContentChartBooleanPieObject = {
     chartTitle: 'Boolean Flags',
-    labels: ['planned', 'not planned'],
+    skipTitle: true,
+    labels: [
+      res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_YES,
+      res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_NO,
+      res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_NO,
+      res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_YES
+    ],
     dataSetCount: 2,
     dataSet1: varExpensesPieChartDs1,
-    dataSet1Name: 'is planned?',
+    dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_TOOLTIP,
     dataSet1Colors: pieChart1Colors,
     dataSet2: varExpensesPieChartDs2,
-    dataSet2Name: 'contains indulgence?',
+    dataSet2Name: res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_TOOLTIP,
     dataSet2Colors: pieChart2Colors
   };
+  return booleanPieChartObj;
 }
 /**
  * Extracts vertical bars for each filtered category, especially Groceries, Leisure, Gift and the combined aggregate Category Health & Body
@@ -357,7 +365,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   // Monthly/Yearly Expenses Visualized in Vertical Barchart
   const [expenseVerticalBarChartData, setExpenseVerticalBarChartData] = useState<ContentChartVerticalBarObject>();
   // Dual Pie Chart is_planned yes/no piechart & contains indulgence yes/no pie chart
-  const [expensePieChartData, setExpensePieChartData] = useState<any>();
+  const [expensePieChartData, setExpensePieChartData] = useState<ContentChartBooleanPieObject>();
   const [selectedChartLabel, setSelectedChartLabel] = useState<string>('');
   // year selection
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
@@ -434,8 +442,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     const varExpenseVerticalBarChartAggregate = extractVerticalBarChartData(filteredYearVarExpenses);
     setExpenseVerticalBarChartData(varExpenseVerticalBarChartAggregate.varExpensesBarChart);
     // Pie Chart displaying is_planned and contains_indulgence flags
-    const varExpensePieChartFlags = extractPieChartData(filteredYearVarExpenses, palette);
-    setExpensePieChartData(varExpensePieChartFlags);
+    const varExpenseBooleanPieChart = extractPieChartData(filteredYearVarExpenses, palette);
+    setExpensePieChartData(varExpenseBooleanPieChart);
+    // Content Cards with aggregated costs per largest category
     const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredYearVarExpenses, false);
     setAggregatedPurchaseInformation(aggregatePurchaseInfo);
     setSelectedChartLabel('');
@@ -459,6 +468,10 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       filteredMonthVarExpenses = allVariableExpenses
         .filter((e: any) => e.purchasing_date.substring(0, 4) === selectedYear)
         .filter((e: any) => e.purchasing_date.substring(5, 7) === selectedMonthArr[1]);
+      // Pie Chart displaying is_planned and contains_indulgence flags
+      const varExpenseBooleanPieChart = extractPieChartData(filteredMonthVarExpenses, palette);
+      setExpensePieChartData(varExpenseBooleanPieChart);
+      // Content Cards with aggregated costs per largest category
       const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredMonthVarExpenses, true);
       setAggregatedPurchaseInformation(aggregatePurchaseInfo);
       setSelectedChartLabel(`${selectedYear}-${selectedMonthArr[1]}`);
@@ -641,6 +654,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                       }}
                     >
                       <ContentBooleanPieChart {...expensePieChartData} />
+                      {/* <ContentBooleanMultiPieChart /> */}
                     </Paper>
                   ) : null}
                 </Grid>

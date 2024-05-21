@@ -181,6 +181,30 @@ export type FoodItemUpdateObject = {
   lastUpdate: Date;
 };
 
+export type BooleanPieColors = {
+  backgroundColor: {
+    pieColor1: string;
+    pieColor2: string;
+  };
+  borderColor: {
+    borderColor1: string;
+    borderColor2: string;
+  };
+};
+
+export type ContentChartBooleanPieObject = {
+  chartTitle: string;
+  skipTitle?: boolean;
+  labels: string[];
+  dataSetCount: number;
+  dataSet1: number[];
+  dataSet1Name: string;
+  dataSet1Colors: BooleanPieColors;
+  dataSet2: number[];
+  dataSet2Name: string;
+  dataSet2Colors: BooleanPieColors;
+};
+
 export type ContentChartVerticalBarObject = {
   chartTitle: string;
   labels: string[];
