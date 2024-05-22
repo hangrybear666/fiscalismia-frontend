@@ -44,8 +44,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
   const [pctTaxed, setPctTaxed] = React.useState(Number(100.0).toFixed(2));
 
   // Selection
-  const [isinSelectItems, setIsinSelectItems] = React.useState(isinSelection);
-  const [selectedIsin, setSelectedIsin] = React.useState('');
+  const [isinSelectItems, setIsinSelectItems] = React.useState<TwelveCharacterString[]>(isinSelection);
+  const [selectedIsin, setSelectedIsin] = React.useState<string>('');
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -268,9 +268,10 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
 
   const validateInput = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    console.log(!/^[a-zA-Z]{2}$/.test(selectedIsin.substring(0, 2)));
     let errorPresent = false;
     // Dividend Amount
-    if (!isNumeric(dividendAmount) || parseInt(Number(dividendAmount).toFixed(0)) < 0) {
+    if (!isNumeric(dividendAmount) || parseInt(dividendAmount) < 0) {
       errorPresent = true;
       setIsDividendAmountValidationError(true);
       setDividendAmountValidationErrorMessage(res.MINOR_INPUT_DIVIDEND_MODAL_DIVIDEND_AMOUNT_VALIDATION_ERROR_MSG);
@@ -290,8 +291,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     // Pct Taxed Validation
     if (
       !isNumeric(pctTaxed) ||
-      parseFloat(Number(pctTaxed).toFixed(2)) > 100.0 ||
-      parseInt(Number(pctTaxed).toFixed(0)) < 0
+      parseFloat(parseFloat(pctTaxed).toFixed(2)) > 100.0 ||
+      parseFloat(parseFloat(pctTaxed).toFixed(2)) < 0
     ) {
       errorPresent = true;
       setIsPctTaxedValidationError(true);
@@ -301,13 +302,13 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
       setPctTaxedValidationErrorMessage('');
     }
     // Selected ISIN
-    if (!selectedIsin || selectedIsin?.length < 12) {
+    if (!selectedIsin || selectedIsin?.length < 12 || !/^[a-zA-Z]{2}$/.test(selectedIsin?.substring(0, 2))) {
       errorPresent = true;
       setIsSelectedIsinValidationError(true);
       setSelectedIsinValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG);
     } else {
-      setIsPctTaxedValidationError(false);
-      setPctTaxedValidationErrorMessage('');
+      setIsSelectedIsinValidationError(false);
+      setSelectedIsinValidationErrorMessage('');
     }
     if (errorPresent) {
       // Errors present => return

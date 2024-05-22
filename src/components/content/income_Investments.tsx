@@ -163,8 +163,46 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
    */
   const VisualizeOnAggregateRows = ({ value, investments }: any) => {
     const [open, setOpen] = useState(false);
+    const [aggregateRowsColumnDefinitions, setAggregateRowsColumnDefinitions] = useState<any[]>([]);
     // breakpoints
     const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
+
+    useEffect(() => {
+      setAggregateRowsColumnDefinitions([
+        { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 1.5, minWidth: 200 },
+        {
+          field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
+          headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
+          cellRenderer: IsinNationalFlagRenderer,
+          minWidth: 150
+        },
+        {
+          field: res.INCOME_INVESTMENTS_DB_COL_NAME_INVESTMENT_TYPE,
+          headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE,
+          flex: 0.5
+        },
+        { field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS, valueFormatter: unitsFormatter, flex: 0.5 },
+        {
+          field: res.INCOME_INVESTMENTS_DB_COL_NAME_PRICE_PER_UNIT,
+          headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
+          valueFormatter: currencyFormatter,
+          flex: 0.5
+        },
+        { field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES, valueFormatter: currencyFormatter, flex: 0.5 },
+        {
+          field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
+          headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+          valueFormatter: currencyFormatter,
+          flex: 0.5
+        },
+        {
+          field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_DATE,
+          headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
+          cellRenderer: DateCellFormatter,
+          minWidth: 135
+        }
+      ]);
+    }, [allInvestments, open]);
 
     if (allInvestments && value && value > 1) {
       // Filter all Investments to the Ids contained within aggregated dividends
@@ -199,36 +237,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
                   <AgGridReact
                     domLayout="autoHeight"
                     rowData={filteredInvestments}
-                    columnDefs={[
-                      { field: 'description', flex: 1.5, minWidth: 200 },
-                      {
-                        field: 'isin',
-                        headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
-                        cellRenderer: IsinNationalFlagRenderer,
-                        minWidth: 150
-                      },
-                      { field: 'investment_type', headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE, flex: 0.5 },
-                      { field: 'units', valueFormatter: unitsFormatter, flex: 0.5 },
-                      {
-                        field: 'price_per_unit',
-                        headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
-                        valueFormatter: currencyFormatter,
-                        flex: 0.5
-                      },
-                      { field: 'fees', valueFormatter: currencyFormatter, flex: 0.5 },
-                      {
-                        field: 'total_price',
-                        headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
-                        valueFormatter: currencyFormatter,
-                        flex: 0.5
-                      },
-                      {
-                        field: 'execution_date',
-                        headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
-                        cellRenderer: DateCellFormatter,
-                        minWidth: 135
-                      }
-                    ]}
+                    columnDefs={aggregateRowsColumnDefinitions}
                     defaultColDef={{
                       filter: false,
                       floatingFilter: false,
@@ -276,10 +285,10 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
     setInvestmentColumnDefinitions([
-      { field: 'id' },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
       {
-        headerName: 'Order Type',
-        field: 'execution_type',
+        headerName: res.INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_TYPE,
         cellRenderer: (p: any) => <CustomBoughtSoldChip value={p.value} />,
         minWidth: 80,
         cellStyle: () => ({
@@ -288,33 +297,43 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           justifyContent: 'center'
         })
       },
-      { field: 'description', flex: 2, minWidth: 200 },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 2, minWidth: 200 },
       {
-        field: 'isin',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
         filter: false,
         minWidth: 160
       },
-      { field: 'investment_type', headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE },
-      { field: 'marketplace', floatingFilter: false },
-      { field: 'units', valueFormatter: unitsFormatter, floatingFilter: false, filter: false },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_INVESTMENT_TYPE, headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_MARKETPLACE, floatingFilter: false },
       {
-        field: 'price_per_unit',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
+        valueFormatter: unitsFormatter,
+        floatingFilter: false,
+        filter: false
+      },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_PRICE_PER_UNIT,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
         valueFormatter: currencyFormatter,
         floatingFilter: false
       },
-      { field: 'fees', valueFormatter: currencyFormatter, floatingFilter: false, filter: false },
       {
-        field: 'total_price',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES,
+        valueFormatter: currencyFormatter,
+        floatingFilter: false,
+        filter: false
+      },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
         cellRenderer: SalesProfitMinusTaxes,
         floatingFilter: false,
         minWidth: 140
       },
       {
-        field: 'execution_date',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_DATE,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
@@ -327,7 +346,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
     setDividendColumnDefinitions([
       // { field: "id", },
       {
-        field: 'cnt',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_COUNT,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_AGGREGATE,
         cellRenderer: (p: any) => <VisualizeOnAggregateRows value={p.value} investments={p.data.investments} />,
         filter: false,
@@ -338,30 +357,38 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           justifyContent: 'center'
         })
       },
-      { field: 'description', flex: 2, minWidth: 200 },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 2, minWidth: 200 },
       {
-        field: 'isin',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
         filter: false,
         minWidth: 160
       },
       {
-        field: 'dividend_amount',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_AMOUNT,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_DIVIDEND,
         valueFormatter: currencyFormatter
       },
       {
-        field: 'pct_of_total',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_PCT_OF_TOTAL,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_PCT_OF_TOTAL,
         valueFormatter: percentageFormatter
       },
-      { field: 'avg_ppu', headerName: res.INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE, valueFormatter: currencyFormatter },
-      { field: 'units', valueFormatter: unitsFormatter },
-      { field: 'total_price', headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL, valueFormatter: currencyFormatter },
-      { field: 'fees', valueFormatter: currencyFormatter },
       {
-        field: 'dividend_date',
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_AVG_PPU,
+        headerName: res.INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE,
+        valueFormatter: currencyFormatter
+      },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS, valueFormatter: unitsFormatter },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
+        headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+        valueFormatter: currencyFormatter
+      },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES, valueFormatter: currencyFormatter },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_DATE,
         headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
