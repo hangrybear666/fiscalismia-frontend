@@ -12,6 +12,6 @@
 # getUniqueEffectiveDates(allFixedCosts.results) as string[] code search und in sharedFunction returntype auslagern
 # When entering dividend with tax percentage above 100% throw validation error
 # Create Warning in INSERT STATEMENTS or DB or Frontend for set indulgences without a true contains_indulgences flag
-
+# Fixkosten Übersicht & Wohnen Essentials & Einkommen Übersicht genau wie Variable Ausgaben mit Chart und breakpointwidth alignen
 ESLINT/PRETTIER in VSCODE
 https://github.com/idahogurl/vs-code-prettier-eslint/tree/master/examples/typescript

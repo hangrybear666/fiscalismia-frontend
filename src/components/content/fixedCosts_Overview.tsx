@@ -278,7 +278,7 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
                 padding: 1,
                 backgroundColor: palette.background.default,
                 width: '90%',
-                height: 500
+                height: 400
               }}
             >
               <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate} />
