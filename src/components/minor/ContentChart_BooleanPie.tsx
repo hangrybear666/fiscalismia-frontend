@@ -147,7 +147,6 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
             }
           },
           footer: function (context: any) {
-            console.log(context);
             if (context && context.length > 0 && context[0]?.dataIndex !== undefined) {
               const dataIndex = context[0].dataIndex;
               if (dataIndex === 0) {

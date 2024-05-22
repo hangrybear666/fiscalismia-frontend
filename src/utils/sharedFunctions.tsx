@@ -305,8 +305,9 @@ export function dateValidation(dateStr: Date | string) {
   if (isNaN(date.getTime())) {
     dateValid = false;
   }
-  if (!isNaN(date.getFullYear()) && date.getFullYear() < 2020 && date.getFullYear() > new Date().getFullYear() + 1) {
-    // Datum zwischen 2020 und Folgejahr
+  if ((!isNaN(date.getFullYear()) && date.getFullYear() < 2022) || date.getFullYear() > new Date().getFullYear() + 1) {
+    console.log();
+    // Datum zwischen 2022 und Folgejahr
     dateValid = false;
   }
   return { isValid: dateValid, date: date };

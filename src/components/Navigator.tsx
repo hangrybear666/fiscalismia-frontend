@@ -51,7 +51,6 @@ interface NavigatorProps {
  */
 export default function Navigator(props: NavigatorProps) {
   const [selectedRelativePath, setSelectedRelativePath] = useState<string | null>('');
-  const { ...other } = props;
   const { open, onClose, variant, sxProps, drawerWidth } = props;
   const navigate = useNavigate();
   let location = useLocation();
@@ -81,14 +80,7 @@ export default function Navigator(props: NavigatorProps) {
   };
 
   return (
-    <Drawer
-      variant={variant}
-      sx={sxProps}
-      {...other}
-      open={open}
-      onClose={onClose}
-      PaperProps={{ style: { width: drawerWidth } }}
-    >
+    <Drawer variant={variant} sx={sxProps} open={open} onClose={onClose} PaperProps={{ style: { width: drawerWidth } }}>
       <List disablePadding>
         {/* FISCALISMIA */}
         <ListItem sx={{ paddingY: 2, color: '#fff' }}>

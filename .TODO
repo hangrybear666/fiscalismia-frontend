@@ -1,16 +1,9 @@
 # User Notification on failed Login attempt
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
-  und optional Callback auf Tooltip Click, damit beim Klicken auf einen Datensatz das selected Effective Date gewählt wird
 # pgConnections catch(error) mit user notification abfangen
-# console.error logging im Frontend ersetzen mit zentraler Logfile die Live Betrieb berücksichtigt / ODER mit user notifications
+# console.error logging im Frontend ersetzen mit zentraler Logfile die im Live Betrieb berücksichtigt / ODER mit user notifications
 # Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
-# Date Validation in sharedFunctions to consider year range
-# INVESTMENTS DATAGRID:
-- Replace hardcoded Strings with resource_properties
 # BUG: when pressing f5 or entering food prices from the menu, refresh food prices after image deletion is not triggered. it is triggered for prior added images
 # fix useAuth as unknown
 # getUniqueEffectiveDates(allFixedCosts.results) as string[] code search und in sharedFunction returntype auslagern
 # Create Warning in INSERT STATEMENTS or DB or Frontend for set indulgences without a true contains_indulgences flag
-# Variable Expense Overview Navigate to November and December having issues with selected label.
-ESLINT/PRETTIER in VSCODE
-https://github.com/idahogurl/vs-code-prettier-eslint/tree/master/examples/typescript

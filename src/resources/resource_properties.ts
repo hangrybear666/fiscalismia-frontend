@@ -207,7 +207,7 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG: 'Kein Artikel ausgewählt.',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 12.05',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
-    'Erwarte Datum (zw. 2020 und Folgejahr) im Format: DD.MM.YYYY',
+    'Erwarte Datum (zw. 2022 und nächstem Jahr) im Format: DD.MM.YYYY',
   MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG:
     'Das Startdatum muss vor dem Enddatum liegen.',
 
@@ -226,7 +226,7 @@ export const resourceProperties = {
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE_AUTOCOMPLETE_VALIDATION_ERROR_MSG: 'Todo store',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY_AUTOCOMPLETE_VALIDATION_ERROR_MSG: 'Todo category',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
-    'Erwarte Datum (zw. 2020 und Folgejahr) im Format: DD.MM.YYYY',
+    'Erwarte Datum (zw. 2022 und nächstem Jahr) im Format: DD.MM.YYYY',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_TODAY: 'date_today',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_TODAY: 'Heutiges Datum',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COFFEE: 'coffee_in_shop',
@@ -253,11 +253,11 @@ export const resourceProperties = {
   MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG: 'Marke muss mindestens 4 Zeichen enthalten.',
   MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG: 'Gewicht als Zahl in Gramm erwartet, zB.: 500',
   MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
-    'Erwarte Datum (zw. 2020 und Folgejahr) im Format: DD.MM.YYYY',
+    'Erwarte Datum (zw. 2022 und nächstem Jahr) im Format: DD.MM.YYYY',
 
   MINOR_INPUT_FOOD_ITEM_MODAL_OPEN_BUTTON: 'Investment hinzufügen',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG:
-    'Erwarte Datum (zw. 2020 und Folgejahr) im Format: DD.MM.YYYY',
+    'Erwarte Datum (zw. 2022 und nächstem Jahr) im Format: DD.MM.YYYY',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG: 'Preis im folgenden Format erwartet: 14.00',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG:
     'Anteil am Profit der versteuert wird zwischen 0 - 100.00%',

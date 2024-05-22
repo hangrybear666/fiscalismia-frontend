@@ -56,8 +56,6 @@ export default function ContentHorizontalBarChart(props: ContentHorizontalBarCha
   const labels = props.labels ? props.labels : ['Label One', 'Label Two'];
 
   const maxDatasetValue = Math.max(dataSet1, dataSet2, dataSet3, dataSet4, dataSet5, dataSet6);
-  console.log('maxDatasetValue');
-  console.log(maxDatasetValue);
   const options = {
     ...chartOptions,
     indexAxis: 'y',

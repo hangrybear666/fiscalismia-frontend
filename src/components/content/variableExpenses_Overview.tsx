@@ -117,18 +117,18 @@ function extractHorizontalBarChartData(allVariableExpenses: any, palette: Palett
     labels: [''], // To have only one dataset entry rendered without a label, empty label within an array has to be passed.
     dataSetCount: 6,
     skipTitle: true,
-    dataSet1: [topIndulgenceArray[0][1] as number],
-    dataSet2: [topIndulgenceArray[1][1] as number],
-    dataSet3: [topIndulgenceArray[2][1] as number],
-    dataSet4: [topIndulgenceArray[3][1] as number],
-    dataSet5: [topIndulgenceArray[4][1] as number],
-    dataSet6: [topIndulgenceArray[5][1] as number],
-    dataSet1Name: topIndulgenceArray[0][0] as string,
-    dataSet2Name: topIndulgenceArray[1][0] as string,
-    dataSet3Name: topIndulgenceArray[2][0] as string,
-    dataSet4Name: topIndulgenceArray[3][0] as string,
-    dataSet5Name: topIndulgenceArray[4][0] as string,
-    dataSet6Name: topIndulgenceArray[5][0] as string
+    dataSet1: topIndulgenceArray && topIndulgenceArray.length > 0 ? [topIndulgenceArray[0][1] as number] : [],
+    dataSet2: topIndulgenceArray && topIndulgenceArray.length > 1 ? [topIndulgenceArray[1][1] as number] : [],
+    dataSet3: topIndulgenceArray && topIndulgenceArray.length > 2 ? [topIndulgenceArray[2][1] as number] : [],
+    dataSet4: topIndulgenceArray && topIndulgenceArray.length > 3 ? [topIndulgenceArray[3][1] as number] : [],
+    dataSet5: topIndulgenceArray && topIndulgenceArray.length > 4 ? [topIndulgenceArray[4][1] as number] : [],
+    dataSet6: topIndulgenceArray && topIndulgenceArray.length > 5 ? [topIndulgenceArray[5][1] as number] : [],
+    dataSet1Name: topIndulgenceArray && topIndulgenceArray.length > 0 ? (topIndulgenceArray[0][0] as string) : '',
+    dataSet2Name: topIndulgenceArray && topIndulgenceArray.length > 1 ? (topIndulgenceArray[1][0] as string) : '',
+    dataSet3Name: topIndulgenceArray && topIndulgenceArray.length > 2 ? (topIndulgenceArray[2][0] as string) : '',
+    dataSet4Name: topIndulgenceArray && topIndulgenceArray.length > 3 ? (topIndulgenceArray[3][0] as string) : '',
+    dataSet5Name: topIndulgenceArray && topIndulgenceArray.length > 4 ? (topIndulgenceArray[4][0] as string) : '',
+    dataSet6Name: topIndulgenceArray && topIndulgenceArray.length > 5 ? (topIndulgenceArray[5][0] as string) : ''
   };
   return booleanPieChartObj;
 }
@@ -592,14 +592,16 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               <Grid xs={12} md={3.5} xl={2.5}>
                 <Stack direction="row">
                   <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
-                    <IconButton
-                      color="inherit"
-                      disabled={selectedYear ? false : true}
-                      onClick={() => handleMonthDirectionChanged('left')}
-                      sx={{ paddingX: 2, width: 1 / 9 }}
-                    >
-                      <AssignmentReturnIcon />
-                    </IconButton>
+                    <React.Fragment>
+                      <IconButton
+                        color="inherit"
+                        disabled={selectedYear ? false : true}
+                        onClick={() => handleMonthDirectionChanged('left')}
+                        sx={{ paddingX: 2, width: 1 / 9 }}
+                      >
+                        <AssignmentReturnIcon />
+                      </IconButton>
+                    </React.Fragment>
                   </Tooltip>
                   <Container maxWidth={false} sx={{ width: 7 / 9 }}>
                     <SelectDropdown
@@ -611,18 +613,20 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     />
                   </Container>
                   <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
-                    <IconButton
-                      color="inherit"
-                      disabled={selectedYear ? false : true}
-                      onClick={() => handleMonthDirectionChanged('right')}
-                      sx={{ paddingX: 2, width: 1 / 9 }}
-                    >
-                      <AssignmentReturnIcon
-                        sx={{
-                          transform: 'scaleX(-1)'
-                        }}
-                      />
-                    </IconButton>
+                    <React.Fragment>
+                      <IconButton
+                        color="inherit"
+                        disabled={selectedYear ? false : true}
+                        onClick={() => handleMonthDirectionChanged('right')}
+                        sx={{ paddingX: 2, width: 1 / 9 }}
+                      >
+                        <AssignmentReturnIcon
+                          sx={{
+                            transform: 'scaleX(-1)'
+                          }}
+                        />
+                      </IconButton>
+                    </React.Fragment>
                   </Tooltip>
                 </Stack>
               </Grid>
@@ -673,8 +677,8 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               {aggregatedPurchaseInformation ? (
                 <React.Fragment>
                   {aggregatedPurchaseInformation.categoryCards
-                    ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject) => (
-                        <Grid xs={6} md={4} xl={2} key={e.header + e.amount}>
+                    ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject, i: number) => (
+                        <Grid xs={6} md={4} xl={2} key={i}>
                           <ContentCardCosts elevation={12} {...e} />
                         </Grid>
                       ))
@@ -682,14 +686,14 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                   {/* Add empty grids for any months with less than 6 expense categories to retain horizontal width */}
                   {aggregatedPurchaseInformation?.categoryCards &&
                   aggregatedPurchaseInformation.categoryCards.length < 6
-                    ? [...new Array(6 - aggregatedPurchaseInformation.categoryCards.length)].map((e: any) => (
-                        <Grid xs={6} md={4} xl={2} key={e}></Grid>
-                      ))
+                    ? [...new Array(6 - aggregatedPurchaseInformation.categoryCards.length)].map(
+                        (e: any, i: number) => <Grid xs={6} md={4} xl={2} key={i}></Grid>
+                      )
                     : null}
                 </React.Fragment>
               ) : (
-                [...new Array(6)].map((e) => (
-                  <Grid xs={6} md={4} xl={2} key={e}>
+                [...new Array(6)].map((_e, i: number) => (
+                  <Grid xs={6} md={4} xl={2} key={i}>
                     <Skeleton variant="rectangular" height={120} />
                   </Grid>
                 ))
