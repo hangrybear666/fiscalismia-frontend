@@ -11,11 +11,12 @@ import SelectDropdown from '../minor/SelectDropdown';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
-import { Paper, Theme } from '@mui/material';
+import { Box, Paper, Theme } from '@mui/material';
 import {
   constructContentVerticalBarChartObject,
   constructContentCardObject,
-  getUniqueEffectiveDates
+  getUniqueEffectiveDates,
+  getBreakPointWidth
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 
@@ -209,23 +210,12 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState<string[]>([]);
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState<string>('');
-  // breakpoint
+
+  // width for page content based on current window width extracted from supplied breakpoints.
+  const breakpointWidth = getBreakPointWidth(breakpoints);
   const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'));
   const isSm = useMediaQuery((theme: Theme) => theme.breakpoints.only('sm'));
-  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.only('md'));
-  const isLg = useMediaQuery((theme: Theme) => theme.breakpoints.only('lg'));
-  const isXl = useMediaQuery((theme: Theme) => theme.breakpoints.only('xl'));
-  const breakpointWidth = isXs
-    ? '90%'
-    : isSm
-      ? breakpoints.values.sm - 256
-      : isMd
-        ? breakpoints.values.md - 256
-        : isLg
-          ? breakpoints.values.lg - 256
-          : isXl
-            ? breakpoints.values.xl - 256
-            : 0;
+
   const handleSelect = (selected: string): void => {
     setSelectedEffectiveDate(selected);
   };
@@ -265,62 +255,72 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
   }, [selectedEffectiveDate]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid xs={12}>
-        <SelectDropdown
-          selectLabel={res.DATE}
-          selectItems={effectiveDateSelectItems}
-          selectedValue={selectedEffectiveDate}
-          handleSelect={handleSelect}
-        />
-      </Grid>
-      {rentAndUtilitiesCard ? (
-        <Grid xs={6} md={4} xl={3}>
-          <ContentCardCosts {...rentAndUtilitiesCard} />
-        </Grid>
-      ) : null}
-      {studentLoansCard ? (
-        <Grid xs={6} md={4} xl={3}>
-          <ContentCardCosts {...studentLoansCard} />
-        </Grid>
-      ) : null}
-
-      {dslAndPhoneCard ? (
-        <Grid xs={6} md={4} xl={3}>
-          <ContentCardCosts {...dslAndPhoneCard} />
-        </Grid>
-      ) : null}
-
-      {insuranceCard ? (
-        <Grid xs={6} md={4} xl={3}>
-          <ContentCardCosts {...insuranceCard} />
-        </Grid>
-      ) : null}
-      {/* All Living Essentials Bar Chart */}
+    <Grid container>
       <Grid xs={0} xl={1}></Grid>
-      {livingEssentialsChart ? (
-        <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-          <Paper
-            elevation={6}
-            sx={{
-              borderRadius: 0,
-              border: `1px solid ${palette.border.dark}`,
-              padding: 1,
-              backgroundColor: palette.background.default,
-              width: breakpointWidth,
-              height: 500
-            }}
-          >
-            <ContentVerticalBarChart
-              {...livingEssentialsChart}
-              dataSetCount={4}
-              selectedLabel={selectedEffectiveDate}
-              legendPos={isXs || isSm ? 'top' : 'left'}
-            />
-          </Paper>
-        </Grid>
-      ) : null}
+      <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
+        {/* DETERMINES RESPONSIVE LAYOUT */}
+        <Box
+          sx={{
+            width: breakpointWidth
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid xs={12}>
+              <SelectDropdown
+                selectLabel={res.DATE}
+                selectItems={effectiveDateSelectItems}
+                selectedValue={selectedEffectiveDate}
+                handleSelect={handleSelect}
+              />
+            </Grid>
+            {rentAndUtilitiesCard ? (
+              <Grid xs={6} md={4} xl={3}>
+                <ContentCardCosts {...rentAndUtilitiesCard} />
+              </Grid>
+            ) : null}
+            {studentLoansCard ? (
+              <Grid xs={6} md={4} xl={3}>
+                <ContentCardCosts {...studentLoansCard} />
+              </Grid>
+            ) : null}
 
+            {dslAndPhoneCard ? (
+              <Grid xs={6} md={4} xl={3}>
+                <ContentCardCosts {...dslAndPhoneCard} />
+              </Grid>
+            ) : null}
+
+            {insuranceCard ? (
+              <Grid xs={6} md={4} xl={3}>
+                <ContentCardCosts {...insuranceCard} />
+              </Grid>
+            ) : null}
+            {/* All Living Essentials Bar Chart */}
+            {livingEssentialsChart ? (
+              <Grid xs={12} display="flex" alignItems="center" justifyContent="center">
+                <Paper
+                  elevation={6}
+                  sx={{
+                    borderRadius: 0,
+                    border: `1px solid ${palette.border.dark}`,
+                    padding: 1,
+                    backgroundColor: palette.background.default,
+                    width: '100%',
+                    height: 500
+                  }}
+                >
+                  <ContentVerticalBarChart
+                    {...livingEssentialsChart}
+                    dataSetCount={4}
+                    selectedLabel={selectedEffectiveDate}
+                    legendPos={isXs || isSm ? 'top' : 'left'}
+                  />
+                </Paper>
+              </Grid>
+            ) : null}
+          </Grid>
+        </Box>
+      </Grid>
       <Grid xs={0} xl={1}></Grid>
     </Grid>
   );

@@ -4,6 +4,7 @@ import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import { ContentCardObject, ContentChartLineObject, ContentChartVerticalBarObject } from '../types/custom/customTypes';
+import { Breakpoints, Theme, useMediaQuery } from '@mui/material';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -339,3 +340,28 @@ export function stringAlphaNumericOnly(str: string) {
   const regExAlphaNumeric = /^[a-zA-Z0-9._-]*$/g;
   return regExAlphaNumeric.test(str);
 }
+
+/**
+ * returns width for page content based on current window width extracted from supplied breakpoints.
+ * @param breakpoints extracted via useTheme()
+ * @returns width to use for outer content containers
+ */
+export const getBreakPointWidth = (breakpoints: Breakpoints) => {
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'));
+  const isSm = useMediaQuery((theme: Theme) => theme.breakpoints.only('sm'));
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.only('md'));
+  const isLg = useMediaQuery((theme: Theme) => theme.breakpoints.only('lg'));
+  const isXl = useMediaQuery((theme: Theme) => theme.breakpoints.only('xl'));
+  const breakpointWidth = isXs
+    ? '90%'
+    : isSm
+      ? breakpoints.values.sm - 256
+      : isMd
+        ? breakpoints.values.md - 256
+        : isLg
+          ? breakpoints.values.lg - 256
+          : isXl
+            ? breakpoints.values.xl - 256
+            : 0;
+  return breakpointWidth;
+};

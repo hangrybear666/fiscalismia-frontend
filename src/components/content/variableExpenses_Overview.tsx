@@ -36,7 +36,8 @@ import {
   constructContentLineChartObject,
   getUniqueEffectiveMonthYears,
   getUniqueEffectiveYears,
-  getUniquePurchasingDates
+  getUniquePurchasingDates,
+  getBreakPointWidth
 } from '../../utils/sharedFunctions';
 import {
   ContentCardObject,
@@ -453,23 +454,8 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const [categoryAutoCompleteItemArray, setCategoryAutoCompleteItemArray] = useState<string[]>([]);
   const [indulgencesAutoCompleteItemArray, setIndulgencesAutoCompleteItemArray] = useState<string[]>([]);
 
-  // breakpoint
-  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'));
-  const isSm = useMediaQuery((theme: Theme) => theme.breakpoints.only('sm'));
-  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.only('md'));
-  const isLg = useMediaQuery((theme: Theme) => theme.breakpoints.only('lg'));
-  const isXl = useMediaQuery((theme: Theme) => theme.breakpoints.only('xl'));
-  const breakpointWidth = isXs
-    ? '90%'
-    : isSm
-      ? breakpoints.values.sm - 256
-      : isMd
-        ? breakpoints.values.md - 256
-        : isLg
-          ? breakpoints.values.lg - 256
-          : isXl
-            ? breakpoints.values.xl - 256
-            : 0;
+  // width for page content based on current window width extracted from supplied breakpoints.
+  const breakpointWidth = getBreakPointWidth(breakpoints);
   const tableHeadStyling = {
     backgroundColor: palette.primary.dark,
     '> th': { color: palette.common.white, letterSpacing: 1, fontWeight: 500 }
@@ -581,207 +567,205 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   };
   return (
     <>
-      <Box>
-        <Grid container>
-          <Grid xs={0} xl={1}></Grid>
-          <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-            {/* DETERMINES RESPONSIVE LAYOUT */}
-            <Box
-              sx={{
-                width: breakpointWidth
-              }}
-            >
-              {/* MAIN CENTERED GRID */}
-              <Grid container spacing={1.5}>
-                {/* NEW EXPENSE INPUT MODAL */}
-                <Grid xs={12} md={3.5} xl={2}>
-                  <InputVariableExpenseModal
-                    setAddedItemId={setAddedItemId}
-                    storeAutoCompleteItemArray={storeAutoCompleteItemArray}
-                    categoryAutoCompleteItemArray={categoryAutoCompleteItemArray}
-                    indulgencesAutoCompleteItemArray={indulgencesAutoCompleteItemArray}
-                  />
-                </Grid>
-
-                {/* MONTH SELECTION */}
-                <Grid xs={12} md={3.5} xl={2.5}>
-                  <Stack direction="row">
-                    <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
-                      <IconButton
-                        color="inherit"
-                        disabled={selectedYear ? false : true}
-                        onClick={() => handleMonthDirectionChanged('left')}
-                        sx={{ paddingX: 2, width: 1 / 9 }}
-                      >
-                        <AssignmentReturnIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Container maxWidth={false} sx={{ width: 7 / 9 }}>
-                      <SelectDropdown
-                        selectLabel={res.DATE}
-                        selectItems={monthYearSelection.ARRAY_MONTH_ALL.map((e) => e[0] as string)}
-                        selectedValue={selectedMonth}
-                        handleSelect={handleSelectMonth}
-                        disabled={selectedYear ? false : true}
-                      />
-                    </Container>
-                    <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
-                      <IconButton
-                        color="inherit"
-                        disabled={selectedYear ? false : true}
-                        onClick={() => handleMonthDirectionChanged('right')}
-                        sx={{ paddingX: 2, width: 1 / 9 }}
-                      >
-                        <AssignmentReturnIcon
-                          sx={{
-                            transform: 'scaleX(-1)'
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                </Grid>
-                {/* YEAR SELECTION */}
-                <Grid xs={12} md={5} xl={7.5}>
-                  {yearSelectionData
-                    ? yearSelectionData.map((parent, index) => {
-                        return (
-                          <ToggleButtonGroup key={index} exclusive value={selectedYear} onChange={handleYearSelection}>
-                            {parent.map((child, index) => {
-                              return (
-                                <ToggleButton
-                                  key={index}
-                                  size="large"
-                                  value={child}
-                                  selected={child === selectedYear}
-                                  sx={{
-                                    borderRadius: 0,
-                                    paddingX: 2.0,
-                                    '&:hover': {
-                                      bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
-                                      color: palette.common.white
-                                    },
-                                    '&.Mui-selected:hover': {
-                                      bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500]
-                                    },
-                                    '&.Mui-selected': {
-                                      bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
-                                      color: palette.mode === 'light' ? palette.common.white : palette.common.black,
-                                      boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
-                                      transition: 'box-shadow 0.2s linear 0s'
-                                    },
-                                    '&.Mui-disabled': {
-                                      color: palette.text.disabled
-                                    }
-                                  }}
-                                >
-                                  {child}
-                                </ToggleButton>
-                              );
-                            })}
-                          </ToggleButtonGroup>
-                        );
-                      })
-                    : null}
-                </Grid>
-                {/* CONTENT CARDS WITH AGGREGATE VALUES PER MONTH/YEAR */}
-                {aggregatedPurchaseInformation ? (
-                  <React.Fragment>
-                    {aggregatedPurchaseInformation.categoryCards
-                      ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject) => (
-                          <Grid xs={6} md={4} xl={2} key={e.header + e.amount}>
-                            <ContentCardCosts elevation={12} {...e} />
-                          </Grid>
-                        ))
-                      : null}
-                    {/* Add empty grids for any months with less than 6 expense categories to retain horizontal width */}
-                    {aggregatedPurchaseInformation?.categoryCards &&
-                    aggregatedPurchaseInformation.categoryCards.length < 6
-                      ? [...new Array(6 - aggregatedPurchaseInformation.categoryCards.length)].map((e: any) => (
-                          <Grid xs={6} md={4} xl={2} key={e}></Grid>
-                        ))
-                      : null}
-                  </React.Fragment>
-                ) : (
-                  [...new Array(6)].map((e) => (
-                    <Grid xs={6} md={4} xl={2} key={e}>
-                      <Skeleton variant="rectangular" height={120} />
-                    </Grid>
-                  ))
-                )}
-
-                <Grid xs={12} md={8} xl={9}>
-                  {expenseLineChartData ? (
-                    <Paper
-                      elevation={6}
-                      sx={{
-                        ...chartBackgroundProperties(palette),
-                        height: 300
-                      }}
-                    >
-                      <ContentLineChart {...expenseLineChartData} dataSetCount={1} selectedLabel={selectedChartLabel} />
-                    </Paper>
-                  ) : (
-                    <Skeleton variant="rectangular" height={300} />
-                  )}
-                </Grid>
-                <Grid xs={12} md={4} xl={3}>
-                  {expensePieChartData ? (
-                    <Paper
-                      elevation={6}
-                      sx={{
-                        ...chartBackgroundProperties(palette),
-                        height: 300
-                      }}
-                    >
-                      <ContentBooleanPieChart {...expensePieChartData} />
-                    </Paper>
-                  ) : (
-                    <Skeleton variant="rectangular" height={300} />
-                  )}
-                </Grid>
-                {/* CATEGORY SUMS VERTICAL BAR CHART */}
-                <Grid xs={12} md={8} xl={9}>
-                  {expenseVerticalBarChartData ? (
-                    <Paper
-                      elevation={6}
-                      sx={{
-                        ...chartBackgroundProperties(palette),
-                        height: 400
-                      }}
-                    >
-                      <ContentVerticalBarChart
-                        {...expenseVerticalBarChartData}
-                        dataSetCount={4}
-                        selectedLabel={selectedChartLabel}
-                        legendPos="top"
-                      />
-                    </Paper>
-                  ) : (
-                    <Skeleton variant="rectangular" height={400} />
-                  )}
-                </Grid>
-                <Grid xs={12} md={4} xl={3}>
-                  {indulgencesHorizontalBarChartData ? (
-                    <Paper
-                      elevation={6}
-                      sx={{
-                        ...chartBackgroundProperties(palette),
-                        height: 400
-                      }}
-                    >
-                      <ContentHorizontalBarChart {...indulgencesHorizontalBarChartData} />
-                    </Paper>
-                  ) : (
-                    <Skeleton variant="rectangular" height={400} />
-                  )}
-                </Grid>
+      <Grid container>
+        <Grid xs={0} xl={1}></Grid>
+        <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
+          {/* DETERMINES RESPONSIVE LAYOUT */}
+          <Box
+            sx={{
+              width: breakpointWidth
+            }}
+          >
+            {/* MAIN CENTERED GRID */}
+            <Grid container spacing={1.5}>
+              {/* NEW EXPENSE INPUT MODAL */}
+              <Grid xs={12} md={3.5} xl={2}>
+                <InputVariableExpenseModal
+                  setAddedItemId={setAddedItemId}
+                  storeAutoCompleteItemArray={storeAutoCompleteItemArray}
+                  categoryAutoCompleteItemArray={categoryAutoCompleteItemArray}
+                  indulgencesAutoCompleteItemArray={indulgencesAutoCompleteItemArray}
+                />
               </Grid>
-            </Box>
-          </Grid>
-          <Grid xs={0} xl={1}></Grid>
+
+              {/* MONTH SELECTION */}
+              <Grid xs={12} md={3.5} xl={2.5}>
+                <Stack direction="row">
+                  <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
+                    <IconButton
+                      color="inherit"
+                      disabled={selectedYear ? false : true}
+                      onClick={() => handleMonthDirectionChanged('left')}
+                      sx={{ paddingX: 2, width: 1 / 9 }}
+                    >
+                      <AssignmentReturnIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Container maxWidth={false} sx={{ width: 7 / 9 }}>
+                    <SelectDropdown
+                      selectLabel={res.DATE}
+                      selectItems={monthYearSelection.ARRAY_MONTH_ALL.map((e) => e[0] as string)}
+                      selectedValue={selectedMonth}
+                      handleSelect={handleSelectMonth}
+                      disabled={selectedYear ? false : true}
+                    />
+                  </Container>
+                  <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
+                    <IconButton
+                      color="inherit"
+                      disabled={selectedYear ? false : true}
+                      onClick={() => handleMonthDirectionChanged('right')}
+                      sx={{ paddingX: 2, width: 1 / 9 }}
+                    >
+                      <AssignmentReturnIcon
+                        sx={{
+                          transform: 'scaleX(-1)'
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </Grid>
+              {/* YEAR SELECTION */}
+              <Grid xs={12} md={5} xl={7.5}>
+                {yearSelectionData
+                  ? yearSelectionData.map((parent, index) => {
+                      return (
+                        <ToggleButtonGroup key={index} exclusive value={selectedYear} onChange={handleYearSelection}>
+                          {parent.map((child, index) => {
+                            return (
+                              <ToggleButton
+                                key={index}
+                                size="large"
+                                value={child}
+                                selected={child === selectedYear}
+                                sx={{
+                                  borderRadius: 0,
+                                  paddingX: 2.0,
+                                  '&:hover': {
+                                    bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
+                                    color: palette.common.white
+                                  },
+                                  '&.Mui-selected:hover': {
+                                    bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500]
+                                  },
+                                  '&.Mui-selected': {
+                                    bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
+                                    color: palette.mode === 'light' ? palette.common.white : palette.common.black,
+                                    boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
+                                    transition: 'box-shadow 0.2s linear 0s'
+                                  },
+                                  '&.Mui-disabled': {
+                                    color: palette.text.disabled
+                                  }
+                                }}
+                              >
+                                {child}
+                              </ToggleButton>
+                            );
+                          })}
+                        </ToggleButtonGroup>
+                      );
+                    })
+                  : null}
+              </Grid>
+              {/* CONTENT CARDS WITH AGGREGATE VALUES PER MONTH/YEAR */}
+              {aggregatedPurchaseInformation ? (
+                <React.Fragment>
+                  {aggregatedPurchaseInformation.categoryCards
+                    ? aggregatedPurchaseInformation.categoryCards.map((e: ContentCardObject) => (
+                        <Grid xs={6} md={4} xl={2} key={e.header + e.amount}>
+                          <ContentCardCosts elevation={12} {...e} />
+                        </Grid>
+                      ))
+                    : null}
+                  {/* Add empty grids for any months with less than 6 expense categories to retain horizontal width */}
+                  {aggregatedPurchaseInformation?.categoryCards &&
+                  aggregatedPurchaseInformation.categoryCards.length < 6
+                    ? [...new Array(6 - aggregatedPurchaseInformation.categoryCards.length)].map((e: any) => (
+                        <Grid xs={6} md={4} xl={2} key={e}></Grid>
+                      ))
+                    : null}
+                </React.Fragment>
+              ) : (
+                [...new Array(6)].map((e) => (
+                  <Grid xs={6} md={4} xl={2} key={e}>
+                    <Skeleton variant="rectangular" height={120} />
+                  </Grid>
+                ))
+              )}
+
+              <Grid xs={12} md={8} xl={9}>
+                {expenseLineChartData ? (
+                  <Paper
+                    elevation={6}
+                    sx={{
+                      ...chartBackgroundProperties(palette),
+                      height: 300
+                    }}
+                  >
+                    <ContentLineChart {...expenseLineChartData} dataSetCount={1} selectedLabel={selectedChartLabel} />
+                  </Paper>
+                ) : (
+                  <Skeleton variant="rectangular" height={300} />
+                )}
+              </Grid>
+              <Grid xs={12} md={4} xl={3}>
+                {expensePieChartData ? (
+                  <Paper
+                    elevation={6}
+                    sx={{
+                      ...chartBackgroundProperties(palette),
+                      height: 300
+                    }}
+                  >
+                    <ContentBooleanPieChart {...expensePieChartData} />
+                  </Paper>
+                ) : (
+                  <Skeleton variant="rectangular" height={300} />
+                )}
+              </Grid>
+              {/* CATEGORY SUMS VERTICAL BAR CHART */}
+              <Grid xs={12} md={8} xl={9}>
+                {expenseVerticalBarChartData ? (
+                  <Paper
+                    elevation={6}
+                    sx={{
+                      ...chartBackgroundProperties(palette),
+                      height: 400
+                    }}
+                  >
+                    <ContentVerticalBarChart
+                      {...expenseVerticalBarChartData}
+                      dataSetCount={4}
+                      selectedLabel={selectedChartLabel}
+                      legendPos="top"
+                    />
+                  </Paper>
+                ) : (
+                  <Skeleton variant="rectangular" height={400} />
+                )}
+              </Grid>
+              <Grid xs={12} md={4} xl={3}>
+                {indulgencesHorizontalBarChartData ? (
+                  <Paper
+                    elevation={6}
+                    sx={{
+                      ...chartBackgroundProperties(palette),
+                      height: 400
+                    }}
+                  >
+                    <ContentHorizontalBarChart {...indulgencesHorizontalBarChartData} />
+                  </Paper>
+                ) : (
+                  <Skeleton variant="rectangular" height={400} />
+                )}
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
-      </Box>
+        <Grid xs={0} xl={1}></Grid>
+      </Grid>
       {/* <TableContainer component={Paper} sx={{ borderRadius: 0, mt: 2 }}>
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
           <TableHead>

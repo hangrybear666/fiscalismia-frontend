@@ -70,7 +70,7 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={1} sx={{ marginTop: 2 }}>
+      <Grid container spacing={1.5} sx={{ marginTop: 2 }}>
         {/* Horizontal Data Filtering on top on small screens */}
         <Grid xs={12}>
           {foodPrices && isSmallScreen ? (

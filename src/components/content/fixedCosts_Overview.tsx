@@ -6,10 +6,11 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
-import { Palette, Paper } from '@mui/material';
+import { Box, Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
   constructContentLineChartObject,
+  getBreakPointWidth,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
@@ -165,7 +166,7 @@ interface FixedCosts_OverviewProps {
 }
 
 export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
-  const { palette } = useTheme();
+  const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Costs
   const [monthlyTotalCostCard, setMonthlyTotalCostCard] = useState<ContentCardObject>();
   const [rentAndUtilitiesCard, setRentAndUtilitiesCard] = useState<ContentCardObject>();
@@ -179,6 +180,10 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState<string[]>([]);
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('');
+
+  // width for page content based on current window width extracted from supplied breakpoints.
+  const breakpointWidth = getBreakPointWidth(breakpoints);
+
   const handleSelect = (selected: string): void => {
     setSelectedEffectiveDate(selected);
   };
@@ -221,72 +226,80 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
   }, [selectedEffectiveDate]);
 
   return (
-    <>
-      <Grid container spacing={3}>
-        <Grid xs={12}>
-          <SelectDropdown
-            selectLabel={res.DATE}
-            selectItems={effectiveDateSelectItems}
-            selectedValue={selectedEffectiveDate}
-            handleSelect={handleSelect}
-          />
-        </Grid>
-        {monthlyTotalCostCard ? (
-          <Grid xs={12}>
-            <ContentCardCosts elevation={12} {...monthlyTotalCostCard} />
-          </Grid>
-        ) : null}
-        {rentAndUtilitiesCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...rentAndUtilitiesCard} />
-          </Grid>
-        ) : null}
+    <Grid container>
+      <Grid xs={0} xl={1}></Grid>
+      <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
+        {/* DETERMINES RESPONSIVE LAYOUT */}
+        <Box
+          sx={{
+            width: breakpointWidth
+          }}
+        >
+          <Grid container spacing={3}>
+            <Grid xs={12}>
+              <SelectDropdown
+                selectLabel={res.DATE}
+                selectItems={effectiveDateSelectItems}
+                selectedValue={selectedEffectiveDate}
+                handleSelect={handleSelect}
+              />
+            </Grid>
+            {monthlyTotalCostCard ? (
+              <Grid xs={12}>
+                <ContentCardCosts elevation={12} {...monthlyTotalCostCard} />
+              </Grid>
+            ) : null}
+            {rentAndUtilitiesCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...rentAndUtilitiesCard} />
+              </Grid>
+            ) : null}
 
-        {studentLoansCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...studentLoansCard} />
+            {studentLoansCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...studentLoansCard} />
+              </Grid>
+            ) : null}
+            {dslAndPhoneCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...dslAndPhoneCard} />
+              </Grid>
+            ) : null}
+            {sportsAndHealthCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...sportsAndHealthCard} />
+              </Grid>
+            ) : null}
+            {mediaAndEntertainmentCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...mediaAndEntertainmentCard} />
+              </Grid>
+            ) : null}
+            {insuranceCard ? (
+              <Grid xs={6} md={4} xl={2}>
+                <ContentCardCosts {...insuranceCard} />
+              </Grid>
+            ) : null}
+            {allFixedCostsChart ? (
+              <Grid xs={12} display="flex" alignItems="center" justifyContent="center">
+                <Paper
+                  elevation={6}
+                  sx={{
+                    borderRadius: 0,
+                    border: `1px solid ${palette.border.dark}`,
+                    padding: 1,
+                    backgroundColor: palette.background.default,
+                    width: '100%',
+                    height: 400
+                  }}
+                >
+                  <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate} />
+                </Paper>
+              </Grid>
+            ) : null}
           </Grid>
-        ) : null}
-        {dslAndPhoneCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...dslAndPhoneCard} />
-          </Grid>
-        ) : null}
-        {sportsAndHealthCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...sportsAndHealthCard} />
-          </Grid>
-        ) : null}
-        {mediaAndEntertainmentCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...mediaAndEntertainmentCard} />
-          </Grid>
-        ) : null}
-        {insuranceCard ? (
-          <Grid xs={6} md={4} xl={2}>
-            <ContentCardCosts {...insuranceCard} />
-          </Grid>
-        ) : null}
-        <Grid xs={0} xl={1}></Grid>
-        {allFixedCostsChart ? (
-          <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-            <Paper
-              elevation={6}
-              sx={{
-                borderRadius: 0,
-                border: `1px solid ${palette.border.dark}`,
-                padding: 1,
-                backgroundColor: palette.background.default,
-                width: '90%',
-                height: 400
-              }}
-            >
-              <ContentLineChart {...allFixedCostsChart} dataSetCount={1} selectedLabel={selectedEffectiveDate} />
-            </Paper>
-          </Grid>
-        ) : null}
-        <Grid xs={0} xl={1}></Grid>
+        </Box>
       </Grid>
-    </>
+    </Grid>
   );
 }

@@ -6,10 +6,11 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getFixedIncomeByEffectiveDate, getAllFixedIncome } from '../../services/pgConnections';
 import SelectDropdown from '../minor/SelectDropdown';
-import { Palette, Paper } from '@mui/material';
+import { Box, Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
   constructContentLineChartObject,
+  getBreakPointWidth,
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
@@ -107,7 +108,7 @@ interface Income_OverviewProps {
   routeInfo: RouteInfo;
 }
 export default function Income_Overview(_props: Income_OverviewProps) {
-  const { palette } = useTheme();
+  const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Income
   const [monthlyNetIncomeCard, setMonthlyNetIncomeCard] = useState<ContentCardObject>();
   const [monthlyGrossIncomeCard, setMonthlyGrossIncomeCard] = useState<ContentCardObject>();
@@ -118,6 +119,10 @@ export default function Income_Overview(_props: Income_OverviewProps) {
   // Effective Dates
   const [effectiveDateSelectItems, setEffectiveDateSelectItems] = useState<string[]>([]);
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState('');
+
+  // width for page content based on current window width extracted from supplied breakpoints.
+  const breakpointWidth = getBreakPointWidth(breakpoints);
+
   const handleSelect = (selected: string): void => {
     setSelectedEffectiveDate(selected);
   };
@@ -158,54 +163,68 @@ export default function Income_Overview(_props: Income_OverviewProps) {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid xs={12}>
-          <SelectDropdown
-            selectLabel={res.DATE}
-            selectItems={effectiveDateSelectItems}
-            selectedValue={selectedEffectiveDate}
-            handleSelect={handleSelect}
-          />
+      <Grid container>
+        <Grid xs={0} xl={1}></Grid>
+        <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
+          {/* DETERMINES RESPONSIVE LAYOUT */}
+          <Box
+            sx={{
+              width: breakpointWidth
+            }}
+          >
+            <Grid container spacing={3}>
+              <Grid xs={12}>
+                <SelectDropdown
+                  selectLabel={res.DATE}
+                  selectItems={effectiveDateSelectItems}
+                  selectedValue={selectedEffectiveDate}
+                  handleSelect={handleSelect}
+                />
+              </Grid>
+              {monthlyNetIncomeCard ? (
+                <Grid xs={12} md={6} xl={3}>
+                  <ContentCardCosts {...monthlyNetIncomeCard} />
+                </Grid>
+              ) : null}
+              {oneTimeYearlyBonusCard ? (
+                <Grid xs={12} md={6} xl={3}>
+                  <ContentCardCosts {...oneTimeYearlyBonusCard} />
+                </Grid>
+              ) : null}
+              {monthlyGrossIncomeCard ? (
+                <Grid xs={12} md={6} xl={3}>
+                  <ContentCardCosts {...monthlyGrossIncomeCard} />
+                </Grid>
+              ) : null}
+              {yearlyGrossIncomeCard ? (
+                <Grid xs={12} md={6} xl={3}>
+                  <ContentCardCosts {...yearlyGrossIncomeCard} />
+                </Grid>
+              ) : null}
+              {monthlyNetIncomeChart ? (
+                <Grid xs={12} display="flex" alignItems="center" justifyContent="center">
+                  <Paper
+                    elevation={6}
+                    sx={{
+                      borderRadius: 0,
+                      border: `1px solid ${palette.border.dark}`,
+                      padding: 1,
+                      backgroundColor: palette.background.default,
+                      width: '100%',
+                      height: 400
+                    }}
+                  >
+                    <ContentLineChart
+                      {...monthlyNetIncomeChart}
+                      dataSetCount={1}
+                      selectedLabel={selectedEffectiveDate}
+                    />
+                  </Paper>
+                </Grid>
+              ) : null}
+            </Grid>
+          </Box>
         </Grid>
-        {monthlyNetIncomeCard ? (
-          <Grid xs={12} md={6} xl={3}>
-            <ContentCardCosts {...monthlyNetIncomeCard} />
-          </Grid>
-        ) : null}
-        {oneTimeYearlyBonusCard ? (
-          <Grid xs={12} md={6} xl={3}>
-            <ContentCardCosts {...oneTimeYearlyBonusCard} />
-          </Grid>
-        ) : null}
-        {monthlyGrossIncomeCard ? (
-          <Grid xs={12} md={6} xl={3}>
-            <ContentCardCosts {...monthlyGrossIncomeCard} />
-          </Grid>
-        ) : null}
-        {yearlyGrossIncomeCard ? (
-          <Grid xs={12} md={6} xl={3}>
-            <ContentCardCosts {...yearlyGrossIncomeCard} />
-          </Grid>
-        ) : null}
-        <Grid xs={0} xl={1}></Grid>
-        {monthlyNetIncomeChart ? (
-          <Grid xs={12} xl={10} display="flex" alignItems="center" justifyContent="center">
-            <Paper
-              elevation={6}
-              sx={{
-                borderRadius: 0,
-                border: `1px solid ${palette.border.dark}`,
-                padding: 1,
-                backgroundColor: palette.background.default,
-                width: '90%',
-                height: 500
-              }}
-            >
-              <ContentLineChart {...monthlyNetIncomeChart} dataSetCount={1} selectedLabel={selectedEffectiveDate} />
-            </Paper>
-          </Grid>
-        ) : null}
-        <Grid xs={0} xl={1}></Grid>
       </Grid>
     </>
   );
