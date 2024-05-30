@@ -96,7 +96,7 @@ export default function ContentHorizontalBarChart(props: ContentHorizontalBarCha
           size: 14
         },
         color: '#fff', // default without dataset specific override
-        formatter: (value: any, chartObject: any) => {
+        formatter: (_value: any, chartObject: any) => {
           const label = chartObject.dataset.label;
           return `${label}`;
         }
