@@ -1,1 +1,2 @@
-# docker run --env-file .env --rm -it -p 3001:3001  fiscalismia-frontend:latest
+# docker build --pull --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
+# docker run --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
