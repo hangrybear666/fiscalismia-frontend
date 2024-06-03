@@ -1,10 +1,12 @@
 # Fiscalismia Frontend
+Admin Dashboard and User Interface for Fiscalismia.
+Fiscalismia is a Web Service for visualizing, analyzing, aggregating, importing and exporting personal finance data. Data can consist of variable and fixed costs, income, sales and investments. Advanced capabilities are available for synthesizing supermarket grocery deals.
 
+## Technical Overview
 
-## Overview
-
-Fiscalismia Frontend is a REACT service communicating via axios with a Node.js express server in the backend. JWT tokens are used for authentication.
-The UI itself displays financial data in different timelines and aggregates. The REACT elements are designed with full CRUD operations in mind, to seed, manipulate and analyze the data within the backend's db.
+fiscalismia-frontend is a REACT service rendered with Material UI, utilizes axios to communicate with a Node.js REST API in the backend. JWT tokens are used for authentication.
+The REACT elements are designed with full CRUD operations in mind, to seed, manipulate and analyze the data within the backend's cloud hosted db.
+The frontend is built in a continuous integration pipeline, tested, scanned for vulnerabilities and published as a docker image to a public docker registry before being deployed to the cloud.
 
 ## Table of Contents
 
@@ -33,10 +35,15 @@ The UI itself displays financial data in different timelines and aggregates. The
 
 **Dependencies**
 
-1. **Node.js:** Ensure that Node.js is installed on your local machine, with a minimum version of 20.9. You can download Node.js via Node Version Switcher [here](https://github.com/jasongin/nvs) or directly from the source [here](https://nodejs.org/).
+1. **Node.js:** Ensure that Node.js is installed on your local machine, with a minimum version of 20.12.2 You can download Node.js via Node Version Switcher [here](https://github.com/jasongin/nvs) or directly from the source [here](https://nodejs.org/).
 
 2. **Clone the Repository:**
+   ```bash
    git clone https://github.com/your-username/fiscalismia-frontend.git
+   ```
+
+3. **The REST API must be running:**
+   See https://github.com/hangrybear666/fiscalismia-backend
 
 **Installation**
 
@@ -60,7 +67,7 @@ npm run dev
 
 ## Usage
 
-Once the server is up and running, it will be ready at http://localhost:5173/
+Once the frontend and backend are up and running, the website will be ready at http://localhost:5173/
 
 ## License
 

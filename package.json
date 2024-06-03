@@ -1,7 +1,7 @@
 {
   "name": "fiscalismia-frontend",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "React frontend for the fiscalismia webservice",
   "type": "module",
   "scripts": {
     "dev": "vite &",
