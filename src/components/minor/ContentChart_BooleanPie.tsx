@@ -91,6 +91,10 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
           //                ___    __   ___  __     ___  __      __     ___     __             __  ___     __        ___  __   __     __   ___
           // |\/| |  | |     |  | /__` |__  |__) | |__  /__`    |__) | |__     /  ` |__|  /\  |__)  |     /  \ \  / |__  |__) |__) | |  \ |__
           // |  | \__/ |___  |  | .__/ |___ |  \ | |___ .__/    |    | |___    \__, |  | /~~\ |  \  |     \__/  \/  |___ |  \ |  \ | |__/ |___
+          /**
+           *
+           * @param chart
+           */
           generateLabels: function (chart: ChartJS) {
             // Get the default label list
             const original = ChartJS.overrides.pie.plugins.legend.labels.generateLabels;
@@ -114,6 +118,16 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
             return labelsOriginal;
           }
         },
+        /**
+         *
+         * @param _mouseEvent
+         * @param legendItem
+         * @param legend
+         * @param legend.chart
+         * @param legend.chart.getDatasetMeta
+         * @param legend.chart.isDatasetVisible
+         * @param legend.chart.update
+         */
         onClick: function (
           _mouseEvent: MouseEvent,
           legendItem: LegendItem,
@@ -135,10 +149,18 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
       tooltip: {
         callbacks: {
           // see https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-callbacks
+          /**
+           *
+           * @param context
+           */
           label: function (context: any) {
             const labelIndex = context.datasetIndex * 2 + context.dataIndex;
             return context.chart.data.labels[labelIndex] + ': ' + context.formattedValue;
           },
+          /**
+           *
+           * @param context
+           */
           title: function (context: any) {
             if (context && context.length > 0 && context[0]?.dataset?.label) {
               return context[0].dataset.label;
@@ -146,6 +168,10 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
               return '';
             }
           },
+          /**
+           *
+           * @param context
+           */
           footer: function (context: any) {
             if (context && context.length > 0 && context[0]?.dataIndex !== undefined) {
               const dataIndex = context[0].dataIndex;

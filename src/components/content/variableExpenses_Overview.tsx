@@ -64,6 +64,10 @@ const chartBackgroundProperties = (palette: Palette) => {
   };
 };
 
+/**
+ *
+ * @param allVariableExpenses
+ */
 function getUniqueEffectiveDateYears(allVariableExpenses: any) {
   const uniqueEffectiveDateArray = getUniquePurchasingDates(allVariableExpenses);
   return getUniqueEffectiveYears(uniqueEffectiveDateArray);
@@ -228,10 +232,10 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
   const uniqueExpenseDates: string[] = getUniquePurchasingDates(allVariableExpensesFiltered) as string[];
   const varExpensesVerticalBarChartXaxis: string[] = getUniqueEffectiveMonthYears(uniqueExpenseDates) as string[];
   // only read dates from datetime
-  let varExpensesVerticalBarChartDs1: number[] = [];
-  let varExpensesVerticalBarChartDs2: number[] = [];
-  let varExpensesVerticalBarChartDs3: number[] = [];
-  let varExpensesVerticalBarChartDs4: number[] = [];
+  const varExpensesVerticalBarChartDs1: number[] = [];
+  const varExpensesVerticalBarChartDs2: number[] = [];
+  const varExpensesVerticalBarChartDs3: number[] = [];
+  const varExpensesVerticalBarChartDs4: number[] = [];
   // for each unique date create an xAxis array with summed up expense values per filtered category
   varExpensesVerticalBarChartXaxis.forEach((xAxisEntry) => {
     varExpensesVerticalBarChartDs1.push(
@@ -284,7 +288,7 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
     dataSet3Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT,
     dataSet4Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_COMBINED_HEALTH_AND_BODY
   };
-  let varExpensesBarChart = constructContentVerticalBarChartObject(
+  const varExpensesBarChart = constructContentVerticalBarChartObject(
     res.VARIABLE_EXPENSES_OVERVIEW_BAR_CHART_HEADER,
     varExpensesVerticalBarChartXaxis,
     varExpensesVerticalBarChartDataSet,
@@ -297,6 +301,7 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
 /**
  *
  * @param {*} allVariableExpenses all variable expenses within db
+ * @param palette
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
 function extractLineChartData(allVariableExpenses: any, palette: Palette) {
@@ -311,7 +316,7 @@ function extractLineChartData(allVariableExpenses: any, palette: Palette) {
   const uniqueExpenseDates: string[] = getUniquePurchasingDates(overviewFiltered) as string[];
   const overviewXaxis: string[] = getUniqueEffectiveMonthYears(uniqueExpenseDates) as string[];
   // only read date string from datetime
-  let overviewDataset: number[] = [];
+  const overviewDataset: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   overviewXaxis.forEach((xAxisEntry) => {
     overviewDataset.push(
@@ -326,7 +331,7 @@ function extractLineChartData(allVariableExpenses: any, palette: Palette) {
     dataSet1: overviewDataset,
     dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER
   };
-  let overview = constructContentLineChartObject(
+  const overview = constructContentLineChartObject(
     res.VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER,
     overviewXaxis,
     overviewDataSets,
@@ -338,21 +343,24 @@ function extractLineChartData(allVariableExpenses: any, palette: Palette) {
 
 /**
  * Transforms a list of Objects from the db into simple arrays
+ * @param allStores
+ * @param allCategories
+ * @param allSensitivities
  * @returns
  * storeAutoCompleteItemArray: unique stores within variable expenses
  * categoryAutoCompleteItemArray: unique categories within variable expenses
  * indulgencesAutoCompleteItemArray: unique indulgences within variable expenses
  */
 function getStoreDataStructuresForAutocomplete(allStores: any[], allCategories: any[], allSensitivities: any[]) {
-  const storeArray: string[] = new Array();
+  const storeArray: string[] = [];
   allStores.forEach((e, i: number) => {
     storeArray[i] = `${e.description}`;
   });
-  const categoryArray: string[] = new Array();
+  const categoryArray: string[] = [];
   allCategories.forEach((e, i: number) => {
     categoryArray[i] = `${e.description}`;
   });
-  const indulgenceArray: string[] = new Array();
+  const indulgenceArray: string[] = [];
   allSensitivities.forEach((e, i: number) => {
     indulgenceArray[i] = `${e.description}`;
   });
@@ -394,8 +402,13 @@ function aggregateCostsPerCategory(allVariableExpenses: any): (string | number)[
 }
 
 // TODO create custom type for purchase info
+/**
+ *
+ * @param allVariableExpenses
+ * @param isMonthly
+ */
 function extractAggregatedPurchaseInformation(allVariableExpenses: any, isMonthly: boolean) {
-  let yearlyTotalExpenseCard = constructContentCardObject(
+  const yearlyTotalExpenseCard = constructContentCardObject(
     res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_EXPENSES,
     null,
     isMonthly ? '1.00' : '12.00',
@@ -403,7 +416,7 @@ function extractAggregatedPurchaseInformation(allVariableExpenses: any, isMonthl
     null,
     res.NO_IMG
   );
-  let categoryCards: ContentCardObject[] = [];
+  const categoryCards: ContentCardObject[] = [];
 
   const costsPerCategory: (string | number)[][] = aggregateCostsPerCategory(allVariableExpenses);
   costsPerCategory.forEach((e: (string | number)[]) => {
@@ -427,6 +440,10 @@ interface VariableExpenses_OverviewProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ *
+ * @param _props
+ */
 export default function VariableExpenses_Overview(_props: VariableExpenses_OverviewProps) {
   const { palette, breakpoints } = useTheme();
   // Variable Expense Data for Display
@@ -448,7 +465,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const [selectedYear, setSelectedYear] = useState<string>();
   const [selectedMonth, setSelectedMonth] = useState<string>(monthYearSelection.ARRAY_MONTH_ALL[0][0] as string);
   // to refresh table based on added food item after DB insertion
-  const [addedItemId, setAddedItemId] = useState<Number>();
+  const [addedItemId, setAddedItemId] = useState<number>();
   // Autocomplete Data for InputModal
   const [storeAutoCompleteItemArray, setStoreAutoCompleteItemArray] = useState<string[]>([]);
   const [categoryAutoCompleteItemArray, setCategoryAutoCompleteItemArray] = useState<string[]>([]);
@@ -467,14 +484,14 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   };
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
-      let allVariableExpenses = await getAllVariableExpenses();
+      const allVariableExpenses = await getAllVariableExpenses();
       const uniqueYears = getUniqueEffectiveDateYears(allVariableExpenses.results);
       setYearSelectionData(new Array(uniqueYears)); // 2D Array for mapping ToggleButtonGroup as parent
       // setSelectedYear(uniqueYears[0]);
       // handleYearSelection(null, uniqueYears[0]);
-      let allStores = await getAllVariableExpenseStores();
-      let allCategories = await getAllVariableExpenseCategories();
-      let allSensitivities = await getAllVariableExpenseSensitivities();
+      const allStores = await getAllVariableExpenseStores();
+      const allCategories = await getAllVariableExpenseCategories();
+      const allSensitivities = await getAllVariableExpenseSensitivities();
       setAllVariableExpenses(allVariableExpenses.results);
       const autoCompleteItemArrays = getStoreDataStructuresForAutocomplete(
         allStores.results,

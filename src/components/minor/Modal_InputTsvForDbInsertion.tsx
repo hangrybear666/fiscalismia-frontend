@@ -25,6 +25,10 @@ interface InputTsvForDbInsertionModalProps {
   helperText: string;
 }
 
+/**
+ *
+ * @param props
+ */
 export default function InputTsvForDbInsertionModal(props: InputTsvForDbInsertionModalProps) {
   const modalId = props.id;
   const postTsvInputMethod = props.postMethod;

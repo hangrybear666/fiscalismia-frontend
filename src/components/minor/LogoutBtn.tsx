@@ -10,6 +10,11 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 import { paths } from '../../resources/router_navigation_paths';
 import { AuthInfo } from '../../types/custom/customTypes';
 
+/**
+ *
+ * @param root0
+ * @param root0.fullWidth
+ */
 export default function LogoutBtn({ fullWidth }: { fullWidth: boolean }) {
   const navigate = useNavigate();
   const { setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown

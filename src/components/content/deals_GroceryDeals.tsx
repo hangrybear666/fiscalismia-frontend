@@ -15,12 +15,12 @@ import InputFoodDiscountModal from '../minor/Modal_InputFoodDiscount';
 import { RouteInfo } from '../../types/custom/customTypes';
 
 /**
- * extracts relevant fields from the db query result
- * in order to populate one card for each discounted item.
+ * Extracts relevant fields from the db query result in order to populate one card for each discounted item.
  * @param {*} allFoodDiscounts db query result
+ * @returns Array of ContentCardDiscount Objects
  */
 function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
-  let discountedFoodItemCards: ContentCardDiscount[] = new Array();
+  const discountedFoodItemCards: ContentCardDiscount[] = [];
   allFoodDiscounts.forEach((e: any) => {
     const imageStr = e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : res.NO_IMG;
     const contentCardObj = {
@@ -37,15 +37,15 @@ function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
       daysLeft:
         e.starts_in_days <= 0
           ? e.ends_in_days == 1
-            ? `noch heute und morgen gültig`
+            ? 'noch heute und morgen gültig'
             : e.ends_in_days == 0
-              ? `letzter Tag der Gültigkeit`
+              ? 'letzter Tag der Gültigkeit'
               : `noch ${e.ends_in_days} Tage gültig`
           : null,
       startsInDays:
         e.starts_in_days > 0
           ? e.starts_in_days == 1
-            ? `gültig ab morgen`
+            ? 'gültig ab morgen'
             : `startet in ${e.starts_in_days} Tagen`
           : null,
       details: null,
@@ -73,7 +73,7 @@ function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
 function getFoodItemSelectionDataStructures(allFoodPrices: any): {
   autoCompleteItemArray: { label: string; id: number }[];
 } {
-  const autoCompleteItemArray = new Array();
+  const autoCompleteItemArray: { label: string; id: any }[] = [];
   allFoodPrices.forEach((e: any, i: number) => {
     autoCompleteItemArray[i] = { label: `${e.food_item} - ${e.brand} | ${e.store}`, id: e.id };
   });
@@ -85,7 +85,12 @@ interface Deals_GroceryDealsProps {
   routeInfo: RouteInfo;
 }
 
-export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps) {
+/**
+ * Displays temporarily discounted Food Items from supermarkets and applicable data such as price, discount amount, saving percentage, deal duration and end date, etc.
+ * @param {Deals_GroceryDealsProps} _props
+ * @returns Collection of ContentCardDiscount Objects in a responsive Grid.
+ */
+export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps): JSX.Element {
   const { palette } = useTheme();
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState<any>();
   const [discountedItemCards, setDiscountedItemCards] = useState<ContentCardDiscount[]>([]);
@@ -97,8 +102,8 @@ export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps) {
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
-      let allFoodDiscounts = await getCurrentFoodDiscounts();
-      let allFoodItems = await getAllFoodPricesAndDiscounts();
+      const allFoodDiscounts = await getCurrentFoodDiscounts();
+      const allFoodItems = await getAllFoodPricesAndDiscounts();
       const selectionInfoForModal = getFoodItemSelectionDataStructures(allFoodItems.results);
       const autoCompleteItemArray = selectionInfoForModal.autoCompleteItemArray;
       setAllFoodItemArrayForAutoComplete(autoCompleteItemArray);

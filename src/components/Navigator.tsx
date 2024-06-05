@@ -48,12 +48,14 @@ interface NavigatorProps {
 
 /**
  * Vertical Menu to the Left side with Menu Entries leading to path Selection for React Router
+ * @param {NavigatorProps} props
+ * @returns Vertical HTML Navigation Bar, hidden on small screens with a toggle button
  */
-export default function Navigator(props: NavigatorProps) {
+export default function Navigator(props: NavigatorProps): JSX.Element {
   const [selectedRelativePath, setSelectedRelativePath] = useState<string | null>('');
   const { open, onClose, variant, sxProps, drawerWidth } = props;
   const navigate = useNavigate();
-  let location = useLocation();
+  const location = useLocation();
 
   const handleMenuSelection = (parentId: string, childId: string, path: string) => {
     const contentHeader = {

@@ -27,6 +27,13 @@ declare module '@mui/material/styles' {
   }
 }
 
+/**
+ * Customized Material UI theme, taking palette, mode dark | light (chosen by the user and persisted in user settings) into consideration.
+ * Custom breakpoints for responsive design. Custom border, header, menu colors. Custom Typography. And more
+ * @param root0
+ * @param {CustomThemeProviderProps} root0.children
+ * @returns
+ */
 export default function CustomThemeProvider({ children }: CustomThemeProviderProps) {
   const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode);
   const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette);

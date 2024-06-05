@@ -18,3 +18,9 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Reports
+reports/type-check-output.txt
+reports/eslint-analysis.txt
+reports/snyk-code-analysis.txt
+reports/snyk-dependency-analysis.txt

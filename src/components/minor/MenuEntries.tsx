@@ -50,7 +50,6 @@ export const menuEntries = [
       { id: res.GROCERY_DEALS, path: paths.DEALS_GROCERY_DEALS, icon: <AddShoppingCartIcon /> }
     ]
   },
-  ,
   {
     id: res.ADMIN_PANEL,
     children: [

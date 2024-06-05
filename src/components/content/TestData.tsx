@@ -72,7 +72,7 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
   const processPost = async (e: any) => {
     e.preventDefault();
     if (postInput === '') {
-      alert(`please provide a value for POST`);
+      alert('please provide a value for POST');
     }
     const newEntry = { description: postInput };
     await postTest(newEntry);
@@ -84,7 +84,7 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
   const processPut = async (e: any) => {
     e.preventDefault();
     if (putInput === '' || putId === '') {
-      alert(`please provide values for PUT`);
+      alert('please provide values for PUT');
     }
     const updatedEntry = { description: putInput };
     await putTest(Number(putId), updatedEntry);
@@ -97,7 +97,7 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
   const processDelete = async (e: any) => {
     e.preventDefault();
     if (deleteInput === '') {
-      alert(`please provide a value for DELETE`);
+      alert('please provide a value for DELETE');
     }
     console.log('deleting entry with ID:');
     console.log(deleteInput);

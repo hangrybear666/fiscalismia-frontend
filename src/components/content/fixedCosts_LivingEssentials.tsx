@@ -27,6 +27,11 @@ const iconProperties = {
   borderRadius: 1
 };
 
+/**
+ *
+ * @param specificFixedCosts
+ * @returns filtered dataset containing applicable categories
+ */
 function filterLivingEssentials(specificFixedCosts: any) {
   return specificFixedCosts.results.filter(
     (row: any) =>
@@ -55,10 +60,10 @@ function extractChartData(allFixedCosts: any) {
   livingEssentialsEffectiveDatesArr.sort();
   // only read dates from datetime
   const livingEssentialsXaxis = livingEssentialsEffectiveDatesArr.map((e: string) => e.substring(0, 10));
-  let livingEssentialsDs1: number[] = [];
-  let livingEssentialsDs2: number[] = [];
-  let livingEssentialsDs3: number[] = [];
-  let livingEssentialsDs4: number[] = [];
+  const livingEssentialsDs1: number[] = [];
+  const livingEssentialsDs2: number[] = [];
+  const livingEssentialsDs3: number[] = [];
+  const livingEssentialsDs4: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   livingEssentialsEffectiveDatesArr.forEach((xAxisEntry) => {
     livingEssentialsDs1.push(
@@ -101,7 +106,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.INTERNET_AND_PHONE_VALUE,
     dataSet4Name: categories.INSURANCE_VALUE
   };
-  let livingEssentials = constructContentVerticalBarChartObject(
+  const livingEssentials = constructContentVerticalBarChartObject(
     res.LIVING_ESSENTIALS,
     livingEssentialsXaxis,
     livingEssentialsDataSets,
@@ -118,7 +123,7 @@ function extractChartData(allFixedCosts: any) {
  * @returns
  */
 function extractCardData(specificFixedCosts: any) {
-  let rentAndUtilities = constructContentCardObject(
+  const rentAndUtilities = constructContentCardObject(
     res.FIXED_COSTS_RENT_UTILITIES,
     null,
     '1.00',
@@ -126,7 +131,7 @@ function extractCardData(specificFixedCosts: any) {
     <LocalAtmOutlinedIcon sx={iconProperties} />,
     res.NO_IMG
   );
-  let dslAndPhone = constructContentCardObject(
+  const dslAndPhone = constructContentCardObject(
     res.FIXED_COSTS_DSL_PHONE,
     null,
     '1.00',
@@ -134,7 +139,7 @@ function extractCardData(specificFixedCosts: any) {
     <CellWifiOutlinedIcon sx={iconProperties} />,
     res.NO_IMG
   );
-  let insurance = constructContentCardObject(
+  const insurance = constructContentCardObject(
     res.FIXED_COSTS_INSURANCE,
     null,
     '1.00',
@@ -142,7 +147,7 @@ function extractCardData(specificFixedCosts: any) {
     <WaterDamageOutlinedIcon sx={iconProperties} />,
     res.NO_IMG
   );
-  let studentLoans = constructContentCardObject(
+  const studentLoans = constructContentCardObject(
     res.FIXED_COSTS_STUDENT_LOANS,
     null,
     '1.00',
@@ -151,7 +156,7 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   // Rent and Utilities
-  let rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
+  const rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.LIVING_ESSENTIALS_KEY
   );
   rentAndUtilities.amount = rentAndUtilitiesFiltered
@@ -161,7 +166,7 @@ function extractCardData(specificFixedCosts: any) {
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
   // DSL & Telephone
-  let dslAndPhoneFiltered = specificFixedCosts.results.filter(
+  const dslAndPhoneFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.INTERNET_AND_PHONE_KEY
   );
   dslAndPhone.amount = dslAndPhoneFiltered
@@ -172,7 +177,7 @@ function extractCardData(specificFixedCosts: any) {
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
   // Insurance
-  let insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
+  const insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
   insurance.amount = insuranceFiltered
     .map((row: any) => parseFloat(row.monthly_cost))
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
@@ -181,7 +186,7 @@ function extractCardData(specificFixedCosts: any) {
     row.description.trim().concat(' | ').concat(row.monthly_cost).concat(res.CURRENCY_EURO)
   );
   // Student Loans
-  let studentLoansFiltered = specificFixedCosts.results.filter(
+  const studentLoansFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.STUDENT_LOANS_KEY
   );
   studentLoans.amount = studentLoansFiltered
@@ -198,6 +203,13 @@ interface FixedCosts_LivingEssentialsProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ * Monthly Fixed Cost horizontal responsive Cards with Information to several categories such as rent, debt, insurances.
+ * Vertical ChartJs Bar Chart with cost per category.
+ * Date Selection for switching between dataset effective dates.
+ * @param {FixedCosts_LivingEssentialsProps} _props
+ * @returns
+ */
 export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEssentialsProps) {
   const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Costs
@@ -223,11 +235,11 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
   useEffect(() => {
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
-      let allFixedCosts = await getAllFixedCosts();
-      let effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const allFixedCosts = await getAllFixedCosts();
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedCostsChartData = extractChartData(allFixedCosts);
+      const allFixedCostsChartData = extractChartData(allFixedCosts);
       setLivingEssentialsChart(allFixedCostsChartData.livingEssentials);
     };
     queryAllFixedCosts();
@@ -235,14 +247,14 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
 
   useEffect(() => {
     const getSpecificFixedCosts = async () => {
-      let specificFixedCosts = await getFixedCostsByEffectiveDate(
+      const specificFixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Spezifische Kosten via ausgewähltem effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
             : res.FALLBACK_DATE
       ); // Fallback auf übergebenes Datum
-      let extractedFixedCosts = extractCardData(specificFixedCosts);
+      const extractedFixedCosts = extractCardData(specificFixedCosts);
       setRentAndUtilitiesCard(extractedFixedCosts.rentAndUtilities);
       setDslAndPhoneCard(extractedFixedCosts.dslAndPhone);
       setInsuranceCard(extractedFixedCosts.insurance);

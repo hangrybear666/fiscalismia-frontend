@@ -39,7 +39,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
   // unique effective dates as string array
   const incomeDatesArr: string[] = getUniqueEffectiveDates(incomeFiltered) as string[];
   // only read date string from datetime
-  let overviewDataset: { x: string; y: number }[] = [];
+  const overviewDataset: { x: string; y: number }[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   incomeDatesArr.forEach((xAxisEntry) => {
     overviewDataset.push({
@@ -55,7 +55,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
   const costsFiltered = allFixedCosts.results;
   // unique effective dates as string array
   const costsDatesArr: string[] = getUniqueEffectiveDates(costsFiltered) as string[];
-  let costsDataset: { x: string; y: number }[] = [];
+  const costsDataset: { x: string; y: number }[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   costsDatesArr.forEach((xAxisEntry) => {
     costsDataset.push({
@@ -82,7 +82,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
   const xAxisArray = Array.from(new Set(incomeDatesArr.concat(costsDatesArr)))
     .map((e) => e.substring(0, 10))
     .sort((a, b) => (a > b ? 1 : -1)); // ASC sorted so left side of x axis starts with prior date
-  let overview = constructContentLineChartObject(
+  const overview = constructContentLineChartObject(
     res.INCOME_MONTHLY_BUDGET_CHART_HEADER,
     xAxisArray,
     incomeDataSets,
@@ -96,12 +96,20 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
  *  Extracts information of specific fixed income valid at a given date
  *  to display in cards dependent on the selected effective date
  * @param {*} specificFixedIncome
+ * @param specificFixedCosts
  * @returns
  */
 function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
-  let monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
-  let oneTimeYearlyBonus = constructContentCardObject(res.INCOME_ONE_TIME_BONUS, null, '12.00', null, null, res.NO_IMG);
-  let monthlyTotalCost = constructContentCardObject(
+  const monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
+  const oneTimeYearlyBonus = constructContentCardObject(
+    res.INCOME_ONE_TIME_BONUS,
+    null,
+    '12.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  const monthlyTotalCost = constructContentCardObject(
     res.INCOME_FIXED_COST_CARD_HEADER,
     null,
     '1.00',
@@ -110,7 +118,7 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
     res.NO_IMG
   );
   // Monhtly Net Income
-  let monthlyNetIncomeFiltered = specificFixedIncome.results
+  const monthlyNetIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
   monthlyNetIncome.amount = monthlyNetIncomeFiltered
@@ -118,7 +126,7 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
   monthlyNetIncome.details = monthlyNetIncomeFiltered.map((row: any) => row.description.trim());
   // One Time Yearly Bonus
-  let oneTimeYearlyBonusFiltered = specificFixedIncome.results
+  const oneTimeYearlyBonusFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => e.description.toLowerCase().includes('bonus'));
   oneTimeYearlyBonus.amount = oneTimeYearlyBonusFiltered
@@ -136,6 +144,11 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
 interface Income_Monthly_BudgetProps {
   routeInfo: RouteInfo;
 }
+/**
+ * Compares two datasets to eachother: Monhtly fixed costs and monthly income. The diff is visualized in a horizontal line chart containing one line per dataset.
+ * @param {Income_Monthly_BudgetProps} _props
+ * @returns
+ */
 export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps) {
   const { palette } = useTheme();
   // Selected Specific Fixed Income
@@ -154,15 +167,15 @@ export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps
   useEffect(() => {
     const queryAllFixedIncomeData = async () => {
       // All income data in the DB
-      let allFixedIncomeResponse = await getAllFixedIncome();
-      let allFixedCostsResponse = await getAllFixedCosts();
-      let effectiveDateSelectItems: string[] = getCombinedUniqueEffectiveDates(
+      const allFixedIncomeResponse = await getAllFixedIncome();
+      const allFixedCostsResponse = await getAllFixedCosts();
+      const effectiveDateSelectItems: string[] = getCombinedUniqueEffectiveDates(
         allFixedIncomeResponse.results,
         allFixedCostsResponse.results
       ) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, allFixedCostsResponse, palette);
+      const allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, allFixedCostsResponse, palette);
       setMonthlyNetIncomeChart(allFixedIncomeChartData.overview);
     };
     queryAllFixedIncomeData();
@@ -170,21 +183,21 @@ export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps
 
   useEffect(() => {
     const getSpecificFixedIncome = async () => {
-      let specificFixedIncome = await getFixedIncomeByEffectiveDate(
+      const specificFixedIncome = await getFixedIncomeByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Specific Income via selected effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Specific Income via first entry in all effective dates
             : res.FALLBACK_DATE
       ); // Fallback to provided date
-      let specificFixedCost = await getFixedCostsByEffectiveDate(
+      const specificFixedCost = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Specific Income via selected effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Specific Income via first entry in all effective dates
             : res.FALLBACK_DATE
       ); // Fallback to provided date
-      let extractedFixedIncome = extractCardData(specificFixedIncome, specificFixedCost);
+      const extractedFixedIncome = extractCardData(specificFixedIncome, specificFixedCost);
       setMonthlyNetIncomeCard(extractedFixedIncome.monthlyNetIncome);
       setOneTimeYearlyBonusCard(extractedFixedIncome.oneTimeYearlyBonus);
       setMonthlyTotalCostCard(extractedFixedIncome.monthlyTotalCost);

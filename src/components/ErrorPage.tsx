@@ -6,11 +6,22 @@ import Stack from '@mui/material/Stack';
 import HomeIcon from '@mui/icons-material/Home';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
+/**
+ * Extended Error class containing http status and arbitrary data
+ */
 class CustomError extends Error {
   status: number;
   statusText: string;
   data: any;
 
+  /**
+   *
+   * @param message Error message
+   * @param options object containing status information and arbitrary data
+   * @param options.status status number
+   * @param options.statusText status string
+   * @param options.data arbitrary data
+   */
   constructor(message: string, options: { status: number; statusText: string; data: any }) {
     super(message);
     this.status = options.status;
@@ -19,10 +30,15 @@ class CustomError extends Error {
   }
 }
 
-export default function ErrorPage({ isNoMatch }: { isNoMatch?: boolean }) {
-  let error = useRouteError();
+/**
+ * Page rendered as fallback when an unhandled error is encountered.
+ * @param {boolean} isNoMatch
+ * @returns either RoutingError or GenericError JSX HTML container
+ */
+export default function ErrorPage(isNoMatch?: boolean): JSX.Element {
+  const error = useRouteError();
   let customError: CustomError;
-  let location = useLocation();
+  const location = useLocation();
   if (!isRouteErrorResponse(error)) {
     customError = new CustomError(error instanceof Error ? error.message : res.ERROR_FALLBACK_MESSAGE, {
       status: 400,
@@ -45,11 +61,20 @@ export default function ErrorPage({ isNoMatch }: { isNoMatch?: boolean }) {
   }
 }
 
-function RoutingError({ error, location }: { error: CustomError; location: Location }) {
+interface RoutingErrorProps {
+  error: CustomError;
+  location: Location;
+}
+/**
+ * Error container rendered in response to User navigating to nonexistent path.
+ * @param {RoutingErrorProps} props
+ * @returns JSX.Element, specifically HTML div container containing router error info
+ */
+function RoutingError(props: RoutingErrorProps): JSX.Element {
   return (
     <div id="error-page">
       <h1>
-        {error?.status || res.STATUS_NOT_DEFINED} | {error?.statusText || res.STATUSTEXT_NOT_DEFINED}
+        {props.error?.status || res.STATUS_NOT_DEFINED} | {props.error?.statusText || res.STATUSTEXT_NOT_DEFINED}
       </h1>
       <h2>{res.PATH_DOES_NOT_EXIST(location.pathname)}</h2>
       <hr />
@@ -59,7 +84,17 @@ function RoutingError({ error, location }: { error: CustomError; location: Locat
   );
 }
 
-function GenericError({ error }: { error: CustomError }) {
+interface GenericErrorProps {
+  error: CustomError;
+}
+
+/**
+ * Error container rendered in response to User producing unhandled Error.
+ * @param {GenericErrorProps} props
+ * @returns JSX.Element, specifically HTML div container containing generic error info
+ */
+function GenericError(props: GenericErrorProps) {
+  const { error } = props;
   return (
     <div id="error-page">
       <h1>{res.GENERIC_ERROR_MESSAGE}</h1>
@@ -79,6 +114,9 @@ function GenericError({ error }: { error: CustomError }) {
   );
 }
 
+/**
+ * @returns Navigation Buttons to Home or Login Page.
+ */
 function NavBtns() {
   const navigate = useNavigate();
   return (

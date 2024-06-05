@@ -46,7 +46,7 @@ interface IsinNationalFlagRendererProps {
 }
 /**
  * Custom Cell Renderer displaying unicode country flags based on first two letters of ISIN
- * @param {} param0 ISIN
+ * @param {IsinNationalFlagRendererProps} props
  * @returns Flag + whitespace + ISIN
  */
 const IsinNationalFlagRenderer = (props: IsinNationalFlagRendererProps) => (
@@ -72,6 +72,15 @@ interface Income_InvestmentsProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ * Contains two ag-grid datatables that can be filtered, sorted, searched and clicked for additional (overlay) information:
+ * - One for Investments such as stocks and ETFs, that can simply be inserted as BUY or SELL
+ * - One for dividends that relate to specific investments. Which investments they relate to is calculated with an algorithm utilizing the date of purchases and sales
+ * of applicable investments and the date of dividend distribution.
+ * Contains a Modal for adding new Investments and new Dividends to the DB. Dividend Addition is dependent on Investments and uses ISIN as JOIN criteria.
+ * @param {Income_InvestmentsProps} _props
+ * @returns
+ */
 export default function Income_Investments(_props: Income_InvestmentsProps) {
   const { palette } = useTheme();
   // db data
@@ -83,7 +92,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   const [dividendRowData, setDividendRowData] = useState([]);
   const [investmentColumnDefinitions, setInvestmentColumnDefinitions] = useState<any[]>([]);
   const [dividendColumnDefinitions, setDividendColumnDefinitions] = useState<any[]>([]);
-  const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState<React.SetStateAction<Number>>();
+  const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState<React.SetStateAction<number>>();
   // Reference to grid API
   const investmentGridRef = useRef<AgGridReact>(null);
   const dividendGridRef = useRef<AgGridReact>(null);
@@ -91,8 +100,8 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   // ON PAGE LOAD
   useEffect(() => {
     const getInvestmentData = async () => {
-      let allInvestments = await getAllInvestments();
-      let allDividends = await getAllDividends();
+      const allInvestments = await getAllInvestments();
+      const allDividends = await getAllDividends();
       setInvestmentRowData(allInvestments.results);
       setDividendRowData(allDividends.results);
       setAllInvestments(allInvestments.results);

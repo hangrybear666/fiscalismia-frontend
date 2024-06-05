@@ -19,11 +19,15 @@ import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils
 import { DividendsRelatedInvestmentsAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface InputInvestmentDividendsModalProps {
-  refreshParent: React.Dispatch<React.SetStateAction<Number>>;
+  refreshParent: React.Dispatch<React.SetStateAction<number>>;
   isinSelection: TwelveCharacterString[];
   allInvestments: any;
 }
 
+/**
+ *
+ * @param props
+ */
 export default function InputInvestmentDividendsModal(props: InputInvestmentDividendsModalProps) {
   const { palette } = useTheme();
   const { refreshParent, isinSelection, allInvestments } = props;
@@ -76,6 +80,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
    * - Calculates which investments are still owned fully
    * - Calculates which investment is only owned partially and the remaining units
    * Returns remaining units and investment ids related to dividend payment
+   * @param dividendDate
+   * @param allInvestments
    */
   const extractRelatedInvestmentsOfDividend = (
     dividendDate: Date,
@@ -84,11 +90,11 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     investmentId: number;
     remainingUnits: number;
   }[] => {
-    let investmentIdsAndUnits: {
+    const investmentIdsAndUnits: {
       investmentId: number;
       remainingUnits: number;
     }[] = [];
-    let filteredInvestments = allInvestments
+    const filteredInvestments = allInvestments
       .filter((e: any) => e.isin === selectedIsin)
       .filter((e: any) => new Date(e.execution_date) < new Date(dividendDate));
     if (
@@ -165,7 +171,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             //  |    /~~\ |  \  |  | /~~\ |___    .__/ /~~\ |___ |___
             const partialSaleDate = new Date(e.execution_date);
             let partialSaleUnits = Number(e.units);
-            let currentInvestments = investments.filter(
+            const currentInvestments = investments.filter(
               (e) =>
                 e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY && // only purchases
                 new Date(e.execution_date) < partialSaleDate && // only before sale date

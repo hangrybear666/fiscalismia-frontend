@@ -6,6 +6,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+/**
+ *
+ * @param root0
+ * @param root0.show
+ * @param root0.results
+ */
 export default function TempDeleteTable({ show, results }: { show: boolean; results: any }) {
   if (!show) {
     return <></>;

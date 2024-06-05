@@ -13,7 +13,11 @@ interface HeaderProps {
     subHeader: string;
   };
 }
-
+/**
+ * Top of the page, dynamic dependent on react-router navigation
+ * @param {HeaderProps} props header and subHeader
+ * @returns A horizontal Header HTML container with header and subheader strings and an interactive menu bar.
+ */
 function Header(props: HeaderProps) {
   const { palette } = useTheme();
   const { onDrawerToggle } = props;

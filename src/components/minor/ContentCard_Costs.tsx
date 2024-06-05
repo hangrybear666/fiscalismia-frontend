@@ -19,6 +19,10 @@ interface ContentCardCostsProps {
   elevation?: number;
   imgHeight?: number;
 }
+/**
+ *
+ * @param props
+ */
 export default function ContentCardCosts(props: ContentCardCostsProps) {
   const { palette } = useTheme();
   const { img, header, amount, subtitle, icon, details, elevation, imgHeight, detailHeader } = props;

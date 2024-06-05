@@ -18,6 +18,7 @@ import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../type
 /**
  *
  * @param {*} allFixedIncome all fixed income data within db
+ * @param palette
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
 function extractChartData(allFixedIncome: any, palette: Palette) {
@@ -33,7 +34,7 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
   overviewDatesArr.sort();
   // only read date string from datetime
   const overviewXaxis = overviewDatesArr.map((e: string) => e.substring(0, 10));
-  let overviewDataset: number[] = [];
+  const overviewDataset: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   overviewDatesArr.forEach((xAxisEntry) => {
     overviewDataset.push(
@@ -49,7 +50,7 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
     dataSet1: overviewDataset,
     dataSet1Name: res.INCOME_YEARLY_GROSS_INCOME
   };
-  let overview = constructContentLineChartObject(
+  const overview = constructContentLineChartObject(
     res.INCOME_YEARLY_GROSS_INCOME,
     overviewXaxis,
     overviewDataSets,
@@ -66,12 +67,19 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
  * @returns
  */
 function extractCardData(specificFixedIncome: any) {
-  let monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
-  let monthlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '1.00', null, null, res.NO_IMG);
-  let yearlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '12.00', null, null, res.NO_IMG);
-  let oneTimeYearlyBonus = constructContentCardObject(res.INCOME_ONE_TIME_BONUS, null, '12.00', null, null, res.NO_IMG);
+  const monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
+  const monthlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '1.00', null, null, res.NO_IMG);
+  const yearlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '12.00', null, null, res.NO_IMG);
+  const oneTimeYearlyBonus = constructContentCardObject(
+    res.INCOME_ONE_TIME_BONUS,
+    null,
+    '12.00',
+    null,
+    null,
+    res.NO_IMG
+  );
   // Monhtly Net Income
-  let monthlyNetIncomeFiltered = specificFixedIncome.results
+  const monthlyNetIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
   monthlyNetIncome.amount = monthlyNetIncomeFiltered
@@ -79,7 +87,7 @@ function extractCardData(specificFixedIncome: any) {
     .reduce((partialSum: number, a: number) => partialSum + a, 0);
   monthlyNetIncome.details = monthlyNetIncomeFiltered.map((row: any) => row.description.trim());
   // Monthly Gross Income
-  let monthlyGrossIncomeFiltered = specificFixedIncome.results
+  const monthlyGrossIncomeFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_GROSS_SALARY_KEY)
     .filter((e: any) => !e.description.toLowerCase().includes('bonus'));
   monthlyGrossIncome.amount = monthlyGrossIncomeFiltered
@@ -87,7 +95,7 @@ function extractCardData(specificFixedIncome: any) {
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
   monthlyGrossIncome.details = monthlyGrossIncomeFiltered.map((row: any) => row.description.trim());
   // Yearly Gross Income
-  let yearlyGrossIncomeFiltered = specificFixedIncome.results.filter(
+  const yearlyGrossIncomeFiltered = specificFixedIncome.results.filter(
     (row: any) => row.type.toLowerCase() === res.INCOME_GROSS_SALARY_KEY
   );
   yearlyGrossIncome.amount = yearlyGrossIncomeFiltered
@@ -95,7 +103,7 @@ function extractCardData(specificFixedIncome: any) {
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
   yearlyGrossIncome.details = yearlyGrossIncomeFiltered.map((row: any) => row.description.trim());
   // One Time Yearly Bonus
-  let oneTimeYearlyBonusFiltered = specificFixedIncome.results
+  const oneTimeYearlyBonusFiltered = specificFixedIncome.results
     .filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY)
     .filter((e: any) => e.description.toLowerCase().includes('bonus'));
   oneTimeYearlyBonus.amount = oneTimeYearlyBonusFiltered
@@ -107,6 +115,13 @@ function extractCardData(specificFixedIncome: any) {
 interface Income_OverviewProps {
   routeInfo: RouteInfo;
 }
+/**
+ * Monthly Income earned via having a Job (not including sales or investments!).
+ * Contains several horizontal, responsive cards with detailed breakdown of payments.
+ * Also contains a horizontal line chart showing income change over time.
+ * @param {Income_OverviewProps} _props
+ * @returns
+ */
 export default function Income_Overview(_props: Income_OverviewProps) {
   const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Income
@@ -130,11 +145,11 @@ export default function Income_Overview(_props: Income_OverviewProps) {
   useEffect(() => {
     const queryAllFixedIncomeData = async () => {
       // All income data in the DB
-      let allFixedIncomeResponse = await getAllFixedIncome();
-      let effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedIncomeResponse.results) as string[];
+      const allFixedIncomeResponse = await getAllFixedIncome();
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedIncomeResponse.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, palette);
+      const allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, palette);
       setMonthlyNetIncomeChart(allFixedIncomeChartData.overview);
     };
     queryAllFixedIncomeData();
@@ -142,14 +157,14 @@ export default function Income_Overview(_props: Income_OverviewProps) {
 
   useEffect(() => {
     const getSpecificFixedIncome = async () => {
-      let specificFixedIncome = await getFixedIncomeByEffectiveDate(
+      const specificFixedIncome = await getFixedIncomeByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Specific Income via selected effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Specific Income via first entry in all effective dates
             : res.FALLBACK_DATE
       ); // Fallback to provided date
-      let extractedFixedIncome = extractCardData(specificFixedIncome);
+      const extractedFixedIncome = extractCardData(specificFixedIncome);
       setMonthlyNetIncomeCard(extractedFixedIncome.monthlyNetIncome);
       setMonthlyGrossIncomeCard(extractedFixedIncome.monthlyGrossIncome);
       setYearlyGrossIncomeCard(extractedFixedIncome.yearlyGrossIncome);

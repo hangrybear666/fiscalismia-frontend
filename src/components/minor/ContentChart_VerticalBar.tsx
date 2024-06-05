@@ -77,19 +77,19 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
     });
     // finds maximum Y value within all datasets for y Axis box highlighting via chartjs-plugin-annotation
     if (dataSet1) {
-      let currentMax = Math.max(...dataSet1);
+      const currentMax = Math.max(...dataSet1);
       maxValueYaxis = currentMax;
     }
     if (dataSet2) {
-      let currentMax = Math.max(...dataSet2);
+      const currentMax = Math.max(...dataSet2);
       maxValueYaxis < currentMax ? currentMax : maxValueYaxis;
     }
     if (dataSet3) {
-      let currentMax = Math.max(...dataSet3);
+      const currentMax = Math.max(...dataSet3);
       maxValueYaxis < currentMax ? currentMax : maxValueYaxis;
     }
     if (dataSet4) {
-      let currentMax = Math.max(...dataSet4);
+      const currentMax = Math.max(...dataSet4);
       maxValueYaxis < currentMax ? currentMax : maxValueYaxis;
     }
   }
@@ -135,7 +135,7 @@ export default function ContentVerticalBarChart(props: ContentVerticalBarChartPr
     }
   };
 
-  let data = {
+  const data = {
     ...chartData,
     labels,
     datasets: [

@@ -10,7 +10,14 @@ import {
   UserSettingObject
 } from '../types/custom/customTypes';
 const baseUrl = serverConfig.API_BASE_URL;
+/**
+ *
+ */
 export class FileSizeError extends Error {
+  /**
+   *
+   * @param message
+   */
   constructor(message: string) {
     super(message);
     this.name = 'FileSizeError';
@@ -46,7 +53,7 @@ export const login = async (credentials: UserCredentials) => {
  * 0) WARNING: THE BACKEND CURRENTLY CONTAINS A WHITELIST OF USERNAMES TO LIMIT ACCESS
  * 1) performs DB INSERTION into um_users
  * 2) initializes um_user_settings such as mode (light) and palette(default)
- * @param {*} accountObject {username, email, password}
+ * @param {UserCredentials} credentials  {username, email, password}
  * @returns username if successful OR error otherwise
  */
 export const createUserCredentials = async (credentials: UserCredentials) => {
@@ -352,6 +359,8 @@ export const postUpdatedUserSettings = async (username: string, settingKey: stri
 /**
  * User Upload of images such as jpg/webp/png requiring:
  * - <input type="file" /> within a <Button component='label'/>
+ * @param event
+ * @param foodItemId
  * @returns
  */
 export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>, foodItemId: string) => {
@@ -364,7 +373,7 @@ export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>
       console.error('No file provided in image upload');
       return;
     }
-    let file = event.target.files[0];
+    const file = event.target.files[0];
     if (file?.size > 1 * 1024 * 1024) {
       return new FileSizeError('File size is limited to 1MB.');
     }
@@ -378,6 +387,7 @@ export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>
     return response;
   } catch (error) {
     console.error(error);
+    return;
   }
 };
 /**
@@ -466,6 +476,7 @@ export const postDividends = async (dividendsObject: DividendsRelatedInvestments
 
 /**
  * deletes server side images and removes filepath entry from db
+ * @param id
  * @returns
  */
 export const deleteFoodItemImg = async (id: string) => {
@@ -483,6 +494,7 @@ export const deleteFoodItemImg = async (id: string) => {
 
 /**
  * deletes the corresponding food item via its id from db
+ * @param id
  * @returns
  */
 export const deleteFoodItem = async (id: number) => {

@@ -18,6 +18,7 @@ import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../type
 /**
  *
  * @param {*} allFixedCosts all fixed costs within db
+ * @param palette
  * @returns contentChartObj constructed via helper method constructContentLineChartObject
  */
 function extractChartData(allFixedCosts: any, palette: Palette): { overview: ContentChartLineObject } {
@@ -33,7 +34,7 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
   overviewDatesArr.sort();
   // only read date string from datetime
   const overviewXaxis = overviewDatesArr.map((e: any) => e.substring(0, 10));
-  let overviewDataset: number[] = [];
+  const overviewDataset: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   overviewDatesArr.forEach((xAxisEntry) => {
     overviewDataset.push(
@@ -48,7 +49,7 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
     dataSet1: overviewDataset,
     dataSet1Name: res.FIXED_COSTS_MONHTLY_COST
   };
-  let overview = constructContentLineChartObject(
+  const overview = constructContentLineChartObject(
     res.FIXED_COSTS_MONHTLY_COST,
     overviewXaxis,
     overviewDataSets,
@@ -65,8 +66,15 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
  * @returns
  */
 function extractCardData(specificFixedCosts: any) {
-  let monthlyTotalCost = constructContentCardObject(res.FIXED_COSTS_MONHTLY_COST, null, '1.00', null, null, res.NO_IMG);
-  let rentAndUtilities = constructContentCardObject(
+  const monthlyTotalCost = constructContentCardObject(
+    res.FIXED_COSTS_MONHTLY_COST,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  const rentAndUtilities = constructContentCardObject(
     res.FIXED_COSTS_RENT_UTILITIES,
     null,
     '1.00',
@@ -74,9 +82,16 @@ function extractCardData(specificFixedCosts: any) {
     null,
     res.NO_IMG
   );
-  let dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG);
-  let sportsAndHealth = constructContentCardObject(res.FIXED_COSTS_SPORTS_HEALTH, null, '1.00', null, null, res.NO_IMG);
-  let mediaAndEntertainment = constructContentCardObject(
+  const dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG);
+  const sportsAndHealth = constructContentCardObject(
+    res.FIXED_COSTS_SPORTS_HEALTH,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  const mediaAndEntertainment = constructContentCardObject(
     res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
     null,
     '1.00',
@@ -84,15 +99,15 @@ function extractCardData(specificFixedCosts: any) {
     null,
     res.NO_IMG
   );
-  let insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
-  let studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, res.NO_IMG);
+  const insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
+  const studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, res.NO_IMG);
   // Monthly Total Amount
   monthlyTotalCost.amount = specificFixedCosts.results
     .map((row: any) => parseFloat(row.monthly_cost))
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
 
   // Rent and Utilities
-  let rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
+  const rentAndUtilitiesFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.LIVING_ESSENTIALS_KEY
   );
   rentAndUtilities.amount = rentAndUtilitiesFiltered
@@ -101,7 +116,7 @@ function extractCardData(specificFixedCosts: any) {
 
   rentAndUtilities.details = rentAndUtilitiesFiltered.map((row: any) => row.description.trim());
   // DSL & Telephone
-  let dslAndPhoneFiltered = specificFixedCosts.results.filter(
+  const dslAndPhoneFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.INTERNET_AND_PHONE_KEY
   );
   dslAndPhone.amount = dslAndPhoneFiltered
@@ -110,7 +125,7 @@ function extractCardData(specificFixedCosts: any) {
 
   dslAndPhone.details = dslAndPhoneFiltered.map((row: any) => row.description.trim());
   // Sports and Health
-  let sportsAndHealthFiltered = specificFixedCosts.results.filter(
+  const sportsAndHealthFiltered = specificFixedCosts.results.filter(
     (row: any) =>
       row.category === categories.SPORTS_FACILITIES_KEY ||
       row.category === categories.SUPPLEMENTS_HEALTH_KEY ||
@@ -123,7 +138,7 @@ function extractCardData(specificFixedCosts: any) {
 
   sportsAndHealth.details = sportsAndHealthFiltered.map((row: any) => row.description.trim());
   // Media and Entertainment
-  let mediaAndEntertainmentFiltered = specificFixedCosts.results.filter(
+  const mediaAndEntertainmentFiltered = specificFixedCosts.results.filter(
     (row: any) =>
       row.category === categories.LEISURE_GAMING_KEY ||
       row.category === categories.LEISURE_MUSIC_PODCASTS_KEY ||
@@ -135,14 +150,14 @@ function extractCardData(specificFixedCosts: any) {
 
   mediaAndEntertainment.details = mediaAndEntertainmentFiltered.map((row: any) => row.description.trim());
   // Insurance
-  let insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
+  const insuranceFiltered = specificFixedCosts.results.filter((row: any) => row.category === categories.INSURANCE_KEY);
   insurance.amount = insuranceFiltered
     .map((row: any) => parseFloat(row.monthly_cost))
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
 
   insurance.details = insuranceFiltered.map((row: any) => row.description.trim());
   // Student Loans
-  let studentLoansFiltered = specificFixedCosts.results.filter(
+  const studentLoansFiltered = specificFixedCosts.results.filter(
     (row: any) => row.category === categories.STUDENT_LOANS_KEY
   );
   studentLoans.amount = studentLoansFiltered
@@ -165,6 +180,13 @@ interface FixedCosts_OverviewProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ * Monthly Fixed costs displayed as horizontal, responsive Cards showing all costs in an Overview.
+ * Horizontal Line Chart showing price trend over time.
+ * Date Selection for switching between dataset effective dates.
+ * @param {FixedCosts_OverviewProps} _props
+ * @returns
+ */
 export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
   const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Costs
@@ -191,11 +213,11 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
   useEffect(() => {
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
-      let allFixedCosts = await getAllFixedCosts();
-      let effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const allFixedCosts = await getAllFixedCosts();
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedCostsChartData = extractChartData(allFixedCosts, palette);
+      const allFixedCostsChartData = extractChartData(allFixedCosts, palette);
       setAllFixedCostsChart(allFixedCostsChartData.overview);
     };
     queryAllFixedCosts();
@@ -203,14 +225,14 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
 
   useEffect(() => {
     const getSpecificFixedCosts = async () => {
-      let specificFixedCosts = await getFixedCostsByEffectiveDate(
+      const specificFixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Spezifische Kosten via ausgewähltem effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
             : res.FALLBACK_DATE
       ); // Fallback auf übergebenes Datum
-      let extractedFixedCosts = extractCardData(specificFixedCosts);
+      const extractedFixedCosts = extractCardData(specificFixedCosts);
       setMonthlyTotalCostCard(extractedFixedCosts.monthlyTotalCost);
       setRentAndUtilitiesCard(extractedFixedCosts.rentAndUtilities);
       setDslAndPhoneCard(extractedFixedCosts.dslAndPhone);

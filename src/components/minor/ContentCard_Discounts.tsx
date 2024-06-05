@@ -76,6 +76,10 @@ export type ContentCardDiscount = {
   imgHeight?: number;
 };
 
+/**
+ *
+ * @param props
+ */
 export default function ContentCardDiscounts(props: ContentCardDiscount) {
   const { palette } = useTheme();
   const {

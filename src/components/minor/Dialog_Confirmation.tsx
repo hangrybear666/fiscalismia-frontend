@@ -18,6 +18,10 @@ interface ConfirmationDialogProps {
   handleConfirm: () => Promise<void>;
   confirmBtnText: string;
 }
+/**
+ *
+ * @param props
+ */
 export default function ConfirmationDialog(props: ConfirmationDialogProps) {
   const { palette } = useTheme();
   const { title, text, textColor, open, setOpen, handleConfirm, confirmBtnText } = props;

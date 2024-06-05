@@ -22,6 +22,10 @@ interface InputFoodDiscountModalProps {
   autoCompleteItemArray: { label: string; id: number }[];
 }
 
+/**
+ *
+ * @param props
+ */
 export default function InputFoodDiscountModal(props: InputFoodDiscountModalProps) {
   const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);

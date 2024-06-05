@@ -20,7 +20,11 @@ import VariableExpenses_Overview from './content/variableExpenses_Overview';
 import { RouteInfo } from '../types/custom/customTypes';
 
 interface ContentProps {}
-
+/**
+ * Changes content body depending on selected route in based on MenuEntries and router_navigation_paths in resources.
+ * @param _props
+ * @returns
+ */
 export default function Content(_props: ContentProps) {
   const renderedElement = (parentId: string, childId: string, path: string) => {
     const routeInfo: RouteInfo = {

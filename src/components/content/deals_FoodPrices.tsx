@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
-import ContentCardFoodPrices, { ContentCardFoodPriceType } from '../minor/ContentCard_FoodPrices';
+import ContentCardFoodPrices, { ContentCardFoodPrice } from '../minor/ContentCard_FoodPrices';
 import { resourceProperties as res, serverConfig } from '../../resources/resource_properties';
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import FilterFoodPriceData from '../minor/FilterFoodPriceData';
@@ -12,21 +12,26 @@ interface Deals_FoodPricesProps {
   routeInfo: RouteInfo;
 }
 
-export default function Deals_FoodPrices(_props: Deals_FoodPricesProps) {
+/**
+ * Displays supermarket Food Items and applicable data such as price, brand, calories and images that can be uploaded, deleted and replaced.
+ * @param {Deals_FoodPricesProps} _props
+ * @returns Collection of ContentCardFoodPrice Objects in a responsive Grid.
+ */
+export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Element {
   // breakpoint
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
 
   const [foodPrices, setFoodPrices] = useState(null);
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
   const [filteredFoodPrices, setFilteredFoodPrices] = useState(null);
-  const [foodItemCards, setFoodItemCards] = useState<ContentCardFoodPriceType[]>([]);
+  const [foodItemCards, setFoodItemCards] = useState<ContentCardFoodPrice[]>([]);
   const [hasBeenSortedBy, setHasBeenSortedBy] = useState<number | null>(null);
   // Render Images yes or no switch
   const [renderImages, setRenderImages] = React.useState(false);
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
-      let allFoodPrices = await getAllFoodPricesAndDiscounts();
+      const allFoodPrices = await getAllFoodPricesAndDiscounts();
       setFoodPrices(allFoodPrices.results);
       setFoodItemCards(extractCardData(allFoodPrices.results, true));
     };
@@ -38,15 +43,15 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps) {
   }, [filteredFoodPrices, hasBeenSortedBy]);
 
   /**
-   * extracts relevant fields from the db query result
-   * in order to populate one card for each discounted item.
+   * Extracts relevant fields from the db query result in order to populate one card per discounted item.
    * @param {any} allFoodDiscounts db query result
    * @param {boolean} initializeWithoutImage overrides any image filepaths present with the 'no-img' placeholder to disable images by default
+   * @returns Array of ContentCardFoodPrice Objects
    */
-  function extractCardData(allFoodDiscounts: any, initializeWithoutImage: boolean): ContentCardFoodPriceType[] {
-    let discountedFoodItemCards = new Array();
+  function extractCardData(allFoodDiscounts: any, initializeWithoutImage: boolean): ContentCardFoodPrice[] {
+    const discountedFoodItemCards: ContentCardFoodPrice[] = [];
     allFoodDiscounts.forEach((e: any) => {
-      let foodPriceObj: ContentCardFoodPriceType = {
+      const foodPriceObj: ContentCardFoodPrice = {
         foodItemId: e.id,
         header: `${e.food_item} - ${e.brand}`,
         subtitle: `Gewicht ${e.weight}g`,

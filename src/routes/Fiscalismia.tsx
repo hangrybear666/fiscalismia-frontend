@@ -12,7 +12,11 @@ import CustomThemeProvider from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties';
 import { paths } from '../resources/router_navigation_paths';
 
-function Footer() {
+/**
+ * Footer with Copyright, current year, App Name
+ * @returns
+ */
+function Footer(): JSX.Element {
   return (
     <Box component="footer" sx={{ p: 2 }}>
       <Typography variant="body2" color="text.secondary" align="center">
@@ -28,6 +32,15 @@ function Footer() {
 
 const drawerWidth = 256;
 
+/**
+ * Root of the App accessed after authentication via SignInSide. Menu Selection changes react-router paths and renders Content based on selection.
+ * - Is wrapped in a Custom theme
+ * - contains the vertical side Navigator menu (Admin Panel style)
+ * - Header rendering the route header and subheader with a User Settings Icon Bar
+ * - Content rendered based on selected menu entry (route)
+ * - Basic Footer with Copyright
+ * @returns
+ */
 export default function Fiscalismia() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [contentHeader, setContentHeader] = useState({ header: res.HOME, subHeader: '', path: paths.APP_ROOT_PATH });

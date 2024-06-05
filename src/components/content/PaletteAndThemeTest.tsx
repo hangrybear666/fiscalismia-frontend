@@ -8,6 +8,12 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import { localStorageKeys } from '../../resources/resource_properties';
 
+/**
+ * Example Material UI Elements to configure Palette Colors
+ * @param root0
+ * @param root0.show destructured flag indicating if the test is to be shown
+ * @returns several interface elements to test a palette if show === true
+ */
 export default function PaletteAndThemeTest({ show = false }) {
   const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode);
   const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette);

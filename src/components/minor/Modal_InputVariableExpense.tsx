@@ -37,6 +37,10 @@ type VariableExpensePreset = {
   icon: JSX.Element;
 };
 
+/**
+ *
+ * @param palette
+ */
 function initializePresetData(palette: Palette): VariableExpensePreset[] {
   return [
     {
@@ -72,11 +76,15 @@ function initializePresetData(palette: Palette): VariableExpensePreset[] {
   ];
 }
 interface InputVariableExpenseModalProps {
-  setAddedItemId: React.Dispatch<React.SetStateAction<Number | undefined>>;
+  setAddedItemId: React.Dispatch<React.SetStateAction<number | undefined>>;
   storeAutoCompleteItemArray: string[];
   categoryAutoCompleteItemArray: string[];
   indulgencesAutoCompleteItemArray: string[];
 }
+/**
+ *
+ * @param props
+ */
 export default function InputVariableExpenseModal(props: InputVariableExpenseModalProps) {
   const { palette }: { palette: Palette } = useTheme();
   const {
@@ -295,7 +303,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         setPurchaseDate(initializeReactDateInput(new Date()));
         setIsPlanned(false);
         setContainsIndulgence(true);
-        indulgences = new Array();
+        indulgences = [];
         indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'caffeine'));
         setIndulgencesAutoCompleteArray(indulgences);
         setSensitivitiesString(indulgences.join(', '));
@@ -308,7 +316,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         setPurchaseDate(initializeReactDateInput(new Date()));
         setIsPlanned(false);
         setContainsIndulgence(true);
-        indulgences = new Array();
+        indulgences = [];
         indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'caffeine'));
         indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'aspartame/saccharin'));
         setIndulgencesAutoCompleteArray(indulgences);

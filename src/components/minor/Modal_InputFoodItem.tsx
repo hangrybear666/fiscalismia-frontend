@@ -27,6 +27,10 @@ interface InputFoodItemModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<string>>;
 }
 
+/**
+ *
+ * @param props
+ */
 export default function InputFoodItemModal(props: InputFoodItemModalProps) {
   const { palette } = useTheme();
   const { refreshParent } = props;

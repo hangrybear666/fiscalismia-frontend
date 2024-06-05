@@ -38,6 +38,11 @@ interface Deals_OverviewProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ * All Food Items relevant to the user that are saved in the db are shown in an ag-grid table to be filtered, sorted, deleted and their price updated.
+ * @param {Deals_OverviewProps} _props
+ * @returns Interactive AG-Grid in a parent container.
+ */
 export default function Deals_Overview(_props: Deals_OverviewProps) {
   const { palette } = useTheme();
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState(null);
@@ -52,7 +57,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
-      let allFoodPricesAndDiscounts = await getAllFoodPricesAndDiscounts();
+      const allFoodPricesAndDiscounts = await getAllFoodPricesAndDiscounts();
       setFoodPricesAndDiscounts(allFoodPricesAndDiscounts.results);
       setFoodPriceRowData(allFoodPricesAndDiscounts.results);
     };
@@ -112,7 +117,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
   /**
    * WARNING: Extraction into individual REACT COMPONENT has failed. Perhaps because of AG-Grid cellRenderer implementation.
    * Custom Cell Renderer for AG-GRID displaying a button with Modal Input to update food price information in the db
-   * @param {} param0
+   * @param {UpdatePriceBtnProps} props
    * @returns
    */
   const UpdatePriceBtn = (props: UpdatePriceBtnProps) => {

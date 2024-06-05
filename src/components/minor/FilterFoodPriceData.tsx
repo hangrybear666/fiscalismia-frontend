@@ -50,7 +50,7 @@ type SortCriteria = {
   tooltip: string | null;
   icon: React.ReactNode | null;
 };
-let sortCriteria: SortCriteria[][] = [];
+const sortCriteria: SortCriteria[][] = [];
 sortCriteria.push([
   {
     id: SORT_BY_IDS.pricePerKgDesc,
@@ -120,10 +120,18 @@ sortCriteria.push([
   }
 ]);
 
+/**
+ *
+ * @param allFoodPrices
+ */
 function getMacroNutrientCategories(allFoodPrices: any): string[] {
   return Array.from(new Set(allFoodPrices.map((e: any) => e.main_macro)));
 }
 
+/**
+ *
+ * @param allFoodPrices
+ */
 function getStoreItems(allFoodPrices: any): string[] {
   return Array.from(new Set(allFoodPrices.map((e: any) => e.store)));
 }
@@ -134,7 +142,7 @@ function getStoreItems(allFoodPrices: any): string[] {
  * @returns
  */
 function getFoodItemSelectionDataStructures(allFoodPrices: any) {
-  const autoCompleteItemArray = new Array();
+  const autoCompleteItemArray = [];
   allFoodPrices.forEach((e: any, i: number) => {
     autoCompleteItemArray[i] = {
       label: `${e.food_item} - ${e.brand} | ${e.store}`,
@@ -155,6 +163,10 @@ interface FilterFoodPriceDataProps {
   setRenderImages: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ *
+ * @param props
+ */
 export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
   const { palette } = useTheme();
   const {

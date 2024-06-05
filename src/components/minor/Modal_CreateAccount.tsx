@@ -31,6 +31,9 @@ const style = {
 const regExEmail =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+/**
+ *
+ */
 export default function CreateAccountModal() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();

@@ -37,6 +37,16 @@ export type ContentCardSales = {
   imgHeight?: number;
 };
 
+/**
+ *
+ * @param header
+ * @param amount
+ * @param subtitle
+ * @param detailHeader
+ * @param details
+ * @param icon
+ * @param img
+ */
 function constructContentCardObjectSales(
   header: string,
   amount: number | null,
@@ -67,11 +77,12 @@ function constructContentCardObjectSales(
  *  Extracts information of sales (variable expenses with category ='Sale')
  *  to display in cards dependent on the selected year
  * @param {*} sales
+ * @param selectedYear
  * @returns
  */
 function extractCardData(sales: any, selectedYear: number | string = 2023) {
   // ensure that sales have positive cost value
-  let salesTransformed = sales.map((e: any) => {
+  const salesTransformed = sales.map((e: any) => {
     if (e.cost < 0) {
       e.cost = e.cost * -1;
     } else {
@@ -80,12 +91,12 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     return e;
   });
   // DISTINCT STORE SALE CARDS
-  let storeBasedCards: ContentCardSales[] = [];
+  const storeBasedCards: ContentCardSales[] = [];
   const distinctSaleStores: string[] = Array.from(new Set(salesTransformed.map((e: any) => e.store)));
   // loop through all stores of sale and construct summed cost cards for each
   distinctSaleStores.forEach((store: string) => {
     const storeFilteredSales = salesTransformed.filter((e: any) => e.store === store);
-    let distinctStoreCard = constructContentCardObjectSales(
+    const distinctStoreCard = constructContentCardObjectSales(
       store,
       null,
       `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
@@ -104,7 +115,7 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     storeBasedCards.push(distinctStoreCard);
   });
   // TOTAL SALES
-  let totalSales = constructContentCardObjectSales(
+  const totalSales = constructContentCardObjectSales(
     res.INCOME_SALES_CARD_TOTAL_SALES_HEADER,
     null,
     `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
@@ -124,6 +135,10 @@ interface Income_SalesProps {
   routeInfo: RouteInfo;
 }
 
+/**
+ *
+ * @param _props
+ */
 export default function Income_Sales(_props: Income_SalesProps) {
   const { palette, breakpoints } = useTheme();
   const [allSales, setAllSales] = useState<any>(null);
@@ -145,7 +160,7 @@ export default function Income_Sales(_props: Income_SalesProps) {
   };
   useEffect(() => {
     const getAllSales = async () => {
-      let allSales = await getVariableExpenseByCategory('Sale');
+      const allSales = await getVariableExpenseByCategory('Sale');
       const uniqueYears = getUniqueEffectiveDateYears(allSales.results);
       setYearSelectionData(new Array(uniqueYears.concat(res.ALL))); // 2D Array for mapping ToggleButtonGroup as parent
       setAllSales(allSales);
@@ -157,13 +172,13 @@ export default function Income_Sales(_props: Income_SalesProps) {
     setSelectedYear(newValue);
     if (newValue === res.ALL) {
       setSelectedSales(allSales.results);
-      let extractedSales = extractCardData(allSales.results, res.ALL);
+      const extractedSales = extractCardData(allSales.results, res.ALL);
       setSalesCard(extractedSales.totalSales);
       setDistinctStoreSalesCard(extractedSales.storeBasedCards);
     } else {
       const filteredSales = allSales.results.filter((e: any) => e.purchasing_date.substring(0, 4) === newValue);
       setSelectedSales(filteredSales);
-      let extractedSales = extractCardData(filteredSales, newValue);
+      const extractedSales = extractCardData(filteredSales, newValue);
       setSalesCard(extractedSales.totalSales);
       setDistinctStoreSalesCard(extractedSales.storeBasedCards);
     }

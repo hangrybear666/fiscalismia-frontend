@@ -57,6 +57,10 @@ type DateComparison = {
   index: number;
 };
 
+/**
+ *
+ * @param props
+ */
 export default function ContentLineChart(props: ContentLineChartProps) {
   const { palette } = useTheme();
   const {

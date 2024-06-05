@@ -27,9 +27,13 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TwelveCharacterString } from '../../types/custom/customTypes';
 
 interface InputInvestmentTaxesModalProps {
-  refreshParent: React.Dispatch<React.SetStateAction<Number>>;
+  refreshParent: React.Dispatch<React.SetStateAction<number>>;
 }
 
+/**
+ *
+ * @param props
+ */
 export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
   const { palette } = useTheme();
   const { refreshParent } = props;

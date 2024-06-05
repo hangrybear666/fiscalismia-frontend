@@ -24,6 +24,10 @@ const iconProperties = {
   borderRadius: 1
 };
 
+/**
+ * @param fixedCosts
+ * @returns filtered dataset containing applicable categories
+ */
 function filterSportsAndHealth(fixedCosts: any) {
   return fixedCosts.results.filter(
     (row: any) =>
@@ -34,6 +38,11 @@ function filterSportsAndHealth(fixedCosts: any) {
   );
 }
 
+/**
+ *
+ * @param fixedCosts
+ * @returns filtered dataset containing applicable categories
+ */
 function filterMediaAndEntertainment(fixedCosts: any) {
   return fixedCosts.results.filter(
     (row: any) =>
@@ -62,10 +71,10 @@ function extractChartData(allFixedCosts: any) {
   sportsEffectiveDatesArr.sort();
   // only read dates from datetime
   const sportsXaxis = sportsEffectiveDatesArr.map((e: string) => e.substring(0, 10));
-  let sportsDs1: number[] = [];
-  let sportsDs2: number[] = [];
-  let sportsDs3: number[] = [];
-  let sportsDs4: number[] = [];
+  const sportsDs1: number[] = [];
+  const sportsDs2: number[] = [];
+  const sportsDs3: number[] = [];
+  const sportsDs4: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   sportsEffectiveDatesArr.forEach((xAxisEntry) => {
     sportsDs1.push(
@@ -108,7 +117,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.SUPPLEMENTS_PERFORMANCE_VALUE,
     dataSet4Name: categories.PHYSIO_AND_HEALTH_COURSES_VALUE
   };
-  let sportsAndHealth = constructContentVerticalBarChartObject(
+  const sportsAndHealth = constructContentVerticalBarChartObject(
     res.FIXED_COSTS_SPORTS_HEALTH,
     sportsXaxis,
     sportsDataSets,
@@ -121,15 +130,15 @@ function extractChartData(allFixedCosts: any) {
     color2: '',
     color3: ''
   };
-  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(allFixedCosts);
+  const mediaAndEntertainmentFiltered = filterMediaAndEntertainment(allFixedCosts);
   // unique effective dates as string array
   const mediaEffectiveDatesArr: string[] = getUniqueEffectiveDates(mediaAndEntertainmentFiltered) as string[];
   mediaEffectiveDatesArr.sort();
   // only read dates from datetime
   const mediaXaxis = mediaEffectiveDatesArr.map((e: string) => e.substring(0, 10));
-  let mediaDs1: number[] = [];
-  let mediaDs2: number[] = [];
-  let mediaDs3: number[] = [];
+  const mediaDs1: number[] = [];
+  const mediaDs2: number[] = [];
+  const mediaDs3: number[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   mediaEffectiveDatesArr.forEach((xAxisEntry) => {
     mediaDs1.push(
@@ -162,7 +171,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet2Name: categories.LEISURE_TV_CINEMA_VALUE,
     dataSet3Name: categories.LEISURE_MUSIC_PODCASTS_VALUE
   };
-  let mediaAndEntertainment = constructContentVerticalBarChartObject(
+  const mediaAndEntertainment = constructContentVerticalBarChartObject(
     res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
     mediaXaxis,
     mediaDataSets,
@@ -178,7 +187,7 @@ function extractChartData(allFixedCosts: any) {
  * @returns
  */
 function extractCardData(specificFixedCosts: any) {
-  let sportsAndHealth = constructContentCardObject(
+  const sportsAndHealth = constructContentCardObject(
     res.FIXED_COSTS_SPORTS_HEALTH,
     null,
     '1.00',
@@ -186,7 +195,7 @@ function extractCardData(specificFixedCosts: any) {
     <FitnessCenterOutlinedIcon sx={iconProperties} />,
     'https://source.unsplash.com/random/?fitness'
   );
-  let mediaAndEntertainment = constructContentCardObject(
+  const mediaAndEntertainment = constructContentCardObject(
     res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
     null,
     '1.00',
@@ -196,7 +205,7 @@ function extractCardData(specificFixedCosts: any) {
   );
 
   // Sports and Health
-  let sportsAndHealthFiltered = filterSportsAndHealth(specificFixedCosts);
+  const sportsAndHealthFiltered = filterSportsAndHealth(specificFixedCosts);
   sportsAndHealth.amount = sportsAndHealthFiltered
     .map((row: any) => row.monthly_cost)
     .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0);
@@ -205,7 +214,7 @@ function extractCardData(specificFixedCosts: any) {
   );
 
   // Media and Entertainment
-  let mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts);
+  const mediaAndEntertainmentFiltered = filterMediaAndEntertainment(specificFixedCosts);
   mediaAndEntertainment.amount = mediaAndEntertainmentFiltered
     .map((row: any) => row.monthly_cost)
     .reduce((partialSum: string, add: string) => parseFloat(partialSum) + parseFloat(add), 0);
@@ -219,7 +228,13 @@ interface FixedCosts_LeisureProps {
   routeInfo: RouteInfo;
 }
 
-export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps) {
+/**
+ * Monthly Fixed Cost Content Cards and Vertical Chartjs Bar Chart visualizing Data from 2 categories: Sports & Health and Media & Entertainment.
+ * Date Selection for switching between dataset effective dates.
+ * @param {FixedCosts_LeisureProps} _props
+ * @returns
+ */
+export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps): JSX.Element {
   const { palette, breakpoints } = useTheme();
   // Selected Specific Fixed Costs
   const [sportsAndHealthCard, setSportsAndHealthCard] = useState<ContentCardObject>();
@@ -240,11 +255,11 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps) {
   useEffect(() => {
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
-      let allFixedCosts = await getAllFixedCosts();
-      let effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const allFixedCosts = await getAllFixedCosts();
+      const effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results) as string[];
       setSelectedEffectiveDate(effectiveDateSelectItems?.length > 0 ? effectiveDateSelectItems[0] : '');
       setEffectiveDateSelectItems(effectiveDateSelectItems);
-      let allFixedCostsChartData = extractChartData(allFixedCosts);
+      const allFixedCostsChartData = extractChartData(allFixedCosts);
       setSportsAndHealthChart(allFixedCostsChartData.sportsAndHealth);
       setMediaAndEntertainmentChart(allFixedCostsChartData.mediaAndEntertainment);
     };
@@ -253,14 +268,14 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps) {
 
   useEffect(() => {
     const getSpecificFixedCosts = async () => {
-      let specificfixedCosts = await getFixedCostsByEffectiveDate(
+      const specificfixedCosts = await getFixedCostsByEffectiveDate(
         selectedEffectiveDate
           ? selectedEffectiveDate.substring(0, 10) // Spezifische Kosten via ausgewähltem effective date
           : effectiveDateSelectItems
             ? effectiveDateSelectItems[0].substring(0, 10) // Spezifische Kosten via erstem Eintrag aus allen effective dates
             : res.FALLBACK_DATE
       ); // Fallback auf übergebenes Datum
-      let selectedFixedCosts = extractCardData(specificfixedCosts);
+      const selectedFixedCosts = extractCardData(specificfixedCosts);
       setSportsAndHealthCard(selectedFixedCosts.sportsAndHealth);
       setMediaAndEntertainmentCard(selectedFixedCosts.mediaAndEntertainment);
     };

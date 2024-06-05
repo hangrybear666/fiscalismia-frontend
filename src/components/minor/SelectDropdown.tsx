@@ -12,6 +12,15 @@ interface SelectDropdownProps {
   disabled?: boolean;
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.selectLabel
+ * @param root0.selectItems
+ * @param root0.selectedValue
+ * @param root0.handleSelect
+ * @param root0.disabled
+ */
 export default function SelectDropdown({
   selectLabel,
   selectItems,

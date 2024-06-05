@@ -20,7 +20,10 @@ import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentic
 import CreateAccountModal from './minor/Modal_CreateAccount';
 import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
 
-function Copyright() {
+/**
+ * @returns String containing Copyright Icon App Name and current Year
+ */
+function Copyright(): JSX.Element {
   return (
     <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
       {'Copyright © '}
@@ -49,7 +52,10 @@ const theme = createTheme({
   }
 });
 
-export default function SignInSide() {
+/**
+ * @returns Login Page with Sign Up Modal
+ */
+export default function SignInSide(): JSX.Element {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(
@@ -67,7 +73,7 @@ export default function SignInSide() {
         }
         const response = await getUserSpecificSettings(loginUserName);
         if (response?.results?.length > 0) {
-          let userSettingsMap: Map<string, string> = new Map();
+          const userSettingsMap: Map<string, string> = new Map();
           response.results.forEach(({ setting_key, setting_value }: { setting_key: string; setting_value: string }) => {
             userSettingsMap.set(setting_key, setting_value);
           });

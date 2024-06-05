@@ -29,6 +29,15 @@ interface SettingsAndProfileAppBarProps {
   onDrawerToggle: () => void;
 }
 
+/**
+ * User Settings App Bar containing buttons with tooltips and overlays displaying user settings such as:
+ * Github Repository Links Frontend | Backend
+ * - Selected Mode dark | light
+ * - Selected Palette default | pastel | tbd
+ * - Selected Language en_US | de_DE
+ * @param {SettingsAndProfileAppBarProps} props
+ * @returns
+ */
 function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
   const { palette } = useTheme();
   const { onDrawerToggle } = props;
@@ -64,7 +73,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
       return;
     }
     setSettingsAnchorElement(undefined);
-    let newColorMode = isDarkMode ? 'light' : 'dark';
+    const newColorMode = isDarkMode ? 'light' : 'dark';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedMode, newColorMode);
     if (result?.results[0]?.username == loginUserName) {
       window.localStorage.setItem(localStorageKeys.selectedMode, newColorMode);
@@ -78,7 +87,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
       return;
     }
     setSettingsAnchorElement(undefined);
-    let newPalette = currentPalette === 'default' ? 'pastel' : 'default';
+    const newPalette = currentPalette === 'default' ? 'pastel' : 'default';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedPalette, newPalette);
     if (result?.results[0]?.username == loginUserName) {
       window.localStorage.setItem(localStorageKeys.selectedPalette, newPalette);
@@ -92,7 +101,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
       return;
     }
     setSettingsAnchorElement(undefined);
-    let newLanguage = currentLanguage === 'en_US' ? 'de_DE' : 'en_US';
+    const newLanguage = currentLanguage === 'en_US' ? 'de_DE' : 'en_US';
     const result = await postUpdatedUserSettings(loginUserName, localStorageKeys.selectedLanguage, newLanguage);
     if (result?.results[0]?.username == loginUserName) {
       window.localStorage.setItem(localStorageKeys.selectedLanguage, newLanguage);

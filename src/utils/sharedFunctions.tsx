@@ -13,6 +13,17 @@ declare module '@mui/material/Chip' {
   }
 }
 
+/**
+ * Constructs the object for several Custom React Components displaying synthesized information extracted from the db.
+ * Is used to construct fixed cost information, monthly income information and overview of variable expenses, among potentially others.
+ * @param header
+ * @param amount
+ * @param subtitle
+ * @param details
+ * @param icon
+ * @param img
+ * @returns
+ */
 export function constructContentCardObject(
   header: string,
   amount: number | null,
@@ -21,7 +32,7 @@ export function constructContentCardObject(
   icon: React.ReactNode | string,
   img: string | null
 ): ContentCardObject {
-  let turnus =
+  const turnus =
     subtitle === '1.00'
       ? res.INTERVAL_MONTHLY
       : subtitle === '3.00'
@@ -51,7 +62,16 @@ export function constructContentCardObject(
  * @param title Card Title
  * @param xAxis typically a string representation of a date array
  * @param dataSets typically number arrays for the y axis
+ * @param dataSets.dataSet1
+ * @param dataSets.dataSet1Name
+ * @param dataSets.dataSet2
+ * @param dataSets.dataSet2Name
  * @param colors color overrides for line, point and active selection
+ * @param colors.pointColor1
+ * @param colors.lineColor1
+ * @param colors.pointColor2
+ * @param colors.lineColor2
+ * @param colors.selectionColor
  * @returns {ContentChartLineObject} a ContentChartLineObject
  */
 export function constructContentLineChartObject(
@@ -65,7 +85,7 @@ export function constructContentLineChartObject(
   },
   colors: { pointColor1: string; lineColor1: string; pointColor2?: string; lineColor2?: string; selectionColor: string }
 ): ContentChartLineObject {
-  let contentChartObj: ContentChartLineObject = {
+  const contentChartObj: ContentChartLineObject = {
     chartTitle: title,
     labels: xAxis,
     dataSet1: dataSets?.dataSet1,
@@ -94,7 +114,19 @@ export function constructContentLineChartObject(
  * @param title Card Title
  * @param xAxis typically a string representation of a date array
  * @param dataSets typically number arrays for the y axis
+ * @param dataSets.dataSet1
+ * @param dataSets.dataSet2
+ * @param dataSets.dataSet3
+ * @param dataSets.dataSet4
+ * @param dataSets.dataSet1Name
+ * @param dataSets.dataSet2Name
+ * @param dataSets.dataSet3Name
+ * @param dataSets.dataSet4Name
  * @param colors color overrides for bar colors
+ * @param colors.color1
+ * @param colors.color2
+ * @param colors.color3
+ * @param colors.color4
  * @returns {ContentChartVerticalBarObject} a ContentChartVerticalBarObject
  */
 export function constructContentVerticalBarChartObject(
@@ -293,12 +325,20 @@ export const gramsFormatter = ({ value }: { value: number }): string | null => {
   return value ? value.toFixed(0) + ' ' + res.GRAMS : null;
 };
 
-/** helper function to validate decimal numbers */
+/**
+ * helper function to validate decimal numbers
+ * @param value
+ * @returns true for Numbers, false otherwise
+ */
 export function isNumeric(value: any) {
   return /^-?\d+(\.\d+)?$/.test(value);
 }
 
-/** helper function to validate dates in the format YYYY/MM/DD */
+/**
+ * helper function to validate dates in the format YYYY/MM/DD
+ * @param dateStr
+ * @returns Object containing valid flag and provided date
+ */
 export function dateValidation(dateStr: Date | string) {
   const date = new Date(dateStr);
   let dateValid: boolean = true;

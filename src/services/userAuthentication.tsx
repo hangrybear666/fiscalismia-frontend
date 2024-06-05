@@ -94,7 +94,6 @@ export const isUserTokenValid = (token: string, loginUserName: string | null = n
 /**
  * 1) calls the helper function isUserTokenValid to guarantee that the token's user's userName and loginUserName match
  * 2) Intercepts HTTP API RESPONSES to check for status 401 = UNAUTHORIZED which gets thrown by authentication.js in backend
- * @param {*} param0 an object containing all of the children components being rendered
  * @returns all children Routes being Protected if true; Navigates to redirectPath if false
  */
 export const ProtectedRoute = () => {

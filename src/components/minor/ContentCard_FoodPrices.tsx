@@ -56,7 +56,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-export type ContentCardFoodPriceType = {
+export type ContentCardFoodPrice = {
   foodItemId: string;
   header: string;
   subtitle: string;
@@ -71,7 +71,11 @@ export type ContentCardFoodPriceType = {
   imgHeight?: number;
 };
 
-export default function ContentCardFoodPrices(props: ContentCardFoodPriceType) {
+/**
+ *
+ * @param props
+ */
+export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
   const { palette } = useTheme();
   const {
     foodItemId,
