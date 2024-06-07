@@ -23,8 +23,10 @@ interface InputFoodDiscountModalProps {
 }
 
 /**
- *
- * @param props
+ * Dialog Modal for inserting new temporary grocery deals into db.
+ * Has a bunch of validation to ensure data consistency and applicable error messaging.
+ * @param {InputFoodDiscountModalProps} props
+ * @returns
  */
 export default function InputFoodDiscountModal(props: InputFoodDiscountModalProps) {
   const { palette } = useTheme();

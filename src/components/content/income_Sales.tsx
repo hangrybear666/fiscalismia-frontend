@@ -38,7 +38,8 @@ export type ContentCardSales = {
 };
 
 /**
- *
+ * Specific Card for variable_expenses with the category Sales therefore not being a purchase.
+ * Cards adding additional details compared to ContentCardCosts from sharesFunctions
  * @param header
  * @param amount
  * @param subtitle
@@ -46,6 +47,7 @@ export type ContentCardSales = {
  * @param details
  * @param icon
  * @param img
+ * @returns
  */
 function constructContentCardObjectSales(
   header: string,
@@ -136,10 +138,12 @@ interface Income_SalesProps {
 }
 
 /**
- *
+ * Queries variable expenses with category='Sale' where the amount is expected to be negative,
+ * which is inverted logic since the file containing sales is supposed to contain purchases.
  * @param _props
+ * @returns Several Content Cards with sales ordered by amount desc. Also contains all sales in a very basic data table.
  */
-export default function Income_Sales(_props: Income_SalesProps) {
+export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
   const { palette, breakpoints } = useTheme();
   const [allSales, setAllSales] = useState<any>(null);
   const [selectedSales, setSelectedSales] = useState<any>();

@@ -26,8 +26,9 @@ interface InputTsvForDbInsertionModalProps {
 }
 
 /**
- *
+ * Generic Multi-purpose Dialog Modal for Inserting TSV RAW Data from Google Docs and returning INSERT statements for psql DB.
  * @param props
+ * @returns
  */
 export default function InputTsvForDbInsertionModal(props: InputTsvForDbInsertionModalProps) {
   const modalId = props.id;

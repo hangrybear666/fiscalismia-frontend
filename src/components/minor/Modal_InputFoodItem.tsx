@@ -28,8 +28,10 @@ interface InputFoodItemModalProps {
 }
 
 /**
- *
- * @param props
+ * Dialog Modal to insert new food items into db.
+ * Has a bunch of validation to ensure data consistency and applicable error messaging.
+ * @param {InputFoodItemModalProps} props
+ * @returns
  */
 export default function InputFoodItemModal(props: InputFoodItemModalProps) {
   const { palette } = useTheme();

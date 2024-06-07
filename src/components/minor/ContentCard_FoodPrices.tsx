@@ -72,8 +72,11 @@ export type ContentCardFoodPrice = {
 };
 
 /**
- *
+ * JSX rendered as HTML for food price data extracted from the db.
+ * Is used solely for rendering food items, their price and macronutrient information and the date of last update.
+ * Includes several additional fields compared to ContentCardCosts from sharedFunctions.
  * @param props
+ * @returns
  */
 export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
   const { palette } = useTheme();

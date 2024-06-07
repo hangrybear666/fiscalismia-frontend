@@ -123,6 +123,7 @@ sortCriteria.push([
 /**
  *
  * @param allFoodPrices
+ * @returns string array of macronutrients
  */
 function getMacroNutrientCategories(allFoodPrices: any): string[] {
   return Array.from(new Set(allFoodPrices.map((e: any) => e.main_macro)));
@@ -131,6 +132,7 @@ function getMacroNutrientCategories(allFoodPrices: any): string[] {
 /**
  *
  * @param allFoodPrices
+ * @returns string array of stores
  */
 function getStoreItems(allFoodPrices: any): string[] {
   return Array.from(new Set(allFoodPrices.map((e: any) => e.store)));
@@ -142,7 +144,7 @@ function getStoreItems(allFoodPrices: any): string[] {
  * @returns
  */
 function getFoodItemSelectionDataStructures(allFoodPrices: any) {
-  const autoCompleteItemArray = [];
+  const autoCompleteItemArray: { label: string; id: any }[] = [];
   allFoodPrices.forEach((e: any, i: number) => {
     autoCompleteItemArray[i] = {
       label: `${e.food_item} - ${e.brand} | ${e.store}`,
@@ -164,8 +166,13 @@ interface FilterFoodPriceDataProps {
 }
 
 /**
- *
- * @param props
+ * Contains filter logic for foor items. Functionality:
+ * Ascending | Descending Sort by several categories
+ * Toggle button for boolean flag to render food item images or not.
+ * Text Filterable Multiselect Dropdown allowing to select 1-N food items from DB
+ * Button to Reset all Filter & Sort
+ * @param {FilterFoodPriceDataProps} props
+ * @returns
  */
 export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
   const { palette } = useTheme();

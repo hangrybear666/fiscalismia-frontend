@@ -58,8 +58,11 @@ type DateComparison = {
 };
 
 /**
- *
- * @param props
+ * Horizontal Line Chart for multi-purpose use allowing for two datasets.
+ * If a single dataset is present, it can be used by several Components as it is relatively straight forward without custom logic.
+ * If two datasets are provided, the difference in values between both is displayed as a tooltip.
+ * @param {ContentLineChartProps} props
+ * @returns
  */
 export default function ContentLineChart(props: ContentLineChartProps) {
   const { palette } = useTheme();

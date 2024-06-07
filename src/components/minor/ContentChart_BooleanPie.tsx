@@ -92,8 +92,10 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
           // |\/| |  | |     |  | /__` |__  |__) | |__  /__`    |__) | |__     /  ` |__|  /\  |__)  |     /  \ \  / |__  |__) |__) | |  \ |__
           // |  | \__/ |___  |  | .__/ |___ |  \ | |___ .__/    |    | |___    \__, |  | /~~\ |  \  |     \__/  \/  |___ |  \ |  \ | |__/ |___
           /**
-           *
+           * Custom labels with user defined bg colors matching the style of provided datasets.
+           * Also handles visibility based on flag set via clicking the legend.
            * @param chart
+           * @returns A formatted Legend Item with correct visibility state
            */
           generateLabels: function (chart: ChartJS) {
             // Get the default label list
@@ -119,7 +121,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
           }
         },
         /**
-         *
+         * overrides the click event to make a click of a single label hide the corresponding partner label within the dataset.
          * @param _mouseEvent
          * @param legendItem
          * @param legend
@@ -150,8 +152,9 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
         callbacks: {
           // see https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-callbacks
           /**
-           *
+           * Overrides the overlayed tooltip on hover and adds the label and value.
            * @param context
+           * @returns label and value string
            */
           label: function (context: any) {
             const labelIndex = context.datasetIndex * 2 + context.dataIndex;
@@ -160,6 +163,7 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
           /**
            *
            * @param context
+           * @returns
            */
           title: function (context: any) {
             if (context && context.length > 0 && context[0]?.dataset?.label) {
@@ -169,8 +173,9 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
             }
           },
           /**
-           *
+           * Constructs the footer within hover tooltip listing total amount of values present.
            * @param context
+           * @returns footer string of applicable dataset 1 | 2
            */
           footer: function (context: any) {
             if (context && context.length > 0 && context[0]?.dataIndex !== undefined) {

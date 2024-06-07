@@ -1,3 +1,4 @@
+/* eslint-disable */ // TODO
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -38,8 +39,10 @@ type VariableExpensePreset = {
 };
 
 /**
- *
+ * Contains different variations of common purchases to initialize the dialog modal and reduce manual typing effort.
+ * Preset data is based on frequency of past purchases and are manually added.
  * @param palette
+ * @returns
  */
 function initializePresetData(palette: Palette): VariableExpensePreset[] {
   return [
@@ -82,8 +85,9 @@ interface InputVariableExpenseModalProps {
   indulgencesAutoCompleteItemArray: string[];
 }
 /**
- *
- * @param props
+ * Dialog Modal to insert a new variable expense, typically initialized with common presets.
+ * @param {InputVariableExpenseModalProps} props
+ * @returns
  */
 export default function InputVariableExpenseModal(props: InputVariableExpenseModalProps) {
   const { palette }: { palette: Palette } = useTheme();
@@ -297,28 +301,28 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COFFEE:
         setDescription('Kaffee mit Hafermilch');
-        setCategoryAutoComplete('Leisure');
+        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
         setStoreAutoComplete('Cafè');
         setPrice('');
         setPurchaseDate(initializeReactDateInput(new Date()));
         setIsPlanned(false);
         setContainsIndulgence(true);
         indulgences = [];
-        indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'caffeine'));
+        indulgences.push(res.INDULGENCES_KEY_CAFFEINE);
         setIndulgencesAutoCompleteArray(indulgences);
         setSensitivitiesString(indulgences.join(', '));
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COLA:
         setDescription('Cola Zero');
-        setCategoryAutoComplete('Leisure');
+        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
         setStoreAutoComplete('Kiosk');
         setPrice('2');
         setPurchaseDate(initializeReactDateInput(new Date()));
         setIsPlanned(false);
         setContainsIndulgence(true);
         indulgences = [];
-        indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'caffeine'));
-        indulgences.push(indulgencesAutoCompleteItemArray.find((e) => e === 'aspartame/saccharin'));
+        indulgences.push(res.INDULGENCES_KEY_CAFFEINE);
+        indulgences.push(res.INDULGENCES_KEY_ASPARTAME_SACCHARIN);
         setIndulgencesAutoCompleteArray(indulgences);
         setSensitivitiesString(indulgences.join(', '));
         break;
@@ -335,7 +339,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_BREAKFAST:
         setDescription('Bio Eier, Eismeergarnelen TK');
-        setCategoryAutoComplete('Groceries');
+        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES);
         setStoreAutoComplete('Netto');
         setPrice('');
         setPurchaseDate(initializeReactDateInput(new Date()));

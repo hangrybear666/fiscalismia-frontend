@@ -20,8 +20,10 @@ interface ContentCardCostsProps {
   imgHeight?: number;
 }
 /**
- *
- * @param props
+ * JSX rendered as HTML for several Custom React Components displaying synthesized information extracted from the db.
+ * Is used to construct fixed cost information, monthly income information and overview of variable expenses, among potentially others.
+ * @param {ContentCardCostsProps} props
+ * @returns
  */
 export default function ContentCardCosts(props: ContentCardCostsProps) {
   const { palette } = useTheme();

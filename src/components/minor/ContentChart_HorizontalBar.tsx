@@ -25,7 +25,8 @@ interface ContentHorizontalBarChartProps extends ContentChartHorizontalBarObject
 
 /**
  * Horizontal Bar Chart receiving up to 6 datasets, primarily designed to be used with a single entry in the labels string[] array.
- * @param props
+ * @param {ContentHorizontalBarChartProps} props
+ * @returns
  */
 export default function ContentHorizontalBarChart(props: ContentHorizontalBarChartProps) {
   const { palette } = useTheme();

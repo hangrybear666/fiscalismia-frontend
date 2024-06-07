@@ -25,8 +25,11 @@ interface InputInvestmentDividendsModalProps {
 }
 
 /**
- *
+ * Algorithmically complex calculation of dividends connected to partial sales.
+ * When inserting a new dividend, an ISIN is selected and the history of bought and sold positions is summarized
+ * and the dividend is assigned proportionally correct to investments in the order of execution.
  * @param props
+ * @returns
  */
 export default function InputInvestmentDividendsModal(props: InputInvestmentDividendsModalProps) {
   const { palette } = useTheme();
@@ -82,6 +85,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
    * Returns remaining units and investment ids related to dividend payment
    * @param dividendDate
    * @param allInvestments
+   * @returns
    */
   const extractRelatedInvestmentsOfDividend = (
     dividendDate: Date,

@@ -29,13 +29,16 @@ class CustomError extends Error {
     this.data = options.data;
   }
 }
+interface ErrorPageProps {
+  isNoMatch?: boolean;
+}
 
 /**
  * Page rendered as fallback when an unhandled error is encountered.
- * @param {boolean} isNoMatch
+ * @param {ErrorPageProps} props
  * @returns either RoutingError or GenericError JSX HTML container
  */
-export default function ErrorPage(isNoMatch?: boolean): JSX.Element {
+export default function ErrorPage(props: ErrorPageProps): JSX.Element {
   const error = useRouteError();
   let customError: CustomError;
   const location = useLocation();
@@ -54,7 +57,7 @@ export default function ErrorPage(isNoMatch?: boolean): JSX.Element {
   }
   console.error(`ErrorPage routerError is: ${error}`);
 
-  if (isNoMatch) {
+  if (props.isNoMatch) {
     return <RoutingError error={customError} location={location} />;
   } else {
     return <GenericError error={customError} />;

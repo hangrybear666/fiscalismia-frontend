@@ -19,8 +19,10 @@ interface ConfirmationDialogProps {
   confirmBtnText: string;
 }
 /**
- *
- * @param props
+ * Confirmation Dialog for e.g. deleting database entries.
+ * Renders a Modal Dialog with a Cancel and Confirm Button.
+ * @param {ConfirmationDialogProps} props
+ * @returns
  */
 export default function ConfirmationDialog(props: ConfirmationDialogProps) {
   const { palette } = useTheme();

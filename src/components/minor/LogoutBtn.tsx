@@ -10,12 +10,17 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 import { paths } from '../../resources/router_navigation_paths';
 import { AuthInfo } from '../../types/custom/customTypes';
 
+interface LogoutBtnProps {
+  fullWidth: boolean;
+}
+
 /**
- *
- * @param root0
- * @param root0.fullWidth
+ * Button to destroy session to be rendered either in vertical left side menu in full width, or in top header as icon button.
+ * @param {LogoutBtnProps} props
+ * @returns
  */
-export default function LogoutBtn({ fullWidth }: { fullWidth: boolean }) {
+export default function LogoutBtn(props: LogoutBtnProps) {
+  const { fullWidth } = props;
   const navigate = useNavigate();
   const { setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {

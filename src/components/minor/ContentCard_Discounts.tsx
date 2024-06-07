@@ -77,8 +77,11 @@ export type ContentCardDiscount = {
 };
 
 /**
- *
+ * JSX rendered as HTML for grocery deal data extracted from the db.
+ * Is used solely for rendering temporary grocery deals valid at certain effective dates.
+ * Includes several additional fields compared to ContentCardCosts from sharedFunctions.
  * @param props
+ * @returns
  */
 export default function ContentCardDiscounts(props: ContentCardDiscount) {
   const { palette } = useTheme();

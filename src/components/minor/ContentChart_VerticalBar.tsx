@@ -42,6 +42,7 @@ interface ContentVerticalBarChartProps {
 /**
  * Vertical Bar Chart receiving between 1 and 4 datasets for the y-axis whereas labels describe the x-axis
  * @param {*} props barCount | labels | chartTitle | dataSet1 | dataSet2 | dataSet3 | dataSet4 | dataSet1Name | dataSet2Name | dataSet3Name | dataSet4Name | color1 | color2 | color3 | color4
+ * @returns
  */
 export default function ContentVerticalBarChart(props: ContentVerticalBarChartProps) {
   const { palette } = useTheme();

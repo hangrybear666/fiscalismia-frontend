@@ -31,8 +31,9 @@ interface InputInvestmentTaxesModalProps {
 }
 
 /**
- *
- * @param props
+ * Inputs a new investment with type BUY or SELL. calculates applicable taxes to be deducted based on user entry.
+ * @param {InputInvestmentTaxesModalProps} props
+ * @returns
  */
 export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
   const { palette } = useTheme();

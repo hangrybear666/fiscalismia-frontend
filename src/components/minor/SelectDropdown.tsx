@@ -13,21 +13,12 @@ interface SelectDropdownProps {
 }
 
 /**
- *
- * @param root0
- * @param root0.selectLabel
- * @param root0.selectItems
- * @param root0.selectedValue
- * @param root0.handleSelect
- * @param root0.disabled
+ * Generic Dropdown for String Selection.
+ * @param {SelectDropdownProps} props
+ * @returns
  */
-export default function SelectDropdown({
-  selectLabel,
-  selectItems,
-  selectedValue,
-  handleSelect,
-  disabled
-}: SelectDropdownProps) {
+export default function SelectDropdown(props: SelectDropdownProps) {
+  const { selectLabel, selectItems, selectedValue, handleSelect, disabled } = props;
   const handleChange = (event: SelectChangeEvent) => {
     handleSelect(event.target.value as string);
   };

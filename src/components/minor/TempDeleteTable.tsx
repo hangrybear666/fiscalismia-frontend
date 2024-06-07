@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
  * @param root0
  * @param root0.show
  * @param root0.results
+ * @returns
  */
 export default function TempDeleteTable({ show, results }: { show: boolean; results: any }) {
   if (!show) {

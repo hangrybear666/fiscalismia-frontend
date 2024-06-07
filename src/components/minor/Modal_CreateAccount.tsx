@@ -28,11 +28,12 @@ const style = {
   p: 4
 };
 
-const regExEmail =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const regExEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 /**
- *
+ * Displayed on Login Page to allow for user registry against a predefined whitelist containing allowed usernanmes.
+ * Opens a Dialog Modal with fields for username, email and password.
+ * @returns
  */
 export default function CreateAccountModal() {
   const [open, setOpen] = React.useState(false);
