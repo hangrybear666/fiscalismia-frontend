@@ -378,7 +378,7 @@ export function stringAlphabeticOnly(str: string) {
  * @returns
  */
 export function stringAlphaNumericOnly(str: string) {
-  const regExAlphaNumeric = /^[a-zA-Z0-9._-]*$/g;
+  const regExAlphaNumeric = /^[a-zA-Z0-9._-]*$/;
   return regExAlphaNumeric.test(str);
 }
 

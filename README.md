@@ -24,7 +24,7 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 - **Jenkins:** A DevOps automation server that orchestrates the development pipeline, helping in building, testing, and deploying the application fully automated.
 - **JWT Auth:** JSON Web Token authentication is used for securing and verifying the authenticity of API requests.
 - **Docker:** Jenkins runs in a Docker container, the pipeline itself uses further containers providing a consistent environment for the entire development workflow.
-- **Vite:** A build tool for modern web development, designed to be fast and efficient.
+- **Vite:** A fast & efficient build tool with Hot Module Replacement (HMR) allowing modules to be updated in real-time during development without requiring a full page refresh.
 - **Axios:** A promise-based HTTP client for making requests to the backend API and handling asynchronous operations.
 - **Chart.js:** A simple yet flexible JavaScript charting library for adding interactive charts and graphs to the application.
 - **Jest and React Testing Library:** Used for unit testing to ensure the reliability of individual components.
@@ -37,37 +37,87 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 
 1. **Node.js:** Ensure that Node.js is installed on your local machine, with a minimum version of 20.12.2 You can download Node.js via Node Version Switcher [here](https://github.com/jasongin/nvs) or directly from the source [here](https://nodejs.org/).
 
-2. **Clone the Repository:**
+2. **Docker & Docker Compose** Ensure that Docker is installed in your local development environment. Get Docker [here](https://docs.docker.com/get-docker/) and Docker Compose [here](https://docs.docker.com/compose/install/).
+
+3. **Clone the Repository:**
    ```bash
    git clone https://github.com/your-username/fiscalismia-frontend.git
    ```
 
-3. **The REST API must be running:**
+3. **The Backend and Database must be running:**
    See https://github.com/hangrybear666/fiscalismia-backend
 
 **Installation**
 
 1. **Navigate to the Project Folder:**
 
-```bash
-cd fiscalismia-frontend
-```
+   ```bash
+   cd fiscalismia-frontend
+   ```
 
 2. **Install Dependencies:**
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-3. **Run the Frontend Development Server:**
+3. **Create Environment file**
 
-```bash
-npm run dev
-```
+   Create an `.env` file in the root directory with the following contents
+
+   ```bash
+   PORT=3001
+   SNYK_TOKEN=
+   ```
+
+**Running**
+
+1. **Run the Frontend either locally or in Docker:**
+
+   ```bash
+   # Developing locally
+   npm run dev
+   ```
+
+   ```bash
+   # Developing in docker container
+   docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
+   docker run -v %cd%\src:/fiscalismia-frontend/src --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
+   ```
 
 ## Usage
 
-Once the frontend and backend are up and running, the website will be ready at http://localhost:5173/
+Once the frontend and backend are up and running, the website will be ready at http://localhost:3001
+
+## Testing
+
+**All tests generate report files in the `reports/` subdirectory.**
+
+2. **Playwright Web Automation Integration Tests**
+
+   todo
+
+2. **Static Code Analysis**
+
+   Eslint is used to ensure a consistent codebase adhering to certain coding standards configured in `.eslintrc.js`.
+   Typecheck runs the Typescript Compiler which is configured with high strictness in `tsconfig.json`.
+
+
+   ```bash
+   npm run typeCheck
+   npm run eslintAnalysis
+   ```
+
+3. **Snyk Security Analysis**
+
+   `SNYK_TOKEN` has to be set in `.env` file.
+   Get one for free by creating a snyk account [here](https://app.snyk.io/login)
+
+   Vulnerability scanning of both the codebase, especially relevant for issues such as SQL Injection and XSS(Cross Site Scripting).
+   ```bash
+   npm run snykCodeAnalysis
+   npm run snykDependencyAnalysis
+   ```
 
 ## License
 

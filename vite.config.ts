@@ -8,6 +8,9 @@ const PORT = Number(process.env.PORT) || 3003;
 export default defineConfig({
   plugins: [react()],
   server: {
+    watch: {
+      usePolling: true // Add this line if you're running on a network filesystem or Docker and Hot Module Replace is not working
+    },
     host: true,
     port: PORT
   }
