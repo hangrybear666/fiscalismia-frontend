@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+// timezone for HMR logging
+process.env.TZ = 'Europe/Berlin';
+
 const PORT = Number(process.env.PORT) || 3003;
 // https://vitejs.dev/config/
 export default defineConfig({
