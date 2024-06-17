@@ -16,6 +16,7 @@ import {
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 const iconProperties = {
   fontSize: 55,
@@ -118,7 +119,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet4Name: categories.PHYSIO_AND_HEALTH_COURSES_VALUE
   };
   const sportsAndHealth = constructContentVerticalBarChartObject(
-    res.FIXED_COSTS_SPORTS_HEALTH,
+    locales().FIXED_COSTS_SPORTS_HEALTH,
     sportsXaxis,
     sportsDataSets,
     sportsColors
@@ -172,7 +173,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet3Name: categories.LEISURE_MUSIC_PODCASTS_VALUE
   };
   const mediaAndEntertainment = constructContentVerticalBarChartObject(
-    res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
+    locales().FIXED_COSTS_MEDIA_ENTERTAINMENT,
     mediaXaxis,
     mediaDataSets,
     mediaColors
@@ -188,7 +189,7 @@ function extractChartData(allFixedCosts: any) {
  */
 function extractCardData(specificFixedCosts: any) {
   const sportsAndHealth = constructContentCardObject(
-    res.FIXED_COSTS_SPORTS_HEALTH,
+    locales().FIXED_COSTS_SPORTS_HEALTH,
     null,
     '1.00',
     null,
@@ -196,7 +197,7 @@ function extractCardData(specificFixedCosts: any) {
     'https://source.unsplash.com/random/?fitness'
   );
   const mediaAndEntertainment = constructContentCardObject(
-    res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
+    locales().FIXED_COSTS_MEDIA_ENTERTAINMENT,
     null,
     '1.00',
     null,
@@ -289,7 +290,7 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps): JSX
     <Grid container spacing={2}>
       <Grid xs={12}>
         <SelectDropdown
-          selectLabel={res.DATE}
+          selectLabel={locales().GENERAL_DATE}
           selectItems={effectiveDateSelectItems}
           selectedValue={selectedEffectiveDate}
           handleSelect={handleSelect}
@@ -316,7 +317,7 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps): JSX
             <ContentVerticalBarChart
               {...sportsAndHealthChart}
               dataSetCount={4}
-              chartTitle={res.FIXED_COSTS_SPORTS_HEALTH}
+              chartTitle={locales().FIXED_COSTS_SPORTS_HEALTH}
               selectedLabel={selectedEffectiveDate}
               legendPos={isSmallScreen ? 'top' : 'left'}
             />

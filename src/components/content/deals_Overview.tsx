@@ -33,6 +33,7 @@ import {
 } from '../../utils/sharedFunctions';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
 import { RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface Deals_OverviewProps {
   routeInfo: RouteInfo;
@@ -88,7 +89,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
     };
     return (
       <React.Fragment>
-        <Tooltip placement="left" title={res.DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW}>
+        <Tooltip placement="left" title={locales().DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW}>
           <IconButton
             color="error"
             sx={{ paddingY: 0.2, paddingX: 1, marginRight: 0, marginY: 0, marginLeft: 0.5, align: 'right' }}
@@ -98,10 +99,10 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
           </IconButton>
         </Tooltip>
         <ConfirmationDialog
-          title={res.CONFIRMATION_DIALOG_TITLE_DELETE}
+          title={locales().CONFIRMATION_DIALOG_TITLE_DELETE}
           text={data.food_item + ' - ' + data.store}
           textColor="secondary"
-          confirmBtnText={res.DELETE}
+          confirmBtnText={locales().GENERAL_DELETE}
           open={confirmDeleteOpen}
           setOpen={setConfirmDeleteOpen}
           handleConfirm={deleteRow}
@@ -150,7 +151,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
       if (!isNumeric(price)) {
         errorPresent = true;
         setIsPriceValidationError(true);
-        setPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG);
+        setPriceValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG);
       } else {
         setIsPriceValidationError(false);
         setPriceValidationErrorMessage('');
@@ -159,7 +160,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
       if (!dateValidation(lastUpdateDate).isValid) {
         errorPresent = true;
         setIsLastUpdateValidationError(true);
-        setLastUpdateDateErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+        setLastUpdateDateErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
       } else {
         setIsLastUpdateValidationError(false);
         setLastUpdateDateErrorMessage('');
@@ -195,7 +196,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
 
     return (
       <React.Fragment>
-        <Tooltip placement="left" title={res.DEALS_OVERVIEW_UPDATE_FOOD_PRICE}>
+        <Tooltip placement="left" title={locales().DEALS_OVERVIEW_UPDATE_FOOD_PRICE}>
           <IconButton
             color="secondary"
             sx={{ paddingY: 0.2, paddingX: 1, marginRight: 0, marginY: 0, marginLeft: 0.5, align: 'right' }}
@@ -234,7 +235,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
             {/* UPDATE DATUM */}
             <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
               <InputLabel shrink={true} htmlFor="last_update">
-                {res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE}
+                {locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE}
               </InputLabel>
               <Input
                 id="last_update"
@@ -260,7 +261,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
               variant="contained"
               endIcon={<FileDownloadDoneIcon />}
             >
-              {res.SAVE}
+              {locales().GENERAL_SAVE}
             </Button>
           </Box>
         </Modal>
@@ -301,40 +302,40 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
         floatingFilter: false,
         sortable: false
       },
-      { field: 'food_item', headerName: res.DEALS_OVERVIEW_THEADER_FOODITEM, minWidth: 200, flex: 1.5 },
-      { field: 'brand', headerName: res.DEALS_OVERVIEW_THEADER_BRAND },
-      { field: 'store', headerName: res.DEALS_OVERVIEW_THEADER_STORE },
-      { field: 'main_macro', headerName: res.DEALS_OVERVIEW_THEADER_MAIN_MACRO },
+      { field: 'food_item', headerName: locales().DEALS_OVERVIEW_THEADER_FOODITEM, minWidth: 200, flex: 1.5 },
+      { field: 'brand', headerName: locales().DEALS_OVERVIEW_THEADER_BRAND },
+      { field: 'store', headerName: locales().DEALS_OVERVIEW_THEADER_STORE },
+      { field: 'main_macro', headerName: locales().DEALS_OVERVIEW_THEADER_MAIN_MACRO },
       {
         field: 'kcal_amount',
-        headerName: res.DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP,
+        headerName: locales().DEALS_OVERVIEW_THEADER_KCAL_AMT_TOP,
         valueFormatter: kcalFormatter,
         filter: false,
         floatingFilter: false
       },
       {
         field: 'weight',
-        headerName: res.DEALS_OVERVIEW_THEADER_WEIGHT_TOP,
+        headerName: locales().DEALS_OVERVIEW_THEADER_WEIGHT_TOP,
         valueFormatter: gramsFormatter,
         filter: false,
         floatingFilter: false
       },
       {
         field: 'price',
-        headerName: res.DEALS_OVERVIEW_THEADER_PRICE_TOP,
+        headerName: locales().DEALS_OVERVIEW_THEADER_PRICE_TOP,
         valueFormatter: currencyFormatter,
         filter: false,
         floatingFilter: false
       },
       {
         field: 'last_update',
-        headerName: res.DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP,
+        headerName: locales().DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP,
         cellRenderer: DateCellFormatter,
         minWidth: 160
       },
       {
         field: 'normalized_price',
-        headerName: res.DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP,
+        headerName: locales().DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP,
         valueFormatter: currencyFormatter,
         filter: false,
         floatingFilter: false

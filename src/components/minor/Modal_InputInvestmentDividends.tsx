@@ -17,6 +17,7 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 import { postDividends } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 import { DividendsRelatedInvestmentsAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface InputInvestmentDividendsModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
@@ -284,7 +285,9 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     if (!isNumeric(dividendAmount) || parseInt(dividendAmount) < 0) {
       errorPresent = true;
       setIsDividendAmountValidationError(true);
-      setDividendAmountValidationErrorMessage(res.MINOR_INPUT_DIVIDEND_MODAL_DIVIDEND_AMOUNT_VALIDATION_ERROR_MSG);
+      setDividendAmountValidationErrorMessage(
+        locales().MINOR_INPUT_DIVIDEND_MODAL_DIVIDEND_AMOUNT_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsDividendAmountValidationError(false);
       setDividendAmountValidationErrorMessage('');
@@ -293,7 +296,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     if (!dateValidation(dividendDate).isValid) {
       errorPresent = true;
       setIsDateValidationError(true);
-      setDateErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setDateErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsDateValidationError(false);
       setDateErrorMessage('');
@@ -306,7 +309,9 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     ) {
       errorPresent = true;
       setIsPctTaxedValidationError(true);
-      setPctTaxedValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG);
+      setPctTaxedValidationErrorMessage(
+        locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsPctTaxedValidationError(false);
       setPctTaxedValidationErrorMessage('');
@@ -315,7 +320,9 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     if (!selectedIsin || selectedIsin?.length < 12 || !/^[a-zA-Z]{2}$/.test(selectedIsin?.substring(0, 2))) {
       errorPresent = true;
       setIsSelectedIsinValidationError(true);
-      setSelectedIsinValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG);
+      setSelectedIsinValidationErrorMessage(
+        locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsSelectedIsinValidationError(false);
       setSelectedIsinValidationErrorMessage('');
@@ -362,7 +369,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
         }}
         startIcon={<AddCircleIcon />}
       >
-        {res.MINOR_INPUT_DIVIDEND_MODAL_OPEN_BUTTON}
+        {locales().MINOR_INPUT_DIVIDEND_MODAL_OPEN_BUTTON}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -370,7 +377,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           {isinSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2.5 }}>
               <SelectDropdown
-                selectLabel={res.MINOR_INPUT_DIVIDEND_MODAL_INPUT_ISIN_SELECT}
+                selectLabel={locales().MINOR_INPUT_DIVIDEND_MODAL_INPUT_ISIN_SELECT}
                 selectItems={isinSelectItems}
                 selectedValue={selectedIsin}
                 handleSelect={handleIsinSelect}
@@ -388,7 +395,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           ) : null}
           {/* DIVIDEND DATE */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
-            <InputLabel htmlFor="dividend_date">{res.MINOR_INPUT_DIVIDEND_MODAL_INPUT_DIVIDEND_DATE}</InputLabel>
+            <InputLabel htmlFor="dividend_date">{locales().MINOR_INPUT_DIVIDEND_MODAL_INPUT_DIVIDEND_DATE}</InputLabel>
             <Input
               id="dividend_date"
               value={dividendDate}
@@ -400,7 +407,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           </FormControl>
           {/* DIVIDEND AMOUNT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="dividend_amount">{res.MINOR_INPUT_DIVIDEND_MODAL_INPUT_DIVIDEND_AMT}</InputLabel>
+            <InputLabel htmlFor="dividend_amount">{locales().MINOR_INPUT_DIVIDEND_MODAL_INPUT_DIVIDEND_AMT}</InputLabel>
             <Input
               id="dividend_amount"
               value={dividendAmount}
@@ -420,7 +427,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           {/* PERCENTAGE OF PROFITS TAXED */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor="pct_taxed">
-              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}
+              {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}
             </InputLabel>
             <Input
               id="pct_taxed"
@@ -451,7 +458,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

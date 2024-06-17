@@ -18,11 +18,7 @@ import CancelIcon from '@mui/icons-material/CancelSharp';
 import Stack from '@mui/system/Stack';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  resourceProperties as res,
-  serverConfig,
-  foodItemInputCategories as foodCategories
-} from '../../resources/resource_properties';
+import { serverConfig, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
 import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../services/pgConnections';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
@@ -40,6 +36,7 @@ import butcher from '/imgs/supermarkets/butcher1.png';
 import online from '/imgs/supermarkets/online1.png';
 // import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
+import { locales } from '../../utils/localeConfiguration';
 
 const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -279,7 +276,7 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
                   variant="contained"
                   startIcon={<CloudUploadIcon />}
                 >
-                  {res.UPLOAD_IMG}
+                  {locales().GENERAL_UPLOAD_IMG}
                   <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
                 </Button>
               </form>

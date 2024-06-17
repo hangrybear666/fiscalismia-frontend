@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import { ContentCardObject, ContentChartLineObject, ContentChartVerticalBarObject } from '../types/custom/customTypes';
 import { Breakpoints, Theme, useMediaQuery } from '@mui/material';
+import { locales } from './localeConfiguration';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -34,13 +35,13 @@ export function constructContentCardObject(
 ): ContentCardObject {
   const turnus =
     subtitle === '1.00'
-      ? res.INTERVAL_MONTHLY
+      ? locales().INTERVAL_MONTHLY
       : subtitle === '3.00'
-        ? res.INTERVAL_QUARTERLY
+        ? locales().INTERVAL_QUARTERLY
         : subtitle === '6.00'
-          ? res.INTERVAL_HALFYEARLY
+          ? locales().INTERVAL_HALFYEARLY
           : subtitle === '12.00'
-            ? res.INTERVAL_YEARLY
+            ? locales().INTERVAL_YEARLY
             : `alle ${subtitle} Monate`;
   const contentCardObj = {
     header: header.trim(),

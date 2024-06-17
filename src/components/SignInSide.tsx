@@ -3,14 +3,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { login, getUserSpecificSettings } from '../services/pgConnections';
-import { IconButton } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -19,20 +18,27 @@ import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
 import CreateAccountModal from './minor/Modal_CreateAccount';
 import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
+import { locales } from '../utils/localeConfiguration';
 
 /**
- * @returns String containing Copyright Icon App Name and current Year
+ * Footer with current year, App Name
+ * @returns
  */
-function Copyright(): JSX.Element {
+function Header(): JSX.Element {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 5 }}>
-      {'Copyright © '}
-      <Link color="inherit" href={res.APP_URL}>
-        {res.APP_NAME}
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <Box component="header" sx={{ p: 2, margin: '0 auto', mb: 2 }}>
+      <Stack direction="row">
+        <Typography
+          color="text.secondary"
+          sx={{ fontWeight: 300, letterSpacing: 4, fontSize: 18, textTransform: 'uppercase' }}
+        >
+          {res.APP_NAME}&nbsp;
+        </Typography>
+        <Typography color="text.secondary" sx={{ fontWeight: 300, letterSpacing: 4, fontSize: 18 }}>
+          {new Date().getFullYear()}
+        </Typography>
+      </Stack>
+    </Box>
   );
 }
 
@@ -178,11 +184,12 @@ export default function SignInSide(): JSX.Element {
               alignItems: 'center'
             }}
           >
+            <Header />
             <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              {res.SIGN_IN}
+              {locales().GENERAL_SIGN_IN}
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
@@ -190,7 +197,7 @@ export default function SignInSide(): JSX.Element {
                 required
                 fullWidth
                 id="username"
-                label={res.USERNAME}
+                label={locales().GENERAL_USERNAME}
                 autoComplete="username"
                 autoFocus
                 value={username}
@@ -200,7 +207,7 @@ export default function SignInSide(): JSX.Element {
                 margin="normal"
                 required
                 fullWidth
-                label={res.PASSWORD}
+                label={locales().GENERAL_PASSWORD}
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -216,7 +223,6 @@ export default function SignInSide(): JSX.Element {
                 {res.LOGIN}
               </Button>
               <CreateAccountModal />
-              <Copyright />
             </Box>
           </Box>
         </Grid>

@@ -19,6 +19,7 @@ import {
   getBreakPointWidth
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 const iconProperties = {
   fontSize: 55,
@@ -107,7 +108,7 @@ function extractChartData(allFixedCosts: any) {
     dataSet4Name: categories.INSURANCE_VALUE
   };
   const livingEssentials = constructContentVerticalBarChartObject(
-    res.LIVING_ESSENTIALS,
+    locales().MENU_LIVING_ESSENTIALS,
     livingEssentialsXaxis,
     livingEssentialsDataSets,
     livingEssentialsColors
@@ -124,7 +125,7 @@ function extractChartData(allFixedCosts: any) {
  */
 function extractCardData(specificFixedCosts: any) {
   const rentAndUtilities = constructContentCardObject(
-    res.FIXED_COSTS_RENT_UTILITIES,
+    locales().FIXED_COSTS_RENT_UTILITIES,
     null,
     '1.00',
     null,
@@ -132,7 +133,7 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   const dslAndPhone = constructContentCardObject(
-    res.FIXED_COSTS_DSL_PHONE,
+    locales().FIXED_COSTS_DSL_PHONE,
     null,
     '1.00',
     null,
@@ -140,7 +141,7 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   const insurance = constructContentCardObject(
-    res.FIXED_COSTS_INSURANCE,
+    locales().FIXED_COSTS_INSURANCE,
     null,
     '1.00',
     null,
@@ -148,7 +149,7 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   const studentLoans = constructContentCardObject(
-    res.FIXED_COSTS_STUDENT_LOANS,
+    locales().FIXED_COSTS_STUDENT_LOANS,
     null,
     '1.00',
     null,
@@ -279,7 +280,7 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
           <Grid container spacing={2}>
             <Grid xs={12}>
               <SelectDropdown
-                selectLabel={res.DATE}
+                selectLabel={locales().GENERAL_DATE}
                 selectItems={effectiveDateSelectItems}
                 selectedValue={selectedEffectiveDate}
                 handleSelect={handleSelect}

@@ -14,6 +14,7 @@ import {
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 /**
  *
@@ -47,10 +48,10 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
 
   const overviewDataSets = {
     dataSet1: overviewDataset,
-    dataSet1Name: res.FIXED_COSTS_MONHTLY_COST
+    dataSet1Name: locales().FIXED_COSTS_MONHTLY_COST
   };
   const overview = constructContentLineChartObject(
-    res.FIXED_COSTS_MONHTLY_COST,
+    locales().FIXED_COSTS_MONHTLY_COST,
     overviewXaxis,
     overviewDataSets,
     overviewColors
@@ -67,7 +68,7 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
  */
 function extractCardData(specificFixedCosts: any) {
   const monthlyTotalCost = constructContentCardObject(
-    res.FIXED_COSTS_MONHTLY_COST,
+    locales().FIXED_COSTS_MONHTLY_COST,
     null,
     '1.00',
     null,
@@ -75,16 +76,16 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   const rentAndUtilities = constructContentCardObject(
-    res.FIXED_COSTS_RENT_UTILITIES,
+    locales().FIXED_COSTS_RENT_UTILITIES,
     null,
     '1.00',
     null,
     null,
     res.NO_IMG
   );
-  const dslAndPhone = constructContentCardObject(res.FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG);
+  const dslAndPhone = constructContentCardObject(locales().FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG);
   const sportsAndHealth = constructContentCardObject(
-    res.FIXED_COSTS_SPORTS_HEALTH,
+    locales().FIXED_COSTS_SPORTS_HEALTH,
     null,
     '1.00',
     null,
@@ -92,15 +93,22 @@ function extractCardData(specificFixedCosts: any) {
     res.NO_IMG
   );
   const mediaAndEntertainment = constructContentCardObject(
-    res.FIXED_COSTS_MEDIA_ENTERTAINMENT,
+    locales().FIXED_COSTS_MEDIA_ENTERTAINMENT,
     null,
     '1.00',
     null,
     null,
     res.NO_IMG
   );
-  const insurance = constructContentCardObject(res.FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
-  const studentLoans = constructContentCardObject(res.FIXED_COSTS_STUDENT_LOANS, null, '1.00', null, null, res.NO_IMG);
+  const insurance = constructContentCardObject(locales().FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
+  const studentLoans = constructContentCardObject(
+    locales().FIXED_COSTS_STUDENT_LOANS,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
   // Monthly Total Amount
   monthlyTotalCost.amount = specificFixedCosts.results
     .map((row: any) => parseFloat(row.monthly_cost))
@@ -260,7 +268,7 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
           <Grid container spacing={3}>
             <Grid xs={12}>
               <SelectDropdown
-                selectLabel={res.DATE}
+                selectLabel={locales().GENERAL_DATE}
                 selectItems={effectiveDateSelectItems}
                 selectedValue={selectedEffectiveDate}
                 handleSelect={handleSelect}

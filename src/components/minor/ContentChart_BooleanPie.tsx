@@ -12,8 +12,8 @@ import {
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
-import { resourceProperties as res } from '../../resources/resource_properties';
 import { ContentChartBooleanPieObject } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
@@ -181,9 +181,9 @@ export function ContentBooleanPieChart(props: ContentPieChartProps) {
             if (context && context.length > 0 && context[0]?.dataIndex !== undefined) {
               const dataIndex = context[0].dataIndex;
               if (dataIndex === 0) {
-                return `${res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet1[0] + dataSet1[1]}`;
+                return `${locales().VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet1[0] + dataSet1[1]}`;
               } else if (dataIndex === 1) {
-                return `${res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet2[0] + dataSet2[1]}`;
+                return `${locales().VARIABLE_EXPENSES_OVERVIEW_TOTAL_PURCHASE_AMOUNT}: ${dataSet2[0] + dataSet2[1]}`;
               }
             }
             return null;

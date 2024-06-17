@@ -33,6 +33,7 @@ import {
   ToggleButton,
   Switch
 } from '@mui/material';
+import { locales } from '../../utils/localeConfiguration';
 
 const SORT_BY_IDS = {
   pricePerKgDesc: 1,
@@ -54,68 +55,68 @@ const sortCriteria: SortCriteria[][] = [];
 sortCriteria.push([
   {
     id: SORT_BY_IDS.pricePerKgDesc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_DESC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_DESC,
     icon: <KeyboardDoubleArrowDownIcon />
   },
   {
-    id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE_PER_KG,
+    id: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE_PER_KG,
     tooltip: null,
     icon: null
   },
   {
     id: SORT_BY_IDS.pricePerKgAsc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_ASC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_PER_KG_ASC,
     icon: <KeyboardDoubleArrowUpIcon />
   }
 ]);
 sortCriteria.push([
   {
     id: SORT_BY_IDS.kcalAmountDesc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_DESC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_DESC,
     icon: <KeyboardDoubleArrowDownIcon />
   },
   {
-    id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT,
+    id: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_KCAL_AMOUNT,
     tooltip: null,
     icon: null
   },
   {
     id: SORT_BY_IDS.kcalAmountAsc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_ASC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_KCAL_AMOUNT_KG_ASC,
     icon: <KeyboardDoubleArrowUpIcon />
   }
 ]);
 sortCriteria.push([
   {
     id: SORT_BY_IDS.priceDesc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_DESC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_DESC,
     icon: <KeyboardDoubleArrowDownIcon />
   },
   {
-    id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE,
+    id: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_PRICE,
     tooltip: null,
     icon: null
   },
   {
     id: SORT_BY_IDS.priceAsc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_ASC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_PRICE_ASC,
     icon: <KeyboardDoubleArrowUpIcon />
   }
 ]);
 sortCriteria.push([
   {
     id: SORT_BY_IDS.normalizedPriceDesc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_DESC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_DESC,
     icon: <KeyboardDoubleArrowDownIcon />
   },
   {
-    id: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE,
+    id: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_NORMALIZED_PRICE,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_BTN_VALUE_TOOLTIP_NORMALIZED_PRICE,
     icon: null
   },
   {
     id: SORT_BY_IDS.normalizedPriceAsc,
-    tooltip: res.MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_ASC,
+    tooltip: locales().MINOR_FILTER_FOOD_PRICES_SORT_CRITERIA_TOOLTIP_NORMALIZED_PRICE_ASC,
     icon: <KeyboardDoubleArrowUpIcon />
   }
 ]);
@@ -403,7 +404,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
       <Grid xs={12}>
         <Paper elevation={4} sx={{ borderRadius: 0, border: `1px solid ${palette.border.light}` }}>
           <Box sx={{ padding: 1.2 }}>
-            <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL}</Typography>
+            <Typography sx={headerStyle}>{locales().MINOR_FILTER_FOOD_PRICES_RENDER_IMAGES_SWITCH_LABEL}</Typography>
             <Switch size="medium" checked={renderImages} onChange={handleRenderImagesSwitch} />
           </Box>
         </Paper>
@@ -411,7 +412,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
       <Grid xs={12}>
         <Paper elevation={4} sx={{ borderRadius: 0, border: `1px solid ${palette.border.light}` }}>
           <Box sx={{ padding: 1.2 }}>
-            <Typography sx={headerStyle}>{res.SORT_BY}</Typography>
+            <Typography sx={headerStyle}>{locales().GENERAL_SORT_BY}</Typography>
             {sortCriteria
               ? sortCriteria.map((parent) => (
                   <ToggleButtonGroup
@@ -472,7 +473,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL}
+                        label={locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL}
                         sx={{ borderRadius: 0 }}
                       />
                     )}
@@ -484,7 +485,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
               {/* SELECT MACRO */}
               <Grid xs={12}>
                 <Stack>
-                  <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_MACRO_HEADER}</Typography>
+                  <Typography sx={headerStyle}>{locales().MINOR_FILTER_FOOD_PRICES_MACRO_HEADER}</Typography>
                   <ToggleButtonGroup
                     fullWidth
                     color="primary"
@@ -525,7 +526,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
               {/* SELECT SUPERMARKET */}
               <Grid xs={12}>
                 <Stack>
-                  <Typography sx={headerStyle}>{res.MINOR_FILTER_FOOD_PRICES_STORE_HEADER}</Typography>
+                  <Typography sx={headerStyle}>{locales().MINOR_FILTER_FOOD_PRICES_STORE_HEADER}</Typography>
                   <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
                     <ToggleButtonGroup
                       value={selectedStore}
@@ -598,7 +599,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
                   }}
                 >
                   <CancelIcon sx={{ mr: 1.5 }} />
-                  {res.MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER}
+                  {locales().MINOR_FILTER_FOOD_PRICES_CLEAR_FILTER}
                 </IconButton>
               </Grid>
             </Grid>

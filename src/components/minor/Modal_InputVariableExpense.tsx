@@ -30,6 +30,7 @@ import {
   Typography
 } from '@mui/material';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
+import { locales } from '../../utils/localeConfiguration';
 
 type VariableExpensePreset = {
   id: string;
@@ -49,31 +50,31 @@ function initializePresetData(palette: Palette): VariableExpensePreset[] {
     {
       id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_TODAY,
       color: palette.tertiary.main,
-      tooltip: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_TODAY,
+      tooltip: locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_TODAY,
       icon: <TodayTwoToneIcon fontSize="large" />
     },
     {
       id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COFFEE,
       color: palette.error.light,
-      tooltip: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_COFFEE,
+      tooltip: locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_COFFEE,
       icon: <LocalCafeTwoToneIcon fontSize="large" />
     },
     {
       id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COLA,
       color: palette.error.light,
-      tooltip: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_COLA,
+      tooltip: locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_COLA,
       icon: <LiquorTwoToneIcon fontSize="large" />
     },
     {
-      id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_SCHOKOBROETCHEN,
+      id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_CHOCO_CROISSANT,
       color: palette.secondary.main,
-      tooltip: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_SCHOKOBROETCHEN,
+      tooltip: locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_CHOCO_CROISSANT,
       icon: <BakeryDiningTwoToneIcon fontSize="large" />
     },
     {
       id: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_BREAKFAST,
       color: palette.secondary.main,
-      tooltip: res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_BREAKFAST,
+      tooltip: locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_BREAKFAST,
       icon: <EggAltTwoToneIcon fontSize="large" />
     }
   ];
@@ -187,7 +188,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
       errorPresent = true;
       setIsCategoryAutoCompleteValidationError(true);
       setCategoryAutoCompleteValidationErrorMessage(
-        res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY_AUTOCOMPLETE_VALIDATION_ERROR_MSG
+        locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY_AUTOCOMPLETE_VALIDATION_ERROR_MSG
       );
     } else {
       setIsCategoryAutoCompleteValidationError(false);
@@ -198,7 +199,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
       errorPresent = true;
       setIsStoreAutoCompleteValidationError(true);
       setStoreAutoCompleteValidationErrorMessage(
-        res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE_AUTOCOMPLETE_VALIDATION_ERROR_MSG
+        locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE_AUTOCOMPLETE_VALIDATION_ERROR_MSG
       );
     } else {
       setIsStoreAutoCompleteValidationError(false);
@@ -208,7 +209,9 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
     if (!description || description == '' || description?.length < 5) {
       errorPresent = true;
       setIsDescriptionValidationError(true);
-      setDescriptionValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG);
+      setDescriptionValidationErrorMessage(
+        locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsDescriptionValidationError(false);
       setDescriptionValidationErrorMessage('');
@@ -217,7 +220,9 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
     if (containsIndulgence && (!sensitivitiesString || sensitivitiesString == '' || sensitivitiesString?.length < 4)) {
       errorPresent = true;
       setIsIndulgencesValidationError(true);
-      setIndulgencesValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INDULGENCE_VALIDATION_ERROR_MSG);
+      setIndulgencesValidationErrorMessage(
+        locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INDULGENCE_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsIndulgencesValidationError(false);
       setIndulgencesValidationErrorMessage('');
@@ -226,7 +231,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
     if (!isNumeric(price)) {
       errorPresent = true;
       setIsPriceValidationError(true);
-      setPriceValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRICE_VALIDATION_ERROR_MSG);
+      setPriceValidationErrorMessage(locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
       setIsPriceValidationError(false);
       setPriceValidationErrorMessage('');
@@ -235,7 +240,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
     if (!dateValidation(purchasingDate).isValid) {
       errorPresent = true;
       setIsDateValidationError(true);
-      setDateValidationErrorMessage(res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setDateValidationErrorMessage(locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsDateValidationError(false);
       setDateValidationErrorMessage('');
@@ -301,7 +306,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COFFEE:
         setDescription('Kaffee mit Hafermilch');
-        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
+        setCategoryAutoComplete(locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
         setStoreAutoComplete('Cafè');
         setPrice('');
         setPurchaseDate(initializeReactDateInput(new Date()));
@@ -314,7 +319,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_COLA:
         setDescription('Cola Zero');
-        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
+        setCategoryAutoComplete(locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE);
         setStoreAutoComplete('Kiosk');
         setPrice('2');
         setPurchaseDate(initializeReactDateInput(new Date()));
@@ -326,7 +331,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         setIndulgencesAutoCompleteArray(indulgences);
         setSensitivitiesString(indulgences.join(', '));
         break;
-      case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_SCHOKOBROETCHEN:
+      case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_CHOCO_CROISSANT:
         setDescription('Schokobrötchen');
         setCategoryAutoComplete('Gift');
         setStoreAutoComplete('Bäcker');
@@ -339,7 +344,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         break;
       case res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_ID_BREAKFAST:
         setDescription('Bio Eier, Eismeergarnelen TK');
-        setCategoryAutoComplete(res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES);
+        setCategoryAutoComplete(locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES);
         setStoreAutoComplete('Netto');
         setPrice('');
         setPurchaseDate(initializeReactDateInput(new Date()));
@@ -369,7 +374,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
         }}
         startIcon={<AddCircleIcon />}
       >
-        {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN}
+        {locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_OPEN}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -387,7 +392,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
           {/* EXPENSE ITEM DESCRIPTION */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel sx={{ letterSpacing: 2, fontWeight: 300, fontSize: 16 }} htmlFor="description">
-              {res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION}
+              {locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_DESCRIPTION}
             </InputLabel>
             <Input
               id="description"
@@ -411,7 +416,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY}
+                    label={locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CATEGORY}
                     sx={{ borderRadius: 0 }}
                   />
                 )}
@@ -442,7 +447,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE}
+                    label={locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_STORE}
                     sx={{ borderRadius: 0 }}
                   />
                 )}
@@ -463,7 +468,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
           ) : null}
           {/* PRICE */}
           <FormControl fullWidth sx={{ m: 1, mt: 2.5 }} variant="standard">
-            <InputLabel htmlFor="price">{res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE}</InputLabel>
+            <InputLabel htmlFor="price">{locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE}</InputLabel>
             <Input
               id="price"
               value={price}
@@ -481,7 +486,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
           {/* DATE OF VARIABLE EXPENSE */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
             <InputLabel shrink={true} htmlFor="purchase_date">
-              {res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_DATE_OF_PURCHASE}
+              {locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_DATE_OF_PURCHASE}
             </InputLabel>
             <Input
               id="purchase_date"
@@ -504,7 +509,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                     fontSize: 14
                   }}
                 >
-                  {res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_IS_PLANNED_LABEL}
+                  {locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_IS_PLANNED_LABEL}
                 </Typography>
               }
             />
@@ -523,7 +528,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                     fontSize: 14
                   }}
                 >
-                  {res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CONTAINS_INDULGENCE_LABEL}
+                  {locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_CONTAINS_INDULGENCE_LABEL}
                 </Typography>
               }
             />
@@ -540,7 +545,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_INDULGENCE}
+                    label={locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_INDULGENCE}
                     sx={{ borderRadius: 0 }}
                   />
                 )}
@@ -574,7 +579,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

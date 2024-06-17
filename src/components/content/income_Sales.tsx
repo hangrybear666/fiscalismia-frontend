@@ -14,6 +14,7 @@ import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { getUniqueEffectiveYears, getUniquePurchasingDates } from '../../utils/sharedFunctions';
 import { RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 /**
  * extracts all unique years within unique date array into an array
@@ -101,8 +102,8 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     const distinctStoreCard = constructContentCardObjectSales(
       store,
       null,
-      `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
-      res.INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER,
+      `${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
+      locales().INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER,
       null,
       null,
       res.NO_IMG
@@ -118,9 +119,9 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
   });
   // TOTAL SALES
   const totalSales = constructContentCardObjectSales(
-    res.INCOME_SALES_CARD_TOTAL_SALES_HEADER,
+    locales().INCOME_SALES_CARD_TOTAL_SALES_HEADER,
     null,
-    `${selectedYear === res.ALL ? res.OVER_TOTAL_PERIOD : `${res.INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
+    `${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
     undefined,
     null,
     null,
@@ -264,10 +265,10 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
             <Table sx={{ minWidth: 500 }} size="small">
               <TableHead>
                 <TableRow sx={tableHeadStyling}>
-                  <TableCell>{res.INCOME_SALES_THEADER_DESCRIPTION}</TableCell>
-                  <TableCell align="right">{res.INCOME_SALES_THEADER_COST}</TableCell>
-                  <TableCell>{res.INCOME_SALES_THEADER_STORE}</TableCell>
-                  <TableCell>{res.INCOME_SALES_THEADER_DATE}</TableCell>
+                  <TableCell>{locales().INCOME_SALES_THEADER_DESCRIPTION}</TableCell>
+                  <TableCell align="right">{locales().INCOME_SALES_THEADER_COST}</TableCell>
+                  <TableCell>{locales().INCOME_SALES_THEADER_STORE}</TableCell>
+                  <TableCell>{locales().INCOME_SALES_THEADER_DATE}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

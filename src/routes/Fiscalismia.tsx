@@ -4,28 +4,29 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import Navigator from '../components/Navigator';
 import Header from '../components/Header';
 import ContentHandler from '../components/ContentHandler';
 import CustomThemeProvider from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties';
 import { paths } from '../resources/router_navigation_paths';
+import { Stack } from '@mui/material';
 
 /**
- * Footer with Copyright, current year, App Name
+ * Footer with current year, App Name
  * @returns
  */
 function Footer(): JSX.Element {
   return (
-    <Box component="footer" sx={{ p: 2 }}>
-      <Typography variant="body2" color="text.secondary" align="center">
-        {`${res.COPYRIGHT} `}
-        <Link color="inherit" href={res.APP_URL}>
-          {res.APP_NAME}
-        </Link>{' '}
-        {new Date().getFullYear()}.
-      </Typography>
+    <Box component="footer" sx={{ p: 2, margin: '0 auto' }}>
+      <Stack direction="row">
+        <Typography color="text.secondary" sx={{ fontWeight: 300, letterSpacing: 2 }}>
+          {res.APP_NAME}&nbsp;
+        </Typography>
+        <Typography color="text.secondary" sx={{ fontWeight: 300, letterSpacing: 3 }}>
+          {new Date().getFullYear()}
+        </Typography>
+      </Stack>
     </Box>
   );
 }
@@ -38,7 +39,7 @@ const drawerWidth = 256;
  * - contains the vertical side Navigator menu (Admin Panel style)
  * - Header rendering the route header and subheader with a User Settings Icon Bar
  * - Content rendered based on selected menu entry (route)
- * - Basic Footer with Copyright
+ * - Basic Footer
  * @returns
  */
 export default function Fiscalismia() {

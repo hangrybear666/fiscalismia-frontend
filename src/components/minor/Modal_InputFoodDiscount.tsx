@@ -16,6 +16,7 @@ import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
 import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
+import { locales } from '../../utils/localeConfiguration';
 
 interface InputFoodDiscountModalProps {
   setDiscountAddedItemId: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -99,7 +100,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     if (!isNumeric(selectedFoodItemId)) {
       errorPresent = true;
       setIsFoodItemSelectionError(true);
-      setFoodItemSelectionErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG);
+      setFoodItemSelectionErrorMessage(locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_FOOD_ITEM_SELECTION_ERROR_MSG);
     } else {
       setIsFoodItemSelectionError(false);
       setFoodItemSelectionErrorMessage('');
@@ -108,7 +109,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     if (!isNumeric(discountPrice)) {
       errorPresent = true;
       setIsPriceValidationError(true);
-      setDiscountPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG);
+      setDiscountPriceValidationErrorMessage(locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
       setIsPriceValidationError(false);
       setDiscountPriceValidationErrorMessage('');
@@ -117,7 +118,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     if (!dateValidation(startDate).isValid) {
       errorPresent = true;
       setIsStartDateValidationError(true);
-      setStartDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setStartDateErrorMessage(locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsStartDateValidationError(false);
       setStartDateErrorMessage('');
@@ -126,7 +127,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     if (!dateValidation(startDate).isValid) {
       errorPresent = true;
       setIsEndDateValidationError(true);
-      setEndDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setEndDateErrorMessage(locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsEndDateValidationError(false);
       setEndDateErrorMessage('');
@@ -135,9 +136,11 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     if (startDate > endDate) {
       errorPresent = true;
       setIsEndDateValidationError(true);
-      setEndDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG);
+      setEndDateErrorMessage(locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG);
       setIsStartDateValidationError(true);
-      setStartDateErrorMessage(res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG);
+      setStartDateErrorMessage(
+        locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE_BEFORE_START_DATE_VALIDATION_ERROR_MSG
+      );
     }
     if (errorPresent) {
       // Errors present => return
@@ -186,7 +189,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
         }}
         startIcon={<AddCircleIcon />}
       >
-        {res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_OPEN}
+        {locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_OPEN}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -201,7 +204,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL}
+                    label={locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_SELECTDROPDOWN_LABEL}
                     sx={{ borderRadius: 0 }}
                   />
                 )}
@@ -222,7 +225,9 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
           ) : null}
           {/* ANGEBOTSPREIS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="discount_price">{res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_DISCOUNT_AMOUNT}</InputLabel>
+            <InputLabel htmlFor="discount_price">
+              {locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_DISCOUNT_AMOUNT}
+            </InputLabel>
             <Input
               id="discount_price"
               value={discountPrice}
@@ -236,7 +241,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
           {/* START DATUM */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
             <InputLabel shrink={true} htmlFor="start_date">
-              {res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_START_DATE}
+              {locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_START_DATE}
             </InputLabel>
             <Input
               id="start_date"
@@ -250,7 +255,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
           {/* END DATUM */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2, mb: 4 }} variant="standard">
             <InputLabel shrink={true} htmlFor="end_date">
-              {res.MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE}
+              {locales().MINOR_INPUT_FOOD_DISCOUNT_MODAL_END_DATE}
             </InputLabel>
             <Input
               id="end_date"
@@ -275,7 +280,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

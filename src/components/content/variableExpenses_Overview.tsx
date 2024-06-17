@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import InputVariableExpenseModal from '../minor/Modal_InputVariableExpense';
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
-import { resourceProperties as res, monthYearSelection } from '../../resources/resource_properties';
+import { resourceProperties as res } from '../../resources/resource_properties';
 import {
   getAllVariableExpenses,
   getAllVariableExpenseStores,
@@ -53,6 +53,7 @@ import ContentLineChart from '../minor/ContentChart_Line';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { ContentBooleanPieChart } from '../minor/ContentChart_BooleanPie';
 import ContentHorizontalBarChart from '../minor/ContentChart_HorizontalBar';
+import { locales } from '../../utils/localeConfiguration';
 
 const chartBackgroundProperties = (palette: Palette) => {
   return {
@@ -117,7 +118,7 @@ function extractHorizontalBarChartData(allVariableExpenses: any, palette: Palett
     });
 
   const booleanPieChartObj: ContentChartHorizontalBarObject = {
-    chartTitle: res.VARIABLE_EXPENSES_OVERVIEW_INDULGENCE_BAR_CHART_TITLE,
+    chartTitle: locales().VARIABLE_EXPENSES_OVERVIEW_INDULGENCE_BAR_CHART_TITLE,
     labels: [''], // To have only one dataset entry rendered without a label, empty label within an array has to be passed.
     dataSetCount: 6,
     skipTitle: true,
@@ -200,17 +201,17 @@ function extractPieChartData(allVariableExpenses: any, palette: Palette): Conten
     chartTitle: 'Boolean Flags',
     skipTitle: true,
     labels: [
-      res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_YES,
-      res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_NO,
-      res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_NO,
-      res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_YES
+      locales().VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_YES,
+      locales().VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_LABEL_NO,
+      locales().VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_NO,
+      locales().VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_LABEL_YES
     ],
     dataSetCount: 2,
     dataSet1: varExpensesPieChartDs1,
-    dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_TOOLTIP,
+    dataSet1Name: locales().VARIABLE_EXPENSES_OVERVIEW_IS_PLANNED_TOOLTIP,
     dataSet1Colors: pieChart1Colors,
     dataSet2: varExpensesPieChartDs2,
-    dataSet2Name: res.VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_TOOLTIP,
+    dataSet2Name: locales().VARIABLE_EXPENSES_OVERVIEW_CONTAINS_INDULGENCE_TOOLTIP,
     dataSet2Colors: pieChart2Colors
   };
   return booleanPieChartObj;
@@ -242,7 +243,8 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
-          (row: any) => row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES.toLowerCase()
+          (row: any) =>
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES.toLowerCase()
         )
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
@@ -251,7 +253,8 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
-          (row: any) => row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE.toLowerCase()
+          (row: any) =>
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE.toLowerCase()
         )
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
@@ -259,7 +262,9 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
     varExpensesVerticalBarChartDs3.push(
       allVariableExpensesFiltered
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
-        .filter((row: any) => row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT.toLowerCase())
+        .filter(
+          (row: any) => row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT.toLowerCase()
+        )
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
     );
@@ -268,10 +273,10 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
         .filter((row: any) => row.purchasing_date.substring(0, 7) === xAxisEntry)
         .filter(
           (row: any) =>
-            row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HEALTH.toLowerCase() ||
-            row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_SUPPLEMENTS.toLowerCase() ||
-            row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HYGIENE.toLowerCase() ||
-            row.category.toLowerCase() === res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_MEDICAL_EXPENSES.toLowerCase()
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HEALTH.toLowerCase() ||
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_SUPPLEMENTS.toLowerCase() ||
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_HYGIENE.toLowerCase() ||
+            row.category.toLowerCase() === locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_MEDICAL_EXPENSES.toLowerCase()
         )
         .map((row: any) => parseFloat(row.cost))
         .reduce((partialSum: number, add: number) => partialSum + add, 0)
@@ -283,13 +288,13 @@ function extractVerticalBarChartData(allVariableExpenses: any) {
     dataSet2: varExpensesVerticalBarChartDs2,
     dataSet3: varExpensesVerticalBarChartDs3,
     dataSet4: varExpensesVerticalBarChartDs3,
-    dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES,
-    dataSet2Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE,
-    dataSet3Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT,
-    dataSet4Name: res.VARIABLE_EXPENSES_OVERVIEW_CATEGORY_COMBINED_HEALTH_AND_BODY
+    dataSet1Name: locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GROCERIES,
+    dataSet2Name: locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_LEISURE,
+    dataSet3Name: locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_GIFT,
+    dataSet4Name: locales().VARIABLE_EXPENSES_OVERVIEW_CATEGORY_COMBINED_HEALTH_AND_BODY
   };
   const varExpensesBarChart = constructContentVerticalBarChartObject(
-    res.VARIABLE_EXPENSES_OVERVIEW_BAR_CHART_HEADER,
+    locales().VARIABLE_EXPENSES_OVERVIEW_BAR_CHART_HEADER,
     varExpensesVerticalBarChartXaxis,
     varExpensesVerticalBarChartDataSet,
     barChartColors
@@ -329,10 +334,10 @@ function extractLineChartData(allVariableExpenses: any, palette: Palette) {
 
   const overviewDataSets = {
     dataSet1: overviewDataset,
-    dataSet1Name: res.VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER
+    dataSet1Name: locales().VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER
   };
   const overview = constructContentLineChartObject(
-    res.VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER,
+    locales().VARIABLE_EXPENSES_OVERVIEW_LINE_CHART_HEADER,
     overviewXaxis,
     overviewDataSets,
     overviewColors
@@ -409,7 +414,7 @@ function aggregateCostsPerCategory(allVariableExpenses: any): (string | number)[
  */
 function extractAggregatedPurchaseInformation(allVariableExpenses: any, isMonthly: boolean) {
   const yearlyTotalExpenseCard = constructContentCardObject(
-    res.VARIABLE_EXPENSES_OVERVIEW_TOTAL_EXPENSES,
+    locales().VARIABLE_EXPENSES_OVERVIEW_TOTAL_EXPENSES,
     null,
     isMonthly ? '1.00' : '12.00',
     null,
@@ -463,7 +468,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   // year selection
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
   const [selectedYear, setSelectedYear] = useState<string>();
-  const [selectedMonth, setSelectedMonth] = useState<string>(monthYearSelection.ARRAY_MONTH_ALL[0][0] as string);
+  const [selectedMonth, setSelectedMonth] = useState<string>(locales().ARRAY_MONTH_ALL[0][0] as string);
   // to refresh table based on added food item after DB insertion
   const [addedItemId, setAddedItemId] = useState<number>();
   // Autocomplete Data for InputModal
@@ -534,9 +539,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const handleSelectMonth = (selected: string): void => {
     setSelectedMonth(selected);
     let filteredMonthVarExpenses;
-    const selectedMonthArr: (string | RegExp)[] = monthYearSelection.ARRAY_MONTH_ALL.filter(
-      (e) => e[0] === selected
-    )[0];
+    const selectedMonthArr: (string | RegExp)[] = locales().ARRAY_MONTH_ALL.filter((e) => e[0] === selected)[0];
     if (selectedMonthArr && selectedMonthArr[0] === res.ALL) {
       // filter all expenses by preselected year
       filteredMonthVarExpenses = allVariableExpenses.filter(
@@ -571,15 +574,15 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const handleMonthDirectionChanged = (direction: 'left' | 'right') => {
     const isPriorMonth = direction === 'left' ? true : false;
     let selectedMonthIndex = -1;
-    monthYearSelection.ARRAY_MONTH_ALL.forEach((e, i) => {
+    locales().ARRAY_MONTH_ALL.forEach((e, i) => {
       if (e[0] === selectedMonth) {
         selectedMonthIndex = i;
       }
     });
     if (isPriorMonth && selectedMonthIndex > 0) {
-      handleSelectMonth(monthYearSelection.ARRAY_MONTH_ALL[selectedMonthIndex - 1][0] as string);
+      handleSelectMonth(locales().ARRAY_MONTH_ALL[selectedMonthIndex - 1][0] as string);
     } else if (!isPriorMonth && selectedMonthIndex < 12) {
-      handleSelectMonth(monthYearSelection.ARRAY_MONTH_ALL[selectedMonthIndex + 1][0] as string);
+      handleSelectMonth(locales().ARRAY_MONTH_ALL[selectedMonthIndex + 1][0] as string);
     }
   };
   return (
@@ -608,7 +611,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               {/* MONTH SELECTION */}
               <Grid xs={12} md={3.5} xl={2.5}>
                 <Stack direction="row">
-                  <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
+                  <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
                     <React.Fragment>
                       <IconButton
                         color="inherit"
@@ -622,14 +625,14 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                   </Tooltip>
                   <Container maxWidth={false} sx={{ width: 7 / 9 }}>
                     <SelectDropdown
-                      selectLabel={res.DATE}
-                      selectItems={monthYearSelection.ARRAY_MONTH_ALL.map((e) => e[0] as string)}
+                      selectLabel={locales().GENERAL_DATE}
+                      selectItems={locales().ARRAY_MONTH_ALL.map((e) => e[0] as string)}
                       selectedValue={selectedMonth}
                       handleSelect={handleSelectMonth}
                       disabled={selectedYear ? false : true}
                     />
                   </Container>
-                  <Tooltip title={res.VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
+                  <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
                     <React.Fragment>
                       <IconButton
                         color="inherit"

@@ -13,6 +13,7 @@ import { resourceProperties as res, serverConfig } from '../../resources/resourc
 import { getCurrentFoodDiscounts, getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import InputFoodDiscountModal from '../minor/Modal_InputFoodDiscount';
 import { RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 /**
  * Extracts relevant fields from the db query result in order to populate one card for each discounted item.
@@ -26,27 +27,27 @@ function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
     const contentCardObj = {
       foodItemId: e.id,
       header: `${e.food_item} - ${e.brand}`.trim(),
-      subtitle: `${res.DEALS_GROCERY_DEALS_CONTENT_CARD_WEIGHT} ${e.weight}${res.GRAMS}`,
+      subtitle: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_WEIGHT} ${e.weight}${res.GRAMS}`,
       originalPrice: `${e.price}${res.CURRENCY_EURO}`,
       discountPrice: `${e.discount_price}${res.CURRENCY_EURO}`,
       discountPercentage: `${Math.round(e.reduced_by_pct)}${res.SYMBOL_PERCENT}`,
       store: e.store,
-      startDate: `${res.DEALS_GROCERY_DEALS_CONTENT_CARD_START_DATE_STR} ${e.discount_start_date}`,
-      endDate: `${res.DEALS_GROCERY_DEALS_CONTENT_CARD_END_DATE_STR} ${e.discount_end_date}`,
-      dealDuration: `${res.DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_DURATION_STR}: ${e.discount_days_duration} ${res.DAYS}`,
+      startDate: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_START_DATE_STR} ${e.discount_start_date}`,
+      endDate: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_END_DATE_STR} ${e.discount_end_date}`,
+      dealDuration: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_DURATION_STR}: ${e.discount_days_duration} ${locales().GENERAL_DAYS}`,
       daysLeft:
         e.starts_in_days <= 0
           ? e.ends_in_days == 1
-            ? 'noch heute und morgen gültig'
+            ? locales().DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_VALID_TODAY_TOMORROW
             : e.ends_in_days == 0
-              ? 'letzter Tag der Gültigkeit'
-              : `noch ${e.ends_in_days} Tage gültig`
+              ? locales().DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_LAST_DAY
+              : `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_ENDS_IN_DAYS_STR_1} ${e.ends_in_days} ${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_ENDS_IN_DAYS_STR_2}`
           : null,
       startsInDays:
         e.starts_in_days > 0
           ? e.starts_in_days == 1
-            ? 'gültig ab morgen'
-            : `startet in ${e.starts_in_days} Tagen`
+            ? locales().DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_VALID_FROM_TOMORROW
+            : `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_STARTS_IN_DAYS_STR_1} ${e.starts_in_days} ${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_STARTS_IN_DAYS_STR_2}`
           : null,
       details: null,
       img: imageStr
@@ -133,24 +134,24 @@ export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps): JSX
         <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow sx={tableHeadStyling}>
-              <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_FOODITEM}</TableCell>
+              <TableCell>{locales().DEALS_GROCERY_DEALS_THEADER_FOODITEM}</TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
-                {res.DEALS_GROCERY_DEALS_THEADER_BRAND}
+                {locales().DEALS_GROCERY_DEALS_THEADER_BRAND}
               </TableCell>
-              <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_STORE}</TableCell>
+              <TableCell>{locales().DEALS_GROCERY_DEALS_THEADER_STORE}</TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                {res.DEALS_GROCERY_DEALS_THEADER_ORIGINAL_PRICE}
+                {locales().DEALS_GROCERY_DEALS_THEADER_ORIGINAL_PRICE}
               </TableCell>
-              <TableCell align="right">{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PRICE}</TableCell>
+              <TableCell align="right">{locales().DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PRICE}</TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                {res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_AMOUNT}
+                {locales().DEALS_GROCERY_DEALS_THEADER_DISCOUNT_AMOUNT}
               </TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                {res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT}
+                {locales().DEALS_GROCERY_DEALS_THEADER_DISCOUNT_PCT}
               </TableCell>
-              <TableCell>{res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE}</TableCell>
+              <TableCell>{locales().DEALS_GROCERY_DEALS_THEADER_DISCOUNT_START_DATE}</TableCell>
               <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
-                {res.DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE}
+                {locales().DEALS_GROCERY_DEALS_THEADER_DISCOUNT_END_DATE}
               </TableCell>
             </TableRow>
           </TableHead>

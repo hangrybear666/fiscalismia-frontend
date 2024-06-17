@@ -7,7 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import DialogActions from '@mui/material/DialogActions';
 import Dialog from '@mui/material/Dialog';
 import { Typography } from '@mui/material';
-import { resourceProperties as res } from '../../resources/resource_properties';
+import { locales } from '../../utils/localeConfiguration';
 
 interface ConfirmationDialogProps {
   title: string;
@@ -67,7 +67,7 @@ export default function ConfirmationDialog(props: ConfirmationDialogProps) {
                 size="large"
                 onClick={handleCancel}
               >
-                {res.CANCEL}
+                {locales().GENERAL_CANCEL}
               </Button>
             </Grid>
             <Grid xs={6}>
@@ -79,7 +79,7 @@ export default function ConfirmationDialog(props: ConfirmationDialogProps) {
                 size="large"
                 onClick={handleOk}
               >
-                {confirmBtnText ? confirmBtnText : res.OK}
+                {confirmBtnText ? confirmBtnText : locales().GENERAL_CONFIRM}
               </Button>
             </Grid>
           </Grid>

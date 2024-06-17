@@ -16,12 +16,10 @@ import ScaleIcon from '@mui/icons-material/Scale';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import {
-  resourceProperties as res,
-  foodItemInputCategories as selectionCategories
-} from '../../resources/resource_properties';
+import { foodItemInputCategories as selectionCategories } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
+import { locales } from '../../utils/localeConfiguration';
 
 interface InputFoodItemModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<string>>;
@@ -112,7 +110,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!foodItem || foodItem == '' || foodItem?.length < 5) {
       errorPresent = true;
       setIsFoodItemValidationError(true);
-      setFoodItemValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_FOOD_ITEM_VALIDATION_ERROR_MSG);
+      setFoodItemValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_FOOD_ITEM_VALIDATION_ERROR_MSG);
     } else {
       setIsFoodItemValidationError(false);
       setFoodItemValidationErrorMessage('');
@@ -121,7 +119,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!brand || brand == '' || brand?.length < 4) {
       errorPresent = true;
       setIsBrandValidationError(true);
-      setBrandValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG);
+      setBrandValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_BRAND_VALIDATION_ERROR_MSG);
     } else {
       setIsBrandValidationError(false);
       setBrandValidationErrorMessage('');
@@ -130,7 +128,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!isNumeric(kcalAmount)) {
       errorPresent = true;
       setIskcalAmountValidationError(true);
-      setKcalAmountValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_KCAL_AMOUNT_VALIDATION_ERROR_MSG);
+      setKcalAmountValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_KCAL_AMOUNT_VALIDATION_ERROR_MSG);
     } else {
       setIskcalAmountValidationError(false);
       setKcalAmountValidationErrorMessage('');
@@ -139,7 +137,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!isNumeric(weight)) {
       errorPresent = true;
       setIsWeightValidationError(true);
-      setWeightValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG);
+      setWeightValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_WEIGHT_VALIDATION_ERROR_MSG);
     } else {
       setIsWeightValidationError(false);
       setWeightValidationErrorMessage('');
@@ -148,7 +146,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!isNumeric(price)) {
       errorPresent = true;
       setIsPriceValidationError(true);
-      setPriceValidationErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG);
+      setPriceValidationErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
       setIsPriceValidationError(false);
       setPriceValidationErrorMessage('');
@@ -157,7 +155,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     if (!dateValidation(lastUpdateDate).isValid) {
       errorPresent = true;
       setIsDateValidationError(true);
-      setDateErrorMessage(res.MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setDateErrorMessage(locales().MINOR_INPUT_FOOD_ITEM_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsDateValidationError(false);
       setDateErrorMessage('');
@@ -225,13 +223,13 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
         }}
         startIcon={<AddCircleIcon />}
       >
-        {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN}
+        {locales().MINOR_INPUT_FOOD_ITEM_MODAL_OPEN}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           {/* FOOD ITEM */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="food_item">{res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_FOOD_ITEM}</InputLabel>
+            <InputLabel htmlFor="food_item">{locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_FOOD_ITEM}</InputLabel>
             <Input
               id="food_item"
               value={foodItem}
@@ -248,7 +246,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           </FormControl>
           {/* BRAND */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="brand">{res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_BRAND}</InputLabel>
+            <InputLabel htmlFor="brand">{locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_BRAND}</InputLabel>
             <Input
               id="brand"
               value={brand}
@@ -267,7 +265,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           {storeSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2 }}>
               <SelectDropdown
-                selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_STORE}
+                selectLabel={locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_STORE}
                 selectItems={storeSelectItems}
                 selectedValue={selectedStore}
                 handleSelect={handleStoreSelect}
@@ -276,7 +274,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           ) : null}
           {/* PRICE */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="price">{res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_PRICE}</InputLabel>
+            <InputLabel htmlFor="price">{locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_PRICE}</InputLabel>
             <Input
               id="price"
               value={price}
@@ -293,7 +291,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           </FormControl>
           {/* WEIGHT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="weight">{res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_WEIGHT}</InputLabel>
+            <InputLabel htmlFor="weight">{locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_WEIGHT}</InputLabel>
             <Input
               id="weight"
               value={weight}
@@ -310,7 +308,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           </FormControl>
           {/* KCAL AMOUNT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="kcal_amount">{res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_KCAL_AMOUNT}</InputLabel>
+            <InputLabel htmlFor="kcal_amount">{locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_KCAL_AMOUNT}</InputLabel>
             <Input
               id="kcal_amount"
               value={kcalAmount}
@@ -329,7 +327,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           {macroSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2.5, mb: 1.5 }}>
               <SelectDropdown
-                selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MAIN_MACRO}
+                selectLabel={locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MAIN_MACRO}
                 selectItems={macroSelectItems}
                 selectedValue={selectedMacro}
                 handleSelect={handleMacroSelect}
@@ -339,7 +337,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
           {/* DATE OF LAST UPDATE */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
             <InputLabel shrink={true} htmlFor="last_update">
-              {res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE}
+              {locales().MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_LAST_UPDATE}
             </InputLabel>
             <Input
               id="last_update"
@@ -365,7 +363,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

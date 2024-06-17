@@ -1,4 +1,3 @@
-import { resourceProperties as res } from '../../resources/resource_properties';
 import { paths } from '../../resources/router_navigation_paths';
 import SavingsIcon from '@mui/icons-material/Savings';
 import EuroIcon from '@mui/icons-material/Euro';
@@ -13,47 +12,50 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-// good icons for ADD functionality
-
+import { locales } from '../../utils/localeConfiguration';
 export const menuEntries = [
   {
-    id: res.VARIABLE_EXPENSES,
+    id: locales().MENU_VARIABLE_EXPENSES,
     children: [
-      { id: res.OVERVIEW, path: paths.VARIABLE_EXPENSES_OVERVIEW, icon: <AnalyticsIcon /> },
-      { id: res.STORES, path: paths.VARIABLE_EXPENSES_STORES, icon: <StorefrontIcon /> },
-      { id: res.INDULGENCES, path: paths.VARIABLE_EXPENSES_INDULGENCES, icon: <LiquorIcon /> }
+      { id: locales().MENU_OVERVIEW, path: paths.VARIABLE_EXPENSES_OVERVIEW, icon: <AnalyticsIcon /> },
+      { id: locales().MENU_STORES, path: paths.VARIABLE_EXPENSES_STORES, icon: <StorefrontIcon /> },
+      { id: locales().MENU_INDULGENCES, path: paths.VARIABLE_EXPENSES_INDULGENCES, icon: <LiquorIcon /> }
     ]
   },
   {
-    id: res.FIXED_COSTS,
+    id: locales().MENU_FIXED_COSTS,
     children: [
-      { id: res.OVERVIEW, path: paths.FIXED_COSTS_OVERVIEW, icon: <AnalyticsIcon /> },
-      { id: res.LIVING_ESSENTIALS, path: paths.FIXED_COSTS_LIVING_ESSENTIALS, icon: <CottageIcon /> },
-      { id: res.RECREATION_RELAXATION, path: paths.FIXED_COSTS_RECREATION_RELAXATION, icon: <SportsEsportsIcon /> }
+      { id: locales().MENU_OVERVIEW, path: paths.FIXED_COSTS_OVERVIEW, icon: <AnalyticsIcon /> },
+      { id: locales().MENU_LIVING_ESSENTIALS, path: paths.FIXED_COSTS_LIVING_ESSENTIALS, icon: <CottageIcon /> },
+      {
+        id: locales().MENU_RECREATION_RELAXATION,
+        path: paths.FIXED_COSTS_RECREATION_RELAXATION,
+        icon: <SportsEsportsIcon />
+      }
     ]
   },
   {
-    id: res.INCOME,
+    id: locales().MENU_INCOME,
     children: [
-      { id: res.OVERVIEW, path: paths.INCOME_OVERVIEW, icon: <AnalyticsIcon /> },
-      { id: res.MONTHLY_BUDGET, path: paths.INCOME_MONTHLY_BUDGET, icon: <EuroIcon /> },
-      { id: res.INVESTMENTS, path: paths.INCOME_INVESTMENTS, icon: <SavingsIcon /> },
-      { id: res.PORTFOLIO, path: paths.INCOME_PORTFOLIO, icon: <ShowChartIcon /> },
-      { id: res.SALES, path: paths.INCOME_SALES, icon: <CreditScoreIcon /> }
+      { id: locales().MENU_OVERVIEW, path: paths.INCOME_OVERVIEW, icon: <AnalyticsIcon /> },
+      { id: locales().MENU_MONTHLY_BUDGET, path: paths.INCOME_MONTHLY_BUDGET, icon: <EuroIcon /> },
+      { id: locales().MENU_INVESTMENTS, path: paths.INCOME_INVESTMENTS, icon: <SavingsIcon /> },
+      { id: locales().MENU_PORTFOLIO, path: paths.INCOME_PORTFOLIO, icon: <ShowChartIcon /> },
+      { id: locales().MENU_SALES, path: paths.INCOME_SALES, icon: <CreditScoreIcon /> }
     ]
   },
   {
-    id: res.DEALS,
+    id: locales().MENU_DEALS,
     children: [
-      { id: res.OVERVIEW, path: paths.DEALS_OVERVIEW, icon: <PercentIcon /> },
-      { id: res.FOOD_PRICES, path: paths.DEALS_FOOD_PRICES, icon: <ShoppingCartIcon /> },
-      { id: res.GROCERY_DEALS, path: paths.DEALS_GROCERY_DEALS, icon: <AddShoppingCartIcon /> }
+      { id: locales().MENU_OVERVIEW, path: paths.DEALS_OVERVIEW, icon: <PercentIcon /> },
+      { id: locales().MENU_FOOD_PRICES, path: paths.DEALS_FOOD_PRICES, icon: <ShoppingCartIcon /> },
+      { id: locales().MENU_GROCERY_DEALS, path: paths.DEALS_GROCERY_DEALS, icon: <AddShoppingCartIcon /> }
     ]
   },
   {
-    id: res.ADMIN_PANEL,
+    id: locales().MENU_ADMIN_PANEL,
     children: [
-      { id: res.UPLOAD_AREA, path: paths.ADMIN_UPLOAD_AREA, icon: <FileUploadIcon /> }
+      { id: locales().MENU_UPLOAD_AREA, path: paths.ADMIN_UPLOAD_AREA, icon: <FileUploadIcon /> }
       // { id: 'TEST 1', path: 'admin/test1', icon: <FileUploadIcon /> }
     ]
   }

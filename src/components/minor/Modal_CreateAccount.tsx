@@ -12,9 +12,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { resourceProperties as res } from '../../resources/resource_properties';
 import { createUserCredentials } from '../../services/pgConnections';
 import { UserCredentials } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 const style = {
   position: 'absolute',
@@ -78,7 +78,7 @@ export default function CreateAccountModal() {
     if (!username) {
       errorPresent = true;
       setIsUsernameValidationError(true);
-      setUsernameValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1);
+      setUsernameValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1);
     } else {
       setIsUsernameValidationError(false);
       setUsernameValidationErrorMessage('');
@@ -86,7 +86,7 @@ export default function CreateAccountModal() {
     if (username?.length < 3) {
       errorPresent = true;
       setIsUsernameValidationError(true);
-      setUsernameValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2);
+      setUsernameValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2);
     } else {
       setIsUsernameValidationError(false);
       setUsernameValidationErrorMessage('');
@@ -94,7 +94,7 @@ export default function CreateAccountModal() {
     if (!password) {
       errorPresent = true;
       setIsPasswordValidationError(true);
-      setPasswordValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1);
+      setPasswordValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1);
     } else {
       setIsPasswordValidationError(false);
       setPasswordValidationErrorMessage('');
@@ -102,7 +102,7 @@ export default function CreateAccountModal() {
     if (password?.length < 8) {
       errorPresent = true;
       setIsPasswordValidationError(true);
-      setPasswordValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2);
+      setPasswordValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2);
     } else {
       setIsPasswordValidationError(false);
       setPasswordValidationErrorMessage('');
@@ -110,7 +110,7 @@ export default function CreateAccountModal() {
     if (!regExEmail.test(email)) {
       errorPresent = true;
       setIsEmailValidationError(true);
-      setEmailValidationErrorMessage(res.MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1);
+      setEmailValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1);
     } else {
       setIsEmailValidationError(false);
       setEmailValidationErrorMessage('');
@@ -142,14 +142,14 @@ export default function CreateAccountModal() {
   return (
     <>
       <Button onClick={handleOpen} fullWidth color="secondary" variant="outlined" sx={{ mb: 2 }}>
-        {res.CREATE_ACCOUNT}
+        {locales().GENERAL_CREATE_ACCOUNT}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           {/* USERNAME */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel color="secondary" htmlFor="create_username">
-              {res.USERNAME}
+              {locales().GENERAL_USERNAME}
             </InputLabel>
             <Input
               id="create_username"
@@ -169,7 +169,7 @@ export default function CreateAccountModal() {
           {/* EMAIL */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel color="secondary" htmlFor="create_email">
-              {res.EMAIL}
+              {locales().GENERAL_EMAIL}
             </InputLabel>
             <Input
               id="create_email"
@@ -189,7 +189,7 @@ export default function CreateAccountModal() {
           {/* PASSWORD */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel color="secondary" htmlFor="create_password">
-              {res.PASSWORD}
+              {locales().GENERAL_PASSWORD}
             </InputLabel>
             <Input
               id="create_password"
@@ -222,7 +222,7 @@ export default function CreateAccountModal() {
             color="secondary"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

@@ -19,6 +19,7 @@ import {
   constructContentLineChartObject
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 /**
  * @param {*} allFixedIncome all fixed income data within db
@@ -69,10 +70,10 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
 
   const incomeDataSets = {
     dataSet1: overviewDataset,
-    dataSet1Name: res.INCOME_MONTHLY_NET_INCOME,
+    dataSet1Name: locales().INCOME_MONTHLY_NET_INCOME,
     dataSet1Order: 1, // Datasets with higher order are drawn first
     dataSet2: costsDataset,
-    dataSet2Name: res.INCOME_MONTHLY_FIXED_COSTS,
+    dataSet2Name: locales().INCOME_MONTHLY_FIXED_COSTS,
     dataSet2Order: 0
   };
 
@@ -83,7 +84,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
     .map((e) => e.substring(0, 10))
     .sort((a, b) => (a > b ? 1 : -1)); // ASC sorted so left side of x axis starts with prior date
   const overview = constructContentLineChartObject(
-    res.INCOME_MONTHLY_BUDGET_CHART_HEADER,
+    locales().INCOME_MONTHLY_BUDGET_CHART_HEADER,
     xAxisArray,
     incomeDataSets,
     colors
@@ -100,9 +101,16 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
  * @returns
  */
 function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
-  const monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
+  const monthlyNetIncome = constructContentCardObject(
+    locales().INCOME_NET_INCOME,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
   const oneTimeYearlyBonus = constructContentCardObject(
-    res.INCOME_ONE_TIME_BONUS,
+    locales().INCOME_ONE_TIME_BONUS,
     null,
     '12.00',
     null,
@@ -110,7 +118,7 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
     res.NO_IMG
   );
   const monthlyTotalCost = constructContentCardObject(
-    res.INCOME_FIXED_COST_CARD_HEADER,
+    locales().INCOME_FIXED_COST_CARD_HEADER,
     null,
     '1.00',
     null,
@@ -137,7 +145,7 @@ function extractCardData(specificFixedIncome: any, specificFixedCosts: any) {
   monthlyTotalCost.amount = specificFixedCosts.results
     .map((row: any) => row.monthly_cost)
     .reduce((partialSum: number, add: number) => partialSum + add, 0);
-  monthlyTotalCost.details = [res.LIVING_ESSENTIALS, res.RECREATION_RELAXATION];
+  monthlyTotalCost.details = [locales().MENU_LIVING_ESSENTIALS, locales().MENU_RECREATION_RELAXATION];
   return { monthlyNetIncome, oneTimeYearlyBonus, monthlyTotalCost };
 }
 
@@ -214,7 +222,7 @@ export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps
         <Grid xs={0} xl={1.5}></Grid>
         <Grid xs={12} xl={9}>
           <SelectDropdown
-            selectLabel={res.DATE}
+            selectLabel={locales().GENERAL_DATE}
             selectItems={effectiveDateSelectItems}
             selectedValue={selectedEffectiveDate}
             handleSelect={handleSelect}

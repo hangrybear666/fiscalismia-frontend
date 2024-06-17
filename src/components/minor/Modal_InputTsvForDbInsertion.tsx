@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { resourceProperties as res } from '../../resources/resource_properties';
+import { locales } from '../../utils/localeConfiguration';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
@@ -127,7 +127,7 @@ export default function InputTsvForDbInsertionModal(props: InputTsvForDbInsertio
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

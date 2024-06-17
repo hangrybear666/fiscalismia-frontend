@@ -25,6 +25,7 @@ import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TwelveCharacterString } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface InputInvestmentTaxesModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
@@ -73,8 +74,8 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
   const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(
     selectionCategories.ARRAY_INVESTMENT_TYPE[0]
   );
-  const [marketplaceSelectItems] = React.useState(selectionCategories.ARRAY_MARKETPLACE);
-  const [selectedMarketplace, setSelectedMarketplace] = React.useState(selectionCategories.ARRAY_MARKETPLACE[0]);
+  const [marketplaceSelectItems] = React.useState(locales().ARRAY_MARKETPLACE);
+  const [selectedMarketplace, setSelectedMarketplace] = React.useState(locales().ARRAY_MARKETPLACE[0]);
   const [orderTypeArray] = React.useState(new Array(selectionCategories.ARRAY_ORDER_TYPE));
   const [selectedOrderType, setSelectedOrderType] = React.useState(selectionCategories.ARRAY_ORDER_TYPE[0]);
   const handleOpen = () => setOpen(true);
@@ -135,7 +136,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     if (!isNumeric(fees)) {
       errorPresent = true;
       setIsFeeValidationError(true);
-      setFeeValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
+      setFeeValidationErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
     } else {
       setIsFeeValidationError(false);
       setFeeValidationErrorMessage('');
@@ -144,7 +145,9 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     if (!isNumeric(unitPrice) || parseInt(Number(unitPrice).toFixed(0)) < 0) {
       errorPresent = true;
       setIsUnitPriceValidationError(true);
-      setUnitPriceValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG);
+      setUnitPriceValidationErrorMessage(
+        locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PRICE_VALIDATION_ERROR_MSG
+      );
     } else {
       setIsUnitPriceValidationError(false);
       setUnitPriceValidationErrorMessage('');
@@ -153,7 +156,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     if (!dateValidation(executionDate).isValid) {
       errorPresent = true;
       setIsDateValidationError(true);
-      setDateErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
+      setDateErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_GENERIC_DATE_VALIDATION_ERROR_MSG);
     } else {
       setIsDateValidationError(false);
       setDateErrorMessage('');
@@ -162,7 +165,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     if (!isNumeric(units) || parseInt(Number(units).toFixed(0)) < 0) {
       errorPresent = true;
       setIsUnitsValidationError(true);
-      setUnitsValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG);
+      setUnitsValidationErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG);
     } else {
       setIsUnitsValidationError(false);
       setUnitsValidationErrorMessage('');
@@ -171,7 +174,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     if (!isin || isin == '' || isin?.length != 12 || !stringAlphabeticOnly(isin.substring(0, 2))) {
       errorPresent = true;
       setIsIsinValidationError(true);
-      setIsinValidationErrorMessage(res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG);
+      setIsinValidationErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG);
     } else {
       setIsIsinValidationError(false);
       setIsinValidationErrorMessage('');
@@ -181,7 +184,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
       errorPresent = true;
       setIsDescriptionValidationError(true);
       setDescriptionValidationErrorMessage(
-        res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG
+        locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG
       );
     } else {
       setIsDescriptionValidationError(false);
@@ -198,7 +201,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
         errorPresent = true;
         setIsPctTaxedValidationError(true);
         setPctTaxedValidationErrorMessage(
-          res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG
+          locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PCT_TAXED_VALIDATION_ERROR_MSG
         );
       } else {
         setIsPctTaxedValidationError(false);
@@ -209,7 +212,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
         errorPresent = true;
         setIsProfitAmtValidationError(true);
         setProfitAmtValidationErrorMessage(
-          res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG
+          locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG
         );
       } else {
         setIsProfitAmtValidationError(false);
@@ -286,7 +289,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
         }}
         startIcon={<AddCircleIcon />}
       >
-        {res.MINOR_INPUT_FOOD_ITEM_MODAL_OPEN_BUTTON}
+        {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_OPEN_BUTTON}
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -342,7 +345,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           {investmentTypeSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2.5 }}>
               <SelectDropdown
-                selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_INVESTMENT_TYPE_SELECT}
+                selectLabel={locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_INVESTMENT_TYPE_SELECT}
                 selectItems={investmentTypeSelectItems}
                 selectedValue={selectedInvestmentType}
                 handleSelect={handleInvestmentTypeSelect}
@@ -353,7 +356,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           {marketplaceSelectItems ? (
             <Box sx={{ ml: 1, mr: 0, mt: 2.5, mb: 1.5 }}>
               <SelectDropdown
-                selectLabel={res.MINOR_INPUT_FOOD_ITEM_MODAL_INPUT_MARKETPLACE_SELECT}
+                selectLabel={locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_MARKETPLACE_SELECT}
                 selectItems={marketplaceSelectItems}
                 selectedValue={selectedMarketplace}
                 handleSelect={handleMarketplaceSelect}
@@ -363,7 +366,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           {/* DESCRIPTION */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor="description">
-              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_DESCRIPTION}
+              {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_DESCRIPTION}
             </InputLabel>
             <Input
               id="description"
@@ -381,7 +384,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           </FormControl>
           {/* ISIN */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="isin">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_ISIN}</InputLabel>
+            <InputLabel htmlFor="isin">{locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_ISIN}</InputLabel>
             <Input
               id="isin"
               value={isin}
@@ -398,7 +401,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           </FormControl>
           {/* UNITS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="units">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNITS}</InputLabel>
+            <InputLabel htmlFor="units">{locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNITS}</InputLabel>
             <Input
               id="units"
               value={units}
@@ -416,7 +419,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           {/* UNIT PRICE */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
             <InputLabel htmlFor="unit_price">
-              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE}
+              {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE}
             </InputLabel>
             <Input
               id="unit_price"
@@ -434,7 +437,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           </FormControl>
           {/* FEES */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="fees">{res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_FEES}</InputLabel>
+            <InputLabel htmlFor="fees">{locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_FEES}</InputLabel>
             <Input
               id="fees"
               value={fees}
@@ -454,7 +457,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
               {/* PROFIT AMOUNT */}
               <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                 <InputLabel htmlFor="profit_amt">
-                  {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PROFIT_AMT}
+                  {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PROFIT_AMT}
                 </InputLabel>
                 <Input
                   id="profit_amt"
@@ -473,7 +476,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
               {/* PERCENTAGE OF PROFITS TAXED */}
               <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                 <InputLabel htmlFor="pct_taxed">
-                  {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}
+                  {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_PCT_TAXED}
                 </InputLabel>
                 <Input
                   id="pct_taxed"
@@ -494,7 +497,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           {/* EXECUTION DATE */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
             <InputLabel htmlFor="execution_date">
-              {res.MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE}
+              {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_EXECUTION_DATE}
             </InputLabel>
             <Input
               id="execution_date"
@@ -520,7 +523,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
             variant="contained"
             endIcon={<FileDownloadDoneIcon />}
           >
-            {res.SAVE}
+            {locales().GENERAL_SAVE}
           </Button>
         </Box>
       </Modal>

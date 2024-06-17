@@ -24,6 +24,7 @@ import { postUpdatedUserSettings } from '../../services/pgConnections';
 import { useAuth } from '../../services/userAuthentication';
 import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import { AuthInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface SettingsAndProfileAppBarProps {
   onDrawerToggle: () => void;
@@ -167,7 +168,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
           </Menu>
 
           {/* SETTINGS Icon */}
-          <Tooltip title={res.SETTINGS}>
+          <Tooltip title={locales().GENERAL_SETTINGS}>
             <IconButton color="inherit" onClick={handleSettingsMenuDropdown} size="large">
               <SettingsIcon />
             </IconButton>
@@ -199,7 +200,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
                   whiteSpace: 'pre'
                 }}
               >
-                {`${res.LOGGED_IN_AS}  ${window.localStorage.getItem(localStorageKeys.loginUserName)}`}
+                {`${locales().LOGGED_IN_AS}  ${window.localStorage.getItem(localStorageKeys.loginUserName)}`}
               </Typography>
             </MenuItem>
             <MenuItem onClick={handleColorModeChange}>
@@ -207,7 +208,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
                 {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
               </ListItemIcon>
               <Typography sx={{ whiteSpace: 'pre' }}>
-                {`${res.SELECTED_MODE}    ${currentColorMode ? currentColorMode : ''}`}
+                {`${locales().SELECTED_MODE_STR}    ${currentColorMode ? currentColorMode : ''}`}
               </Typography>
             </MenuItem>
             <MenuItem onClick={handlePaletteChange}>
@@ -215,7 +216,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
                 <ColorLensIcon />
               </ListItemIcon>
               <Typography sx={{ whiteSpace: 'pre' }}>
-                {`${res.SELECTED_PALETTE}    ${currentPalette ? currentPalette : ''}`}
+                {`${locales().SELECTED_PALETTE_STR}    ${currentPalette ? currentPalette : ''}`}
               </Typography>
             </MenuItem>
             <MenuItem onClick={handleLanguageChange}>
@@ -223,7 +224,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
                 <FlagCircleIcon />
               </ListItemIcon>
               <Typography sx={{ whiteSpace: 'pre' }}>
-                {`${res.SELECTED_LANGUAGE}    ${
+                {`${locales().SELECTED_LANGUAGE_STR}    ${
                   currentLanguage === 'en_US'
                     ? getUnicodeFlagIcon('US') + ' ' + currentLanguage
                     : getUnicodeFlagIcon('DE') + ' ' + currentLanguage

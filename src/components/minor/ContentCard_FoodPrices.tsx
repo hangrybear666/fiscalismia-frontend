@@ -39,6 +39,7 @@ import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../service
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
+import { locales } from '../../utils/localeConfiguration';
 
 const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -267,7 +268,7 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
                 variant="contained"
                 startIcon={<CloudUploadIcon />}
               >
-                {res.UPLOAD_IMG}
+                {locales().GENERAL_UPLOAD_IMG}
                 <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
               </Button>
             </Paper>

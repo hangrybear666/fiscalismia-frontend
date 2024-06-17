@@ -18,6 +18,7 @@ import { Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
 import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends';
 import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface CustomBoughtSoldChipProps {
   value: string;
@@ -129,13 +130,19 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
             <React.Fragment>
               <Stack>
                 <Typography sx={{ color: palette.primary.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS + grossProfit?.toFixed(2) + ' ' + res.CURRENCY_EURO}
+                  {locales().INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS +
+                    grossProfit?.toFixed(2) +
+                    ' ' +
+                    res.CURRENCY_EURO}
                 </Typography>
                 <Typography sx={{ color: palette.error.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT + taxPaid?.toFixed(2) + ' ' + res.CURRENCY_EURO}
+                  {locales().INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT + taxPaid?.toFixed(2) + ' ' + res.CURRENCY_EURO}
                 </Typography>
                 <Typography sx={{ color: palette.success.main }}>
-                  {res.INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET + netProfit?.toFixed(2) + ' ' + res.CURRENCY_EURO}
+                  {locales().INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET +
+                    netProfit?.toFixed(2) +
+                    ' ' +
+                    res.CURRENCY_EURO}
                 </Typography>
               </Stack>
             </React.Fragment>
@@ -181,32 +188,32 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 1.5, minWidth: 200 },
         {
           field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
-          headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
+          headerName: locales().INCOME_INVESTMENTS_COL_HEADER_ISIN,
           cellRenderer: IsinNationalFlagRenderer,
           minWidth: 150
         },
         {
           field: res.INCOME_INVESTMENTS_DB_COL_NAME_INVESTMENT_TYPE,
-          headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE,
+          headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TYPE,
           flex: 0.5
         },
         { field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS, valueFormatter: unitsFormatter, flex: 0.5 },
         {
           field: res.INCOME_INVESTMENTS_DB_COL_NAME_PRICE_PER_UNIT,
-          headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
+          headerName: locales().INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
           valueFormatter: currencyFormatter,
           flex: 0.5
         },
         { field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES, valueFormatter: currencyFormatter, flex: 0.5 },
         {
           field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
-          headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+          headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TOTAL,
           valueFormatter: currencyFormatter,
           flex: 0.5
         },
         {
           field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_DATE,
-          headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
+          headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
           cellRenderer: DateCellFormatter,
           minWidth: 135
         }
@@ -296,7 +303,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
     setInvestmentColumnDefinitions([
       { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
       {
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_TYPE,
         cellRenderer: (p: any) => <CustomBoughtSoldChip value={p.value} />,
         minWidth: 80,
@@ -306,44 +313,58 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           justifyContent: 'center'
         })
       },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 2, minWidth: 200 },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DESCRIPTION,
+        flex: 2,
+        minWidth: 200
+      },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
         filter: false,
         minWidth: 160
       },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_INVESTMENT_TYPE, headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_MARKETPLACE, floatingFilter: false },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_INVESTMENT_TYPE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TYPE
+      },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_MARKETPLACE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_MARKETPLACE,
+        floatingFilter: false
+      },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_UNITS,
         valueFormatter: unitsFormatter,
         floatingFilter: false,
         filter: false
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_PRICE_PER_UNIT,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE,
         valueFormatter: currencyFormatter,
         floatingFilter: false
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_FEES,
         valueFormatter: currencyFormatter,
         floatingFilter: false,
         filter: false
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TOTAL,
         cellRenderer: SalesProfitMinusTaxes,
         floatingFilter: false,
         minWidth: 140
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_DATE,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
       }
@@ -356,7 +377,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       // { field: "id", },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_COUNT,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_AGGREGATE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_AGGREGATE,
         cellRenderer: (p: any) => <VisualizeOnAggregateRows value={p.value} investments={p.data.investments} />,
         filter: false,
         minWidth: 70,
@@ -366,39 +387,52 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
           justifyContent: 'center'
         })
       },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION, flex: 2, minWidth: 200 },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_DESCRIPTION,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DESCRIPTION,
+        flex: 2,
+        minWidth: 200
+      },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_ISIN,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
         filter: false,
         minWidth: 160
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_AMOUNT,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_DIVIDEND,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DIVIDEND,
         valueFormatter: currencyFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_PCT_OF_TOTAL,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_PCT_OF_TOTAL,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_PCT_OF_TOTAL,
         valueFormatter: percentageFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_AVG_PPU,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE,
         valueFormatter: currencyFormatter
       },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS, valueFormatter: unitsFormatter },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_UNITS,
+        valueFormatter: unitsFormatter
+      },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TOTAL,
         valueFormatter: currencyFormatter
       },
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES, valueFormatter: currencyFormatter },
+      {
+        field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_FEES,
+        valueFormatter: currencyFormatter
+      },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_DATE,
-        headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE,
+        headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
       }

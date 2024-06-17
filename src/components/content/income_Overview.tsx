@@ -14,6 +14,7 @@ import {
   getUniqueEffectiveDates
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 /**
  *
@@ -48,10 +49,10 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
 
   const overviewDataSets = {
     dataSet1: overviewDataset,
-    dataSet1Name: res.INCOME_YEARLY_GROSS_INCOME
+    dataSet1Name: locales().INCOME_YEARLY_GROSS_INCOME
   };
   const overview = constructContentLineChartObject(
-    res.INCOME_YEARLY_GROSS_INCOME,
+    locales().INCOME_YEARLY_GROSS_INCOME,
     overviewXaxis,
     overviewDataSets,
     overviewColors
@@ -67,11 +68,32 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
  * @returns
  */
 function extractCardData(specificFixedIncome: any) {
-  const monthlyNetIncome = constructContentCardObject(res.INCOME_NET_INCOME, null, '1.00', null, null, res.NO_IMG);
-  const monthlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '1.00', null, null, res.NO_IMG);
-  const yearlyGrossIncome = constructContentCardObject(res.INCOME_GROSS_INCOME, null, '12.00', null, null, res.NO_IMG);
+  const monthlyNetIncome = constructContentCardObject(
+    locales().INCOME_NET_INCOME,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  const monthlyGrossIncome = constructContentCardObject(
+    locales().INCOME_GROSS_INCOME,
+    null,
+    '1.00',
+    null,
+    null,
+    res.NO_IMG
+  );
+  const yearlyGrossIncome = constructContentCardObject(
+    locales().INCOME_GROSS_INCOME,
+    null,
+    '12.00',
+    null,
+    null,
+    res.NO_IMG
+  );
   const oneTimeYearlyBonus = constructContentCardObject(
-    res.INCOME_ONE_TIME_BONUS,
+    locales().INCOME_ONE_TIME_BONUS,
     null,
     '12.00',
     null,
@@ -190,7 +212,7 @@ export default function Income_Overview(_props: Income_OverviewProps) {
             <Grid container spacing={3}>
               <Grid xs={12}>
                 <SelectDropdown
-                  selectLabel={res.DATE}
+                  selectLabel={locales().GENERAL_DATE}
                   selectItems={effectiveDateSelectItems}
                   selectedValue={selectedEffectiveDate}
                   handleSelect={handleSelect}
