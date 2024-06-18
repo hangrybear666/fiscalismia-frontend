@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -10,6 +11,9 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
@@ -60,19 +64,20 @@ export default function InputTsvForDbInsertionModal(props: InputTsvForDbInsertio
   const transformTsvToInsertStatements = async () => {
     const result = await postTsvInputMethod(tsvInput);
     if (result?.status == 200 && result?.data?.length != 0) {
-      console.log('INSERT STATEMENTS CREATED ');
+      toast.success('Insert Statements successfully created.', toastOptions);
       setTsvInput(result.data);
     } else if (result?.data?.length == 0) {
+      toast.warn('Response data came back empty. Check Developer console.', toastOptions);
       console.error(result.response);
-      setTsvInput('RESPONSE DATA IS EMPTY');
+      setTsvInput('');
     } else if (result?.response?.data?.error) {
-      console.log('REQUEST FAILED WITH ERROR:');
+      toast.error('Request failed with error. Check Developer console.', toastOptions);
       console.error(result.response.data.error);
-      setTsvInput(JSON.stringify(result.response.data.error));
+      setTsvInput('');
     } else {
-      console.log('transformTsvToInsertStatements failed for unknown reason');
-      console.error(result.response);
-      setTsvInput('unknown error');
+      toast.error('TSV conversion failed for unknown reason. Check Developer console.', toastOptions);
+      console.log(result.response);
+      setTsvInput('');
     }
   };
 

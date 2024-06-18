@@ -26,6 +26,9 @@ import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOn
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputInvestmentTaxesModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
@@ -113,19 +116,27 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     };
     const response = await postInvestments(investmentAndTaxesObject);
     if (response?.results[0]?.id) {
-      // this setter is called to force the frontend to update and refetch the data from db
-      console.log('SUCCESSFULLY added investments to DB:'); // TODO mit Growl und ID ersetzen
-      console.log(response.results[0]);
+      toast.success(locales().NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_SUCCESSFULLY(response.results[0].id), {
+        ...toastOptions,
+        autoClose: 7000
+      });
       if (selectedOrderType === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY && response?.taxesResults[0]?.id) {
-        console.log('SUCCESSFULLY added investment_taxes to DB:'); // TODO mit Growl und ID ersetzen
-        console.log(response.taxesResults[0]);
+        if (response?.taxesResults[0]?.id) {
+          toast.success(
+            locales().NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_TAXES_SUCCESSFULLY(response.taxesResults[0].id),
+            {
+              ...toastOptions,
+              autoClose: 7000
+            }
+          );
+        }
       }
       setOpen(false);
+      // this setter is called to force the frontend to update and refetch the data from db
       // to refresh parent's table based on added food item after DB insertion
       refreshParent(Number(response.results[0].id));
     } else {
-      // TODO User Notification
-      console.error(response);
+      toast.error(locales().NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_ERROR, toastOptions);
     }
   };
 
@@ -380,7 +391,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{descriptionValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{descriptionValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* ISIN */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -397,7 +408,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{isinValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{isinValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* UNITS */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -414,7 +425,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{unitsValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{unitsValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* UNIT PRICE */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -433,7 +444,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{unitPriceValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{unitPriceValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* FEES */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -450,7 +461,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{feeValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{feeValidationErrorMessage}</FormHelperText>
           </FormControl>
           {isOrderTypeSale ? (
             <>
@@ -471,7 +482,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                     </InputAdornment>
                   }
                 />
-                <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{profitAmtValidationErrorMessage}</FormHelperText>
+                <FormHelperText sx={{ color: palette.error.main }}>{profitAmtValidationErrorMessage}</FormHelperText>
               </FormControl>
               {/* PERCENTAGE OF PROFITS TAXED */}
               <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -490,7 +501,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
                     </InputAdornment>
                   }
                 />
-                <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{pctTaxedValidationErrorMessage}</FormHelperText>
+                <FormHelperText sx={{ color: palette.error.main }}>{pctTaxedValidationErrorMessage}</FormHelperText>
               </FormControl>
             </>
           ) : null}
@@ -506,7 +517,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
               type="date"
               error={isDateValidationError}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{dateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{dateErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

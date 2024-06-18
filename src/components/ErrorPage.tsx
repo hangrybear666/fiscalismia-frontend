@@ -55,6 +55,7 @@ export default function ErrorPage(props: ErrorPageProps): JSX.Element {
       data: error.data
     });
   }
+  // eslint-disable-next-line no-console
   console.error(`ErrorPage routerError is: ${error}`);
 
   if (props.isNoMatch) {

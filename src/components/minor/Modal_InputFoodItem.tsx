@@ -18,8 +18,10 @@ import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { foodItemInputCategories as selectionCategories } from '../../resources/resource_properties';
 import { postNewFoodItem } from '../../services/pgConnections';
-import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
+import { isNumeric, dateValidation, initializeReactDateInput, toastOptions } from '../../utils/sharedFunctions';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 interface InputFoodItemModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<string>>;
@@ -91,15 +93,13 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
     };
     const response = await postNewFoodItem(foodItemObj);
     if (response?.results[0]?.id) {
+      toast.success(locales().NOTIFICATIONS_FOOD_ITEM_INSERTED_SUCCESSFULLY(response.results[0].id), toastOptions);
       // this setter is called to force the frontend to update and refetch the data from db
-      console.log('SUCCESSFULLY added food item to DB:'); // TODO mit Growl und ID ersetzen
-      console.log(response.results[0]);
       setOpen(false);
       // to refresh parent's table based on added food item after DB insertion
       refreshParent(response.results[0].id);
     } else {
-      // TODO User Notification
-      console.error(response);
+      toast.error(locales().NOTIFICATIONS_FOOD_ITEM_INSERTED_ERROR, toastOptions);
     }
   };
 
@@ -242,7 +242,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{foodItemValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{foodItemValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* BRAND */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -259,7 +259,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{brandValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{brandValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* STORE */}
           {storeSelectItems ? (
@@ -287,7 +287,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{priceValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{priceValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* WEIGHT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -304,7 +304,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{weightValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{weightValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* KCAL AMOUNT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -321,7 +321,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{kcalAmountValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{kcalAmountValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* MACRO CATEGORY */}
           {macroSelectItems ? (
@@ -346,7 +346,7 @@ export default function InputFoodItemModal(props: InputFoodItemModalProps) {
               error={isDateValidationError}
               onChange={inputChangeListener}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{dateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{dateErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

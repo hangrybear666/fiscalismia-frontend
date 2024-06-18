@@ -169,13 +169,13 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
       setNotificationSeverity('success');
       setOpen(true);
     } else if (response?.status == 409) {
-      console.error(response.data);
+      // console.error(response.data);
       // User Notification via Snackbar
       setNotificationMessage('STATUS 409: choose a different image.');
       setNotificationSeverity('error');
       setOpen(true);
     } else if (response?.status == 400) {
-      console.error(response.data);
+      // console.error(response.data);
       // User Notification via Snackbar
       setNotificationMessage('STATUS 400: image could not be processed.');
       setNotificationSeverity('error');

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useContext, createContext } from 'react';
 import axios from 'axios';
 import { Navigate, useLocation, Outlet } from 'react-router-dom';
@@ -110,14 +111,14 @@ export const ProtectedRoute = () => {
     },
     (error) => {
       if (error.response.status === 401) {
-        console.info('USER NOT AUTHENTICATED WITH DB');
+        console.error('USER NOT AUTHENTICATED WITH DB');
         window.localStorage.setItem(localStorageKeys.authenticated, 'false');
       }
       return error;
     }
   );
   if (token && !isUserTokenValid(token, loginUserName)) {
-    console.info('PROTECTED ROUTE ACCESS [DENIED]');
+    console.error('PROTECTED ROUTE ACCESS [DENIED]');
     window.localStorage.setItem(localStorageKeys.authenticated, 'false');
   }
   if (window.localStorage.getItem(localStorageKeys.authenticated) !== 'true') {

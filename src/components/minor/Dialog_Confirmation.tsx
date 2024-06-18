@@ -62,7 +62,7 @@ export default function ConfirmationDialog(props: ConfirmationDialogProps) {
               <Button
                 sx={buttonStyle}
                 fullWidth={true}
-                color="error"
+                color="primary"
                 variant="contained"
                 size="large"
                 onClick={handleCancel}
@@ -75,7 +75,7 @@ export default function ConfirmationDialog(props: ConfirmationDialogProps) {
                 sx={buttonStyle}
                 fullWidth={true}
                 variant="contained"
-                color="primary"
+                color="error"
                 size="large"
                 onClick={handleOk}
               >

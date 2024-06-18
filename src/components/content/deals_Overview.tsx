@@ -22,6 +22,8 @@ import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 import { updateFoodItemPrice, deleteFoodItem } from '../../services/pgConnections';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import {
   DateCellFormatter,
   currencyFormatter,
@@ -29,7 +31,8 @@ import {
   gramsFormatter,
   isNumeric,
   dateValidation,
-  initializeReactDateInput
+  initializeReactDateInput,
+  toastOptions
 } from '../../utils/sharedFunctions';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
 import { RouteInfo } from '../../types/custom/customTypes';
@@ -75,16 +78,13 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
 
     const deleteRow = async () => {
       const response = await deleteFoodItem(data.id);
-      if (response?.results[0]?.id) {
+      if ((response?.results[0]?.id && response.results[0].id) === data.id) {
         // this setter is called to force the frontend to update and refetch the data from db
-        console.log('SUCCESSFULLY deleted row from DB:'); // TODO mit Growl und ID ersetzen
-        console.log(response.results[0]);
-        // to refresh parent's table based on updated food item after successfull PUT request
-        // concatenating id to price guarantees that refresh is only triggered if price changes compared to a prior update
+        toast.success(locales().NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY(data.id), toastOptions);
+        // to refresh parent's table based on updated food item after successful DELETE request
         refreshParent(response.results[0].id);
       } else {
-        // TODO User Notification
-        console.error(response);
+        toast.error(locales().NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR, toastOptions);
       }
     };
     return (
@@ -180,17 +180,15 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
         lastUpdate: new Date(lastUpdateDate)
       };
       const response = await updateFoodItemPrice(props.id, foodItemUpdateObject);
-      if (response?.results[0]?.id) {
+      if (response?.results[0]?.id && response.results[0].id === props.id) {
+        toast.success(locales().NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_SUCCESSFULLY, toastOptions);
         // this setter is called to force the frontend to update and refetch the data from db
-        console.log('SUCCESSFULLY updated price in DB:'); // TODO mit Growl und ID ersetzen
-        console.log(response.results[0]);
         setPriceUpdateOpen(false);
         // to refresh parent's table based on updated food item after successfull PUT request
         // concatenating id to price guarantees that refresh is only triggered if price changes compared to a prior update
         props.refreshParent(String(response.results[0].id).concat(String(response?.results[0]?.price)));
       } else {
-        // TODO User Notification
-        console.error(response);
+        toast.error(locales().NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_ERROR, toastOptions);
       }
     };
 
@@ -221,7 +219,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
           >
             {/* PREIS */}
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-              <InputLabel htmlFor="price">{res.MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE}</InputLabel>
+              <InputLabel htmlFor="price">{locales().MINOR_INPUT_VARIABLE_EXPENSE_MODAL_INPUT_PRICE}</InputLabel>
               <Input
                 id="price"
                 value={price}
@@ -230,7 +228,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
                 error={isPriceValidationError}
                 startAdornment={<InputAdornment position="start">{res.CURRENCY_EURO}</InputAdornment>}
               />
-              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{priceValidationErrorMessage}</FormHelperText>
+              <FormHelperText sx={{ color: palette.error.main }}>{priceValidationErrorMessage}</FormHelperText>
             </FormControl>
             {/* UPDATE DATUM */}
             <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
@@ -244,7 +242,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
                 error={isLastUpdateValidationError}
                 onChange={inputChangeListener}
               />
-              <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{lastUpdateDateErrorMessage}</FormHelperText>
+              <FormHelperText sx={{ color: palette.error.main }}>{lastUpdateDateErrorMessage}</FormHelperText>
             </FormControl>
             {/* SPEICHERN */}
             <Button
@@ -378,9 +376,10 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
             backgroundColor: palette.error.dark,
             zIndex: 10,
             top: 8,
-            left: 6,
+            left: 5,
+            px: 1,
             '&:hover': {
-              bgcolor: 'rgba(248,208,130,0.3)',
+              bgcolor: palette.primary.dark,
               color: 'rgba(248,204,116,0.9)'
             }
           }}

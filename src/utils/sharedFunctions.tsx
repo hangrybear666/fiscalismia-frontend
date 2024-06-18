@@ -1,5 +1,5 @@
 import React from 'react';
-import { resourceProperties as res } from '../resources/resource_properties';
+import { localStorageKeys, resourceProperties as res } from '../resources/resource_properties';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
@@ -347,7 +347,6 @@ export function dateValidation(dateStr: Date | string) {
     dateValid = false;
   }
   if ((!isNaN(date.getFullYear()) && date.getFullYear() < 2022) || date.getFullYear() > new Date().getFullYear() + 1) {
-    console.log();
     // Datum zwischen 2022 und Folgejahr
     dateValid = false;
   }
@@ -406,4 +405,10 @@ export const getBreakPointWidth = (breakpoints: Breakpoints) => {
             ? breakpoints.values.xl - 256
             : 0;
   return breakpointWidth;
+};
+
+export const currentMode = window.localStorage.getItem(localStorageKeys.selectedMode) === 'light' ? 'light' : 'dark';
+
+export const toastOptions = {
+  theme: currentMode
 };

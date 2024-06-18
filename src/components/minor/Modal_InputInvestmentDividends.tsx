@@ -18,6 +18,9 @@ import { postDividends } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 import { DividendsRelatedInvestmentsAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputInvestmentDividendsModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
@@ -160,9 +163,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           // .__/ |___ |___ |___
           ownedUnits -= Number(e.units);
           if (ownedUnits < 0) {
-            // TODO LOG CRITICAL ERROR TO FRONTEND
-            console.error('WRONG DATA IN DB. OWNED UNITS NEGATIVE? FIX ASAP.');
-            throw new Error('WRONG DATA IN DB. OWNED UNITS NEGATIVE? FIX ASAP.');
+            toast.error(res.ERROR_INVESTMENT_DIVIDENDS_CRITICAL_ERROR, toastOptions);
+            throw new Error(res.ERROR_INVESTMENT_DIVIDENDS_CRITICAL_ERROR);
           } else if (ownedUnits === 0) {
             // SOLD ALL OWNED UNITS
             fullySoldInvestmentIds = Array.from(ownedInvestmentIds);
@@ -170,7 +172,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             partiallySoldInvestment = null;
             averageUnitPrice = 0;
           } else if (ownedUnits > 0) {
-            console.info('you are making my life hard by partially selling off stock');
+            // (╯°□°)╯︵  you are making my life hard by partially selling off stock
             //   __        __  ___                 __             ___
             //  |__)  /\  |__)  |  |  /\  |       /__`  /\  |    |__
             //  |    /~~\ |  \  |  | /~~\ |___    .__/ /~~\ |___ |___
@@ -186,9 +188,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
               // every is like forEach but it breaks looping when callback receives a false value
               if (Number(current.units) <= partialSaleUnits) {
                 if (partiallySoldInvestment && current.id === partiallySoldInvestment.id) {
-                  console.info(
-                    'you are making my life even harder by selling off partially from multiple stock positions'
-                  );
+                  // (ᓄಠ_ಠ)ᓄ you are making my life even harder by selling off partially from multiple stock positions
                   partialSaleUnits -= partiallySoldInvestment.remainingUnits;
                   partiallySoldInvestment = [];
                 } else {
@@ -257,29 +257,36 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
     };
     const response = await postDividends(dividendsObject);
     if (response?.results[0]?.id) {
-      // this setter is called to force the frontend to update and refetch the data from db
-      console.log('SUCCESSFULLY added investments to DB:'); // TODO mit Growl und ID ersetzen
-      console.log(response.results[0]);
+      toast.success(locales().NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_SUCCESSFULLY(response.results[0].id), {
+        ...toastOptions,
+        autoClose: 8000
+      });
       if (response?.taxesResults[0]?.id) {
-        console.log('SUCCESSFULLY added investment_taxes to DB:'); // TODO mit Growl und ID ersetzen
-        console.log(response.taxesResults[0]);
+        toast.success(
+          locales().NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_TAXES_SUCCESSFULLY(response.taxesResults[0].id),
+          {
+            ...toastOptions,
+            autoClose: 8000
+          }
+        );
       }
       if (response?.bridgeResults[0]?.id) {
-        console.log('SUCCESSFULLY added aggregated investments of dividend to DB:'); // TODO mit Growl und ID ersetzen
-        console.log(response.bridgeResults);
+        toast.success(locales().NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_AGGREGATED_INVESTMENTS_SUCCESSFULLY, {
+          ...toastOptions,
+          autoClose: 8000
+        });
       }
       setOpen(false);
+      // this setter is called to force the frontend to update and refetch the data from db
       // to refresh parent's table based on added food item after DB insertion
       refreshParent(Number(response.results[0].id));
     } else {
-      // TODO User Notification
-      console.error(response);
+      toast.error(locales().NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_ERROR, toastOptions);
     }
   };
 
   const validateInput = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(!/^[a-zA-Z]{2}$/.test(selectedIsin.substring(0, 2)));
     let errorPresent = false;
     // Dividend Amount
     if (!isNumeric(dividendAmount) || parseInt(dividendAmount) < 0) {
@@ -387,9 +394,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
                 sx={{ mt: 0.2, display: isSelectedIsinValidationError ? 'inline' : 'none' }}
                 variant="standard"
               >
-                <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>
-                  {selectedIsinValidationErrorMessage}
-                </FormHelperText>
+                <FormHelperText sx={{ color: palette.error.main }}>{selectedIsinValidationErrorMessage}</FormHelperText>
               </FormControl>
             </Box>
           ) : null}
@@ -403,7 +408,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
               type="date"
               error={isDateValidationError}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{dateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{dateErrorMessage}</FormHelperText>
           </FormControl>
           {/* DIVIDEND AMOUNT */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -420,9 +425,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>
-              {dividendAmountValidationErrorMessage}
-            </FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{dividendAmountValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* PERCENTAGE OF PROFITS TAXED */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -441,7 +444,7 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{pctTaxedValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{pctTaxedValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

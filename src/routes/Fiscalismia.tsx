@@ -11,6 +11,7 @@ import CustomThemeProvider from '../components/styling/Theme';
 import { resourceProperties as res } from '../resources/resource_properties';
 import { paths } from '../resources/router_navigation_paths';
 import { Stack } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
 
 /**
  * Footer with current year, App Name
@@ -54,6 +55,8 @@ export default function Fiscalismia() {
 
   return (
     <CustomThemeProvider>
+      {/* React Toastify User Notifications */}
+      <ToastContainer newestOnTop pauseOnFocusLoss position="top-right" />
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
         <CssBaseline />
         <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>

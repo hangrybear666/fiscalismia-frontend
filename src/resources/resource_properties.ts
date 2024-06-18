@@ -32,6 +32,9 @@ export const resourceProperties = {
   STATUS_NOT_DEFINED: 'Status Not defined',
   STATUSTEXT_NOT_DEFINED: 'StatusText Not defined',
   GENERIC_ERROR_MESSAGE: 'Sorry, an unexpected error has occurred.',
+  ERROR_USER_SETTINGS_NOT_DEFINED: 'User Settings could not be loaded. loginUserName not set.',
+  ERROR_USER_SETTINGS_CHANGE_DENIED_LOGINUSER_NOT_DEFINED: 'User Settings change denied. loginUserName not set.',
+  ERROR_INVESTMENT_DIVIDENDS_CRITICAL_ERROR: 'WRONG DATA IN DB. OWNED UNITS NEGATIVE? FIX ASAP.',
   NOT_DEFINED: 'Not defined',
   // Functions with placeholder vars
   USER_ALREADY_LOGGED_IN: (pos1: string) => `User ${pos1} is already logged in.`,

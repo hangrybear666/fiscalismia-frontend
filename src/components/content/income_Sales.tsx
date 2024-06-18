@@ -15,6 +15,9 @@ import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { getUniqueEffectiveYears, getUniquePurchasingDates } from '../../utils/sharedFunctions';
 import { RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 /**
  * extracts all unique years within unique date array into an array
@@ -89,7 +92,7 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     if (e.cost < 0) {
       e.cost = e.cost * -1;
     } else {
-      console.warn('positive value found in sales. raw data malformed.');
+      toast.warn(locales().NOTIFICATIONS_INCOME_SALES_DATA_MALFORMED_POSITIVE_SALE_VALUE_FOUND, toastOptions);
     }
     return e;
   });

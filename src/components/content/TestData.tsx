@@ -14,7 +14,6 @@ import {
   postTest,
   putTest,
   deleteTest,
-  getFixedCostsByEffectiveDate as getDbFixedCostsByEffectiveDate,
   postVariableExpensesTsv,
   postAllFoodItemTsv,
   postFixedIncomeTsv,
@@ -62,13 +61,6 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
     setShowResult(true);
   };
 
-  const getFixedCostsByEffectiveDate = async () => {
-    const response = await getDbFixedCostsByEffectiveDate('01.08.2023');
-    console.log(response);
-    setResult(response);
-    setShowResult(true);
-  };
-
   const processPost = async (e: any) => {
     e.preventDefault();
     if (postInput === '') {
@@ -99,11 +91,8 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
     if (deleteInput === '') {
       alert('please provide a value for DELETE');
     }
-    console.log('deleting entry with ID:');
-    console.log(deleteInput);
     await deleteTest(Number(deleteInput));
     const response = await getDbTest();
-    console.log(response);
     setResult(response);
     setDeleteInput('');
   };
@@ -188,93 +177,80 @@ const Content: React.FC<ContentProps> = ({ show = true, routeInfo }) => {
             orientation="horizontal"
             role="presentation"
           />
-          <Grid container spacing={2} direction="column" alignItems="left">
-            <Grid xs={12}>
-              <Button
-                sx={{ width: 1 }}
-                variant="contained"
-                size="large"
-                color="secondary"
-                onClick={getFixedCostsByEffectiveDate}
-              >
-                GET Fixed Costs
-              </Button>
-            </Grid>
-            <Grid xs={12}>
-              <Button sx={{ width: 1 }} variant="contained" size="large" color="primary" onClick={getTest}>
-                GET Test Data
-              </Button>
-            </Grid>
-            <Grid xs={12}>
-              <Box component="form" noValidate onSubmit={processPost}>
-                <FormControl sx={{ width: 1 }}>
-                  <InputLabel htmlFor="postInput">String for INSERT</InputLabel>
-                  <FilledInput id="postInput" value={postInput} onChange={inputChangeListener} />
-                  <Button type="submit" variant="contained" size="large" color="info">
-                    POST Test Data
-                  </Button>
-                </FormControl>
-              </Box>
-            </Grid>
-            <Grid xs={12}>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={processPut}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              >
-                <FormControl sx={{ width: 2 / 10 }}>
-                  <InputLabel htmlFor="putId">ID</InputLabel>
-                  <FilledInput
-                    id="putId"
-                    type="number"
-                    size="small"
-                    inputProps={{ min: 0, max: 999 }}
-                    value={putId}
-                    onChange={inputChangeListener}
-                  />
-                </FormControl>
-                <FormControl sx={{ width: 5 / 10 }}>
-                  <InputLabel htmlFor="putInput">String for UPDATE</InputLabel>
-                  <FilledInput id="putInput" size="small" value={putInput} onChange={inputChangeListener} />
-                </FormControl>
-                <Button sx={{ width: 3 / 10 }} type="submit" variant="contained" size="large" color="success">
-                  PUT Test Data
+          <Grid xs={12}>
+            <Button sx={{ width: 1 }} variant="contained" size="large" color="primary" onClick={getTest}>
+              GET Test Data
+            </Button>
+          </Grid>
+          <Grid xs={12}>
+            <Box component="form" noValidate onSubmit={processPost}>
+              <FormControl sx={{ width: 1 }}>
+                <InputLabel htmlFor="postInput">String for INSERT</InputLabel>
+                <FilledInput id="postInput" value={postInput} onChange={inputChangeListener} />
+                <Button type="submit" variant="contained" size="large" color="info">
+                  POST Test Data
                 </Button>
-              </Box>
-            </Grid>
-            <Grid xs={12} sx={{ mb: 4 }}>
-              <Box component="form" noValidate onSubmit={processDelete}>
-                <FormControl sx={{ width: 1 }}>
-                  <InputLabel htmlFor="deleteInput">ID for DELETE</InputLabel>
-                  <FilledInput
-                    id="deleteInput"
-                    type="number"
-                    size="small"
-                    inputProps={{ min: 0, max: 999 }}
-                    value={deleteInput}
-                    onChange={inputChangeListener}
-                  />
-                  <Button type="submit" variant="contained" size="large" color="error">
-                    DELETE Test Data
-                  </Button>
-                </FormControl>
-              </Box>
-            </Grid>
-            <Grid xs={12}>
-              <Typography color="inherit" variant="h5" align="center">
-                Database Result
-              </Typography>
-              <Divider
-                sx={{ mb: 2, borderBottomWidth: '1px', borderBottomColor: '#333333' }}
-                orientation="horizontal"
-                role="presentation"
-              />
-              <TempDeleteTable show={showResult} results={result.results} />
-            </Grid>
+              </FormControl>
+            </Box>
+          </Grid>
+          <Grid xs={12}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={processPut}
+              sx={{
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <FormControl sx={{ width: 2 / 10 }}>
+                <InputLabel htmlFor="putId">ID</InputLabel>
+                <FilledInput
+                  id="putId"
+                  type="number"
+                  size="small"
+                  inputProps={{ min: 0, max: 999 }}
+                  value={putId}
+                  onChange={inputChangeListener}
+                />
+              </FormControl>
+              <FormControl sx={{ width: 5 / 10 }}>
+                <InputLabel htmlFor="putInput">String for UPDATE</InputLabel>
+                <FilledInput id="putInput" size="small" value={putInput} onChange={inputChangeListener} />
+              </FormControl>
+              <Button sx={{ width: 3 / 10 }} type="submit" variant="contained" size="large" color="success">
+                PUT Test Data
+              </Button>
+            </Box>
+          </Grid>
+          <Grid xs={12} sx={{ mb: 4 }}>
+            <Box component="form" noValidate onSubmit={processDelete}>
+              <FormControl sx={{ width: 1 }}>
+                <InputLabel htmlFor="deleteInput">ID for DELETE</InputLabel>
+                <FilledInput
+                  id="deleteInput"
+                  type="number"
+                  size="small"
+                  inputProps={{ min: 0, max: 999 }}
+                  value={deleteInput}
+                  onChange={inputChangeListener}
+                />
+                <Button type="submit" variant="contained" size="large" color="error">
+                  DELETE Test Data
+                </Button>
+              </FormControl>
+            </Box>
+          </Grid>
+          <Grid xs={12}>
+            <Typography color="inherit" variant="h5" align="center">
+              Database Result
+            </Typography>
+            <Divider
+              sx={{ mb: 2, borderBottomWidth: '1px', borderBottomColor: '#333333' }}
+              orientation="horizontal"
+              role="presentation"
+            />
+            <TempDeleteTable show={showResult} results={result.results} />
           </Grid>
         </Grid>
       </Grid>

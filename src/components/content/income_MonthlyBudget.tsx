@@ -79,7 +79,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
 
   // 1 merge effective-date x-axis into single array
   // 2 create array from set to eliminate duplicates
-  // 3 read date substring in the format yyyy-mm-dd // TODO
+  // 3 read date substring in the format yyyy-mm-dd
   const xAxisArray = Array.from(new Set(incomeDatesArr.concat(costsDatesArr)))
     .map((e) => e.substring(0, 10))
     .sort((a, b) => (a > b ? 1 : -1)); // ASC sorted so left side of x axis starts with prior date

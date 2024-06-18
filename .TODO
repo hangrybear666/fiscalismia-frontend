@@ -10,3 +10,6 @@
 # Create Warning in INSERT STATEMENTS or DB or Frontend for set indulgences without a true contains_indulgences flag
 # Create a Header with potentially Logo on SignInSide
 # Rethink Normalized price being 3500kcal. Potentially lower it to be more mainstream applicable
+# selling stock should throw an error if selling stock not owned in adequate amount.
+# potentially make stock selling use ISIN dropdown to select only existing stock
+# Replace Card Icons with nicer styling or remove them in fixed cost living essentials and leisure

@@ -17,6 +17,9 @@ import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
 import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputFoodDiscountModalProps {
   setDiscountAddedItemId: React.Dispatch<React.SetStateAction<number | undefined>>;
@@ -76,14 +79,12 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
     };
     const response = await postFoodItemDiscount(foodItemDiscountObj);
     if (parseInt(response?.results[0]?.food_prices_dimension_key) === parseInt(selectedFoodItemId)) {
-      // this setter is called to force the frontend to update and refetch the data from db
-      console.log('SUCCESSFULLY added discount to DB:'); // TODO mit Growl und ID ersetzen
-      console.log(response.results[0]);
+      toast.success(locales().NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_SUCCESSFULLY(selectedFoodItemId), toastOptions);
       setOpen(false);
+      // this setter is called to force the frontend to update and refetch the data from db
       setDiscountAddedItemId(Number(selectedFoodItemId));
     } else {
-      // TODO User Notification
-      console.error(response);
+      toast.error(locales().NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_ERROR, toastOptions);
     }
   };
 
@@ -212,7 +213,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
               />
               <Typography
                 sx={{
-                  color: 'rgba(211,47,47,1.0)',
+                  color: palette.error.main,
                   fontSize: 12,
                   ml: 1,
                   mt: 0.5,
@@ -236,7 +237,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
               error={isPriceValidationError}
               startAdornment={<InputAdornment position="start">{res.CURRENCY_EURO}</InputAdornment>}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{discountPriceValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{discountPriceValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* START DATUM */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
@@ -250,7 +251,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
               error={isStartDateValidationError}
               onChange={inputChangeListener}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{startDateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{startDateErrorMessage}</FormHelperText>
           </FormControl>
           {/* END DATUM */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2, mb: 4 }} variant="standard">
@@ -264,7 +265,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
               error={isEndDateValidationError}
               onChange={inputChangeListener}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{endDateErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{endDateErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

@@ -22,7 +22,7 @@ export const locales_en = {
   GENERAL_UPLOAD_IMG: 'Upload Image',
   GENERAL_CONFIRM: 'Confirm',
   GENERAL_DELETE: 'Delete',
-  GENERAL_CANCEL: 'Abbrechen',
+  GENERAL_CANCEL: 'Cancel',
   GENERAL_SIGN_IN: 'Login',
   GENERAL_CREATE_ACCOUNT: 'Create Account',
   GENERAL_USERNAME: 'Username',
@@ -242,6 +242,34 @@ export const locales_en = {
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_CHOCO_CROISSANT: 'A choci croissant!',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_BREAKFAST: 'Organic eggs and frozen shrimp',
   CONFIRMATION_DIALOG_TITLE_DELETE: 'Confirm Deletion?',
+
+  NOTIFICATIONS_INCOME_SALES_DATA_MALFORMED_POSITIVE_SALE_VALUE_FOUND:
+    'Positive value found in sales. These should be negative as they are inverse to expenses.',
+  NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY: (pos1: string) => `Food Item with ID [${pos1}] has been deleted.`,
+  NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR: 'Food Item could not be deleted.',
+  NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_SUCCESSFULLY: 'The new price has been saved.',
+  NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_ERROR: 'Item price could not be saved.',
+  NOTIFICATIONS_FOOD_ITEM_INSERTED_SUCCESSFULLY: (pos1: string) => `Food item with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_FOOD_ITEM_INSERTED_ERROR: 'Food item could not be added.',
+  NOTIFICATIONS_LOGIN_FAILED: 'Login failed.',
+  NOTIFICATIONS_ACCOUNT_CREATION_SUCCESS: (pos1: string) =>
+    `User [${pos1}] has been created successfully. Please login.`,
+  NOTIFICATIONS_ACCOUNT_CREATION_ERROR: 'Account creation failed.',
+  NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_SUCCESSFULLY: (pos1: string) =>
+    `Discount for item with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_ERROR: 'Discount could not be added.',
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_SUCCESSFULLY: (pos1: string) =>
+    `Dividend with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_TAXES_SUCCESSFULLY: (pos1: string) =>
+    `Tax data with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_AGGREGATED_INVESTMENTS_SUCCESSFULLY:
+    'Related investment data for the dividend has been added.',
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_ERROR: 'Dividend could not be added.',
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_SUCCESSFULLY: (pos1: string) =>
+    `Investment  with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_TAXES_SUCCESSFULLY: (pos1: string) =>
+    `Tax data with ID [${pos1}] has been added.`,
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_ERROR: 'Investment could not be added.',
 
   SELECTED_MODE_STR: 'Mode:',
   SELECTED_PALETTE_STR: 'Palette:',

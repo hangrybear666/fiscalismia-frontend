@@ -19,6 +19,10 @@ import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentic
 import CreateAccountModal from './minor/Modal_CreateAccount';
 import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
 import { locales } from '../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { ToastContainer } from 'react-toastify';
+import { toastOptions } from '../utils/sharedFunctions';
 
 /**
  * Footer with current year, App Name
@@ -73,10 +77,7 @@ export default function SignInSide(): JSX.Element {
   useEffect(() => {
     const getUserSettings = async () => {
       try {
-        if (!loginUserName) {
-          console.error('loginUserName not set. User Settings could not be loaded.'); // TODO critical error. notify admin
-          return;
-        }
+        if (!loginUserName) throw new Error(res.ERROR_USER_SETTINGS_NOT_DEFINED);
         const response = await getUserSpecificSettings(loginUserName);
         if (response?.results?.length > 0) {
           const userSettingsMap: Map<string, string> = new Map();
@@ -119,7 +120,7 @@ export default function SignInSide(): JSX.Element {
         setAuthenticated(true);
       }
     } else {
-      // TODO notify user of failed login
+      toast.error(locales().NOTIFICATIONS_LOGIN_FAILED, toastOptions);
     }
   };
 
@@ -158,6 +159,7 @@ export default function SignInSide(): JSX.Element {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer newestOnTop pauseOnFocusLoss position="top-right" />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid

@@ -240,6 +240,36 @@ export const locales_de = {
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_CHOCO_CROISSANT: 'Schokobrötchen',
   MINOR_INPUT_VARIABLE_EXPENSE_MODAL_PRESET_TOOLTIP_BREAKFAST: 'Bio Eier und TK Shrimps',
 
+  NOTIFICATIONS_INCOME_SALES_DATA_MALFORMED_POSITIVE_SALE_VALUE_FOUND:
+    'Positiver Wert in Verkäufen gefunden. Diese sollten negativ sein, da sie invers zu Ausgaben sind.',
+  NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY: (pos1: string) => `Supermarktartikel mit ID [${pos1}] wurde gelöscht.`,
+  NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR: 'Supermarktartikel konnte nicht gelöscht werden.',
+  NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_SUCCESSFULLY: 'Der neue Preis wurde gespeichert.',
+  NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_ERROR: 'Artikelpreis konnte nicht gepflegt werden.',
+  NOTIFICATIONS_FOOD_ITEM_INSERTED_SUCCESSFULLY: (pos1: string) =>
+    `Supermarktartikel mit ID [${pos1}] wurde hinzugefügt.`,
+  NOTIFICATIONS_FOOD_ITEM_INSERTED_ERROR: 'Supermarktartikel konnte nicht hinzugefügt werden.',
+  NOTIFICATIONS_LOGIN_FAILED: 'Login fehlgeschlagen.',
+  NOTIFICATIONS_ACCOUNT_CREATION_SUCCESS: (pos1: string) =>
+    `Nutzer [${pos1}] wurde erfolgreich angelegt. Bitte einloggen.`,
+  NOTIFICATIONS_ACCOUNT_CREATION_ERROR:
+    'Nutzeraccount konnte nicht erstellt werden. Stellen Sie sicher, dass die whitelist den Namen enthält.',
+  NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_SUCCESSFULLY: (pos1: string) =>
+    `Angebot für Artikel mit ID [${pos1}] wurde erstellt.`,
+  NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_ERROR: 'Angebot konnte nicht erstellt werden.',
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_SUCCESSFULLY: (pos1: string) =>
+    `Dividende mit ID [${pos1}] wurde hinzugefügt.`,
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_TAXES_SUCCESSFULLY: (pos1: string) =>
+    `Steuerdaten mit ID [${pos1}] wurden hinzugefügt.`,
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_AGGREGATED_INVESTMENTS_SUCCESSFULLY:
+    'Zugehörige Investitionensdaten zur Dividende wurden hinzugefügt.',
+  NOTIFICATIONS_INVESTMENT_DIVIDEND_ADDED_DIVIDEND_ERROR: 'Dividende konnte nicht hinzugefügt werden.',
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_SUCCESSFULLY: (pos1: string) =>
+    `Investment mit ID [${pos1}] wurde hinzugefügt.`,
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_TAXES_SUCCESSFULLY: (pos1: string) =>
+    `Steuerdaten mit ID [${pos1}] wurden hinzugefügt.`,
+  NOTIFICATIONS_INVESTMENT_ADDED_INVESTMENT_ERROR: 'Investment konnte nicht hinzugefügt werden.',
+
   CONFIRMATION_DIALOG_TITLE_DELETE: 'Wirklich löschen?',
   SELECTED_MODE_STR: 'Farbmodus:',
   SELECTED_PALETTE_STR: 'Farbpalette:',

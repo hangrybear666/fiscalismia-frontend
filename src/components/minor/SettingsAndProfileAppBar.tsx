@@ -25,6 +25,9 @@ import { useAuth } from '../../services/userAuthentication';
 import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import { AuthInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 interface SettingsAndProfileAppBarProps {
   onDrawerToggle: () => void;
@@ -70,7 +73,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
 
   const handleColorModeChange = async () => {
     if (!loginUserName) {
-      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      toast.error(res.ERROR_USER_SETTINGS_CHANGE_DENIED_LOGINUSER_NOT_DEFINED, toastOptions);
       return;
     }
     setSettingsAnchorElement(undefined);
@@ -84,7 +87,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
 
   const handlePaletteChange = async () => {
     if (!loginUserName) {
-      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      toast.error(res.ERROR_USER_SETTINGS_CHANGE_DENIED_LOGINUSER_NOT_DEFINED, toastOptions);
       return;
     }
     setSettingsAnchorElement(undefined);
@@ -98,7 +101,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
 
   const handleLanguageChange = async () => {
     if (!loginUserName) {
-      console.error('loginUserName not set. Settings Change denied.'); // TODO critical error. notify admin
+      toast.error(res.ERROR_USER_SETTINGS_CHANGE_DENIED_LOGINUSER_NOT_DEFINED, toastOptions);
       return;
     }
     setSettingsAnchorElement(undefined);

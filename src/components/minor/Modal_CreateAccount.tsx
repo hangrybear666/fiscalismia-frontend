@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import EmailIcon from '@mui/icons-material/Email';
@@ -15,6 +16,9 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { createUserCredentials } from '../../services/pgConnections';
 import { UserCredentials } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { toastOptions } from '../../utils/sharedFunctions';
 
 const style = {
   position: 'absolute',
@@ -36,6 +40,7 @@ const regExEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  * @returns
  */
 export default function CreateAccountModal() {
+  const { palette } = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   // Validation
@@ -54,21 +59,24 @@ export default function CreateAccountModal() {
   const handleClose = () => setOpen(false);
 
   /**
-   * queries DB for food item discount information insertion via REST API
+   * queries DB for user credential insertion
    * notifies user on success or error
    */
   const persistUserCredentialsAndSettings = async () => {
     const credentials: UserCredentials = { username, email, password };
-    console.log(credentials);
     const response = await createUserCredentials(credentials);
-    if (response?.results[0]?.username == username) {
-      // TODO User Notification
-      console.log('SUCCESSFULLY added user account to DB');
+    if (response?.results[0]?.username === username) {
       setOpen(false);
-      navigate(0);
+      toast.success(locales().NOTIFICATIONS_ACCOUNT_CREATION_SUCCESS(response.results[0].username), toastOptions);
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          navigate(0);
+          resolve;
+        }, 2500);
+      });
     } else {
-      // TODO User Notification
-      console.error(response);
+      setOpen(false);
+      toast.error(locales().NOTIFICATIONS_ACCOUNT_CREATION_ERROR, toastOptions);
     }
   };
 
@@ -164,7 +172,7 @@ export default function CreateAccountModal() {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{usernameValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{usernameValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* EMAIL */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -184,7 +192,7 @@ export default function CreateAccountModal() {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{emailValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{emailValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* PASSWORD */}
           <FormControl fullWidth sx={{ m: 1 }} variant="standard">
@@ -204,7 +212,7 @@ export default function CreateAccountModal() {
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{passwordValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{passwordValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* SPEICHERN */}
           <Button

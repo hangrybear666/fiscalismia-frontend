@@ -25,7 +25,6 @@ export default function LogoutBtn(props: LogoutBtnProps) {
   const { setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    console.log('Logging Out...');
     invalidateSession(setToken, setLoginUserName);
     navigate(paths.LOGIN);
   };

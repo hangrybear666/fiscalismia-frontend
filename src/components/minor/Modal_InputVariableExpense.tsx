@@ -401,7 +401,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               type="text"
               error={isDescriptionValidationError}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{descriptionValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{descriptionValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/*  AUTOCOMPLETE DROPDOWN FOR EXPENSE CATEGORY */}
           {categoryAutoCompleteItemArray ? (
@@ -424,7 +424,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               />
               <Typography
                 sx={{
-                  color: 'rgba(211,47,47,1.0)',
+                  color: palette.error.main,
                   fontSize: 12,
                   ml: 1,
                   mt: 0.5,
@@ -455,7 +455,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               />
               <Typography
                 sx={{
-                  color: 'rgba(211,47,47,1.0)',
+                  color: palette.error.main,
                   fontSize: 12,
                   ml: 1,
                   mt: 0.5,
@@ -481,7 +481,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
                 </InputAdornment>
               }
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{priceValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{priceValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* DATE OF VARIABLE EXPENSE */}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }} variant="standard">
@@ -495,7 +495,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               error={isDateValidationError}
               onChange={inputChangeListener}
             />
-            <FormHelperText sx={{ color: 'rgba(211,47,47,1.0)' }}>{dateValidationErrorMessage}</FormHelperText>
+            <FormHelperText sx={{ color: palette.error.main }}>{dateValidationErrorMessage}</FormHelperText>
           </FormControl>
           {/* IS_PLANNED FLAG*/}
           <FormControl fullWidth sx={{ marginX: 1, mt: 2 }}>
@@ -553,7 +553,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               />
               <Typography
                 sx={{
-                  color: 'rgba(211,47,47,1.0)',
+                  color: palette.error.main,
                   fontSize: 12,
                   ml: 1,
                   mt: 0.5,
