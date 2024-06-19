@@ -24,3 +24,6 @@ reports/type-check-output.txt
 reports/eslint-analysis.txt
 reports/snyk-code-analysis.txt
 reports/snyk-dependency-analysis.txt
+
+#Snyk
+.dccache

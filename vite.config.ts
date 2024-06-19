@@ -6,7 +6,7 @@ dotenv.config();
 // timezone for HMR logging
 process.env.TZ = 'Europe/Berlin';
 
-const PORT = Number(process.env.PORT) || 3003;
+const FRONTEND_PORT = Number(process.env.FRONTEND_PORT) || 3003;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -15,6 +15,6 @@ export default defineConfig({
       usePolling: true // Add this line if you're running on a network filesystem or Docker and Hot Module Replace is not working
     },
     host: true,
-    port: PORT
+    port: FRONTEND_PORT
   }
 });

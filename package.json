@@ -7,6 +7,7 @@
     "build": "vite build",
     "typeCheck": "node src/tests/typeCheck",
     "eslintAnalysis": "node src/tests/eslintAnalysis",
+    "snykCodeAnalysis": "node src/tests/snykCodeAnalysis",
     "snykDependencyAnalysis": "node src/tests/snykDependencyAnalysis",
     "preview": "vite preview",
     "host": "vite --host"
