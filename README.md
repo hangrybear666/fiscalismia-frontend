@@ -99,7 +99,7 @@ todo
 
 3. **Option 3: Docker:**
 
-   Run only the frontend container.
+   Run only the frontend container in Windows (Linux would have a different volume mount file path!)
    ```bash
    docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
    docker run -v %cd%\src:/fiscalismia-frontend/src --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
