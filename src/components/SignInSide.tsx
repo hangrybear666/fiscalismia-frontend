@@ -19,6 +19,7 @@ import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentic
 import CreateAccountModal from './minor/Modal_CreateAccount';
 import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
 import { locales } from '../utils/localeConfiguration';
+import forestImg from '/imgs/forest-tooLarge.jpg';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { ToastContainer } from 'react-toastify';
@@ -168,7 +169,7 @@ export default function SignInSide(): JSX.Element {
           md={6}
           lg={8}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random/?forest)',
+            backgroundImage: `url(${forestImg})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
             backgroundSize: 'cover',
