@@ -9,8 +9,6 @@ import { resourceProperties as res, fixedCostCategories as categories } from '..
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import SelectDropdown from '../minor/SelectDropdown';
-import cinemaImg from '/imgs/cinema-tooLarge.jpg';
-import fitnessImg from '/imgs/fitness-tooLarge.jpg';
 import { Paper, Theme } from '@mui/material';
 import {
   constructContentVerticalBarChartObject,
@@ -196,7 +194,7 @@ function extractCardData(specificFixedCosts: any) {
     '1.00',
     null,
     <FitnessCenterOutlinedIcon sx={iconProperties} />,
-    fitnessImg
+    '/imgs/fitness-tooLarge.jpg'
   );
   const mediaAndEntertainment = constructContentCardObject(
     locales().FIXED_COSTS_MEDIA_ENTERTAINMENT,
@@ -204,7 +202,7 @@ function extractCardData(specificFixedCosts: any) {
     '1.00',
     null,
     <SubscriptionsOutlinedIcon sx={iconProperties} />,
-    cinemaImg
+    '/imgs/cinema-tempdel.jpg'
   );
 
   // Sports and Health

@@ -14,6 +14,7 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 - [Technologies](#technologies)
 - [DevOps Pipeline](#pipeline)
 - [Setup](#setup)
+- [Running](#running)
 - [Usage](#usage)
 - [License](#license)
 
@@ -102,11 +103,12 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
    ```bash
    SNYK_TOKEN
    ```
-**Running**
+
+## Running
 
 1. **Option 1: Docker Compose**
 
-   To run the entire stack in development mode, change directory to `fiscalismia-backend`
+   To run the entire stack in development mode, <b>change directory to</b> `fiscalismia-backend`
 
    ```bash
    docker compose build
@@ -122,11 +124,27 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 
 3. **Option 3: Docker:**
 
-   Run only the frontend container in Windows (Linux would have a different volume mount file path!)
+   <details open>
+   <summary><b>Run only the frontend container (Linux Syntax)</b></summary>
+
+   ```bash
+   docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
+   docker run -v $PWD/src:/fiscalismia-frontend/src --env-file .env --net fiscalismia-network --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
+   ```
+
+   </details>
+
+   ------
+
+   <details closed>
+   <summary><b>Run only the frontend container (Windows Syntax)</b></summary>
+
    ```bash
    docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
    docker run -v %cd%\src:/fiscalismia-frontend/src --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
    ```
+
+   </details>
 
 ## Usage
 
@@ -163,12 +181,14 @@ All tests generate report files in the `reports/` subdirectory.
 
    Once per workspace
    ```bash
+   # with snyk cli installed
    snyk auth SNYK_TOKEN
+   # without snyk cli installed
+   npx snyk auth SNYK_TOKEN
    ```
 
    On demand
    ```bash
-   snyk auth SNYK_TOKEN
    npm run snykCodeAnalysis
    npm run snykDependencyAnalysis
    ```
