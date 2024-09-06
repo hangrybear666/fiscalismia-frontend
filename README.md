@@ -35,10 +35,28 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 - **ESLint and Prettier:** Linter and Formatter for ensuring code quality and enforcing coding standards.
 
 ## Pipeline
-todo
-1. **Test & Analyze**
-2. **Build & Publish**
-3. **Deploy to Cloud**
+w:
+
+1. **Triggers:**
+   - The pipeline runs on every push and pull request to the `main` branch.
+
+2. **Job: `test`**:
+   - **Steps:**
+     - Set up Node.js (v20.12.2), install dependencies and Snyk.
+     - Run type checks and ESLint analysis.
+     - Perform Snyk dependency security analysis.
+     - Perform Snyk Static Code security analysis.
+     - Publish type check, ESLint, and Snyk reports as artifacts.
+     - TODO: Playwright Integration Test covering basic UI interactions.
+
+3. **Job: `build`**:
+   - **Steps:**
+     - Build Frontend Docker image.
+     - Publish Docker image to GHCR (TODO: Switch to AWS ECR)
+
+4. **Job: `deploy`**:
+   - **Steps:**
+     - TODO: Deploy on EC2 Instance via AWS CLI
 
 ## Setup
 
@@ -79,6 +97,12 @@ todo
    SNYK_TOKEN=
    ```
 
+4. **Github Secrets:**
+
+   Set up Github Secrets in your Repository Settings, for the pipeline to run successfully. These can and should be the same as in your `.env` file.
+   ```bash
+   SNYK_TOKEN
+   ```
 **Running**
 
 1. **Option 1: Docker Compose**
