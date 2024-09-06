@@ -35,7 +35,6 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 - **ESLint and Prettier:** Linter and Formatter for ensuring code quality and enforcing coding standards.
 
 ## Pipeline
-w:
 
 1. **Triggers:**
    - The pipeline runs on every push and pull request to the `main` branch.
