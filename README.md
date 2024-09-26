@@ -56,7 +56,7 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 
 4. **Job: `deploy`**:
    - **Steps:**
-     - TODO: Deploy on EC2 Instance via AWS CLI
+     - TODO: Deploy on Hetzner Self Managed Kubernetes via ArgoCD (K3s)
 
 ## Setup
 
