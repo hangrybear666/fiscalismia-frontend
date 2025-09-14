@@ -22,7 +22,7 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 ## Technologies
 
 - **Github Actions:** CI/CD Pipeline for automating type checking, eslint analysis, integration testing, vulnerability scanning, building, publishing and deploying.
-- **Docker:** Frontend, Backend and Dev-Database run within docker containers, orchestrated for fullstack development with one docker compose command.
+- **Podman-Docker:** Frontend, Backend and Dev-Database run within docker containers, orchestrated for fullstack development with one podman compose command.
 - **TypeScript:** Statically typed JS with high strictness level and compile target ESNext. Mid-project Migration from plain JavaScript (ECMAScript 2016).
 - **React:** A JavaScript library for building user interfaces, maintained by Facebook.
 - **Material UI:** A popular React UI framework developed by Google, providing a set of pre-designed components for a consistent and visually appealing interface.
@@ -62,9 +62,70 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 
 **Dependencies**
 
-1. **Node.js:** Ensure that Node.js is installed on your local machine, with a minimum version of 20.12.2 You can download Node.js via Node Version Switcher [here](https://github.com/jasongin/nvs) or directly from the source [here](https://nodejs.org/).
+1. **Install Node with Version Management**
 
-2. **Docker & Docker Compose** Ensure that Docker is installed in your local development environment. Get Docker [here](https://docs.docker.com/get-docker/) and Docker Compose [here](https://docs.docker.com/compose/install/).
+   See https://docs.volta.sh/guide/getting-started
+
+   ```bash
+   volta install node@20.19.5
+   volta pin node@20.19.5
+   ```
+
+2. **Podman & Docker Compose** Ensure that Podman is installed in your local development environment. Get Podman [here](https://podman.io/docs/installation) and Docker Compose
+
+   <details closed>
+   <summary><b>On Linux:</b></summary>
+
+   ```bash
+   sudo dnf install podman podman-docker
+   sudo dnf -y install dnf-plugins-core
+   sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+   sudo dnf install -y docker-compose-plugin # docker compose V2
+   docker compose -v
+   systemctl --user start podman.socket
+   systemctl --user enable --now podman.socket
+   ```
+
+   If your dotfiles repo doesn't already contain this in `.bashrc` then add these lines
+   `export DOCKER_BUILDKIT=0                                # disable docker buildkit for rootless podman`
+   `export DOCKER_HOST=unix:///run/user/$UID/docker.sock    # set docker host to rootless user for podman`
+
+   </details>
+
+   <details closed>
+   <summary><b>On Windows:</b></summary>
+
+   1) Install WSL
+   ```
+   wsl --install FedoraLinux-42
+   wsl --set-default FedoraLinux-42
+   wsl -u root
+   passwd
+   # Enter new Password
+   ```
+
+   2) Windows Terminal `winget install Microsoft.WindowsTerminal`
+   3) Execute `podman-installer-windows-amd64.exe` See https://github.com/containers/podman/releases
+   4) Setup Podman See https://github.com/containers/podman/blob/main/docs/tutorials/podman-for-windows.md
+   ```Powershell
+   podman -v
+   podman machine init
+   podman machine start
+   ```
+   5) Setup Docker Compose in WSL
+
+   ```bash
+   # setup plugins repository
+   wsl
+   sudo dnf -y install dnf-plugins-core
+   sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+   sudo dnf install -y docker-ce-cli docker-compose-plugin
+   echo "export DOCKER_HOST=unix:///var/run/docker.sock" >> ~/.bashrc
+   docker --version
+   docker compose -v
+   ```
+
+   </details>
 
 3. **Clone the Repository:**
    ```bash
@@ -111,8 +172,9 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
    To run the entire stack in development mode, <b>change directory to</b> `fiscalismia-backend`
 
    ```bash
-   docker compose build
-   docker compose up
+   cd ~/git/fiscalismia-backend
+   docker compose down --volumes
+   docker compose up --build
    ```
 
 2. **Option 2: Locally:**
@@ -122,14 +184,14 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
    npm run dev
    ```
 
-3. **Option 3: Docker:**
+3. **Option 3: Podman-Docker:**
 
    <details open>
    <summary><b>Run only the frontend container (Linux Syntax)</b></summary>
 
    ```bash
-   docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
-   docker run -v $PWD/src:/fiscalismia-frontend/src --env-file .env --net fiscalismia-network --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
+   podman build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
+   podman run -v $PWD/src:/fiscalismia-frontend/src --env-file .env --net fiscalismia-network --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
    ```
 
    </details>
@@ -140,8 +202,8 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
    <summary><b>Run only the frontend container (Windows Syntax)</b></summary>
 
    ```bash
-   docker build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
-   docker run -v %cd%\src:/fiscalismia-frontend/src --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
+   podman build --pull --no-cache --rm -f "Dockerfile" -t fiscalismia-frontend:latest "."
+   podman run -v %cd%\src:/fiscalismia-frontend/src --env-file .env --rm -it -p 3001:3001 --name fiscalismia-frontend fiscalismia-frontend:latest
    ```
 
    </details>
