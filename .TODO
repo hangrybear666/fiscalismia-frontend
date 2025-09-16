@@ -1,6 +1,4 @@
-# pgConnections catch(error) mit user notification abfangen
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
-# console.error logging im Frontend ersetzen mit zentraler Logfile die im Live Betrieb berücksichtigt / ODER mit user notifications
 # Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
 # BUG: when pressing f5 or entering food prices from the menu, refresh food prices after image deletion is not triggered. it is triggered for prior added images
 # Bug: When logging in and being forwarded to Home the selected_language is not reflected in rendered locales until pressing F5

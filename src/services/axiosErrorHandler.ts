@@ -20,7 +20,8 @@ axiosClient.interceptors.response.use(
     } else {
       toast.error(`Axios Interceptor received undefined Error: ${error}`, axiosErrorToastOptions);
     }
-    // Optionally, return a rejected promise to ensure `.catch` is triggered in individual requests
+    // Preserves Error Type and propagates them to be processed in individual catch blocks.
+    // Otherwise the Interceptor would simply swallow errors and abort any further processing.
     return Promise.reject(error);
   }
 );
