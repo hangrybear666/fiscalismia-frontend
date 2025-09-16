@@ -26,7 +26,6 @@ import { AppBar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material'
 import { AuthInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 interface SettingsAndProfileAppBarProps {

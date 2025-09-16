@@ -6,6 +6,7 @@ import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import { ContentCardObject, ContentChartLineObject, ContentChartVerticalBarObject } from '../types/custom/customTypes';
 import { Breakpoints, Theme, useMediaQuery } from '@mui/material';
 import { locales } from './localeConfiguration';
+import { ToastOptions, ToastPosition, Zoom } from 'react-toastify';
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
@@ -411,4 +412,15 @@ export const currentMode = window.localStorage.getItem(localStorageKeys.selected
 
 export const toastOptions = {
   theme: currentMode
+};
+
+export const axiosErrorToastOptions: ToastOptions = {
+  position: 'top-center' as ToastPosition,
+  autoClose: 8000, // milliseconds
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  theme: 'colored',
+  transition: Zoom
 };

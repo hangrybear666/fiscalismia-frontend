@@ -19,7 +19,6 @@ import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils
 import { DividendsRelatedInvestmentsAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputInvestmentDividendsModalProps {

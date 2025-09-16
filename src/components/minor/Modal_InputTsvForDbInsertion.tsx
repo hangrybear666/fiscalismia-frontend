@@ -12,7 +12,6 @@ import FormControl from '@mui/material/FormControl';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 declare module '@mui/material/Button' {

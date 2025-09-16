@@ -21,7 +21,6 @@ import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
 import { locales } from '../utils/localeConfiguration';
 import forestImg from '/imgs/forest-tooLarge.jpg';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { ToastContainer } from 'react-toastify';
 import { toastOptions } from '../utils/sharedFunctions';
 

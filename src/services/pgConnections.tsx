@@ -9,6 +9,8 @@ import {
   UserCredentials,
   UserSettingObject
 } from '../types/custom/customTypes';
+import { toast } from 'react-toastify';
+import { axiosErrorToastOptions } from '../utils/sharedFunctions';
 const baseUrl = serverConfig.API_BASE_URL;
 /**
  *
@@ -40,12 +42,31 @@ const setToken = () => {
   token = window.localStorage.getItem(localStorageKeys.token)!;
 };
 
+/**
+ * UNPROTECTED ROUTE for Login Page
+ * @param {UserCredentials} credentials {username, email, password}
+ * @returns JSON Web Token with the following structure:
+ * {
+    "user": {
+      "userId": 1,
+      "userName": "admin",
+      "userEmail": "herp_derp@hotmail.com"
+    },
+    "iat": 1758049728,
+    "exp": 1758136128
+  }
+ */
 export const login = async (credentials: UserCredentials) => {
   try {
     const response = await axios.post(`${baseUrl}/um/login`, credentials);
+    console.log(response);
     return response.data;
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      toast.error(`Axios Interceptor - ${error.name}: ${error.message}`, axiosErrorToastOptions);
+    } else {
+      toast.error(`Axios Interceptor received undefined Error: ${error}`, axiosErrorToastOptions);
+    }
   }
 };
 
@@ -254,6 +275,11 @@ export const getCurrentFoodDiscounts = async () => {
  *     \____/\____/  \_/     \____/\_|   \____/ \____/\___/\_|    \___/ \____/
  */
 
+/**
+ *
+ * @param username
+ * @returns
+ */
 export const getUserSpecificSettings = async (username: string) => {
   setToken();
   try {

@@ -23,7 +23,6 @@ import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the 
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 import { updateFoodItemPrice, deleteFoodItem } from '../../services/pgConnections';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import {
   DateCellFormatter,
   currencyFormatter,

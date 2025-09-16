@@ -27,7 +27,6 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputInvestmentTaxesModalProps {

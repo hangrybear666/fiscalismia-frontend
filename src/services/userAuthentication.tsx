@@ -62,7 +62,7 @@ export const invalidateSession = (setToken: AuthInfo['setToken'], setLoginUserNa
   window.localStorage.removeItem(localStorageKeys.selectedLanguage);
   setToken(null);
   setLoginUserName(null);
-  console.info('Invalidated session.');
+  console.debug('Invalidated session.');
 };
 
 /**
@@ -84,7 +84,7 @@ export const isUserTokenValid = (token: string, loginUserName: string | null = n
       console.error(`Token expired [${secondsSinceEpoch - tokenExpiresAt}] seconds ago.`);
       return false;
     }
-    console.info(`Token of user [${loginUserName}] is valid.`);
+    console.debug(`Token of user [${loginUserName}] is valid.`);
     return true;
   } else {
     console.error('Token Authentication failed.');

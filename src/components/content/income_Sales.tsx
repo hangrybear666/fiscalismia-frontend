@@ -16,7 +16,6 @@ import { getUniqueEffectiveYears, getUniquePurchasingDates } from '../../utils/s
 import { RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 /**

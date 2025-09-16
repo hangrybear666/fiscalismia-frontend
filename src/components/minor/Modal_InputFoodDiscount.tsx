@@ -18,7 +18,6 @@ import { Autocomplete, Stack } from '@mui/material';
 import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputFoodDiscountModalProps {

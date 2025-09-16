@@ -21,7 +21,6 @@ import { postNewFoodItem } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, toastOptions } from '../../utils/sharedFunctions';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
 interface InputFoodItemModalProps {
   refreshParent: React.Dispatch<React.SetStateAction<string>>;
