@@ -102,11 +102,9 @@ export const ProtectedRoute = () => {
   const location = useLocation();
   const { token, loginUserName, setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
   // intercepts each axios response and in case of error and status code 401 = UNAUTHORIZED, invalidates session
+  // this guarantees that backend responses from expired or revoked session tokens do not succeed.
   axios.interceptors.response.use(
     (response) => {
-      // to log all AXIOS responses
-      // console.log('RESPONSE INTERCEPTED');
-      // console.log(response);
       return response;
     },
     (error) => {

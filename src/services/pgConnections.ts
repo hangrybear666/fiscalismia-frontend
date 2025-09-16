@@ -11,6 +11,7 @@ import {
 } from '../types/custom/customTypes';
 import { toast } from 'react-toastify';
 import { axiosErrorToastOptions } from '../utils/sharedFunctions';
+import { axiosClient } from './axiosErrorHandler';
 const baseUrl = serverConfig.API_BASE_URL;
 /**
  *
@@ -58,15 +59,10 @@ const setToken = () => {
  */
 export const login = async (credentials: UserCredentials) => {
   try {
-    const response = await axios.post(`${baseUrl}/um/login`, credentials);
-    console.log(response);
+    const response = await axiosClient.post('/um/login', credentials);
     return response.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      toast.error(`Axios Interceptor - ${error.name}: ${error.message}`, axiosErrorToastOptions);
-    } else {
-      toast.error(`Axios Interceptor received undefined Error: ${error}`, axiosErrorToastOptions);
-    }
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -79,10 +75,10 @@ export const login = async (credentials: UserCredentials) => {
  */
 export const createUserCredentials = async (credentials: UserCredentials) => {
   try {
-    const response = await axios.post(`${baseUrl}/um/credentials`, credentials);
+    const response = await axiosClient.post('/um/credentials', credentials);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -105,10 +101,10 @@ export const getAllFixedCosts = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/fixed_costs`, config);
+    const response = await axiosClient.get('/fixed_costs', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -122,10 +118,10 @@ export const getAllVariableExpenseSensitivities = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/sensitivity`, config);
+    const response = await axiosClient.get('/sensitivity', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -139,10 +135,10 @@ export const getAllVariableExpenseStores = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/store`, config);
+    const response = await axiosClient.get('/store', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -156,10 +152,10 @@ export const getAllVariableExpenseCategories = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/category`, config);
+    const response = await axiosClient.get('/category', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -173,10 +169,10 @@ export const getAllVariableExpenses = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/variable_expenses`, config);
+    const response = await axiosClient.get('/variable_expenses', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -190,10 +186,10 @@ export const getAllInvestments = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/investments`, config);
+    const response = await axiosClient.get('/investments', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -207,10 +203,10 @@ export const getAllDividends = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/investment_dividends`, config);
+    const response = await axiosClient.get('/investment_dividends', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -224,10 +220,10 @@ export const getAllFixedIncome = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/fixed_income`, config);
+    const response = await axiosClient.get('/fixed_income', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -242,10 +238,10 @@ export const getAllFoodPricesAndDiscounts = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/food_prices_and_discounts`, config);
+    const response = await axiosClient.get('/food_prices_and_discounts', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -260,10 +256,10 @@ export const getCurrentFoodDiscounts = async () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/discounted_foods_current`, config);
+    const response = await axiosClient.get('/discounted_foods_current', config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 /***
@@ -286,10 +282,10 @@ export const getUserSpecificSettings = async (username: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/um/settings/${username}`, config);
+    const response = await axiosClient.get(`/um/settings/${username}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -305,10 +301,10 @@ export const getFixedCostsByEffectiveDate = async (validDate: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/fixed_costs/valid/${validDate}`, config);
+    const response = await axiosClient.get(`/fixed_costs/valid/${validDate}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -324,10 +320,10 @@ export const getVariableExpenseByCategory = async (category: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/variable_expenses/category/${category}`, config);
+    const response = await axiosClient.get(`/variable_expenses/category/${category}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -343,10 +339,10 @@ export const getFixedIncomeByEffectiveDate = async (validDate: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(`${baseUrl}/fixed_income/valid/${validDate}`, config);
+    const response = await axiosClient.get(`/fixed_income/valid/${validDate}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -375,10 +371,10 @@ export const postUpdatedUserSettings = async (username: string, settingKey: stri
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.post(`${baseUrl}/um/settings`, userSettingObj, config);
+    const response = await axiosClient.post('/um/settings', userSettingObj, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -396,7 +392,7 @@ export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
     };
     if (!event.target.files) {
-      console.error('No file provided in image upload');
+      toast.error('No file provided in image upload', axiosErrorToastOptions);
       return;
     }
     const file = event.target.files[0];
@@ -409,10 +405,10 @@ export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>
     const formData = new FormData();
     formData.append('foodItemImg', file);
     formData.append('id', foodItemId);
-    const response = await axios.post(`${baseUrl}/upload/food_item_img`, formData, config);
+    const response = await axiosClient.post('/upload/food_item_img', formData, config);
     return response;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
     return;
   }
 };
@@ -427,10 +423,10 @@ export const postFoodItemDiscount = async (foodItemDiscountObj: FoodItemDiscount
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await axios.post(`${baseUrl}/food_item_discount`, foodItemDiscountObj, config);
+    const response = await axiosClient.post('/food_item_discount', foodItemDiscountObj, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -445,10 +441,10 @@ export const postNewFoodItem = async (foodItemObj: FoodItem) => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await axios.post(`${baseUrl}/food_item`, foodItemObj, config);
+    const response = await axiosClient.post('/food_item', foodItemObj, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -464,10 +460,10 @@ export const postInvestments = async (investmentAndTaxesObject: InvestmentAndTax
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await axios.post(`${baseUrl}/investments`, investmentAndTaxesObject, config);
+    const response = await axiosClient.post('/investments', investmentAndTaxesObject, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -483,10 +479,10 @@ export const postDividends = async (dividendsObject: DividendsRelatedInvestments
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await axios.post(`${baseUrl}/investment_dividends`, dividendsObject, config);
+    const response = await axiosClient.post('/investment_dividends', dividendsObject, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -511,10 +507,10 @@ export const deleteFoodItemImg = async (id: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.delete(`${baseUrl}/public/img/uploads/${id}`, config);
+    const response = await axiosClient.delete(`/public/img/uploads/${id}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -529,10 +525,10 @@ export const deleteFoodItem = async (id: number) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.delete(`${baseUrl}/food_item/${id}`, config);
+    const response = await axiosClient.delete(`/food_item/${id}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -551,10 +547,10 @@ export const updateFoodItemPrice = async (id: number, newObject: FoodItemUpdateO
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.put(`${baseUrl}/food_item/price/${id}`, newObject, config);
+    const response = await axiosClient.put(`/food_item/price/${id}`, newObject, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -581,7 +577,7 @@ export const postFixedCostTsv = async (fixedCostsTsvInput: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
     };
-    const response = await axios.post(`${baseUrl}/texttsv/fixed_costs`, fixedCostsTsvInput, config);
+    const response = await axiosClient.post('/texttsv/fixed_costs', fixedCostsTsvInput, config);
     return response;
   } catch (error) {
     return error;
@@ -600,7 +596,7 @@ export const postVariableExpensesTsv = async (variableExpensesTsvInput: string) 
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
     };
-    const response = await axios.post(`${baseUrl}/texttsv/variable_expenses`, variableExpensesTsvInput, config);
+    const response = await axiosClient.post('/texttsv/variable_expenses', variableExpensesTsvInput, config);
     return response;
   } catch (error) {
     return error;
@@ -620,7 +616,7 @@ export const postFixedIncomeTsv = async (fixedIncomeTsvInput: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
     };
-    const response = await axios.post(`${baseUrl}/texttsv/fixed_income`, fixedIncomeTsvInput, config);
+    const response = await axiosClient.post('/texttsv/fixed_income', fixedIncomeTsvInput, config);
     return response;
   } catch (error) {
     return error;
@@ -640,7 +636,7 @@ export const postInvestmentsTsv = async (investmentsTsvInput: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
     };
-    const response = await axios.post(`${baseUrl}/texttsv/investments`, investmentsTsvInput, config);
+    const response = await axiosClient.post('/texttsv/investments', investmentsTsvInput, config);
     return response;
   } catch (error) {
     return error;
@@ -661,7 +657,7 @@ export const postAllFoodItemTsv = async (foodItemTsvInput: string) => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'text/plain' }
     };
-    const response = await axios.post(`${baseUrl}/texttsv/new_food_items`, foodItemTsvInput, config);
+    const response = await axiosClient.post('/texttsv/new_food_items', foodItemTsvInput, config);
     return response;
   } catch (error) {
     return error;
@@ -683,10 +679,10 @@ export const getTest = async (): Promise<any> => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.get(baseUrl, config);
+    const response = await axiosClient.get(baseUrl, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -696,10 +692,10 @@ export const postTest = async (newObject: any): Promise<any> => {
     const config = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await axios.post(baseUrl, newObject, config);
+    const response = await axiosClient.post(baseUrl, newObject, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -709,10 +705,10 @@ export const putTest = async (id: number, newObject: any): Promise<any> => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
+    const response = await axiosClient.put(`/${id}`, newObject, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
 
@@ -722,9 +718,9 @@ export const deleteTest = async (id: number): Promise<any> => {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axios.delete(`${baseUrl}/${id}`, config);
+    const response = await axiosClient.delete(`/${id}`, config);
     return response.data;
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
   }
 };
