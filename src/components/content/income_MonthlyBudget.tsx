@@ -38,7 +38,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
   // Filter Income
   const incomeFiltered = allFixedIncome.results.filter((e: any) => e.type.toLowerCase() === res.INCOME_NET_SALARY_KEY);
   // unique effective dates as string array
-  const incomeDatesArr: string[] = getUniqueEffectiveDates(incomeFiltered) as string[];
+  const incomeDatesArr: string[] = getUniqueEffectiveDates(incomeFiltered);
   // only read date string from datetime
   const overviewDataset: { x: string; y: number }[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
@@ -55,7 +55,7 @@ function extractChartData(allFixedIncome: any, allFixedCosts: any, palette: Pale
   // No Filtering of Costs
   const costsFiltered = allFixedCosts.results;
   // unique effective dates as string array
-  const costsDatesArr: string[] = getUniqueEffectiveDates(costsFiltered) as string[];
+  const costsDatesArr: string[] = getUniqueEffectiveDates(costsFiltered);
   const costsDataset: { x: string; y: number }[] = [];
   // for each unique date create an xAxis array with summed up monthly_cost values
   costsDatesArr.forEach((xAxisEntry) => {

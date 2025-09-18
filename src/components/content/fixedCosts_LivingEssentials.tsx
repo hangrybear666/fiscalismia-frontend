@@ -57,7 +57,7 @@ function extractChartData(allFixedCosts: any) {
   };
   const livingEssentialsFiltered = filterLivingEssentials(allFixedCosts);
   // unique effective dates as string array
-  const livingEssentialsEffectiveDatesArr: string[] = getUniqueEffectiveDates(livingEssentialsFiltered) as string[];
+  const livingEssentialsEffectiveDatesArr: string[] = getUniqueEffectiveDates(livingEssentialsFiltered);
   livingEssentialsEffectiveDatesArr.sort();
   // only read dates from datetime
   const livingEssentialsXaxis = livingEssentialsEffectiveDatesArr.map((e: string) => e.substring(0, 10));
@@ -237,7 +237,7 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
       const allFixedCosts = await getAllFixedCosts();
-      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results);
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
       const allFixedCostsChartData = extractChartData(allFixedCosts);

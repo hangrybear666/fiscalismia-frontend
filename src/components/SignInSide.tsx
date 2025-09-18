@@ -17,7 +17,7 @@ import { resourceProperties as res, localStorageKeys } from '../resources/resour
 import { paths } from '../resources/router_navigation_paths';
 import { useAuth, isUserTokenValid, isJwtToken } from '../services/userAuthentication';
 import CreateAccountModal from './minor/Modal_CreateAccount';
-import { AuthInfo, UserCredentials } from '../types/custom/customTypes';
+import { UserCredentials } from '../types/custom/customTypes';
 import { locales } from '../utils/localeConfiguration';
 import forestImg from '/imgs/forest-tooLarge.jpg';
 import { toast } from 'react-toastify';
@@ -72,7 +72,7 @@ export default function SignInSide(): JSX.Element {
     window.localStorage.getItem(localStorageKeys.token) === 'true' ? true : false
   );
   const navigate = useNavigate();
-  const { loginUserName, setToken, setLoginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
+  const { loginUserName, setToken, setLoginUserName } = useAuth();
   // After successfully logging in and authenticating the token, user settings are queried from the DB and redirect to Homepage is triggered
   useEffect(() => {
     const getUserSettings = async () => {

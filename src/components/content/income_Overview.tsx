@@ -31,7 +31,7 @@ function extractChartData(allFixedIncome: any, palette: Palette) {
   // No filtering of overall results required
   const overviewFiltered = allFixedIncome.results;
   // unique effective dates as string array
-  const overviewDatesArr: string[] = getUniqueEffectiveDates(overviewFiltered) as string[];
+  const overviewDatesArr: string[] = getUniqueEffectiveDates(overviewFiltered);
   overviewDatesArr.sort();
   // only read date string from datetime
   const overviewXaxis = overviewDatesArr.map((e: string) => e.substring(0, 10));
@@ -168,7 +168,7 @@ export default function Income_Overview(_props: Income_OverviewProps) {
     const queryAllFixedIncomeData = async () => {
       // All income data in the DB
       const allFixedIncomeResponse = await getAllFixedIncome();
-      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedIncomeResponse.results) as string[];
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedIncomeResponse.results);
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
       const allFixedIncomeChartData = extractChartData(allFixedIncomeResponse, palette);

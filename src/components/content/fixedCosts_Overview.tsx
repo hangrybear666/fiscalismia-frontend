@@ -31,7 +31,7 @@ function extractChartData(allFixedCosts: any, palette: Palette): { overview: Con
   // No filtering of overall results required
   const overviewFiltered = allFixedCosts.results;
   // unique effective dates as string array
-  const overviewDatesArr: string[] = getUniqueEffectiveDates(overviewFiltered) as string[];
+  const overviewDatesArr: string[] = getUniqueEffectiveDates(overviewFiltered);
   overviewDatesArr.sort();
   // only read date string from datetime
   const overviewXaxis = overviewDatesArr.map((e: any) => e.substring(0, 10));
@@ -222,7 +222,7 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
       const allFixedCosts = await getAllFixedCosts();
-      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results);
       setSelectedEffectiveDate(effectiveDateSelectItems[0]);
       setEffectiveDateSelectItems(effectiveDateSelectItems);
       const allFixedCostsChartData = extractChartData(allFixedCosts, palette);

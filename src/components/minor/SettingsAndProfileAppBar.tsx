@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import PreviewIcon from '@mui/icons-material/Preview';
@@ -52,7 +52,7 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
   const [settingsAnchorElement, setSettingsAnchorElement] = useState<HTMLElement>();
   const settingsMenuOpen = Boolean(settingsAnchorElement);
   // COLOR AND THEME
-  const { loginUserName } = useAuth() as unknown as AuthInfo; // TODO fix as unknown
+  const { loginUserName } = useAuth() as unknown as AuthInfo;
   const isDarkMode = window.localStorage.getItem(localStorageKeys.selectedMode) === 'dark';
   const currentPalette = window.localStorage.getItem(localStorageKeys.selectedPalette);
   const currentColorMode = window.localStorage.getItem(localStorageKeys.selectedMode);
@@ -136,12 +136,6 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          {/* Notification Bell */}
-          <Tooltip title="Alerts • No alerts">
-            <IconButton color="inherit">
-              <NotificationsIcon />
-            </IconButton>
-          </Tooltip>
 
           {/* GITHUB Icon */}
           <Tooltip title={res.GITHUB_REPOS}>
@@ -166,6 +160,12 @@ function SettingsAndProfileAppBar(props: SettingsAndProfileAppBarProps) {
                 <HubIcon />
               </ListItemIcon>
               {res.BACKEND}
+            </MenuItem>
+            <MenuItem onClick={handleGithubMenuClose} component={Link} href={res.GITHUB_INFRASTRUCTURE_URL}>
+              <ListItemIcon sx={{ color: palette.text.primary, margin: 0 }}>
+                <SettingsApplicationsIcon />
+              </ListItemIcon>
+              {res.INFRASTRUCTURE}
             </MenuItem>
           </Menu>
 

@@ -68,7 +68,7 @@ function extractChartData(allFixedCosts: any) {
   };
   const sportsAndHealthFiltered = filterSportsAndHealth(allFixedCosts);
   // unique effective dates as string array
-  const sportsEffectiveDatesArr: string[] = getUniqueEffectiveDates(sportsAndHealthFiltered) as string[];
+  const sportsEffectiveDatesArr: string[] = getUniqueEffectiveDates(sportsAndHealthFiltered);
   sportsEffectiveDatesArr.sort();
   // only read dates from datetime
   const sportsXaxis = sportsEffectiveDatesArr.map((e: string) => e.substring(0, 10));
@@ -133,7 +133,7 @@ function extractChartData(allFixedCosts: any) {
   };
   const mediaAndEntertainmentFiltered = filterMediaAndEntertainment(allFixedCosts);
   // unique effective dates as string array
-  const mediaEffectiveDatesArr: string[] = getUniqueEffectiveDates(mediaAndEntertainmentFiltered) as string[];
+  const mediaEffectiveDatesArr: string[] = getUniqueEffectiveDates(mediaAndEntertainmentFiltered);
   mediaEffectiveDatesArr.sort();
   // only read dates from datetime
   const mediaXaxis = mediaEffectiveDatesArr.map((e: string) => e.substring(0, 10));
@@ -257,7 +257,7 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps): JSX
     const queryAllFixedCosts = async () => {
       // All fixed costs in the DB
       const allFixedCosts = await getAllFixedCosts();
-      const effectiveDateSelectItems = getUniqueEffectiveDates(allFixedCosts.results) as string[];
+      const effectiveDateSelectItems: string[] = getUniqueEffectiveDates(allFixedCosts.results);
       setSelectedEffectiveDate(effectiveDateSelectItems?.length > 0 ? effectiveDateSelectItems[0] : '');
       setEffectiveDateSelectItems(effectiveDateSelectItems);
       const allFixedCostsChartData = extractChartData(allFixedCosts);

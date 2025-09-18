@@ -9,7 +9,12 @@ import { AuthInfo, CustomJwtToken, User } from '../types/custom/customTypes';
 /**
  * React Router context receiving token, authenticated loginUserName and respective setters as values
  */
-const AuthContext = createContext(null);
+const AuthContext = createContext<AuthInfo>({
+  token: null,
+  setToken: () => {},
+  loginUserName: null,
+  setLoginUserName: () => {}
+});
 
 /**
  * The React Context Provider containing contextual values available to all of its children components
@@ -36,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
  * helper method for getting the AuthContext
  * @returns AuthContext containing token, loginUserName and respective setters as values
  */
-export const useAuth = () => {
+export const useAuth = (): AuthInfo => {
   return useContext(AuthContext);
 };
 

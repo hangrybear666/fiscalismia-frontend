@@ -173,10 +173,10 @@ export function constructContentVerticalBarChartObject(
  * income and fixed costs call this method and subsequently are passed to the
  * chart component via incomeDataSets that both require to be sorted in the same way.
  */
-export function getUniqueEffectiveDates(singleDataSet: any) {
+export function getUniqueEffectiveDates(singleDataSet: any): string[] {
   return Array.from(new Set(singleDataSet.map((e: any) => e.effective_date))).sort((a: any, b: any) =>
     a > b ? -1 : 1
-  ); // SORT Desc to initialize with current value at index 0
+  ) as string[]; // SORT Desc to initialize with current value at index 0
 }
 
 /**
