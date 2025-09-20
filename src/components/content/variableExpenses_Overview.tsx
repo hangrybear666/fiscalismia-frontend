@@ -20,16 +20,15 @@ import {
 } from '../../services/pgConnections';
 import {
   Box,
+  Button,
   Container,
   IconButton,
   Palette,
   Skeleton,
   Stack,
-  Theme,
   ToggleButton,
   ToggleButtonGroup,
-  Tooltip,
-  useMediaQuery
+  Tooltip
 } from '@mui/material';
 import {
   constructContentVerticalBarChartObject,
@@ -472,6 +471,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const [selectedMonth, setSelectedMonth] = useState<string>(locales().ARRAY_MONTH_ALL[0][0] as string);
   // to refresh table based on added food item after DB insertion
   const [addedItemId, setAddedItemId] = useState<number>();
+  const [renderAllExpenseRows, setRenderAllExpenseRows] = useState<boolean>(false);
   // Autocomplete Data for InputModal
   const [storeAutoCompleteItemArray, setStoreAutoCompleteItemArray] = useState<string[]>([]);
   const [categoryAutoCompleteItemArray, setCategoryAutoCompleteItemArray] = useState<string[]>([]);
@@ -487,6 +487,26 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     '&:nth-of-type(odd)': { backgroundColor: 'rgba(128,128,128,0.7)' },
     '&:nth-of-type(even)': { backgroundColor: 'rgba(184,184,184,0.8)' },
     '&:last-child td, &:last-child th': { border: 0 }
+  };
+  const toggleButtonStylingProps = {
+    borderRadius: 0,
+    paddingX: 2.0,
+    '&:hover': {
+      bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
+      color: palette.common.white
+    },
+    '&.Mui-selected:hover': {
+      bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500]
+    },
+    '&.Mui-selected': {
+      bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
+      color: palette.mode === 'light' ? palette.common.white : palette.common.black,
+      boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
+      transition: 'box-shadow 0.2s linear 0s'
+    },
+    '&.Mui-disabled': {
+      color: palette.text.disabled
+    }
   };
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
@@ -567,6 +587,10 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     setSelectedVariableExpenses(filteredMonthVarExpenses);
   };
 
+  const handleRenderAllExpenseRows = () => {
+    setRenderAllExpenseRows(!renderAllExpenseRows);
+  };
+
   /**
    * changes selected month via click on left arrow or right arrow.
    * Does nothing if we are in first month, or last month.
@@ -600,7 +624,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
             {/* MAIN CENTERED GRID */}
             <Grid container spacing={1.5}>
               {/* NEW EXPENSE INPUT MODAL */}
-              <Grid xs={12} md={3.5} xl={2}>
+              <Grid xs={12} md={3} xl={2}>
                 <InputVariableExpenseModal
                   setAddedItemId={setAddedItemId}
                   storeAutoCompleteItemArray={storeAutoCompleteItemArray}
@@ -610,7 +634,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               </Grid>
 
               {/* MONTH SELECTION */}
-              <Grid xs={12} md={3.5} xl={2.5}>
+              <Grid xs={12} md={3} xl={2.5}>
                 <Stack direction="row">
                   <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
                     <React.Fragment>
@@ -652,7 +676,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                 </Stack>
               </Grid>
               {/* YEAR SELECTION */}
-              <Grid xs={12} md={5} xl={7.5}>
+              <Grid xs={12} md={4} xl={6.5}>
                 {yearSelectionData
                   ? yearSelectionData.map((parent, index) => {
                       return (
@@ -664,26 +688,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                                 size="large"
                                 value={child}
                                 selected={child === selectedYear}
-                                sx={{
-                                  borderRadius: 0,
-                                  paddingX: 2.0,
-                                  '&:hover': {
-                                    bgcolor: palette.mode === 'light' ? palette.grey[600] : palette.grey[600],
-                                    color: palette.common.white
-                                  },
-                                  '&.Mui-selected:hover': {
-                                    bgcolor: palette.mode === 'light' ? palette.grey[800] : palette.grey[500]
-                                  },
-                                  '&.Mui-selected': {
-                                    bgcolor: palette.mode === 'light' ? palette.grey[900] : palette.grey[400],
-                                    color: palette.mode === 'light' ? palette.common.white : palette.common.black,
-                                    boxShadow: palette.mode === 'light' ? `0px 0px 4px 2px ${palette.grey[700]}` : '',
-                                    transition: 'box-shadow 0.2s linear 0s'
-                                  },
-                                  '&.Mui-disabled': {
-                                    color: palette.text.disabled
-                                  }
-                                }}
+                                sx={toggleButtonStylingProps}
                               >
                                 {child}
                               </ToggleButton>
@@ -694,6 +699,20 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     })
                   : null}
               </Grid>
+
+              {/* SHOW RAW DATA TOGGLE BTN */}
+              <Grid xs={12} md={2} xl={1}>
+                <ToggleButton
+                  size="medium"
+                  onClick={handleRenderAllExpenseRows}
+                  value={locales().VARIABLE_EXPENSES_OVERVIEW_RENDER_ALL_EXPENSE_ROW_BTN}
+                  selected={renderAllExpenseRows}
+                  sx={toggleButtonStylingProps}
+                >
+                  {locales().VARIABLE_EXPENSES_OVERVIEW_RENDER_ALL_EXPENSE_ROW_BTN}
+                </ToggleButton>
+              </Grid>
+
               {/* CONTENT CARDS WITH AGGREGATE VALUES PER MONTH/YEAR */}
               {aggregatedPurchaseInformation ? (
                 <React.Fragment>
@@ -791,46 +810,50 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
         </Grid>
         <Grid xs={0} xl={1}></Grid>
       </Grid>
-      {/* <TableContainer component={Paper} sx={{ borderRadius: 0, mt: 2 }}>
-        <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow sx={tableHeadStyling}>
-              <TableCell>description</TableCell>
-              <TableCell>category</TableCell>
-              <TableCell>store</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>cost</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                purchasing_date
-              </TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                is_planned
-              </TableCell>
-              <TableCell align="right">contains_indulgence</TableCell>
-              <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>sensitivities</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {selectedVariableExpenses
-              ? selectedVariableExpenses.map((row: any) => (
-                  <TableRow key={row.id} sx={tableRowStyling}>
-                    <TableCell>{row.description}</TableCell>
-                    <TableCell>{row.category}</TableCell>
-                    <TableCell>{row.store}</TableCell>
-                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{row.cost}</TableCell>
-                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                      {row.purchasing_date}
-                    </TableCell>
-                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
-                      {row.is_planned ? 'Ja' : 'Nein'}
-                    </TableCell>
-                    <TableCell align="right">{row.contains_indulgence ? 'Ja' : 'Nein'}</TableCell>
-                    <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{row.indulgences}</TableCell>
-                  </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+      {renderAllExpenseRows ? (
+        <TableContainer component={Paper} sx={{ borderRadius: 0, mt: 2 }}>
+          <Table sx={{ minWidth: 500 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow sx={tableHeadStyling}>
+                <TableCell>description</TableCell>
+                <TableCell>category</TableCell>
+                <TableCell>store</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>cost</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
+                  purchasing_date
+                </TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
+                  is_planned
+                </TableCell>
+                <TableCell align="right">contains_indulgence</TableCell>
+                <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>sensitivities</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedVariableExpenses
+                ? selectedVariableExpenses.map((row: any) => (
+                    <TableRow key={row.id} sx={tableRowStyling}>
+                      <TableCell>{row.description}</TableCell>
+                      <TableCell>{row.category}</TableCell>
+                      <TableCell>{row.store}</TableCell>
+                      <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{row.cost}</TableCell>
+                      <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
+                        {row.purchasing_date}
+                      </TableCell>
+                      <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }} align="right">
+                        {row.is_planned ? 'Ja' : 'Nein'}
+                      </TableCell>
+                      <TableCell align="right">{row.contains_indulgence ? 'Ja' : 'Nein'}</TableCell>
+                      <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>{row.indulgences}</TableCell>
+                    </TableRow>
+                  ))
+                : null}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

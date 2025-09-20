@@ -564,7 +564,7 @@ export default function InputVariableExpenseModal(props: InputVariableExpenseMod
               </Typography>
             </Stack>
           ) : null}
-          {/* SPEICHERN */}
+          {/* MODAL SAVE BUTTON */}
           <Button
             onClick={validateInput}
             sx={{
