@@ -2,6 +2,7 @@
 
 ## BUGS
 - Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
+- Pressing Raw Data in Variable Expenses gets stale state from year prior only on year selection, not on month selection
 
 - income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
 - fix menu breakpoints. menu pops up on very small width. the menu expansion icon doesnt work in between
@@ -10,7 +11,6 @@
 
 ## Additional Development
 
-- limit month dropdown in variable expense overview to only actually included months from currently selected dataset
 - add skeleton to income sales before selection has been made
 - add the navigational arrows from variable expenses overview to Income (3x) and Fixed Costs (2x)
 - make stock selling use ISIN dropdown to select only existing stock and pre-populate in all known values

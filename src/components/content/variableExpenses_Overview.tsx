@@ -37,7 +37,8 @@ import {
   getUniqueEffectiveMonthYears,
   getUniqueEffectiveYears,
   getUniquePurchasingDates,
-  getBreakPointWidth
+  getBreakPointWidth,
+  toastOptions
 } from '../../utils/sharedFunctions';
 import {
   ContentCardObject,
@@ -54,6 +55,7 @@ import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { ContentBooleanPieChart } from '../minor/ContentChart_BooleanPie';
 import ContentHorizontalBarChart from '../minor/ContentChart_HorizontalBar';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
 
 const chartBackgroundProperties = (palette: Palette) => {
   return {
@@ -66,12 +68,35 @@ const chartBackgroundProperties = (palette: Palette) => {
 };
 
 /**
- *
+ * Extracts datestrings in the format yyyy without duplicates from raw data
  * @param allVariableExpenses
  */
-function getUniqueEffectiveDateYears(allVariableExpenses: any) {
-  const uniqueEffectiveDateArray = getUniquePurchasingDates(allVariableExpenses);
-  return getUniqueEffectiveYears(uniqueEffectiveDateArray);
+function getUniquePurchasingDateYears(allVariableExpenses: any): string[] {
+  const uniquePurchasingDateArray = getUniquePurchasingDates(allVariableExpenses);
+  return getUniqueEffectiveYears(uniquePurchasingDateArray);
+}
+
+/**
+ * Extracts Month Array in correct locale containing only Months included in raw data.
+ * Pass filtered raw data for single year in order to extract the correct values per year
+ * @param allVariableExpenses
+ * @returns 2D Array of Month name and number strings in the Format [January, February][01,02] in correct locale
+ */
+function getUniquePurchasingDateMonths(allVariableExpenses: any): (string | RegExp)[][] {
+  const uniquePurchasingDateArray = getUniquePurchasingDates(allVariableExpenses);
+  // format yyyy-mm
+  const uniquePurchasingMonthYears = getUniqueEffectiveMonthYears(uniquePurchasingDateArray);
+  // format mm
+  const uniqueMonthNumbers = uniquePurchasingMonthYears.map((yearMonthStr: string) => yearMonthStr.substring(5, 7));
+  // format [monthname][monthNr] initialized with ALL Aggregate value
+  let localeMonthArr: (string | RegExp)[][] = locales().ARRAY_MONTH_ALL.filter((e) => e[0] == res.ALL);
+  uniqueMonthNumbers.forEach((monthNr) => {
+    // if monthNr matches string between 01-12 we are guaranteed to find an element
+    if (monthNr.match(/\b(0[1-9]|1[0-2])\b/)) {
+      localeMonthArr.push(locales().ARRAY_MONTH_ALL.find((e) => e[1] == monthNr)!);
+    }
+  });
+  return localeMonthArr;
 }
 
 /**
@@ -91,8 +116,9 @@ function extractHorizontalBarChartData(allVariableExpenses: any, palette: Palett
   const indulgenceSumMap: Map<string, number> = allVariableExpensesFiltered.reduce(
     (map: Map<string, number>, indulgences: string) => {
       if (!indulgences) {
-        console.error(
-          'indulgences is null, please check that each row with the contains_indulgence flag set to true has entries here.'
+        toast.warn(
+          'indulgences is null, please check that each row with the contains_indulgence flag set to true has entries here.',
+          toastOptions
         );
       } else {
         const individualIndulgences: string[] = indulgences.split(',');
@@ -356,7 +382,7 @@ function extractLineChartData(allVariableExpenses: any, palette: Palette) {
  * categoryAutoCompleteItemArray: unique categories within variable expenses
  * indulgencesAutoCompleteItemArray: unique indulgences within variable expenses
  */
-function getStoreDataStructuresForAutocomplete(allStores: any[], allCategories: any[], allSensitivities: any[]) {
+function getDataStructuresForAutocomplete(allStores: any[], allCategories: any[], allSensitivities: any[]) {
   const storeArray: string[] = [];
   allStores.forEach((e, i: number) => {
     storeArray[i] = `${e.description}`;
@@ -466,9 +492,10 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     useState<ContentChartHorizontalBarObject>();
   const [selectedChartLabel, setSelectedChartLabel] = useState<string>('');
   // year selection
-  const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
+  const [yearsWithPurchases, setYearsWithPurchases] = useState<string[][]>();
   const [selectedYear, setSelectedYear] = useState<string>();
-  const [selectedMonth, setSelectedMonth] = useState<string>(locales().ARRAY_MONTH_ALL[0][0] as string);
+  const [monthsWithPurchasesInSelectedYear, setMonthsWithPurchasesInSelectedYear] = useState<(string | RegExp)[][]>();
+  const [selectedMonth, setSelectedMonth] = useState<string>(locales().ARRAY_MONTH_ALL[0][0] as string); // default All Month Aggregate
   // to refresh table based on added food item after DB insertion
   const [addedItemId, setAddedItemId] = useState<number>();
   const [renderAllExpenseRows, setRenderAllExpenseRows] = useState<boolean>(false);
@@ -511,15 +538,13 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
       const allVariableExpenses = await getAllVariableExpenses();
-      const uniqueYears = getUniqueEffectiveDateYears(allVariableExpenses.results);
-      setYearSelectionData(new Array(uniqueYears)); // 2D Array for mapping ToggleButtonGroup as parent
-      // setSelectedYear(uniqueYears[0]);
-      // handleYearSelection(null, uniqueYears[0]);
+      const uniqueYears: string[] = getUniquePurchasingDateYears(allVariableExpenses.results);
+      setYearsWithPurchases(new Array(uniqueYears)); // Creates 2D Array for mapping ToggleButtonGroup as parent
       const allStores = await getAllVariableExpenseStores();
       const allCategories = await getAllVariableExpenseCategories();
       const allSensitivities = await getAllVariableExpenseSensitivities();
       setAllVariableExpenses(allVariableExpenses.results);
-      const autoCompleteItemArrays = getStoreDataStructuresForAutocomplete(
+      const autoCompleteItemArrays = getDataStructuresForAutocomplete(
         allStores.results,
         allCategories.results,
         allSensitivities.results
@@ -536,9 +561,10 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     const filteredYearVarExpenses = allVariableExpenses.filter(
       (e: any) => e.purchasing_date.substring(0, 4) === newValue
     );
-    handleSelectMonth(res.ALL);
-    // Set Selected Variable Expenses
     setSelectedVariableExpenses(filteredYearVarExpenses);
+    // Month Selection - Initialize with Aggregate All
+    setMonthsWithPurchasesInSelectedYear(getUniquePurchasingDateMonths(filteredYearVarExpenses));
+    handleSelectMonth(res.ALL);
     // Line Chart aggregating total expenses per month
     const varExpenseLineChartAggregate = extractLineChartData(filteredYearVarExpenses, palette);
     setExpenseLineChartData(varExpenseLineChartAggregate.overview);
@@ -560,7 +586,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const handleSelectMonth = (selected: string): void => {
     setSelectedMonth(selected);
     let filteredMonthVarExpenses;
-    const selectedMonthArr: (string | RegExp)[] = locales().ARRAY_MONTH_ALL.filter((e) => e[0] === selected)[0];
+    const selectedMonthArr: string[] = monthsWithPurchasesInSelectedYear
+      ? (monthsWithPurchasesInSelectedYear.filter((e) => e[0] === selected)[0] as string[])
+      : (locales().ARRAY_MONTH_ALL.filter((e) => e[0] === selected)[0] as string[]);
     if (selectedMonthArr && selectedMonthArr[0] === res.ALL) {
       // filter all expenses by preselected year
       filteredMonthVarExpenses = allVariableExpenses.filter(
@@ -599,15 +627,30 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const handleMonthDirectionChanged = (direction: 'left' | 'right') => {
     const isPriorMonth = direction === 'left' ? true : false;
     let selectedMonthIndex = -1;
-    locales().ARRAY_MONTH_ALL.forEach((e, i) => {
+    const availableMonths = monthsWithPurchasesInSelectedYear
+      ? monthsWithPurchasesInSelectedYear
+      : locales().ARRAY_MONTH_ALL;
+    availableMonths.forEach((e, i) => {
       if (e[0] === selectedMonth) {
         selectedMonthIndex = i;
       }
     });
     if (isPriorMonth && selectedMonthIndex > 0) {
-      handleSelectMonth(locales().ARRAY_MONTH_ALL[selectedMonthIndex - 1][0] as string);
-    } else if (!isPriorMonth && selectedMonthIndex < 12) {
-      handleSelectMonth(locales().ARRAY_MONTH_ALL[selectedMonthIndex + 1][0] as string);
+      handleSelectMonth(
+        monthsWithPurchasesInSelectedYear
+          ? (monthsWithPurchasesInSelectedYear[selectedMonthIndex - 1][0] as string)
+          : (locales().ARRAY_MONTH_ALL[selectedMonthIndex - 1][0] as string)
+      );
+    } else if (
+      !isPriorMonth &&
+      selectedMonthIndex < (monthsWithPurchasesInSelectedYear ? monthsWithPurchasesInSelectedYear?.length - 1 : 12)
+    ) {
+      console.log('length ', monthsWithPurchasesInSelectedYear?.length);
+      handleSelectMonth(
+        monthsWithPurchasesInSelectedYear
+          ? (monthsWithPurchasesInSelectedYear[selectedMonthIndex + 1][0] as string)
+          : (locales().ARRAY_MONTH_ALL[selectedMonthIndex + 1][0] as string)
+      );
     }
   };
   return (
@@ -637,73 +680,79 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               <Grid xs={12} md={3} xl={2.5}>
                 <Stack direction="row">
                   <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
-                    <React.Fragment>
-                      <IconButton
-                        color="inherit"
-                        disabled={selectedYear ? false : true}
-                        onClick={() => handleMonthDirectionChanged('left')}
-                        sx={{ paddingX: 2, width: 1 / 9 }}
-                      >
-                        <AssignmentReturnIcon />
-                      </IconButton>
-                    </React.Fragment>
+                    <IconButton
+                      color="inherit"
+                      disabled={selectedYear ? false : true}
+                      onClick={() => handleMonthDirectionChanged('left')}
+                      sx={{ paddingX: 2, width: 1 / 9 }}
+                    >
+                      <AssignmentReturnIcon />
+                    </IconButton>
                   </Tooltip>
                   <Container maxWidth={false} sx={{ width: 7 / 9 }}>
-                    <SelectDropdown
-                      selectLabel={locales().GENERAL_DATE}
-                      selectItems={locales().ARRAY_MONTH_ALL.map((e) => e[0] as string)}
-                      selectedValue={selectedMonth}
-                      handleSelect={handleSelectMonth}
-                      disabled={selectedYear ? false : true}
-                    />
+                    {allVariableExpenses ? (
+                      <SelectDropdown
+                        selectLabel={locales().GENERAL_DATE}
+                        selectItems={
+                          monthsWithPurchasesInSelectedYear
+                            ? monthsWithPurchasesInSelectedYear.map((e) => e[0] as string)
+                            : locales().ARRAY_MONTH_ALL.map((e) => e[0] as string)
+                        }
+                        selectedValue={selectedMonth}
+                        handleSelect={handleSelectMonth}
+                        disabled={selectedYear ? false : true}
+                      />
+                    ) : (
+                      <Skeleton variant="rectangular" height={60} />
+                    )}
                   </Container>
                   <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
-                    <React.Fragment>
-                      <IconButton
-                        color="inherit"
-                        disabled={selectedYear ? false : true}
-                        onClick={() => handleMonthDirectionChanged('right')}
-                        sx={{ paddingX: 2, width: 1 / 9 }}
-                      >
-                        <AssignmentReturnIcon
-                          sx={{
-                            transform: 'scaleX(-1)'
-                          }}
-                        />
-                      </IconButton>
-                    </React.Fragment>
+                    <IconButton
+                      color="inherit"
+                      disabled={selectedYear ? false : true}
+                      onClick={() => handleMonthDirectionChanged('right')}
+                      sx={{ paddingX: 2, width: 1 / 9 }}
+                    >
+                      <AssignmentReturnIcon
+                        sx={{
+                          transform: 'scaleX(-1)'
+                        }}
+                      />
+                    </IconButton>
                   </Tooltip>
                 </Stack>
               </Grid>
               {/* YEAR SELECTION */}
               <Grid xs={12} md={4} xl={6.5}>
-                {yearSelectionData
-                  ? yearSelectionData.map((parent, index) => {
-                      return (
-                        <ToggleButtonGroup key={index} exclusive value={selectedYear} onChange={handleYearSelection}>
-                          {parent.map((child, index) => {
-                            return (
-                              <ToggleButton
-                                key={index}
-                                size="large"
-                                value={child}
-                                selected={child === selectedYear}
-                                sx={toggleButtonStylingProps}
-                              >
-                                {child}
-                              </ToggleButton>
-                            );
-                          })}
-                        </ToggleButtonGroup>
-                      );
-                    })
-                  : null}
+                {yearsWithPurchases ? (
+                  yearsWithPurchases.map((parent, index) => {
+                    return (
+                      <ToggleButtonGroup key={index} exclusive value={selectedYear} onChange={handleYearSelection}>
+                        {parent.map((child, index) => {
+                          return (
+                            <ToggleButton
+                              key={index}
+                              size="large"
+                              value={child}
+                              selected={child === selectedYear}
+                              sx={toggleButtonStylingProps}
+                            >
+                              {child}
+                            </ToggleButton>
+                          );
+                        })}
+                      </ToggleButtonGroup>
+                    );
+                  })
+                ) : (
+                  <Skeleton variant="rectangular" height={60} />
+                )}
               </Grid>
 
               {/* SHOW RAW DATA TOGGLE BTN */}
               <Grid xs={12} md={2} xl={1}>
                 <ToggleButton
-                  size="medium"
+                  size="small"
                   onClick={handleRenderAllExpenseRows}
                   value={locales().VARIABLE_EXPENSES_OVERVIEW_RENDER_ALL_EXPENSE_ROW_BTN}
                   selected={renderAllExpenseRows}
