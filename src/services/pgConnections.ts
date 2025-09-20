@@ -383,7 +383,7 @@ export const postUpdatedUserSettings = async (username: string, settingKey: stri
  * - <input type="file" /> within a <Button component='label'/>
  * @param event
  * @param foodItemId
- * @returns
+ * @returns persistence filepath of the stored image
  */
 export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>, foodItemId: string) => {
   setToken();
@@ -499,7 +499,7 @@ export const postDividends = async (dividendsObject: DividendsRelatedInvestments
 /**
  * deletes server side images and removes filepath entry from db
  * @param id
- * @returns
+ * @returns filepath string if deletion was successful
  */
 export const deleteFoodItemImg = async (id: string) => {
   setToken();

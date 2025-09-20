@@ -1,11 +1,6 @@
-# BUG: when deleting images from food prices it is not refreshed if the discount has just been added
-# BUG: when deleting images from food prices it is not refreshed if the menu navigation has been hit
-# BUG: when deleting images from food prices it is not refreshed after pressing F5
-# BUG: when deleting images from a discounted item it is not refreshed if the discount has just been added
-# BUG: when deleting images from a discounted item it is not refreshed if the menu navigation has been hit
-# BUG: when deleting images from a discounted item it is not refreshed after pressing F5
-
 # Wenn man F5 zum Reload drückt ist Home in Headerzeile gerendered, statt der eigentlichen Navigation
+
+# replace remaining console. statements with toasts or remove
 
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
 # Create Warning in INSERT STATEMENTS or DB or Frontend for set indulgences without a true contains_indulgences flag

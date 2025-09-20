@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { AxiosError } from 'axios';
 import Box from '@mui/material/Box';
@@ -95,16 +95,21 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
     elevation,
     imgHeight
   } = props;
-  const [open, setOpen] = React.useState(false);
+  const [notificationOpen, setNotificationOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
   const [notificationSeverity, setNotificationSeverity] = React.useState('info');
-  const [imgFilePath, setImgFilePath] = React.useState<string | undefined>(undefined);
+  const [imgFilePath, setImgFilePath] = React.useState<string | null>(img);
+  const [renderImgDeletion, setRenderImgDeletion] = React.useState<boolean>(img ? true : false);
+
+  useEffect(() => {
+    setRenderImgDeletion(imgFilePath ? true : false);
+  }, [imgFilePath]);
 
   const handleSnackbarClose = (_event: React.SyntheticEvent<any> | Event, reason: SnackbarCloseReason): void => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpen(false);
+    setNotificationOpen(false);
   };
 
   const getSupermarketLogo = () => {
@@ -152,34 +157,29 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
-      setOpen(true);
+      setNotificationOpen(true);
       return;
     } else if (response instanceof FileSizeError) {
       // User Notification via Snackbar
       setNotificationMessage(response.message);
       setNotificationSeverity('warning');
-      setOpen(true);
+      setNotificationOpen(true);
       return;
     }
     if (response?.status == 200) {
       const filepath = response.data;
       setImgFilePath(serverConfig.API_BASE_URL.concat('/').concat(filepath));
-      // User Notification via Snackbar
       setNotificationMessage(`File persisted in path: ${filepath}`);
       setNotificationSeverity('success');
-      setOpen(true);
+      setNotificationOpen(true);
     } else if (response?.status == 409) {
-      // console.error(response.data);
-      // User Notification via Snackbar
       setNotificationMessage('STATUS 409: choose a different image.');
       setNotificationSeverity('error');
-      setOpen(true);
+      setNotificationOpen(true);
     } else if (response?.status == 400) {
-      // console.error(response.data);
-      // User Notification via Snackbar
       setNotificationMessage('STATUS 400: image could not be processed.');
       setNotificationSeverity('error');
-      setOpen(true);
+      setNotificationOpen(true);
     }
   };
 
@@ -187,24 +187,22 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
     event.preventDefault();
     const response = await deleteFoodItemImg(foodItemId);
     if (response.results[0]?.filepath) {
-      // // User Notification via Snackbar
       setNotificationMessage(`Image successfully deleted from path: ${response.results[0].filepath}`);
       setNotificationSeverity('info');
-      setImgFilePath(undefined);
-      setOpen(true);
+      setImgFilePath(null);
+      setNotificationOpen(true);
     } else {
       setNotificationMessage('Image could not be deleted');
       setNotificationSeverity('error');
-      setOpen(true);
+      setNotificationOpen(true);
     }
   };
 
   return (
     <>
-      {/* USER NOTIFICATION */}
-      {/* TODO Pull up into parents for generic logging. */}
+      {/* CUSTOM USER NOTIFICATION FOR LEARNING INSTEAD OF TOAST */}
       <Snackbar
-        open={open}
+        open={notificationOpen}
         autoHideDuration={8000}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={handleSnackbarClose}
@@ -233,10 +231,11 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
       >
         {img === res.NO_IMG ? (
           <></>
-        ) : img || imgFilePath ? (
+        ) : renderImgDeletion ? (
           <Box sx={{ position: 'relative' }}>
             {/* IMAGE queried from server */}
             <CardMedia
+              component="img"
               sx={{ height: imgHeight ? imgHeight : 200 }}
               image={img ? img : imgFilePath ? imgFilePath : undefined}
               title={header}
