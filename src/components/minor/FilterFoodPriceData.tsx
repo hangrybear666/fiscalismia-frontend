@@ -247,6 +247,7 @@ export default function FilterFoodPriceData(props: FilterFoodPriceDataProps) {
     setRenderImages(checked);
     if (!checked) {
       // HIDE IMAGES
+      // to hide by default call extractCardData in deals_FoodPrices with initializeWithoutImage == true and initialize renderImages with false
       setFilteredFoodPrices(
         filteredFoodPrices
           ? filteredFoodPrices.map((e: any) => {

@@ -27,13 +27,13 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Ele
   const [foodItemCards, setFoodItemCards] = useState<ContentCardFoodPrice[]>([]);
   const [hasBeenSortedBy, setHasBeenSortedBy] = useState<number | null>(null);
   // Render Images yes or no switch
-  const [renderImages, setRenderImages] = React.useState(false);
+  const [renderImages, setRenderImages] = React.useState(true); // default value
 
   useEffect(() => {
     const getAllPricesAndDiscounts = async () => {
       const allFoodPrices = await getAllFoodPricesAndDiscounts();
       setFoodPrices(allFoodPrices.results);
-      setFoodItemCards(extractCardData(allFoodPrices.results, true));
+      setFoodItemCards(extractCardData(allFoodPrices.results, false));
     };
     if (filteredFoodPrices) {
       setFoodItemCards(extractCardData(filteredFoodPrices, false));
