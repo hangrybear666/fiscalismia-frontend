@@ -3,8 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
-import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
-import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
@@ -17,13 +15,6 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
-
-const iconProperties = {
-  fontSize: 55,
-  opacity: 0.5,
-  boxShadow: 10,
-  borderRadius: 1
-};
 
 /**
  * @param fixedCosts
@@ -193,7 +184,7 @@ function extractCardData(specificFixedCosts: any) {
     null,
     '1.00',
     null,
-    <FitnessCenterOutlinedIcon sx={iconProperties} />,
+    null,
     '/imgs/fitness-tooLarge.jpg'
   );
   const mediaAndEntertainment = constructContentCardObject(
@@ -201,7 +192,7 @@ function extractCardData(specificFixedCosts: any) {
     null,
     '1.00',
     null,
-    <SubscriptionsOutlinedIcon sx={iconProperties} />,
+    null,
     '/imgs/cinema-tempdel.jpg'
   );
 

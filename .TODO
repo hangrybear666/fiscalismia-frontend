@@ -4,10 +4,9 @@
 
 # income/monthly_budget Feinschliff verpassen -> x Achse als Zeit-Achse und kürzere Linie nach rechts auffüllen
 # Create Warning in INSERT STATEMENTS or DB or Frontend for set indulgences without a true contains_indulgences flag
-# Create a Header with potentially Logo on SignInSide
-# Rethink Normalized price being 3500kcal. Potentially lower it to be more mainstream applicable
 # selling stock should throw an error if selling stock not owned in adequate amount.
 # potentially make stock selling use ISIN dropdown to select only existing stock
 # Replace Card Icons with nicer styling or remove them in fixed cost living essentials and leisure
+# fix menu breakpoints. menu pops up on very small width. the menu expansion icon doesnt work in between
 
 # Minor (potentially only Development) Bug: When logging in and being forwarded to Home the selected_language is not reflected in menu and header locales until pressing F5 despite src/utils/localeConfiguration.ts returning correct locale. To reproduce, change e.g. a value in resource properties after logging out, then login and the language discrepancy can be seen, if the locale is set to german. Since some values then use the default fallback of english. It seems the file is not queried for the menu and header values and some others. In http://localhost:3001/fiscalismia/deals/food_prices some values like the dropdown text on the right are in german, while the buttons are in english. I suspect a HMR caching issue with local development. ====> Test in production with a compiled javascript file, I suspect it might be gone.

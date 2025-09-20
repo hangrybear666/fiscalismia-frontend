@@ -3,10 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
-import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
-import CellWifiOutlinedIcon from '@mui/icons-material/CellWifiOutlined';
-import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
-import WaterDamageOutlinedIcon from '@mui/icons-material/WaterDamageOutlined';
 import SelectDropdown from '../minor/SelectDropdown';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
@@ -20,13 +16,6 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
-
-const iconProperties = {
-  fontSize: 55,
-  opacity: 0.5,
-  boxShadow: 10,
-  borderRadius: 1
-};
 
 /**
  *
@@ -129,31 +118,17 @@ function extractCardData(specificFixedCosts: any) {
     null,
     '1.00',
     null,
-    <LocalAtmOutlinedIcon sx={iconProperties} />,
+    null,
     res.NO_IMG
   );
-  const dslAndPhone = constructContentCardObject(
-    locales().FIXED_COSTS_DSL_PHONE,
-    null,
-    '1.00',
-    null,
-    <CellWifiOutlinedIcon sx={iconProperties} />,
-    res.NO_IMG
-  );
-  const insurance = constructContentCardObject(
-    locales().FIXED_COSTS_INSURANCE,
-    null,
-    '1.00',
-    null,
-    <WaterDamageOutlinedIcon sx={iconProperties} />,
-    res.NO_IMG
-  );
+  const dslAndPhone = constructContentCardObject(locales().FIXED_COSTS_DSL_PHONE, null, '1.00', null, null, res.NO_IMG);
+  const insurance = constructContentCardObject(locales().FIXED_COSTS_INSURANCE, null, '1.00', null, null, res.NO_IMG);
   const studentLoans = constructContentCardObject(
     locales().FIXED_COSTS_STUDENT_LOANS,
     null,
     '1.00',
     null,
-    <MoneyOffOutlinedIcon sx={iconProperties} />,
+    null,
     res.NO_IMG
   );
   // Rent and Utilities

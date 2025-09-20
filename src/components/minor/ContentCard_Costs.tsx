@@ -18,6 +18,7 @@ interface ContentCardCostsProps {
   detailHeader?: string;
   elevation?: number;
   imgHeight?: number;
+  headerFixedLines?: number;
 }
 /**
  * JSX rendered as HTML for several Custom React Components displaying synthesized information extracted from the db.
@@ -27,7 +28,7 @@ interface ContentCardCostsProps {
  */
 export default function ContentCardCosts(props: ContentCardCostsProps) {
   const { palette } = useTheme();
-  const { img, header, amount, subtitle, icon, details, elevation, imgHeight, detailHeader } = props;
+  const { img, header, amount, subtitle, icon, details, elevation, imgHeight, detailHeader, headerFixedLines } = props;
 
   return (
     <Card
@@ -47,7 +48,15 @@ export default function ContentCardCosts(props: ContentCardCostsProps) {
           {/* HEADER */}
           <Grid display="flex" justifyContent="center" alignItems="center" xs={header ? 12 : 0}>
             {header ? (
-              <Typography variant="overline" sx={{ fontSize: 14, paddingX: 2 }} color="text.secondary">
+              <Typography
+                variant="overline"
+                sx={{
+                  fontSize: 14,
+                  paddingX: 2,
+                  height: headerFixedLines ? `${headerFixedLines * 2.5}em` : '100%'
+                }}
+                color="text.secondary"
+              >
                 {header}
               </Typography>
             ) : null}

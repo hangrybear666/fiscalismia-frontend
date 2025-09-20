@@ -281,33 +281,33 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
             ) : null}
             {rentAndUtilitiesCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...rentAndUtilitiesCard} />
+                <ContentCardCosts headerFixedLines={2} {...rentAndUtilitiesCard} />
               </Grid>
             ) : null}
 
             {studentLoansCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...studentLoansCard} />
+                <ContentCardCosts headerFixedLines={2} {...studentLoansCard} />
               </Grid>
             ) : null}
             {dslAndPhoneCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...dslAndPhoneCard} />
+                <ContentCardCosts headerFixedLines={2} {...dslAndPhoneCard} />
               </Grid>
             ) : null}
             {sportsAndHealthCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...sportsAndHealthCard} />
+                <ContentCardCosts headerFixedLines={2} {...sportsAndHealthCard} />
               </Grid>
             ) : null}
             {mediaAndEntertainmentCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...mediaAndEntertainmentCard} />
+                <ContentCardCosts headerFixedLines={2} {...mediaAndEntertainmentCard} />
               </Grid>
             ) : null}
             {insuranceCard ? (
               <Grid xs={6} md={4} xl={2}>
-                <ContentCardCosts {...insuranceCard} />
+                <ContentCardCosts headerFixedLines={2} {...insuranceCard} />
               </Grid>
             ) : null}
             {allFixedCostsChart ? (
