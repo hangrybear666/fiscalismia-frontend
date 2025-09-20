@@ -5,15 +5,19 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
+import ContentCardCosts from '../minor/ContentCard_Costs';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ContentCard from '../minor/ContentCard_Costs';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
 import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { getUniqueEffectiveYears, getUniquePurchasingDates } from '../../utils/sharedFunctions';
-import { RouteInfo } from '../../types/custom/customTypes';
+import {
+  constructContentCardObject,
+  getUniqueEffectiveYears,
+  getUniquePurchasingDates
+} from '../../utils/sharedFunctions';
+import { ContentCardObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../utils/sharedFunctions';
@@ -28,64 +32,13 @@ function getUniqueEffectiveDateYears(allSales: any) {
   return getUniqueEffectiveYears(uniqueEffectiveDateArray);
 }
 
-export type ContentCardSales = {
-  header: string;
-  amount: number | null;
-  subtitle: string;
-  details: string[] | null;
-  icon: React.ReactNode;
-  img: string | null;
-  detailHeader: string | undefined;
-  elevation?: number;
-  imgHeight?: number;
-};
-
-/**
- * Specific Card for variable_expenses with the category Sales therefore not being a purchase.
- * Cards adding additional details compared to ContentCardCosts from sharesFunctions
- * @param header
- * @param amount
- * @param subtitle
- * @param detailHeader
- * @param details
- * @param icon
- * @param img
- * @returns
- */
-function constructContentCardObjectSales(
-  header: string,
-  amount: number | null,
-  subtitle: string,
-  detailHeader: string | undefined,
-  details: string[] | null,
-  icon: React.ReactNode | string,
-  img: string | null
-) {
-  // TODO img
-  const contentCardObj = {
-    header: header.trim(),
-    amount: amount ? amount : null,
-    subtitle: subtitle,
-    detailHeader: detailHeader, // logic unique to this function
-    details: details,
-    img: img
-      ? img === res.NO_IMG
-        ? null
-        : img
-      : `https://source.unsplash.com/random/?money&${Math.floor(Math.random() * 100)}`,
-    icon: icon
-  };
-  return contentCardObj;
-}
-
 /**
  *  Extracts information of sales (variable expenses with category ='Sale')
  *  to display in cards dependent on the selected year
  * @param {*} sales
- * @param selectedYear
  * @returns
  */
-function extractCardData(sales: any, selectedYear: number | string = 2023) {
+function extractCardData(sales: any) {
   // ensure that sales have positive cost value
   const salesTransformed = sales.map((e: any) => {
     if (e.cost < 0) {
@@ -96,16 +49,15 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     return e;
   });
   // DISTINCT STORE SALE CARDS
-  const storeBasedCards: ContentCardSales[] = [];
+  const storeBasedCards: ContentCardObject[] = [];
   const distinctSaleStores: string[] = Array.from(new Set(salesTransformed.map((e: any) => e.store)));
   // loop through all stores of sale and construct summed cost cards for each
   distinctSaleStores.forEach((store: string) => {
     const storeFilteredSales = salesTransformed.filter((e: any) => e.store === store);
-    const distinctStoreCard = constructContentCardObjectSales(
+    const distinctStoreCard = constructContentCardObject(
       store,
       null,
-      `${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
-      locales().INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER,
+      '', // Custom subtitle is set later as Card Prop
       null,
       null,
       res.NO_IMG
@@ -120,11 +72,10 @@ function extractCardData(sales: any, selectedYear: number | string = 2023) {
     storeBasedCards.push(distinctStoreCard);
   });
   // TOTAL SALES
-  const totalSales = constructContentCardObjectSales(
+  const totalSales = constructContentCardObject(
     locales().INCOME_SALES_CARD_TOTAL_SALES_HEADER,
     null,
-    `${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`,
-    undefined,
+    '', // Custom subtitle is set later as Card Prop
     null,
     null,
     res.NO_IMG
@@ -150,8 +101,8 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
   const { palette, breakpoints } = useTheme();
   const [allSales, setAllSales] = useState<any>(null);
   const [selectedSales, setSelectedSales] = useState<any>();
-  const [salesCard, setSalesCard] = useState<ContentCardSales>();
-  const [distinctStoreSalesCard, setDistinctStoreSalesCard] = useState<ContentCardSales[]>();
+  const [salesCard, setSalesCard] = useState<ContentCardObject>();
+  const [distinctStoreSalesCard, setDistinctStoreSalesCard] = useState<ContentCardObject[]>();
   // year selection
   const [selectedYear, setSelectedYear] = useState<string>();
   const [yearSelectionData, setYearSelectionData] = useState<string[][]>();
@@ -179,13 +130,13 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
     setSelectedYear(newValue);
     if (newValue === res.ALL) {
       setSelectedSales(allSales.results);
-      const extractedSales = extractCardData(allSales.results, res.ALL);
+      const extractedSales = extractCardData(allSales.results);
       setSalesCard(extractedSales.totalSales);
       setDistinctStoreSalesCard(extractedSales.storeBasedCards);
     } else {
       const filteredSales = allSales.results.filter((e: any) => e.purchasing_date.substring(0, 4) === newValue);
       setSelectedSales(filteredSales);
-      const extractedSales = extractCardData(filteredSales, newValue);
+      const extractedSales = extractCardData(filteredSales);
       setSalesCard(extractedSales.totalSales);
       setDistinctStoreSalesCard(extractedSales.storeBasedCards);
     }
@@ -249,9 +200,29 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
         {salesCard ? (
           <Grid xs={12} lg={4} xl={3}>
             <Stack spacing={2} sx={{ width: '100%' }}>
-              <ContentCard {...salesCard} />
+              {/* Custom properties subtitle not being used from constructContentCardObject output */}
+              <ContentCardCosts
+                header={salesCard.header}
+                amount={salesCard.amount}
+                details={salesCard.details}
+                icon={salesCard.icon}
+                img={salesCard.img}
+                subtitle={`${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`}
+              />
               {distinctStoreSalesCard
-                ? distinctStoreSalesCard.map((card) => <ContentCard key={card.header} {...card} />)
+                ? distinctStoreSalesCard.map((card) => (
+                    // Custom properties detailHeader and subtitle not being used from constructContentCardObject output
+                    <ContentCardCosts
+                      key={card.header}
+                      header={card.header}
+                      amount={card.amount}
+                      details={card.details}
+                      icon={card.icon}
+                      img={card.img}
+                      subtitle={`${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`}
+                      detailHeader={locales().INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER}
+                    />
+                  ))
                 : null}
             </Stack>
           </Grid>

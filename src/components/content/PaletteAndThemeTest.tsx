@@ -7,7 +7,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import { localStorageKeys } from '../../resources/resource_properties';
 
 /**
  * Example Material UI Elements to configure Palette Colors
@@ -16,21 +15,13 @@ import { localStorageKeys } from '../../resources/resource_properties';
  * @returns several interface elements to test a palette if show === true
  */
 export default function PaletteAndThemeTest({ show = false }) {
-  const userColorMode = window.localStorage.getItem(localStorageKeys.selectedMode);
-  const userPalette = window.localStorage.getItem(localStorageKeys.selectedPalette);
-
-  const click = () => {
-    console.log('click');
-    console.log(userColorMode);
-    console.log(userPalette);
-  };
   if (!show) {
     return <></>;
   }
   return (
     <Paper elevation={12} sx={{ p: 2, borderRadius: 0 }}>
       <Stack direction="row" spacing={1}>
-        <Button onClick={click} size="large" variant="contained" color="primary">
+        <Button size="large" variant="contained" color="primary">
           Primary
         </Button>
         <Button size="large" variant="contained" color="secondary">

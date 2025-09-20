@@ -19,6 +19,8 @@ export const locales_en = {
   MENU_FIXED_COSTS: 'Fixed Costs',
   MENU_INCOME: 'Income',
 
+  GENERAL_EVERY: 'Every',
+  GENERAL_MONTHS: 'Months',
   GENERAL_UPLOAD_IMG: 'Upload Image',
   GENERAL_CONFIRM: 'Confirm',
   GENERAL_DELETE: 'Delete',

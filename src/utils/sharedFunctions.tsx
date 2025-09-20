@@ -43,7 +43,7 @@ export function constructContentCardObject(
           ? locales().INTERVAL_HALFYEARLY
           : subtitle === '12.00'
             ? locales().INTERVAL_YEARLY
-            : `alle ${subtitle} Monate`;
+            : `${locales().GENERAL_EVERY} ${subtitle} ${locales().GENERAL_MONTHS}`;
   const contentCardObj = {
     header: header.trim(),
     amount: amount ? amount : null,
