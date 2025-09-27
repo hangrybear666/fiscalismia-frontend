@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -117,7 +118,26 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
       let ownedInvestmentIds: number[] = [];
       let partiallySoldInvestment: any;
       let fullySoldInvestmentIds: number[] = [];
-      filteredInvestments.sort((a: any, b: any) => new Date(a.execution_date) > new Date(b.execution_date)); // Sort by ascending execution_date - earliest first
+      filteredInvestments.sort((a: any, b: any) => {
+        if (a.execution_date === b.execution_date) {
+          // If buy and sale date are the same, secondary sort condition: execution_type ('BUY' before 'SELL')
+          if (
+            a.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY &&
+            b.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY
+          ) {
+            return -1; // 'a' (BUY) comes before 'b' (SELL)
+          } else if (
+            a.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY &&
+            b.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY
+          ) {
+            return 1; // 'a' (SELL) comes after 'b' (BUY)
+          } else {
+            return 0; // if type and date are the same, sorting doesn't matter
+          }
+        } else {
+          return new Date(a.execution_date) > new Date(b.execution_date);
+        }
+      }); // Sort by ascending execution_date - earliest first
       filteredInvestments.forEach((e: any, _index: number, investments: any[]) => {
         if (e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY) {
           //   __
@@ -142,10 +162,10 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
                     (currentOwnedUnits + Number(e.units));
                 }
               });
-            // console.debug("newAvgPrice")
-            // console.debug(newAvgPrice)
-            // console.debug("currentOwnedUnits")
-            // console.debug(currentOwnedUnits)
+            console.debug('newAvgPrice');
+            console.debug(newAvgPrice);
+            console.debug('currentOwnedUnits');
+            console.debug(currentOwnedUnits);
             averageUnitPrice = newAvgPrice;
           }
           ownedInvestmentIds.push(e.id);
@@ -153,8 +173,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             ownedUnits === 0
               ? Number(e.price_per_unit) // first invocation or owned Units were at 0 after sale --> avg Unit price is identical to current buy
               : (averageUnitPrice * ownedUnits + e.price_per_unit * e.units) / (ownedUnits + Number(e.units)); // subsequent invocation. calculate running average
-          // console.debug("ownedUnits " + ownedUnits + " + " + Number(e.units) + " for " + e.price_per_unit + "€")
-          // console.debug("averageUnitPrice " + averageUnitPrice)
+          console.debug('ownedUnits ' + ownedUnits + ' + ' + Number(e.units) + ' for ' + e.price_per_unit + '€');
+          console.debug('averageUnitPrice ' + averageUnitPrice);
           ownedUnits += Number(e.units);
         } else if (e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY) {
           //  __   ___
@@ -166,11 +186,13 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             throw new Error(res.ERROR_INVESTMENT_DIVIDENDS_CRITICAL_ERROR);
           } else if (ownedUnits === 0) {
             // SOLD ALL OWNED UNITS
+            console.debug('ownedUnits === 0 -> SOLD ALL OWNED UNITS!');
             fullySoldInvestmentIds = Array.from(ownedInvestmentIds);
             ownedInvestmentIds = [];
             partiallySoldInvestment = null;
             averageUnitPrice = 0;
           } else if (ownedUnits > 0) {
+            console.debug('Partial Sale identified!');
             // (╯°□°)╯︵  you are making my life hard by partially selling off stock
             //   __        __  ___                 __             ___
             //  |__)  /\  |__)  |  |  /\  |       /__`  /\  |    |__
@@ -178,10 +200,10 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
             const partialSaleDate = new Date(e.execution_date);
             let partialSaleUnits = Number(e.units);
             const currentInvestments = investments.filter(
-              (e) =>
-                e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY && // only purchases
-                new Date(e.execution_date) < partialSaleDate && // only before sale date
-                !fullySoldInvestmentIds.includes(e.id)
+              (c) =>
+                c.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY && // only purchases
+                !fullySoldInvestmentIds.includes(c.id) &&
+                (new Date(c.execution_date) < partialSaleDate || c.execution_date === e.execution_date) // buy is before or on the same day as sale
             ); // exclude any fully sold investments
             currentInvestments.every((current) => {
               // every is like forEach but it breaks looping when callback receives a false value
@@ -207,12 +229,12 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
           }
         }
       });
-      // console.debug("owned units at " + dividendDate + " is: " + ownedUnits)
-      // console.debug("averageUnitPrice  at " + dividendDate + " is: " + averageUnitPrice)
-      // console.debug("owned investment ids: " + ownedInvestmentIds)
-      // console.debug("fully sold investment ids: " + fullySoldInvestmentIds)
-      // console.debug("partiallySoldInvestment: ")
-      // console.debug(partiallySoldInvestment)
+      console.debug('owned units at ' + dividendDate + ' is: ' + ownedUnits);
+      console.debug('averageUnitPrice  at ' + dividendDate + ' is: ' + averageUnitPrice);
+      console.debug('owned investment ids: ' + ownedInvestmentIds);
+      console.debug('fully sold investment ids: ' + fullySoldInvestmentIds);
+      console.debug('partiallySoldInvestment: ');
+      console.debug(partiallySoldInvestment);
       //   __   __        __  ___  __        __  ___     __   ___ ___       __           __   __        ___  __  ___
       //  /  ` /  \ |\ | /__`  |  |__) |  | /  `  |     |__) |__   |  |  | |__) |\ |    /  \ |__)    | |__  /  `  |
       //  \__, \__/ | \| .__/  |  |  \ \__/ \__,  |     |  \ |___  |  \__/ |  \ | \|    \__/ |__) \__/ |___ \__,  |
@@ -237,8 +259,8 @@ export default function InputInvestmentDividendsModal(props: InputInvestmentDivi
         investmentIdsAndUnits.push({ investmentId: e.id, remainingUnits: e.units });
       });
     }
-    // console.debug("investmentIdsAndUnits")
-    // console.debug(investmentIdsAndUnits)
+    console.debug('investmentIdsAndUnits');
+    console.debug(investmentIdsAndUnits);
     return investmentIdsAndUnits;
   };
 

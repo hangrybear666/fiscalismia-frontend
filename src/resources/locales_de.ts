@@ -301,12 +301,15 @@ export const locales_de = {
   ],
 
   ARRAY_MARKETPLACE: [
+    'Tradegate',
+    'Gettex',
+    'Stuttgart',
+    'NYSE',
+    'Nasdaq',
     'Berlin',
     'Baader Bank',
     'Frankfurt',
     'Düsseldorf',
-    'Tradegate',
-    'Gettex',
     'Hamburg',
     'Hannover',
     'München',
