@@ -11,6 +11,7 @@
 
 ## Additional Development
 
+- remove the vertical red bar and golden vertical box in overview var expenses when selecting "All" as month
 - add skeleton to income sales before selection has been made
 - add the navigational arrows from variable expenses overview to Income (3x) and Fixed Costs (2x)
 - make stock selling use ISIN dropdown to select only existing stock and pre-populate in all known values
