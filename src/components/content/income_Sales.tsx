@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getVariableExpenseByCategory } from '../../services/pgConnections';
-import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Skeleton, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import {
   constructContentCardObject,
   getUniqueEffectiveYears,
@@ -197,8 +197,8 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
           </Box>
         </Grid>
         <Grid xs={0} lg={0.5} xl={1.5}></Grid>
-        {salesCard ? (
-          <Grid xs={12} lg={4} xl={3}>
+        <Grid xs={12} lg={4} xl={3}>
+          {salesCard ? (
             <Stack spacing={2} sx={{ width: '100%' }}>
               {/* Custom properties subtitle not being used from constructContentCardObject output */}
               <ContentCardCosts
@@ -209,24 +209,33 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
                 img={salesCard.img}
                 subtitle={`${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`}
               />
-              {distinctStoreSalesCard
-                ? distinctStoreSalesCard.map((card) => (
-                    // Custom properties detailHeader and subtitle not being used from constructContentCardObject output
-                    <ContentCardCosts
-                      key={card.header}
-                      header={card.header}
-                      amount={card.amount}
-                      details={card.details}
-                      icon={card.icon}
-                      img={card.img}
-                      subtitle={`${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`}
-                      detailHeader={locales().INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER}
-                    />
-                  ))
-                : null}
+              {distinctStoreSalesCard ? (
+                distinctStoreSalesCard.map((card) => (
+                  // Custom properties detailHeader and subtitle not being used from constructContentCardObject output
+                  <ContentCardCosts
+                    key={card.header}
+                    header={card.header}
+                    amount={card.amount}
+                    details={card.details}
+                    icon={card.icon}
+                    img={card.img}
+                    subtitle={`${selectedYear === res.ALL ? locales().OVER_TOTAL_PERIOD : `${locales().INCOME_SALES_CARD_TOTAL_SALES_SUBTITLE} ${selectedYear}`}`}
+                    detailHeader={locales().INCOME_SALES_CARD_DISTINCT_STORE_SALES_DETAILS_HEADER}
+                  />
+                ))
+              ) : (
+                <Skeleton variant="rectangular" height={150} />
+              )}
             </Stack>
-          </Grid>
-        ) : null}
+          ) : (
+            <Stack spacing={2} sx={{ width: '100%' }}>
+              <Skeleton variant="rectangular" animation={false} height={120} />
+              <Skeleton variant="rectangular" animation={false} height={80} />
+              <Skeleton variant="rectangular" animation={false} height={160} />
+              <Skeleton variant="rectangular" animation={false} height={120} />
+            </Stack>
+          )}
+        </Grid>
         <Grid xs={12} lg={7} xl={6}>
           <TableContainer
             component={Paper}
@@ -244,6 +253,7 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
                   <TableCell>{locales().INCOME_SALES_THEADER_DATE}</TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {selectedSales
                   ? selectedSales.map((row: any) => (
@@ -257,6 +267,8 @@ export default function Income_Sales(_props: Income_SalesProps): JSX.Element {
                   : null}
               </TableBody>
             </Table>
+
+            {!selectedSales ? <Skeleton variant="rectangular" animation={false} height={490} /> : null}
           </TableContainer>
         </Grid>
       </Grid>
