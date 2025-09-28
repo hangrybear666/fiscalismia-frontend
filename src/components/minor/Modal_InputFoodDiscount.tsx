@@ -77,7 +77,7 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
       endDate: new Date(endDate)
     };
     const response = await postFoodItemDiscount(foodItemDiscountObj);
-    if (parseInt(response?.results[0]?.food_prices_dimension_key) === parseInt(selectedFoodItemId)) {
+    if (parseInt(response?.results[0]?.id) === parseInt(selectedFoodItemId)) {
       toast.success(locales().NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_SUCCESSFULLY(selectedFoodItemId), toastOptions);
       setOpen(false);
       // this setter is called to force the frontend to update and refetch the data from db

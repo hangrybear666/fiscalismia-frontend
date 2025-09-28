@@ -24,7 +24,7 @@ import {
 import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { TwelveCharacterString } from '../../types/custom/customTypes';
+import { InvestmentAndTaxes, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../utils/sharedFunctions';
@@ -99,7 +99,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
    * queries DB for investment and taxes insertion via REST API
    */
   const saveUserInput = async () => {
-    const investmentAndTaxesObject = {
+    const investmentAndTaxesObject: InvestmentAndTaxes = {
       execution_type: selectedOrderType,
       description: description.trim(),
       isin: isin as TwelveCharacterString,

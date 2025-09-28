@@ -301,7 +301,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
     setInvestmentColumnDefinitions([
-      // { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
+      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
       {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_TYPE,
