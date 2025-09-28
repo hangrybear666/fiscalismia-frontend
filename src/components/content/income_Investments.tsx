@@ -301,7 +301,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
     setInvestmentColumnDefinitions([
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
+      // { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
       {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_TYPE,
@@ -323,7 +323,6 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
-        filter: false,
         minWidth: 160
       },
       {
@@ -397,37 +396,42 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_ISIN,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_ISIN,
         cellRenderer: IsinNationalFlagRenderer,
-        filter: false,
         minWidth: 160
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_AMOUNT,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DIVIDEND,
+        filter: false,
         valueFormatter: currencyFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_PCT_OF_TOTAL,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_PCT_OF_TOTAL,
+        filter: false,
         valueFormatter: percentageFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_AVG_PPU,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE,
+        filter: false,
         valueFormatter: currencyFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_UNITS,
+        filter: false,
         valueFormatter: unitsFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_TOTAL_PRICE,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TOTAL,
+        filter: false,
         valueFormatter: currencyFormatter
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_FEES,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_FEES,
+        filter: false,
         valueFormatter: currencyFormatter
       },
       {
