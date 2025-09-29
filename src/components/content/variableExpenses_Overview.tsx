@@ -20,7 +20,6 @@ import {
 } from '../../services/pgConnections';
 import {
   Box,
-  Button,
   Container,
   IconButton,
   Palette,
@@ -680,14 +679,17 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               <Grid xs={12} md={3} xl={2.5}>
                 <Stack direction="row">
                   <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_PRIOR_MONTH_BTN_TOOLTIP}>
-                    <IconButton
-                      color="inherit"
-                      disabled={selectedYear ? false : true}
-                      onClick={() => handleMonthDirectionChanged('left')}
-                      sx={{ paddingX: 2, width: 1 / 9 }}
-                    >
-                      <AssignmentReturnIcon />
-                    </IconButton>
+                    {/* div required for Tooltip to render correctly if button is disabled */}
+                    <div>
+                      <IconButton
+                        color="inherit"
+                        disabled={selectedYear ? false : true}
+                        onClick={() => handleMonthDirectionChanged('left')}
+                        sx={{ paddingX: 2, width: 1 / 9 }}
+                      >
+                        <AssignmentReturnIcon />
+                      </IconButton>
+                    </div>
                   </Tooltip>
                   <Container maxWidth={false} sx={{ width: 7 / 9 }}>
                     {allVariableExpenses ? (
@@ -703,22 +705,25 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                         disabled={selectedYear ? false : true}
                       />
                     ) : (
-                      <Skeleton variant="rectangular" height={60} />
+                      <Skeleton animation={false} variant="rectangular" height={60} />
                     )}
                   </Container>
                   <Tooltip title={locales().VARIABLE_EXPENSES_OVERVIEW_NEXT_MONTH_BTN_TOOLTIP}>
-                    <IconButton
-                      color="inherit"
-                      disabled={selectedYear ? false : true}
-                      onClick={() => handleMonthDirectionChanged('right')}
-                      sx={{ paddingX: 2, width: 1 / 9 }}
-                    >
-                      <AssignmentReturnIcon
-                        sx={{
-                          transform: 'scaleX(-1)'
-                        }}
-                      />
-                    </IconButton>
+                    {/* div required for Tooltip to render correctly if button is disabled */}
+                    <div>
+                      <IconButton
+                        color="inherit"
+                        disabled={selectedYear ? false : true}
+                        onClick={() => handleMonthDirectionChanged('right')}
+                        sx={{ paddingX: 2, width: 1 / 9 }}
+                      >
+                        <AssignmentReturnIcon
+                          sx={{
+                            transform: 'scaleX(-1)'
+                          }}
+                        />
+                      </IconButton>
+                    </div>
                   </Tooltip>
                 </Stack>
               </Grid>
@@ -745,7 +750,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     );
                   })
                 ) : (
-                  <Skeleton variant="rectangular" height={60} />
+                  <Skeleton animation={false} variant="rectangular" height={60} />
                 )}
               </Grid>
 
@@ -783,7 +788,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
               ) : (
                 [...new Array(6)].map((_e, i: number) => (
                   <Grid xs={6} md={4} xl={2} key={i}>
-                    <Skeleton variant="rectangular" height={120} />
+                    <Skeleton animation={false} variant="rectangular" height={120} />
                   </Grid>
                 ))
               )}
@@ -800,7 +805,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     <ContentLineChart {...expenseLineChartData} dataSetCount={1} selectedLabel={selectedChartLabel} />
                   </Paper>
                 ) : (
-                  <Skeleton variant="rectangular" height={300} />
+                  <Skeleton animation={false} variant="rectangular" height={300} />
                 )}
               </Grid>
               <Grid xs={12} md={4} xl={3}>
@@ -815,7 +820,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     <ContentBooleanPieChart {...expensePieChartData} />
                   </Paper>
                 ) : (
-                  <Skeleton variant="rectangular" height={300} />
+                  <Skeleton animation={false} variant="rectangular" height={300} />
                 )}
               </Grid>
               {/* CATEGORY SUMS VERTICAL BAR CHART */}
@@ -836,7 +841,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     />
                   </Paper>
                 ) : (
-                  <Skeleton variant="rectangular" height={400} />
+                  <Skeleton animation={false} variant="rectangular" height={400} />
                 )}
               </Grid>
               <Grid xs={12} md={4} xl={3}>
@@ -851,7 +856,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                     <ContentHorizontalBarChart {...indulgencesHorizontalBarChartData} />
                   </Paper>
                 ) : (
-                  <Skeleton variant="rectangular" height={400} />
+                  <Skeleton animation={false} variant="rectangular" height={400} />
                 )}
               </Grid>
             </Grid>

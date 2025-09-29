@@ -31,6 +31,7 @@ export const resourceProperties = {
   STATUS: 'Status',
   STATUSTEXT: 'StatusText',
   DATA: 'Data',
+  FOOTER_TEXT: 'Built /w React, TypeScript & Material UI',
   STATUS_NOT_DEFINED: 'Status Not defined',
   STATUSTEXT_NOT_DEFINED: 'StatusText Not defined',
   GENERIC_ERROR_MESSAGE: 'Sorry, an unexpected error has occurred.',

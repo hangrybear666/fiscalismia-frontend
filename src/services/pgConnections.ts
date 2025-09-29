@@ -541,13 +541,13 @@ export const deleteFoodItem = async (id: number) => {
  *     \___/\_|   |___/ \_| |_/\_/ \____/
  */
 
-export const updateFoodItemPrice = async (id: number, newObject: FoodItemUpdateObject) => {
+export const updateFoodItemPrice = async (id: number, updatedFoodPriceObj: FoodItemUpdateObject) => {
   setToken();
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    const response = await axiosClient.put(`/food_item/price/${id}`, newObject, config);
+    const response = await axiosClient.put(`/food_item/price/${id}`, updatedFoodPriceObj, config);
     return response.data;
   } catch (_error) {
     // error handling logic is defined in src/services/axiosErrorHandler.ts
