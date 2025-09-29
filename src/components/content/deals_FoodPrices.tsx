@@ -5,7 +5,7 @@ import { resourceProperties as res, serverConfig } from '../../resources/resourc
 import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import FilterFoodPriceData from '../minor/FilterFoodPriceData';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { Box, Theme } from '@mui/material';
+import { Box, Skeleton, Theme } from '@mui/material';
 import { RouteInfo } from '../../types/custom/customTypes';
 
 interface Deals_FoodPricesProps {
@@ -24,7 +24,7 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Ele
   const [foodPrices, setFoodPrices] = useState(null);
   // id, food_item, brand, store, main_macro, kcal_amount, weight, price, last_update, effective_date, expiration_date, weight_per_100_kcal, price_per_kg, normalized_price, filepath
   const [filteredFoodPrices, setFilteredFoodPrices] = useState(null);
-  const [foodItemCards, setFoodItemCards] = useState<ContentCardFoodPrice[]>([]);
+  const [foodItemCards, setFoodItemCards] = useState<ContentCardFoodPrice[] | null>(null);
   const [hasBeenSortedBy, setHasBeenSortedBy] = useState<number | null>(null);
   // Render Images yes or no switch
   const [renderImages, setRenderImages] = React.useState(true); // default value
@@ -99,7 +99,11 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Ele
                   <ContentCardFoodPrices elevation={6} {...foodItem} imgHeight={150} />
                 </Grid>
               ))
-            : null}
+            : Array.from('x'.repeat(12)).map((_, i) => (
+                <Grid key={i} xs={12} md={6} lg={6} xl={3}>
+                  <Skeleton key={i} variant="rectangular" height={250} />
+                </Grid>
+              ))}
         </Grid>
         {/* Vertical Data Filtering on right side on large screens */}
         <Grid lg={4} xl={3}>
@@ -115,7 +119,16 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Ele
                 renderImages={renderImages}
                 setRenderImages={setRenderImages}
               />
-            ) : null}
+            ) : (
+              Array.from('x'.repeat(3)).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  variant="rectangular"
+                  sx={{ marginBottom: '12px', marginTop: i > 0 ? '12px' : '0px' }}
+                  height={255}
+                />
+              ))
+            )}
           </Box>
         </Grid>
       </Grid>
