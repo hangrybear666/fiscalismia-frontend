@@ -35,6 +35,7 @@ export const locales_en = {
   GENERAL_DAYS: 'Days',
   GENERAL_SORT_BY: 'Sort by',
   GENERAL_EMAIL: 'Email Address',
+  GENERAL_DELETE_ROW_TOOLTIP: 'Delete row',
 
   INCOME_MONTHLY_NET_INCOME: 'Total monthly wage [net]',
   INCOME_FIXED_COST_CARD_HEADER: 'Total fixed costs',
@@ -89,7 +90,6 @@ export const locales_en = {
   DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP: 'last checked',
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Normalized price',
   DEALS_OVERVIEW_UPDATE_FOOD_PRICE: 'Update current price',
-  DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW: 'Delete row',
 
   DEALS_GROCERY_DEALS_THEADER_FOODITEM: 'Food Item',
   DEALS_GROCERY_DEALS_THEADER_BRAND: 'Brand',
@@ -250,6 +250,9 @@ export const locales_en = {
     'Positive value found in sales. These should be negative as they are inverse to expenses.',
   NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY: (pos1: string) => `Food Item with ID [${pos1}] has been deleted.`,
   NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR: 'Food Item could not be deleted.',
+  NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_SUCCESSFULLY: (pos1: string, pos2: string) =>
+    `${pos1} with ID [${pos2}] has been deleted.`,
+  NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_ERROR: (pos1: string) => `${pos1} could not be deleted.`,
   NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_SUCCESSFULLY: 'The new price has been saved.',
   NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_ERROR: 'Item price could not be saved.',
   NOTIFICATIONS_FOOD_ITEM_INSERTED_SUCCESSFULLY: (pos1: string) => `Food item with ID [${pos1}] has been added.`,

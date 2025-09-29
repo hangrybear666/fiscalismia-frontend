@@ -167,20 +167,38 @@ The frontend is built in a continuous integration pipeline, tested, scanned for 
 
 ## Running
 
-1. **Option 1: Docker Compose**
+1. **Option 1: Podman Compose**
 
-   To run the entire stack in development mode, <b>change directory to</b> `fiscalismia-backend`
+   To run the entire stack in development mode
 
    ```bash
    cd ~/git/fiscalismia-backend
    docker compose down --volumes
+
+   # with local db in development mode
    docker compose up --build
+
+   # with cloud db in development mode
+   CLOUD_DB=true docker compose up --build
    ```
 
-2. **Option 2: Locally:**
+2. **Option 2: Locally with Dev DB**
 
-   Run only the frontend locally.
    ```bash
+   cd ~/git/fiscalismia-backend
+   docker compose down --volumes
+   docker compose up --detach --build --no-deps fiscalismia-postgres fiscalismia-backend
+   cd ~/git/fiscalismia-frontend
+   npm run dev
+   ```
+
+3. **Option 3: Locally with Cloud DB**
+
+   ```bash
+   docker compose down --volumes
+   cd ~/git/fiscalismia-backend
+   npm run neon-dev
+   cd ~/git/fiscalismia-frontend
    npm run dev
    ```
 

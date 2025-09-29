@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import LogoutBtn from './minor/LogoutBtn';
+import LogoutBtn from './minor/Button_Logout';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { menuEntries } from './minor/MenuEntries';
 import { resourceProperties as res } from '../resources/resource_properties';

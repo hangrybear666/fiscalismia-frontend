@@ -35,6 +35,7 @@ export const locales_de = {
   GENERAL_DAYS: 'Tage',
   GENERAL_SORT_BY: 'Sortieren nach',
   GENERAL_EMAIL: 'Email Adresse',
+  GENERAL_DELETE_ROW_TOOLTIP: 'Zeile löschen',
 
   INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
   INCOME_FIXED_COST_CARD_HEADER: 'Fixkosten Gesamt',
@@ -89,7 +90,6 @@ export const locales_de = {
   DEALS_OVERVIEW_THEADER_LAST_UPDATE_TOP: 'zuletzt geprüft',
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Gesamtverbrauch Hochrechnung',
   DEALS_OVERVIEW_UPDATE_FOOD_PRICE: 'Aktuellen Preis pflegen',
-  DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW: 'Zeile löschen',
 
   DEALS_GROCERY_DEALS_THEADER_FOODITEM: 'Artikel',
   DEALS_GROCERY_DEALS_THEADER_BRAND: 'Marke',
@@ -247,6 +247,9 @@ export const locales_de = {
     'Positiver Wert in Verkäufen gefunden. Diese sollten negativ sein, da sie invers zu Ausgaben sind.',
   NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY: (pos1: string) => `Supermarktartikel mit ID [${pos1}] wurde gelöscht.`,
   NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR: 'Supermarktartikel konnte nicht gelöscht werden.',
+  NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_SUCCESSFULLY: (pos1: string, pos2: string) =>
+    `${pos1} mit ID [${pos2}] wurde gelöscht.`,
+  NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_ERROR: (pos1: string) => `${pos1} konnte nicht gelöscht werden.`,
   NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_SUCCESSFULLY: 'Der neue Preis wurde gespeichert.',
   NOTIFICATIONS_FOOD_ITEM_PRICE_UPDATED_ERROR: 'Artikelpreis konnte nicht gepflegt werden.',
   NOTIFICATIONS_FOOD_ITEM_INSERTED_SUCCESSFULLY: (pos1: string) =>

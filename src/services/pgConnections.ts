@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { serverConfig, localStorageKeys } from '../resources/resource_properties';
 import {
   DividendsRelatedInvestmentsAndTaxes,
@@ -10,7 +10,7 @@ import {
   UserSettingObject
 } from '../types/custom/customTypes';
 import { toast } from 'react-toastify';
-import { axiosErrorToastOptions } from '../utils/sharedFunctions';
+import { axiosErrorToastOptions, toastOptions } from '../utils/sharedFunctions';
 import { axiosClient } from './axiosErrorHandler';
 const baseUrl = serverConfig.API_BASE_URL;
 /**
@@ -515,9 +515,9 @@ export const deleteFoodItemImg = async (id: string) => {
 };
 
 /**
- * deletes the corresponding food item via its id from db
+ * deletes the corresponding food item rows 1-n from the db. One row per effective date.
  * @param id
- * @returns
+ * @returns id(s) of the deleted food item
  */
 export const deleteFoodItem = async (id: number) => {
   setToken();
@@ -526,6 +526,46 @@ export const deleteFoodItem = async (id: number) => {
       headers: { Authorization: `Bearer ${token}` }
     };
     const response = await axiosClient.delete(`/food_item/${id}`, config);
+    return response.data;
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
+  }
+};
+
+/**
+ * deletes the corresponding investment and taxes in case of sale from the database by providing its id
+ * @param id
+ * @returns id of the deleted investment
+ */
+export const deleteInvestment = async (id: number) => {
+  setToken();
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axiosClient.delete(`/investment/${id}`, config);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response && error.response.status === 409) {
+      // custom status from backend. Foreign Key ON DELETE RESTRICT violation for dividend
+      toast.warn(error.response.data.errorMsg, toastOptions);
+    }
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
+  }
+};
+
+/**
+ * deletes the corresponding dividend and taxes and the bridge relationship to investments by providing its id
+ * @param id
+ * @returns id of the deleted dividend
+ */
+export const deleteDividend = async (id: number) => {
+  setToken();
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axiosClient.delete(`/investment_dividend/${id}`, config);
     return response.data;
   } catch (_error) {
     // error handling logic is defined in src/services/axiosErrorHandler.ts

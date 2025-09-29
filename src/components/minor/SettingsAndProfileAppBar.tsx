@@ -16,7 +16,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import HubIcon from '@mui/icons-material/Hub';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutBtn from './LogoutBtn';
+import LogoutBtn from './Button_Logout';
 import Link from '@mui/material/Link';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';

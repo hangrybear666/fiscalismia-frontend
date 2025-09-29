@@ -53,7 +53,8 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
   const [foodPricesColumnDefinitions, setFoodPriceColumnDefinitions] = useState<any>();
   // to refresh table based on added food item after DB insertion
   const [addedOrUpdatedFoodItems, setAddedOrUpdatedFoodItems] = useState<string>('');
-  const [deletedFoodItem, setDeletedFoodItem] = useState('');
+  // to refresh table based on deleted food item after DB deletion
+  const [deletedFoodItem, setDeletedFoodItem] = useState<React.SetStateAction<number>>();
   // Reference to grid API
   const foodPricesGridRif = useRef<AgGridReact>(null);
   const quickFilterText = '';
@@ -69,7 +70,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
 
   interface DeleteRowBtnProps {
     data: any;
-    refreshParent: React.Dispatch<React.SetStateAction<string>>;
+    refreshParent: React.Dispatch<React.SetStateAction<number>>;
   }
   const DeleteRowBtn = (props: DeleteRowBtnProps) => {
     const { data, refreshParent } = props;
@@ -78,9 +79,8 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
     const deleteRow = async () => {
       const response = await deleteFoodItem(data.id);
       if ((response?.results[0]?.id && response.results[0].id) === data.id) {
-        // this setter is called to force the frontend to update and refetch the data from db
         toast.success(locales().NOTIFICATIONS_FOOD_ITEM_DELETED_SUCCESSFULLY(data.id), toastOptions);
-        // to refresh parent's table based on updated food item after successful DELETE request
+        // to refresh parent's table based on returned id after successful DELETE request
         refreshParent(response.results[0].id);
       } else {
         toast.error(locales().NOTIFICATIONS_FOOD_ITEM_DELETED_ERROR, toastOptions);
@@ -88,7 +88,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
     };
     return (
       <React.Fragment>
-        <Tooltip placement="left" title={locales().DEALS_OVERVIEW_DELETE_FOOD_PRICE_ROW}>
+        <Tooltip placement="left" title={locales().GENERAL_DELETE_ROW_TOOLTIP}>
           <IconButton
             color="error"
             sx={{ paddingY: 0.2, paddingX: 1, marginRight: 0, marginY: 0, marginLeft: 0.5, align: 'right' }}
@@ -345,16 +345,6 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
         minWidth: 60,
         flex: 0.4
       }
-      // { field: "weight_per_100_kcal", valueFormatter: gramsFormatter, filter: false, floatingFilter: false },
-      // { field: "price_per_kg", valueFormatter: currencyFormatter, filter: false, floatingFilter: false  },
-      // { field: "effective_date", cellRenderer: DateCellFormatter, },
-      // { field: "expiration_date", cellRenderer: DateCellFormatter, },
-      // { field: "description", flex: 2, minWidth:200 },
-      // { field: "investment_type", headerName: res.INCOME_INVESTMENTS_COL_HEADER_TYPE, },
-      // { field: "marketplace", floatingFilter: false, },
-      // { field: "price_per_unit", headerName: res.INCOME_INVESTMENTS_COL_HEADER_UNIT_PRICE, valueFormatter: currencyFormatter, floatingFilter: false },
-      // { field: "fees", valueFormatter: currencyFormatter, floatingFilter: false, filter: false },
-      // { field: "execution_date", headerName: res.INCOME_INVESTMENTS_COL_HEADER_DATE, cellRenderer: DateCellFormatter, minWidth:150 },
     ]);
   }, [foodPricesAndDiscounts]);
 

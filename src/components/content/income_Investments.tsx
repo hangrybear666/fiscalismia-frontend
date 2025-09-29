@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
-import { getAllInvestments, getAllDividends } from '../../services/pgConnections';
+import { getAllInvestments, getAllDividends, deleteDividend, deleteInvestment } from '../../services/pgConnections';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import Tooltip from '@mui/material/Tooltip';
@@ -13,17 +13,78 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Chip from '@mui/material/Chip';
-import { DateCellFormatter, HtmlTooltip } from '../../utils/sharedFunctions';
-import { Stack, Theme } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { DateCellFormatter, HtmlTooltip, toastOptions } from '../../utils/sharedFunctions';
+import { IconButton, Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
 import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends';
 import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import { toast } from 'react-toastify';
+import ConfirmationDialog from '../minor/Dialog_Confirmation';
+
+interface DeleteRowBtnProps {
+  type: 'Investment' | 'Dividend';
+  data: any;
+  refreshParent: React.Dispatch<React.SetStateAction<number>>;
+}
+const DeleteRowBtn = (props: DeleteRowBtnProps) => {
+  const { type, data, refreshParent } = props;
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false);
+  const confirmationDialogText =
+    type === 'Investment'
+      ? data.description.substring(0, 15) +
+        ' | ' +
+        data.execution_type +
+        ' | ' +
+        data.execution_date +
+        ' | ' +
+        data.total_price +
+        res.CURRENCY_EURO
+      : data.description.substring(0, 15) +
+        ' | ' +
+        data.dividend_date +
+        ' | ' +
+        data.dividend_amount +
+        res.CURRENCY_EURO;
+
+  const deleteRow = async () => {
+    const response = type === 'Investment' ? await deleteInvestment(data.id) : await deleteDividend(data.id);
+    if ((response?.results[0]?.id && response.results[0].id) === data.id) {
+      toast.success(locales().NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_SUCCESSFULLY(type, data.id), toastOptions);
+      // to refresh parent's table based on returned id after successful DELETE request
+      refreshParent(response.results[0].id);
+    } else {
+      toast.error(locales().NOTIFICATIONS_INVESTMENT_OR_DIVIDEND_DELETED_ERROR(type), toastOptions);
+    }
+  };
+  return (
+    <React.Fragment>
+      <Tooltip placement="left" title={locales().GENERAL_DELETE_ROW_TOOLTIP}>
+        <IconButton
+          color="error"
+          sx={{ paddingY: 0.2, paddingX: 1, marginRight: 0, marginY: 0, marginLeft: 0.5, align: 'right' }}
+          onClick={() => setConfirmDeleteOpen(true)}
+        >
+          <ClearIcon />
+        </IconButton>
+      </Tooltip>
+      <ConfirmationDialog
+        title={locales().CONFIRMATION_DIALOG_TITLE_DELETE}
+        text={confirmationDialogText}
+        textColor="secondary"
+        confirmBtnText={locales().GENERAL_DELETE}
+        open={confirmDeleteOpen}
+        setOpen={setConfirmDeleteOpen}
+        handleConfirm={deleteRow}
+      />
+    </React.Fragment>
+  );
+};
 
 interface CustomBoughtSoldChipProps {
   value: string;
 }
-
 const CustomBoughtSoldChip = (props: CustomBoughtSoldChipProps) => {
   return props.value === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY ? (
     <Chip
@@ -94,6 +155,9 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   const [investmentColumnDefinitions, setInvestmentColumnDefinitions] = useState<any[]>([]);
   const [dividendColumnDefinitions, setDividendColumnDefinitions] = useState<any[]>([]);
   const [updatedOrAddedItemFlag, setUpdatedOrAddedItemFlag] = useState<React.SetStateAction<number>>();
+  // to refresh table based on deleted food item after DB deletion
+  const [deletedInvestment, setDeletedInvestment] = useState<React.SetStateAction<number>>();
+  const [deletedDividend, setDeletedDividend] = useState<React.SetStateAction<number>>();
   // Reference to grid API
   const investmentGridRef = useRef<AgGridReact>(null);
   const dividendGridRef = useRef<AgGridReact>(null);
@@ -110,7 +174,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       setUniqueIsinArray(Array.from(new Set(allInvestments.results.map((e: any) => e.isin))));
     };
     getInvestmentData();
-  }, [updatedOrAddedItemFlag]);
+  }, [updatedOrAddedItemFlag, deletedInvestment, deletedDividend]);
 
   /**
    * Reads Profits, Taxes and Calculates Net Gain of any Sales, otherwise just returns the formatted Total Value
@@ -366,6 +430,16 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
+      },
+      {
+        headerName: '',
+        cellRenderer: (p: any) => (
+          <DeleteRowBtn type={'Investment'} data={p.data} refreshParent={setDeletedInvestment} />
+        ),
+        filter: false,
+        floatingFilter: false,
+        minWidth: 60,
+        flex: 0.4
       }
     ]);
   }, [allInvestments]);
@@ -439,6 +513,14 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
         minWidth: 150
+      },
+      {
+        headerName: '',
+        cellRenderer: (p: any) => <DeleteRowBtn type={'Dividend'} data={p.data} refreshParent={setDeletedDividend} />,
+        filter: false,
+        floatingFilter: false,
+        minWidth: 60,
+        flex: 0.4
       }
       /* { field: "investments", } */
     ]);
