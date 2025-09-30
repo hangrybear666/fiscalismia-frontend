@@ -156,11 +156,14 @@ export const locales_en = {
     'Proportion of profit that is taxed between 0 - 100.00%',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_PROFIT_AMT_VALIDATION_ERROR_MSG:
     'Profit expected in the following format: 330.00',
-  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG: 'Unit expected as a number, e.g.: 42',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG:
+    'Unit expected as a number greater than zero, e.g.: 42',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_ISIN_VALIDATION_ERROR_MSG:
     'ISIN format expected. 12-digit with country code',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_DESCRIPTION_VALIDATION_ERROR_MSG:
     'Description may contain between 5 - 50 characters',
+  MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_OWNED_UNITS_VALIDATION_ERROR_MSG: (pos1: string) =>
+    `Owned Units [${pos1}] must be greater than or equal to sold units.`,
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_UNIT_PRICE: 'Unit price in €',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_MARKETPLACE_SELECT: 'Marketplace',
   MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_INPUT_INVESTMENT_TYPE_SELECT: 'Type of investment',

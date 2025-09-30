@@ -19,8 +19,6 @@ import { getAllFoodPricesAndDiscounts } from '../../services/pgConnections';
 import { Button, Stack } from '@mui/material';
 import { ColDef } from '@ag-grid-community/core';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
-import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
-import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 import { updateFoodItemPrice, deleteFoodItem } from '../../services/pgConnections';
 import { toast } from 'react-toastify';
 import {
@@ -362,7 +360,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
             display: 'block',
             borderRadius: 0.5,
             position: 'absolute',
-            backgroundColor: palette.error.dark,
+            backgroundColor: palette.error.light,
             zIndex: 10,
             top: 8,
             left: 5,

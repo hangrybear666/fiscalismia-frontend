@@ -2,8 +2,6 @@ import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
-import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
-import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the grid
 import { getAllInvestments, getAllDividends, deleteDividend, deleteInvestment } from '../../services/pgConnections';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
 import { resourceProperties as res } from '../../resources/resource_properties';
@@ -22,7 +20,6 @@ import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
-
 interface DeleteRowBtnProps {
   type: 'Investment' | 'Dividend';
   data: any;
@@ -529,7 +526,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   return (
     <>
       <Stack>
-        <InputInvestmentTaxesModal refreshParent={setUpdatedOrAddedItemFlag} />
+        <InputInvestmentTaxesModal allInvestments={allInvestments} refreshParent={setUpdatedOrAddedItemFlag} />
       </Stack>
       <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(investmentGridRef)}>
         {res.RESET}
@@ -539,6 +536,8 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       >
         {allInvestments ? (
           <AgGridReact
+            // enableCellTextSelection={true} // breaks styling somewhat
+            // ensureDomOrder={true} // necessary for cell text selection
             ref={investmentGridRef}
             rowData={investmentRowData}
             columnDefs={investmentColumnDefinitions}
@@ -567,6 +566,8 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       >
         {allInvestments && allDividends ? (
           <AgGridReact
+            // enableCellTextSelection={true} // breaks styling somewhat
+            // ensureDomOrder={true} // necessary for cell text selection
             ref={dividendGridRef}
             rowData={dividendRowData}
             columnDefs={dividendColumnDefinitions}

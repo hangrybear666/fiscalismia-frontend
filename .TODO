@@ -11,10 +11,8 @@
 
 ## Additional Development
 
-- Make Investment and Dividend Table and deals/overview Table have copy pastable cells
+- make stock selling button to ag grid table to buy orders and pre-populate in all known values
 - Add Delete Button without ruining style in deals/grocery_deals for food_item_discount
 - remove the vertical red bar and golden vertical box in overview var expenses when selecting "All" as month
 - add the navigational arrows from variable expenses overview to Income (3x) and Fixed Costs (2x)
-- make stock selling use ISIN dropdown to select only existing stock and pre-populate in all known values
-- selling stock should throw an error if selling stock not owned in adequate amount. either SQL or frontend calculation like in dividends and taxes
 - Persist new added var expenses in db and refresh overview of variable expenses and continue work on MODAL with input validation and so forth

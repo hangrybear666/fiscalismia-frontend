@@ -11,6 +11,8 @@ import { resourceProperties as res } from '../resources/resource_properties';
 import { paths } from '../resources/router_navigation_paths';
 import { ToastContainer } from 'react-toastify';
 import Footer from '../components/Footer';
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community'; // AG-Grid component initialization
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const drawerWidth = 256;
 

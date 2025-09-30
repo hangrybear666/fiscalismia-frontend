@@ -176,7 +176,7 @@ export const foodItemInputCategories = {
 };
 export const investmentInputCategories = {
   ARRAY_ORDER_TYPE: ['buy', 'sell'],
-  ARRAY_INVESTMENT_TYPE: ['stock', 'ETF']
+  ARRAY_INVESTMENT_TYPE: ['stock', 'etf']
 };
 
 export const serverConfig = {

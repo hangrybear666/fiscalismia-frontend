@@ -30,6 +30,7 @@ import { toast } from 'react-toastify';
 import { toastOptions } from '../../utils/sharedFunctions';
 
 interface InputInvestmentTaxesModalProps {
+  allInvestments: any;
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -40,7 +41,7 @@ interface InputInvestmentTaxesModalProps {
  */
 export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
   const { palette } = useTheme();
-  const { refreshParent } = props;
+  const { allInvestments, refreshParent } = props;
   const [open, setOpen] = React.useState(false);
   // Validation
   const [isUnitPriceValidationError, setIsUnitPriceValidationError] = React.useState(false);
@@ -59,6 +60,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
   const [profitAmtValidationErrorMessage, setProfitAmtValidationErrorMessage] = React.useState('');
   const [isPctTaxedValidationError, setIsPctTaxedValidationError] = React.useState(false);
   const [pctTaxedValidationErrorMessage, setPctTaxedValidationErrorMessage] = React.useState('');
+  const [isOwnedUnitsValidationError, setIsOwnedUnitsValidationError] = React.useState(false);
 
   // Inputs
   const [description, setDescription] = React.useState('');
@@ -90,7 +92,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     transform: 'translate(-50%, -50%)',
     width: 500,
     bgcolor: 'background.paper',
-    border: `2px solid ${palette.secondary.main}`,
+    border: `${isOwnedUnitsValidationError ? `10px solid ${palette.error.light}` : `2px solid ${palette.secondary.main}`}  `,
     boxShadow: 24,
     p: 4
   };
@@ -172,7 +174,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
       setDateErrorMessage('');
     }
     // Units
-    if (!isNumeric(units) || parseInt(Number(units).toFixed(0)) < 0) {
+    if (!isNumeric(units) || parseInt(Number(units).toFixed(0)) <= 0) {
       errorPresent = true;
       setIsUnitsValidationError(true);
       setUnitsValidationErrorMessage(locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_UNITS_VALIDATION_ERROR_MSG);
@@ -227,6 +229,29 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
       } else {
         setIsProfitAmtValidationError(false);
         setProfitAmtValidationErrorMessage('');
+      }
+      // Owned Quantity gte Sale Quantity
+      let ownedUnits: number = 0;
+      const boughtUnits = allInvestments
+        .filter((e: any) => e.isin === isin)
+        .filter((e: any) => e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY)
+        .filter((e: any) => e.execution_date <= executionDate)
+        .map((e: any) => e.units)
+        .reduce((partialSum: number, add: number) => partialSum + add, 0);
+      const soldUnits = allInvestments
+        .filter((e: any) => e.isin === isin)
+        .filter((e: any) => e.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_SELL_KEY)
+        .filter((e: any) => e.execution_date <= executionDate)
+        .map((e: any) => e.units)
+        .reduce((partialSum: number, add: number) => partialSum + add, 0);
+      ownedUnits = boughtUnits - soldUnits;
+      if (ownedUnits <= 0 || ownedUnits < Number(units)) {
+        toast.error(
+          locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_OWNED_UNITS_VALIDATION_ERROR_MSG(ownedUnits.toFixed(0)),
+          toastOptions
+        );
+        setIsOwnedUnitsValidationError(true);
+        return;
       }
     }
     if (errorPresent) {
