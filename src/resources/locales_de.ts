@@ -71,6 +71,7 @@ export const locales_de = {
   INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS: 'Gewinn (Brutto): ',
   INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT: 'Steuerabzug: ',
   INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET: 'Gewinn (Netto): ',
+  INCOME_INVESTMENTS_TOOLTIP_SELL_ROW_BTN: 'Position verkaufen',
 
   FIXED_COSTS_MONHTLY_COST: 'Gesamtkosten',
   FIXED_COSTS_RENT_UTILITIES: 'Miete & Nebenkosten',

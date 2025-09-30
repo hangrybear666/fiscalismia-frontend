@@ -71,6 +71,7 @@ export const locales_en = {
   INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_GROSS: 'Profit (gross): ',
   INCOME_INVESTMENTS_TOOLTIP_TAXED_AMT: 'Tax deduction: ',
   INCOME_INVESTMENTS_TOOLTIP_PROFIT_AMT_NET: 'Profit (net): ',
+  INCOME_INVESTMENTS_TOOLTIP_SELL_ROW_BTN: 'Sell investment',
 
   FIXED_COSTS_MONHTLY_COST: 'Total costs',
   FIXED_COSTS_RENT_UTILITIES: 'Rent & Utilities',

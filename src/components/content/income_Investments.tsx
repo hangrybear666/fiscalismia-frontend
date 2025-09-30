@@ -1,10 +1,10 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback, SetStateAction } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import { getAllInvestments, getAllDividends, deleteDividend, deleteInvestment } from '../../services/pgConnections';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
-import { resourceProperties as res } from '../../resources/resource_properties';
+import { resourceProperties as res, investmentInputCategories } from '../../resources/resource_properties';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Chip from '@mui/material/Chip';
 import ClearIcon from '@mui/icons-material/Clear';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import { DateCellFormatter, HtmlTooltip, toastOptions } from '../../utils/sharedFunctions';
 import { IconButton, Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
@@ -20,6 +21,37 @@ import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
+
+interface SellRowBtnProps {
+  data: any;
+  setIsInputInvestmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedOrderType: React.Dispatch<React.SetStateAction<string>>;
+  setIsOrderTypeSale: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const SellRowBtn = (props: SellRowBtnProps) => {
+  const renderSellBtn = props.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY;
+
+  const initializeInvestmentSale = async () => {
+    props.setIsInputInvestmentModalOpen(true);
+    props.setSelectedOrderType(investmentInputCategories.ARRAY_ORDER_TYPE[1]);
+    props.setIsOrderTypeSale(true);
+    console.log('selling ' + props.data.isin);
+  };
+  return renderSellBtn ? (
+    <React.Fragment>
+      <Tooltip placement="left" title={locales().INCOME_INVESTMENTS_TOOLTIP_SELL_ROW_BTN}>
+        <IconButton
+          color="info"
+          sx={{ paddingY: 0.2, paddingX: 1, marginRight: 0, marginY: 0, marginLeft: 0.5, align: 'right' }}
+          onClick={() => initializeInvestmentSale()}
+        >
+          <MoneyOffIcon />
+        </IconButton>
+      </Tooltip>
+    </React.Fragment>
+  ) : null;
+};
+
 interface DeleteRowBtnProps {
   type: 'Investment' | 'Dividend';
   data: any;
@@ -142,6 +174,13 @@ interface Income_InvestmentsProps {
  */
 export default function Income_Investments(_props: Income_InvestmentsProps) {
   const { palette } = useTheme();
+  // INVESTMENTS INPUT MODAL BUY/SELL STATE
+  const [isInputInvestmentModalOpen, setIsInputInvestmentModalOpen] = React.useState<boolean>(false);
+  const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(
+    investmentInputCategories.ARRAY_INVESTMENT_TYPE[0]
+  );
+  const [isOrderTypeSale, setIsOrderTypeSale] = React.useState<boolean>(false);
+  const [selectedOrderType, setSelectedOrderType] = React.useState(investmentInputCategories.ARRAY_ORDER_TYPE[0]);
   // db data
   const [allInvestments, setAllInvestments] = useState<any>();
   const [allDividends, setAllDividends] = useState<any>();
@@ -431,6 +470,21 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       {
         headerName: '',
         cellRenderer: (p: any) => (
+          <SellRowBtn
+            setIsOrderTypeSale={setIsOrderTypeSale}
+            setIsInputInvestmentModalOpen={setIsInputInvestmentModalOpen}
+            setSelectedOrderType={setSelectedOrderType}
+            data={p.data}
+          />
+        ),
+        filter: false,
+        floatingFilter: false,
+        minWidth: 60,
+        flex: 0.4
+      },
+      {
+        headerName: '',
+        cellRenderer: (p: any) => (
           <DeleteRowBtn type={'Investment'} data={p.data} refreshParent={setDeletedInvestment} />
         ),
         filter: false,
@@ -526,7 +580,18 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   return (
     <>
       <Stack>
-        <InputInvestmentTaxesModal allInvestments={allInvestments} refreshParent={setUpdatedOrAddedItemFlag} />
+        <InputInvestmentTaxesModal
+          isOrderTypeSale={isOrderTypeSale}
+          setIsOrderTypeSale={setIsOrderTypeSale}
+          selectedOrderType={selectedOrderType}
+          setSelectedOrderType={setSelectedOrderType}
+          selectedInvestmentType={selectedInvestmentType}
+          setSelectedInvestmentType={setSelectedInvestmentType}
+          isInputInvestmentModalOpen={isInputInvestmentModalOpen}
+          setIsInputInvestmentModalOpen={setIsInputInvestmentModalOpen}
+          allInvestments={allInvestments}
+          refreshParent={setUpdatedOrAddedItemFlag}
+        />
       </Stack>
       <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(investmentGridRef)}>
         {res.RESET}

@@ -17,10 +17,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import SelectDropdown from './SelectDropdown';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import {
-  resourceProperties as res,
-  investmentInputCategories as selectionCategories
-} from '../../resources/resource_properties';
+import { resourceProperties as res, investmentInputCategories } from '../../resources/resource_properties';
 import { postInvestments } from '../../services/pgConnections';
 import { isNumeric, dateValidation, initializeReactDateInput, stringAlphabeticOnly } from '../../utils/sharedFunctions';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -32,6 +29,14 @@ import { toastOptions } from '../../utils/sharedFunctions';
 interface InputInvestmentTaxesModalProps {
   allInvestments: any;
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
+  isInputInvestmentModalOpen: boolean;
+  setIsInputInvestmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedInvestmentType: string;
+  setSelectedInvestmentType: React.Dispatch<React.SetStateAction<string>>;
+  selectedOrderType: string;
+  setSelectedOrderType: React.Dispatch<React.SetStateAction<string>>;
+  isOrderTypeSale: boolean;
+  setIsOrderTypeSale: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /**
@@ -41,8 +46,18 @@ interface InputInvestmentTaxesModalProps {
  */
 export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesModalProps) {
   const { palette } = useTheme();
-  const { allInvestments, refreshParent } = props;
-  const [open, setOpen] = React.useState(false);
+  const {
+    allInvestments,
+    refreshParent,
+    isInputInvestmentModalOpen,
+    setIsInputInvestmentModalOpen,
+    selectedInvestmentType,
+    setSelectedInvestmentType,
+    selectedOrderType,
+    setSelectedOrderType,
+    isOrderTypeSale,
+    setIsOrderTypeSale
+  } = props;
   // Validation
   const [isUnitPriceValidationError, setIsUnitPriceValidationError] = React.useState(false);
   const [unitPriceValidationErrorMessage, setUnitPriceValidationErrorMessage] = React.useState('');
@@ -63,27 +78,22 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
   const [isOwnedUnitsValidationError, setIsOwnedUnitsValidationError] = React.useState(false);
 
   // Inputs
-  const [description, setDescription] = React.useState('');
-  const [unitPrice, setUnitPrice] = React.useState('');
-  const [fees, setFees] = React.useState('');
+  const [description, setDescription] = React.useState<string>('');
+  const [unitPrice, setUnitPrice] = React.useState<string>('');
+  const [fees, setFees] = React.useState<string>('');
   const [executionDate, setExecutionDate] = React.useState(initializeReactDateInput(new Date()));
-  const [units, setUnits] = React.useState('');
-  const [isin, setIsin] = React.useState('');
-  const [isOrderTypeSale, setIsOrderTypeSale] = React.useState(false);
-  const [profitAmt, setProfitAmt] = React.useState('');
-  const [pctTaxed, setPctTaxed] = React.useState(Number(100.0).toFixed(2));
+  const [units, setUnits] = React.useState<string>('');
+  const [isin, setIsin] = React.useState<string>('');
+  const [profitAmt, setProfitAmt] = React.useState<string>('');
+  const [pctTaxed, setPctTaxed] = React.useState<string>(Number(100.0).toFixed(2));
 
   // Selection
-  const [investmentTypeSelectItems] = React.useState(selectionCategories.ARRAY_INVESTMENT_TYPE);
-  const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(
-    selectionCategories.ARRAY_INVESTMENT_TYPE[0]
-  );
+  const [investmentTypeSelectItems] = React.useState(investmentInputCategories.ARRAY_INVESTMENT_TYPE);
   const [marketplaceSelectItems] = React.useState(locales().ARRAY_MARKETPLACE);
   const [selectedMarketplace, setSelectedMarketplace] = React.useState(locales().ARRAY_MARKETPLACE[0]);
-  const [orderTypeArray] = React.useState(new Array(selectionCategories.ARRAY_ORDER_TYPE));
-  const [selectedOrderType, setSelectedOrderType] = React.useState(selectionCategories.ARRAY_ORDER_TYPE[0]);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [orderTypeArray] = React.useState(new Array(investmentInputCategories.ARRAY_ORDER_TYPE));
+  const handleOpen = () => setIsInputInvestmentModalOpen(true);
+  const handleClose = () => setIsInputInvestmentModalOpen(false);
 
   const style = {
     position: 'absolute',
@@ -132,7 +142,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
           );
         }
       }
-      setOpen(false);
+      setIsInputInvestmentModalOpen(false);
       // this setter is called to force the frontend to update and refetch the data from db
       // to refresh parent's table based on added food item after DB insertion
       refreshParent(Number(response.results[0].id));
@@ -326,7 +336,7 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
       >
         {locales().MINOR_INPUT_INVESTMENT_DIVIDEND_TAXES_MODAL_OPEN_BUTTON}
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={isInputInvestmentModalOpen} onClose={handleClose}>
         <Box sx={style}>
           <Box>
             {orderTypeArray
