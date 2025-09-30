@@ -174,6 +174,7 @@ export const foodItemInputCategories = {
     fiber: 'Fiber'
   }
 };
+// refactor to have objects with key value pairs
 export const investmentInputCategories = {
   ARRAY_ORDER_TYPE: ['buy', 'sell'],
   ARRAY_INVESTMENT_TYPE: ['stock', 'etf']

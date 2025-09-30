@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,6 +29,7 @@ import { toastOptions } from '../../utils/sharedFunctions';
 interface InputInvestmentTaxesModalProps {
   allInvestments: any;
   refreshParent: React.Dispatch<React.SetStateAction<number>>;
+  preInitializeInvestmentSaleObj: InvestmentAndTaxes | undefined;
   isInputInvestmentModalOpen: boolean;
   setIsInputInvestmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedInvestmentType: string;
@@ -56,7 +57,8 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
     selectedOrderType,
     setSelectedOrderType,
     isOrderTypeSale,
-    setIsOrderTypeSale
+    setIsOrderTypeSale,
+    preInitializeInvestmentSaleObj
   } = props;
   // Validation
   const [isUnitPriceValidationError, setIsUnitPriceValidationError] = React.useState(false);
@@ -94,18 +96,38 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
   const [orderTypeArray] = React.useState(new Array(investmentInputCategories.ARRAY_ORDER_TYPE));
   const handleOpen = () => setIsInputInvestmentModalOpen(true);
   const handleClose = () => setIsInputInvestmentModalOpen(false);
+  const [style, setStyle] = React.useState<any>();
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: `${isOwnedUnitsValidationError ? `10px solid ${palette.error.light}` : `2px solid ${palette.secondary.main}`}  `,
-    boxShadow: 24,
-    p: 4
-  };
+  useMemo(() => {
+    setStyle({
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 500,
+      bgcolor: 'background.paper',
+      border: `${isOwnedUnitsValidationError ? `10px solid ${palette.error.light}` : `2px solid ${palette.secondary.main}`}  `,
+      boxShadow: 24,
+      p: 4
+    });
+  }, [isOwnedUnitsValidationError]);
+
+  useEffect(() => {
+    const preInit = () => {
+      setDescription(preInitializeInvestmentSaleObj!.description);
+      setUnitPrice(`${preInitializeInvestmentSaleObj!.price_per_unit}`);
+      setFees(`${preInitializeInvestmentSaleObj!.fees}`);
+      setExecutionDate(initializeReactDateInput(new Date()));
+      setUnits(`${preInitializeInvestmentSaleObj!.units}`);
+      setIsin(`${`${preInitializeInvestmentSaleObj!.isin}`}`);
+      setProfitAmt('');
+      setPctTaxed('');
+      setIsOwnedUnitsValidationError(false);
+    };
+    if (preInitializeInvestmentSaleObj) {
+      preInit();
+    }
+  }, [preInitializeInvestmentSaleObj]);
 
   /**
    * queries DB for investment and taxes insertion via REST API
@@ -262,6 +284,8 @@ export default function InputInvestmentTaxesModal(props: InputInvestmentTaxesMod
         );
         setIsOwnedUnitsValidationError(true);
         return;
+      } else {
+        setIsOwnedUnitsValidationError(false);
       }
     }
     if (errorPresent) {

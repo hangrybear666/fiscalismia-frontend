@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback, SetStateAction } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
@@ -17,7 +17,7 @@ import { DateCellFormatter, HtmlTooltip, toastOptions } from '../../utils/shared
 import { IconButton, Stack, Theme } from '@mui/material';
 import InputInvestmentTaxesModal from '../minor/Modal_InputInvestmentTaxes';
 import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividends';
-import { RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
+import { InvestmentAndTaxes, RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
@@ -27,15 +27,30 @@ interface SellRowBtnProps {
   setIsInputInvestmentModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedOrderType: React.Dispatch<React.SetStateAction<string>>;
   setIsOrderTypeSale: React.Dispatch<React.SetStateAction<boolean>>;
+  setPreInitializeInvestmentSaleObj: React.Dispatch<React.SetStateAction<InvestmentAndTaxes | undefined>>;
 }
 const SellRowBtn = (props: SellRowBtnProps) => {
   const renderSellBtn = props.data?.execution_type === res.INCOME_INVESTMENTS_EXECUTION_TYPE_BUY_KEY;
 
   const initializeInvestmentSale = async () => {
     props.setIsInputInvestmentModalOpen(true);
-    props.setSelectedOrderType(investmentInputCategories.ARRAY_ORDER_TYPE[1]);
+    props.setSelectedOrderType(investmentInputCategories.ARRAY_ORDER_TYPE[1]); // SELL - I know this index access is bad code.
     props.setIsOrderTypeSale(true);
-    console.log('selling ' + props.data.isin);
+    const preInitObject: InvestmentAndTaxes = {
+      execution_type: `${props.data.execution_type}`,
+      description: `${props.data.description}`,
+      isin: props.data.isin as TwelveCharacterString,
+      investment_type: `${props.data.investment_type}`,
+      marketplace: `${props.data.marketplace}`,
+      units: parseInt(props.data.units),
+      price_per_unit: parseFloat(Number(props.data.price_per_unit).toFixed(2)),
+      total_price: parseFloat(parseInt(props.data.total_price).toFixed(2)),
+      fees: parseFloat(Number(props.data.fees).toFixed(2)),
+      execution_date: new Date(props.data.execution_date),
+      pct_of_profit_taxed: parseFloat(Number(props.data.pct_of_profit_taxed).toFixed(2)),
+      profit_amt: parseFloat(Number(props.data.profit_amt).toFixed(2))
+    };
+    props.setPreInitializeInvestmentSaleObj(preInitObject);
   };
   return renderSellBtn ? (
     <React.Fragment>
@@ -179,8 +194,9 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   const [selectedInvestmentType, setSelectedInvestmentType] = React.useState(
     investmentInputCategories.ARRAY_INVESTMENT_TYPE[0]
   );
-  const [isOrderTypeSale, setIsOrderTypeSale] = React.useState<boolean>(false);
   const [selectedOrderType, setSelectedOrderType] = React.useState(investmentInputCategories.ARRAY_ORDER_TYPE[0]);
+  const [isOrderTypeSale, setIsOrderTypeSale] = React.useState<boolean>(false);
+  const [preInitializeInvestmentSaleObj, setPreInitializeInvestmentSaleObj] = React.useState<InvestmentAndTaxes>();
   // db data
   const [allInvestments, setAllInvestments] = useState<any>();
   const [allDividends, setAllDividends] = useState<any>();
@@ -471,6 +487,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         headerName: '',
         cellRenderer: (p: any) => (
           <SellRowBtn
+            setPreInitializeInvestmentSaleObj={setPreInitializeInvestmentSaleObj}
             setIsOrderTypeSale={setIsOrderTypeSale}
             setIsInputInvestmentModalOpen={setIsInputInvestmentModalOpen}
             setSelectedOrderType={setSelectedOrderType}
@@ -581,6 +598,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
     <>
       <Stack>
         <InputInvestmentTaxesModal
+          preInitializeInvestmentSaleObj={preInitializeInvestmentSaleObj}
           isOrderTypeSale={isOrderTypeSale}
           setIsOrderTypeSale={setIsOrderTypeSale}
           selectedOrderType={selectedOrderType}
