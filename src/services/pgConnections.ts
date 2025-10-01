@@ -12,6 +12,7 @@ import {
 import { toast } from 'react-toastify';
 import { axiosErrorToastOptions, toastOptions } from '../utils/sharedFunctions';
 import { axiosClient } from './axiosErrorHandler';
+import { locales } from '../utils/localeConfiguration';
 const baseUrl = serverConfig.API_BASE_URL;
 /**
  *
@@ -385,6 +386,7 @@ export const postUpdatedUserSettings = async (username: string, settingKey: stri
  * @param foodItemId
  * @returns persistence filepath of the stored image
  */
+
 export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>, foodItemId: string) => {
   setToken();
   try {
@@ -392,15 +394,15 @@ export const postFoodItemImg = async (event: React.ChangeEvent<HTMLInputElement>
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
     };
     if (!event.target.files) {
-      toast.error('No file provided in image upload', axiosErrorToastOptions);
+      toast.error(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_FILE_MISSING, axiosErrorToastOptions);
       return;
     }
     const file = event.target.files[0];
     if (file?.size > 1 * 1024 * 1024) {
-      return new FileSizeError('File size is limited to 1MB.');
+      return new FileSizeError(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_FILE_SIZE_EXCEEDED);
     }
     if (file?.type !== 'image/png' && file?.type !== 'image/jpeg' && file?.type !== 'image/webp') {
-      return new axios.AxiosError('Images must be uploaded as either png, jpeg or webp!');
+      return new axios.AxiosError(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_INVALID_FILE_TYPE);
     }
     const formData = new FormData();
     formData.append('foodItemImg', file);
@@ -526,6 +528,29 @@ export const deleteFoodItem = async (id: number) => {
       headers: { Authorization: `Bearer ${token}` }
     };
     const response = await axiosClient.delete(`/food_item/${id}`, config);
+    return response.data;
+  } catch (_error) {
+    // error handling logic is defined in src/services/axiosErrorHandler.ts
+  }
+};
+
+/**
+ * DELETE request to delete the row with supplied food_prices_dimension_key discount_start_date from public.food_price_discounts
+ * against API_BASE_URL/food_item_discount/:food_prices_dimension_key/:discount_start_date
+ * @param {string} food_prices_dimension_key
+ * @param {string} discount_start_date
+ * @returns id of the deleted food item discount
+ */
+export const deleteFoodItemDiscount = async (food_prices_dimension_key: string, discount_start_date: string) => {
+  setToken();
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const response = await axiosClient.delete(
+      `/food_item_discount/${food_prices_dimension_key}/${discount_start_date}`,
+      config
+    );
     return response.data;
   } catch (_error) {
     // error handling logic is defined in src/services/axiosErrorHandler.ts

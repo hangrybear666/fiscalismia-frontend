@@ -11,7 +11,6 @@
 
 ## Additional Development
 
-- Add Delete Button without ruining style in deals/grocery_deals for food_item_discount
 - remove the vertical red bar and golden vertical box in overview var expenses when selecting "All" as month
 - add the navigational arrows from variable expenses overview to Income (3x) and Fixed Costs (2x)
 - Persist new added var expenses in db and refresh overview of variable expenses and continue work on MODAL with input validation and so forth

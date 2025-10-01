@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { SetStateAction, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { AxiosError } from 'axios';
 import Box from '@mui/material/Box';
@@ -16,10 +16,15 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Typography from '@mui/material/Typography';
 import CancelIcon from '@mui/icons-material/CancelSharp';
 import Stack from '@mui/system/Stack';
-import { Paper } from '@mui/material';
+import { Paper, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { serverConfig, foodItemInputCategories as foodCategories } from '../../resources/resource_properties';
-import { postFoodItemImg, FileSizeError, deleteFoodItemImg } from '../../services/pgConnections';
+import {
+  postFoodItemImg,
+  FileSizeError,
+  deleteFoodItemImg,
+  deleteFoodItemDiscount
+} from '../../services/pgConnections';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -37,6 +42,8 @@ import online from '/imgs/supermarkets/online1.png';
 // import online2 from '/imgs/supermarkets/online2.png';
 import all from '/imgs/supermarkets/alle1.png';
 import { locales } from '../../utils/localeConfiguration';
+import { toastOptions } from '../../utils/sharedFunctions';
+import { toast } from 'react-toastify';
 
 const Alert = React.forwardRef(function Alert(props: any, ref: any) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -63,6 +70,7 @@ export type ContentCardDiscount = {
   discountPercentage: string;
   store: string;
   startDate: string;
+  discount_start_date: string;
   endDate: string;
   dealDuration: string;
   daysLeft: string | null;
@@ -71,6 +79,7 @@ export type ContentCardDiscount = {
   img: string | null;
   elevation?: number;
   imgHeight?: number;
+  refreshParent: React.Dispatch<SetStateAction<string>>;
 };
 
 /**
@@ -91,6 +100,7 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
     discountPercentage,
     store,
     startDate,
+    discount_start_date,
     endDate,
     dealDuration,
     daysLeft,
@@ -98,7 +108,8 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
     details,
     img,
     elevation,
-    imgHeight
+    imgHeight,
+    refreshParent
   } = props;
   const [notificationOpen, setNotificationOpen] = React.useState(false);
   const [notificationMessage, setNotificationMessage] = React.useState('This is a notification.');
@@ -172,32 +183,56 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
     if (response?.status == 200) {
       const filepath = response.data;
       setImgFilePath(serverConfig.API_BASE_URL.concat('/').concat(filepath));
-      setNotificationMessage(`File persisted in path: ${filepath}`);
+      setNotificationMessage(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_PERSIST_SUCCESS(filepath));
       setNotificationSeverity('success');
       setNotificationOpen(true);
     } else if (response?.status == 409) {
-      setNotificationMessage('STATUS 409: choose a different image.');
+      setNotificationMessage(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_UPLOAD_CONFLICT);
       setNotificationSeverity('error');
       setNotificationOpen(true);
     } else if (response?.status == 400) {
-      setNotificationMessage('STATUS 400: image could not be processed.');
+      setNotificationMessage(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_UPLOAD_BAD_REQUEST);
       setNotificationSeverity('error');
       setNotificationOpen(true);
     }
   };
 
+  /**
+   * deletes image from database and backend persistence location
+   * @param event
+   */
   const handleImgDeletion = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const response = await deleteFoodItemImg(foodItemId);
     if (response.results[0]?.filepath) {
-      setNotificationMessage(`Image successfully deleted from path: ${response.results[0].filepath}`);
+      setNotificationMessage(
+        locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_DELETE_SUCCESS(response.results[0].filepath)
+      );
       setNotificationSeverity('info');
       setImgFilePath(null);
       setNotificationOpen(true);
     } else {
-      setNotificationMessage('Image could not be deleted');
+      setNotificationMessage(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_DELETE_FAILURE);
       setNotificationSeverity('error');
       setNotificationOpen(true);
+    }
+  };
+
+  /**
+   * Deletes backend food item discount from database. renders only if image is null or deleted
+   * @param event
+   */
+  const handleDiscountDeletion = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const response = await deleteFoodItemDiscount(foodItemId, discount_start_date);
+    if (response.results[0]?.id) {
+      toast.info(
+        locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_DISCOUNT_DELETE_SUCCESS(response.results[0].id),
+        toastOptions
+      );
+      refreshParent(response.results[0].id);
+    } else {
+      toast.error(locales().CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_DISCOUNT_DELETE_FAILURE, toastOptions);
     }
   };
 
@@ -242,9 +277,11 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
               title={header}
             />
             {/* DELETE IMG Btn */}
-            <IconButton size="large" sx={{ position: 'absolute', right: 0, top: 0 }} onClick={handleImgDeletion}>
-              <CancelIcon sx={{ borderRadius: 5, backgroundColor: '#cccccc' }} fontSize="inherit" />
-            </IconButton>
+            <Tooltip placement="bottom" title={locales().CONTENT_CARD_DISCOOUNT_DELETE_FOOD_DISCOUNT_IMAGE_TOOLTIP}>
+              <IconButton size="large" sx={{ position: 'absolute', right: 0, top: 0 }} onClick={handleImgDeletion}>
+                <CancelIcon sx={{ borderRadius: 5, backgroundColor: '#cccccc' }} fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
           </Box>
         ) : (
           // UPLOAD IMAGE
@@ -252,12 +289,13 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
             sx={{
               justifyContent: 'center',
               alignItems: 'center',
-              display: 'flex'
+              display: 'flex',
+              position: 'relative'
             }}
           >
             <Paper elevation={4}>
               <form
-                action="http://localhost:3002/api/fiscalismia/upload/food_item_img"
+                action={`${serverConfig.API_BASE_URL}/upload/food_item_img`}
                 method="post"
                 encType="multipart/form-data"
               >
@@ -278,6 +316,12 @@ export default function ContentCardDiscounts(props: ContentCardDiscount) {
                 </Button>
               </form>
             </Paper>
+            {/* DELETE Food Item Discount Btn */}
+            <Tooltip placement="bottom" title={locales().CONTENT_CARD_DISCOOUNT_DELETE_FOOD_DISCOUNT_TOOLTIP}>
+              <IconButton size="large" sx={{ position: 'absolute', right: 0, top: 0 }} onClick={handleDiscountDeletion}>
+                <CancelIcon sx={{ borderRadius: 5, backgroundColor: palette.error.light }} fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
           </CardActions>
         )}
         <CardContent sx={{ padding: 0 }}>

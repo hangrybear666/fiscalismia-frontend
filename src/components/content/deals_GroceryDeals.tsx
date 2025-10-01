@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SetStateAction } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,9 +18,13 @@ import { locales } from '../../utils/localeConfiguration';
 /**
  * Extracts relevant fields from the db query result in order to populate one card for each discounted item.
  * @param {*} allFoodDiscounts db query result
+ * @param {React.Dispatch<SetStateAction<string>>} setDeletedFoodDiscountId
  * @returns Array of ContentCardDiscount Objects
  */
-function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
+function extractCardData(
+  allFoodDiscounts: any,
+  setDeletedFoodDiscountId: React.Dispatch<SetStateAction<string>>
+): ContentCardDiscount[] {
   const discountedFoodItemCards: ContentCardDiscount[] = [];
   allFoodDiscounts.forEach((e: any) => {
     const imageStr = e.filepath ? serverConfig.API_BASE_URL.concat('/').concat(e.filepath) : res.NO_IMG;
@@ -33,6 +37,7 @@ function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
       discountPercentage: `${Math.round(e.reduced_by_pct)}${res.SYMBOL_PERCENT}`,
       store: e.store,
       startDate: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_START_DATE_STR} ${e.discount_start_date}`,
+      discount_start_date: e.discount_start_date,
       endDate: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_END_DATE_STR} ${e.discount_end_date}`,
       dealDuration: `${locales().DEALS_GROCERY_DEALS_CONTENT_CARD_DEAL_DURATION_STR}: ${e.discount_days_duration} ${locales().GENERAL_DAYS}`,
       daysLeft:
@@ -54,7 +59,8 @@ function extractCardData(allFoodDiscounts: any): ContentCardDiscount[] {
         ? imageStr === res.NO_IMG
           ? null
           : imageStr
-        : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`
+        : `https://source.unsplash.com/random/?groceries&${Math.floor(Math.random() * 100)}`,
+      refreshParent: setDeletedFoodDiscountId
     };
     discountedFoodItemCards.push(contentCardObj);
   });
@@ -94,6 +100,7 @@ interface Deals_GroceryDealsProps {
 export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps): JSX.Element {
   const { palette } = useTheme();
   const [foodPricesAndDiscounts, setFoodPricesAndDiscounts] = useState<any>();
+  const [deletedFoodDiscountId, setDeletedFoodDiscountId] = useState<React.SetStateAction<string>>();
   const [discountedItemCards, setDiscountedItemCards] = useState<ContentCardDiscount[]>([]);
   const [allFoodItemArrayForAutoComplete, setAllFoodItemArrayForAutoComplete] = useState<
     { label: string; id: number }[]
@@ -109,10 +116,10 @@ export default function Deals_GroceryDeals(_props: Deals_GroceryDealsProps): JSX
       const autoCompleteItemArray = selectionInfoForModal.autoCompleteItemArray;
       setAllFoodItemArrayForAutoComplete(autoCompleteItemArray);
       setFoodPricesAndDiscounts(allFoodDiscounts.results);
-      setDiscountedItemCards(extractCardData(allFoodDiscounts.results));
+      setDiscountedItemCards(extractCardData(allFoodDiscounts.results, setDeletedFoodDiscountId));
     };
     getAllPricesAndDiscounts();
-  }, [discountAddedItemId]);
+  }, [discountAddedItemId, deletedFoodDiscountId]);
 
   const tableHeadStyling = {
     backgroundColor: palette.primary.dark,

@@ -15,7 +15,7 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { postFoodItemDiscount } from '../../services/pgConnections';
 import { Autocomplete, Stack } from '@mui/material';
-import { isNumeric, dateValidation } from '../../utils/sharedFunctions';
+import { isNumeric, dateValidation, initializeReactDateInput } from '../../utils/sharedFunctions';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
 import { toastOptions } from '../../utils/sharedFunctions';
@@ -47,9 +47,11 @@ export default function InputFoodDiscountModal(props: InputFoodDiscountModalProp
   const [startDateErrorMessage, setStartDateErrorMessage] = React.useState('');
   const [endDateErrorMessage, setEndDateErrorMessage] = React.useState('');
   // Inputs
+  const [currentDate] = React.useState(new Date());
+  const [sevenDaysLaterDate] = React.useState(new Date(new Date(currentDate).setDate(currentDate.getDate() + 7)));
   const [discountPrice, setDiscountPrice] = React.useState('');
-  const [startDate, setStartDate] = React.useState('');
-  const [endDate, setEndDate] = React.useState('');
+  const [startDate, setStartDate] = React.useState(initializeReactDateInput(currentDate)); // default today
+  const [endDate, setEndDate] = React.useState(initializeReactDateInput(sevenDaysLaterDate)); // default today + 7 days
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

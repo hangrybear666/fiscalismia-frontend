@@ -113,6 +113,24 @@ export const locales_de = {
   DEALS_GROCERY_DEALS_CONTENT_CARD_STARTS_IN_DAYS_STR_1: 'startet in',
   DEALS_GROCERY_DEALS_CONTENT_CARD_STARTS_IN_DAYS_STR_2: 'Tag(en)',
 
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_FILE_MISSING: 'Es wurde keine Datei für den Bild-Upload bereitgestellt.',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_FILE_SIZE_EXCEEDED: 'Die Dateigröße ist auf 1 MB begrenzt.',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_INVALID_FILE_TYPE:
+    'Bilder müssen als png, jpeg oder webp hochgeladen werden!',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_PERSIST_SUCCESS: (pos1: string) =>
+    `Datei unter Pfad: ${pos1} und die Referenz in Datenbank gespeichert.`,
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_UPLOAD_CONFLICT: 'STATUS 409: Bitte wählen Sie ein anderes Bild.',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_UPLOAD_BAD_REQUEST:
+    'STATUS 400: Bild konnte nicht verarbeitet werden.',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_DELETE_SUCCESS: (pos1: string) =>
+    `Bild erfolgreich aus Pfad: ${pos1} und die Referenz aus der Datenbank gelöscht.`,
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_IMG_DELETE_FAILURE: 'Bild konnte nicht gelöscht werden.',
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_DISCOUNT_DELETE_SUCCESS: (pos1: string) =>
+    `Angebot mit ID [${pos1}] erfolgreich gelöscht.`,
+  CONTENT_CARD_DISCOOUNT_NOTIFICATION_MESSAGE_DISCOUNT_DELETE_FAILURE: 'Angebot konnte nicht gelöscht werden.',
+  CONTENT_CARD_DISCOOUNT_DELETE_FOOD_DISCOUNT_TOOLTIP: 'Angebot löschen',
+  CONTENT_CARD_DISCOOUNT_DELETE_FOOD_DISCOUNT_IMAGE_TOOLTIP: 'Bild löschen',
+
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1: 'Kein Nutzername angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2: 'Nutzername muss mindestens 3 Zeichen enthalten.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
