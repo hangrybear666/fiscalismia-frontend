@@ -1,4 +1,3 @@
-/* eslint-disable */ // TODO
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -67,8 +66,10 @@ const chartBackgroundProperties = (palette: Palette) => {
 };
 
 /**
+ *
  * Extracts datestrings in the format yyyy without duplicates from raw data
  * @param allVariableExpenses
+ * @returns
  */
 function getUniquePurchasingDateYears(allVariableExpenses: any): string[] {
   const uniquePurchasingDateArray = getUniquePurchasingDates(allVariableExpenses);
@@ -88,7 +89,7 @@ function getUniquePurchasingDateMonths(allVariableExpenses: any): (string | RegE
   // format mm
   const uniqueMonthNumbers = uniquePurchasingMonthYears.map((yearMonthStr: string) => yearMonthStr.substring(5, 7));
   // format [monthname][monthNr] initialized with ALL Aggregate value
-  let localeMonthArr: (string | RegExp)[][] = locales().ARRAY_MONTH_ALL.filter((e) => e[0] == res.ALL);
+  const localeMonthArr: (string | RegExp)[][] = locales().ARRAY_MONTH_ALL.filter((e) => e[0] == res.ALL);
   uniqueMonthNumbers.forEach((monthNr) => {
     // if monthNr matches string between 01-12 we are guaranteed to find an element
     if (monthNr.match(/\b(0[1-9]|1[0-2])\b/)) {
@@ -102,19 +103,18 @@ function getUniquePurchasingDateMonths(allVariableExpenses: any): (string | RegE
  * Extracts all rows with contains_indulgence flag set to true, splits individual indulgences off and counts the total occurence,
  * subsequently used to populate a horizontal barchart.
  * @param allVariableExpenses
- * @param palette
  * @returns
  */
-function extractHorizontalBarChartData(allVariableExpenses: any, palette: Palette): ContentChartHorizontalBarObject {
+function extractHorizontalBarChartData(allVariableExpenses: any): ContentChartHorizontalBarObject {
   const allVariableExpensesFiltered = allVariableExpenses
     .filter((row: any) => row.category.toLowerCase() !== 'sale')
     .filter((row: any) => row.contains_indulgence)
-    .map((e: any): string => (e.indulgences ? e.indulgences.trim() : null));
+    .map((e: any): string => (e.indulgences ? e.indulgences.trim() : ''));
 
   // creates a Map with the indulgence as the key and the summed up occurences as value
   const indulgenceSumMap: Map<string, number> = allVariableExpensesFiltered.reduce(
     (map: Map<string, number>, indulgences: string) => {
-      if (!indulgences) {
+      if (!indulgences || (indulgences && indulgences.length === 0)) {
         toast.warn(
           'indulgences is null, please check that each row with the contains_indulgence flag set to true has entries here.',
           toastOptions
@@ -436,6 +436,7 @@ function aggregateCostsPerCategory(allVariableExpenses: any): (string | number)[
  *
  * @param allVariableExpenses
  * @param isMonthly
+ * @returns
  */
 function extractAggregatedPurchaseInformation(allVariableExpenses: any, isMonthly: boolean) {
   const yearlyTotalExpenseCard = constructContentCardObject(
@@ -473,6 +474,7 @@ interface VariableExpenses_OverviewProps {
 /**
  *
  * @param _props
+ * @returns
  */
 export default function VariableExpenses_Overview(_props: VariableExpenses_OverviewProps) {
   const { palette, breakpoints } = useTheme();
@@ -574,7 +576,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
     const varExpenseBooleanPieChart = extractPieChartData(filteredYearVarExpenses, palette);
     setExpensePieChartData(varExpenseBooleanPieChart);
     // Horizontal Bar Chart Aggregating Indulgences/Sensitivities
-    const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredYearVarExpenses, palette);
+    const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredYearVarExpenses);
     setIndulgencesHorizontalBarChartData(varExpenseHorizontalBarChart);
     // Content Cards with aggregated costs per largest category
     const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredYearVarExpenses, false);
@@ -606,7 +608,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       const varExpenseBooleanPieChart = extractPieChartData(filteredMonthVarExpenses, palette);
       setExpensePieChartData(varExpenseBooleanPieChart);
       // Horizontal Bar Chart Aggregating Indulgences/Sensitivities
-      const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredMonthVarExpenses, palette);
+      const varExpenseHorizontalBarChart = extractHorizontalBarChartData(filteredMonthVarExpenses);
       setIndulgencesHorizontalBarChartData(varExpenseHorizontalBarChart);
       // Content Cards with aggregated costs per largest category
       const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredMonthVarExpenses, true);
@@ -646,7 +648,6 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       !isPriorMonth &&
       selectedMonthIndex < (monthsWithPurchasesInSelectedYear ? monthsWithPurchasesInSelectedYear?.length - 1 : 12)
     ) {
-      console.log('length ', monthsWithPurchasesInSelectedYear?.length);
       handleSelectMonth(
         monthsWithPurchasesInSelectedYear
           ? (monthsWithPurchasesInSelectedYear[selectedMonthIndex + 1][0] as string)
@@ -783,7 +784,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                   {aggregatedPurchaseInformation?.categoryCards &&
                   aggregatedPurchaseInformation.categoryCards.length < 6
                     ? [...new Array(6 - aggregatedPurchaseInformation.categoryCards.length)].map(
-                        (e: any, i: number) => <Grid xs={6} md={4} xl={2} key={i}></Grid>
+                        (_e: any, i: number) => <Grid xs={6} md={4} xl={2} key={i}></Grid>
                       )
                     : null}
                 </React.Fragment>
