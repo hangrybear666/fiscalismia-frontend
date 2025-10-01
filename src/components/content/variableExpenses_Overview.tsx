@@ -480,9 +480,9 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
   const [allVariableExpenses, setAllVariableExpenses] = useState<any>(null);
   const [selectedVariableExpenses, setSelectedVariableExpenses] = useState<any>();
   const [aggregatedPurchaseInformation, setAggregatedPurchaseInformation] = useState<any>();
-  // Monthly/Yearly Expenses Visualized in Linechart
+  // Monthly/Yearly Expenses Visualized in Linechart showing the total expenditure per month
   const [expenseLineChartData, setExpenseLineChartData] = useState<ContentChartLineObject>();
-  // Monthly/Yearly Expenses Visualized in Vertical Barchart
+  // Monthly/Yearly Expenses Visualized in Vertical Barchart - one slice per month
   const [expenseVerticalBarChartData, setExpenseVerticalBarChartData] = useState<ContentChartVerticalBarObject>();
   // Dual Pie Chart is_planned yes/no piechart & contains indulgence yes/no pie chart
   const [expensePieChartData, setExpensePieChartData] = useState<ContentChartBooleanPieObject>();
@@ -595,6 +595,8 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       );
       const aggregatePurchaseInfo = extractAggregatedPurchaseInformation(filteredMonthVarExpenses, false);
       setAggregatedPurchaseInformation(aggregatePurchaseInfo);
+      // unselect month label for marking active slice in both vertical bar chart and line chart
+      setSelectedChartLabel('');
     } else {
       // filter all expenses by preselected year and month substring
       filteredMonthVarExpenses = allVariableExpenses
