@@ -10,7 +10,6 @@ import {
   getAllFixedCosts,
   getFixedCostsByEffectiveDate
 } from '../../services/pgConnections';
-import SelectDropdown from '../minor/SelectDropdown';
 import { Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
@@ -20,6 +19,7 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import Dropdown_NaviationArrows from '../minor/Dropdown_NaviationArrows';
 
 /**
  * @param {*} allFixedIncome all fixed income data within db
@@ -221,11 +221,10 @@ export default function Income_Monthly_Budget(_props: Income_Monthly_BudgetProps
       <Grid container spacing={3} justifyContent="center">
         <Grid xs={0} xl={1.5}></Grid>
         <Grid xs={12} xl={9}>
-          <SelectDropdown
-            selectLabel={locales().GENERAL_DATE}
-            selectItems={effectiveDateSelectItems}
+          <Dropdown_NaviationArrows
             selectedValue={selectedEffectiveDate}
             handleSelect={handleSelect}
+            selectItems={effectiveDateSelectItems}
           />
         </Grid>
         <Grid xs={0} xl={1.5}></Grid>

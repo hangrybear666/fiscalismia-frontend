@@ -36,6 +36,8 @@ export const locales_en = {
   GENERAL_SORT_BY: 'Sort by',
   GENERAL_EMAIL: 'Email Address',
   GENERAL_DELETE_ROW_TOOLTIP: 'Delete row',
+  GENERAL_PRIOR_SELECTION_BTN_TOOLTIP: 'Previous entry',
+  GENERAL_NEXT_SELECTION_BTN_TOOLTIP: 'Next entry',
 
   INCOME_MONTHLY_NET_INCOME: 'Total monthly wage [net]',
   INCOME_FIXED_COST_CARD_HEADER: 'Total fixed costs',

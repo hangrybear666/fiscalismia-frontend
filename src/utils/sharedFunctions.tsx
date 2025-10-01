@@ -167,16 +167,19 @@ export function constructContentVerticalBarChartObject(
 
 /**
  * extracts all uniqure effective dates of a single dataset
- * @param {*} singleDataSet required
+ * @param {*} singleDataSet
+ * @param {'asc' | 'desc'} sort optional override to sort descending
  * @returns sorted array of effective dates in the format 'yyyy-mm-dd'
  * It doesn't matter how it is sorted, as long as it is. This is because both
  * income and fixed costs call this method and subsequently are passed to the
  * chart component via incomeDataSets that both require to be sorted in the same way.
  */
-export function getUniqueEffectiveDates(singleDataSet: any): string[] {
-  return Array.from(new Set(singleDataSet.map((e: any) => e.effective_date))).sort((a: any, b: any) =>
-    a > b ? -1 : 1
-  ) as string[]; // SORT Desc to initialize with current value at index 0
+export function getUniqueEffectiveDates(singleDataSet: any, sort: 'asc' | 'desc' = 'asc'): string[] {
+  const uniqueDates = Array.from(new Set(singleDataSet.map((e: any) => e.effective_date))) as string[];
+  if (sort === 'desc') {
+    return uniqueDates.sort((a: any, b: any) => (a < b ? -1 : a > b ? 1 : 0));
+  }
+  return uniqueDates.sort(); // ascending is default
 }
 
 /**

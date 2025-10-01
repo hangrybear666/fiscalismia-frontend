@@ -5,7 +5,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res } from '../../resources/resource_properties';
 import { getFixedIncomeByEffectiveDate, getAllFixedIncome } from '../../services/pgConnections';
-import SelectDropdown from '../minor/SelectDropdown';
 import { Box, Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
@@ -15,6 +14,7 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import Dropdown_NaviationArrows from '../minor/Dropdown_NaviationArrows';
 
 /**
  *
@@ -211,11 +211,10 @@ export default function Income_Overview(_props: Income_OverviewProps) {
           >
             <Grid container spacing={3}>
               <Grid xs={12}>
-                <SelectDropdown
-                  selectLabel={locales().GENERAL_DATE}
-                  selectItems={effectiveDateSelectItems}
+                <Dropdown_NaviationArrows
                   selectedValue={selectedEffectiveDate}
                   handleSelect={handleSelect}
+                  selectItems={effectiveDateSelectItems}
                 />
               </Grid>
               {monthlyNetIncomeCard ? (

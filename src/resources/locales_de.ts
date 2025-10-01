@@ -36,6 +36,8 @@ export const locales_de = {
   GENERAL_SORT_BY: 'Sortieren nach',
   GENERAL_EMAIL: 'Email Adresse',
   GENERAL_DELETE_ROW_TOOLTIP: 'Zeile löschen',
+  GENERAL_PRIOR_SELECTION_BTN_TOOLTIP: 'Vorheriger Eintrag',
+  GENERAL_NEXT_SELECTION_BTN_TOOLTIP: 'Nächster Eintrag',
 
   INCOME_MONTHLY_NET_INCOME: 'Monatlicher Gesamtlohn [Netto]',
   INCOME_FIXED_COST_CARD_HEADER: 'Fixkosten Gesamt',

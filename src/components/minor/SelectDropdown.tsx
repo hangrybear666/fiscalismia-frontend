@@ -26,9 +26,8 @@ export default function SelectDropdown(props: SelectDropdownProps) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth disabled={disabled ? disabled : false}>
-        <InputLabel id={selectLabel.replace(/\s/g, '').concat('-inputLabel')}>{selectLabel}</InputLabel>
+        <InputLabel>{selectLabel}</InputLabel>
         <Select
-          id={selectLabel.replace(/\s/g, '').concat('-selectItems')}
           value={selectedValue}
           label={selectLabel}
           onChange={handleChange}

@@ -5,7 +5,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ContentLineChart from '../minor/ContentChart_Line';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
-import SelectDropdown from '../minor/SelectDropdown';
 import { Box, Palette, Paper } from '@mui/material';
 import {
   constructContentCardObject,
@@ -15,6 +14,7 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartLineObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import Dropdown_NaviationArrows from '../minor/Dropdown_NaviationArrows';
 
 /**
  *
@@ -267,11 +267,10 @@ export default function FixedCosts_Overview(_props: FixedCosts_OverviewProps) {
         >
           <Grid container spacing={3}>
             <Grid xs={12}>
-              <SelectDropdown
-                selectLabel={locales().GENERAL_DATE}
-                selectItems={effectiveDateSelectItems}
+              <Dropdown_NaviationArrows
                 selectedValue={selectedEffectiveDate}
                 handleSelect={handleSelect}
+                selectItems={effectiveDateSelectItems}
               />
             </Grid>
             {monthlyTotalCostCard ? (

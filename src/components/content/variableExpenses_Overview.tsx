@@ -655,6 +655,7 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
       );
     }
   };
+
   return (
     <>
       <Grid container>
@@ -700,8 +701,8 @@ export default function VariableExpenses_Overview(_props: VariableExpenses_Overv
                         selectLabel={locales().GENERAL_DATE}
                         selectItems={
                           monthsWithPurchasesInSelectedYear
-                            ? monthsWithPurchasesInSelectedYear.map((e) => e[0] as string)
-                            : locales().ARRAY_MONTH_ALL.map((e) => e[0] as string)
+                            ? monthsWithPurchasesInSelectedYear.map((e: any) => e[0] as string)
+                            : locales().ARRAY_MONTH_ALL.map((e: any) => e[0] as string)
                         }
                         selectedValue={selectedMonth}
                         handleSelect={handleSelectMonth}

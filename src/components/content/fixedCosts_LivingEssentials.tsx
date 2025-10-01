@@ -3,7 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCardCosts from '../minor/ContentCard_Costs';
 import Grid from '@mui/material/Unstable_Grid2';
-import SelectDropdown from '../minor/SelectDropdown';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
@@ -16,6 +15,7 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import Dropdown_NaviationArrows from '../minor/Dropdown_NaviationArrows';
 
 /**
  *
@@ -254,11 +254,10 @@ export default function FixedCosts_LivingEssentials(_props: FixedCosts_LivingEss
         >
           <Grid container spacing={2}>
             <Grid xs={12}>
-              <SelectDropdown
-                selectLabel={locales().GENERAL_DATE}
-                selectItems={effectiveDateSelectItems}
+              <Dropdown_NaviationArrows
                 selectedValue={selectedEffectiveDate}
                 handleSelect={handleSelect}
+                selectItems={effectiveDateSelectItems}
               />
             </Grid>
             {rentAndUtilitiesCard ? (

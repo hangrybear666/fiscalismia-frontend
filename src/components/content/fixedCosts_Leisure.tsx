@@ -6,7 +6,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { resourceProperties as res, fixedCostCategories as categories } from '../../resources/resource_properties';
 import { getFixedCostsByEffectiveDate, getAllFixedCosts } from '../../services/pgConnections';
 import ContentVerticalBarChart from '../minor/ContentChart_VerticalBar';
-import SelectDropdown from '../minor/SelectDropdown';
 import { Paper, Theme } from '@mui/material';
 import {
   constructContentVerticalBarChartObject,
@@ -15,6 +14,7 @@ import {
 } from '../../utils/sharedFunctions';
 import { ContentCardObject, ContentChartVerticalBarObject, RouteInfo } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
+import Dropdown_NaviationArrows from '../minor/Dropdown_NaviationArrows';
 
 /**
  * @param fixedCosts
@@ -280,11 +280,10 @@ export default function FixedCosts_Leisure(_props: FixedCosts_LeisureProps): JSX
   return (
     <Grid container spacing={2}>
       <Grid xs={12}>
-        <SelectDropdown
-          selectLabel={locales().GENERAL_DATE}
-          selectItems={effectiveDateSelectItems}
+        <Dropdown_NaviationArrows
           selectedValue={selectedEffectiveDate}
           handleSelect={handleSelect}
+          selectItems={effectiveDateSelectItems}
         />
       </Grid>
       {sportsAndHealthCard ? (
