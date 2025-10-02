@@ -71,7 +71,6 @@ export const login = async (credentials: UserCredentials) => {
 };
 
 /**
- * 0) WARNING: THE BACKEND CURRENTLY CONTAINS A WHITELIST OF USERNAMES TO LIMIT ACCESS
  * 1) performs DB INSERTION into um_users
  * 2) initializes um_user_settings such as mode (light) and palette(default) and selected_language(en_US)
  * @param {UserCredentials} credentials  {username, email, password}

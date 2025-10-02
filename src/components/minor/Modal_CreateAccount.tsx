@@ -32,9 +32,9 @@ const style = {
 };
 
 const regExEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+const usernameRegExp = /^[a-zA-Z0-9_]{3,32}$/;
 /**
- * Displayed on Login Page to allow for user registry against a predefined whitelist containing allowed usernanmes.
+ * Displayed on Login Page to allow for user registry
  * Opens a Dialog Modal with fields for username, email and password.
  * @returns
  */
@@ -94,6 +94,14 @@ export default function CreateAccountModal() {
       errorPresent = true;
       setIsUsernameValidationError(true);
       setUsernameValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2);
+    } else {
+      setIsUsernameValidationError(false);
+      setUsernameValidationErrorMessage('');
+    }
+    if (!usernameRegExp.test(username)) {
+      errorPresent = true;
+      setIsUsernameValidationError(true);
+      setUsernameValidationErrorMessage(locales().MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_3);
     } else {
       setIsUsernameValidationError(false);
       setUsernameValidationErrorMessage('');

@@ -139,6 +139,8 @@ export const locales_de = {
 
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_1: 'Kein Nutzername angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_2: 'Nutzername muss mindestens 3 Zeichen enthalten.',
+  MINOR_INPUT_CREATE_ACCOUNT_MODAL_USERNAME_VALIDATION_ERROR_MSG_3:
+    'Erlaubt sind 3-32 alphanumerische Zeichen und Unterstriche.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_1: 'Kein Passwort angegeben.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_PASSWORD_VALIDATION_ERROR_MSG_2: 'Passwort muss mindestens 8 Zeichen enthalten.',
   MINOR_INPUT_CREATE_ACCOUNT_MODAL_EMAIL_VALIDATION_ERROR_MSG_1: 'Email ist keine valide Adresse',
@@ -286,8 +288,7 @@ export const locales_de = {
   NOTIFICATIONS_LOGIN_FAILED: 'Login fehlgeschlagen.',
   NOTIFICATIONS_ACCOUNT_CREATION_SUCCESS: (pos1: string) =>
     `Nutzer [${pos1}] wurde erfolgreich angelegt. Bitte einloggen.`,
-  NOTIFICATIONS_ACCOUNT_CREATION_ERROR:
-    'Nutzeraccount konnte nicht erstellt werden. Stellen Sie sicher, dass die whitelist den Namen enthält.',
+  NOTIFICATIONS_ACCOUNT_CREATION_ERROR: 'Nutzeraccount konnte nicht erstellt werden.',
   NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_SUCCESSFULLY: (pos1: string) =>
     `Angebot für Artikel mit ID [${pos1}] wurde erstellt.`,
   NOTIFICATIONS_FOOD_ITEM_DISCOUNT_ADDED_ERROR: 'Angebot konnte nicht erstellt werden.',
