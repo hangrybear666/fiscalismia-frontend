@@ -15,16 +15,17 @@ export type AuthInfo = {
 };
 
 /**
- * user object containing userId, userName and userEmail extracted from the db.
  * @table public.um_users
  * @property {number} userId SELECT id FROM public.um_users
  * @property {string} userName SELECT username FROM public.um_users
  * @property {string} userEmail SELECT email FROM public.um_users
+ * @property {string} userSchema SELECT schema FROM public.um_users
  */
 export type User = {
   userId: number;
   userName: string;
   userEmail: string;
+  userSchema: string;
 };
 
 /**
@@ -32,6 +33,7 @@ export type User = {
  * - user.userId
  * - user.userName
  * - user.userEmail
+ * - user.userSchema
  */
 export type CustomJwtToken = JwtPayload & {
   user: User;
@@ -39,10 +41,9 @@ export type CustomJwtToken = JwtPayload & {
 
 /**
  * User Credentials Object used for e.g. Account Creation and INSERT into table public.um_users.
- * @table public.um_users
- * @property {number} username SELECT id FROM public.um_users
- * @property {string | null} email SELECT email FROM public.um_users
- * @property {string} password salted and hashed via pgcrypto crypt('PASSWORD', gen_salt('bf',ITER_COUNT))
+ * @property {string} username
+ * @property {string | null} email
+ * @property {string} password
  */
 export type UserCredentials = {
   username: string;

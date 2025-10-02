@@ -45,7 +45,9 @@ const setToken = () => {
 };
 
 /**
- * UNPROTECTED ROUTE for Login Page
+ * UNPROTECTED ROUTE for Login Page.
+ * username and password is mandatory, email is currently optional
+ * userschema is created in the backend for database isolation between each user
  * @param {UserCredentials} credentials {username, email, password}
  * @returns JSON Web Token with the following structure:
  * {
@@ -53,6 +55,7 @@ const setToken = () => {
       "userId": 1,
       "userName": "admin",
       "userEmail": "herp_derp@hotmail.com"
+      "userShema": "private_admin"
     },
     "iat": 1758049728,
     "exp": 1758136128
