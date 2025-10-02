@@ -7,6 +7,7 @@ import FilterFoodPriceData from '../minor/FilterFoodPriceData';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Box, Skeleton, Theme } from '@mui/material';
 import { RouteInfo } from '../../types/custom/customTypes';
+import { locales } from '../../utils/localeConfiguration';
 
 interface Deals_FoodPricesProps {
   routeInfo: RouteInfo;
@@ -54,12 +55,14 @@ export default function Deals_FoodPrices(_props: Deals_FoodPricesProps): JSX.Ele
       const foodPriceObj: ContentCardFoodPrice = {
         foodItemId: e.id,
         header: `${e.food_item} - ${e.brand}`,
-        subtitle: `Gewicht ${e.weight}g`,
+        subtitle: locales().DEALS_FOOD_PRICES_CARD_SUBTITLE(e.weight),
         originalPrice: `${e.price}${res.CURRENCY_EURO}`,
         store: e.store,
-        pricePerKg: `${e.price_per_kg}${res.CURRENCY_EURO}/kg`,
+        pricePerKg: locales().DEALS_FOOD_PRICES_CARD_PRICE_PER_KG(
+          `${Number(e.price_per_kg).toFixed(2)}${res.CURRENCY_EURO}`
+        ),
         kcalAmount: `${e.kcal_amount}kcal/100g`,
-        lastUpdated: `zuletzt geprüft ${e.last_update}`,
+        lastUpdated: locales().DEALS_FOOD_PRICES_CARD_LAST_UPDATED(e.last_update),
         details: null,
         img:
           e.img == res.NO_IMG || initializeWithoutImage || !renderImages

@@ -94,6 +94,10 @@ export const locales_en = {
   DEALS_OVERVIEW_THEADER_NORMALIZED_PRICE_TOP: 'Normalized price',
   DEALS_OVERVIEW_UPDATE_FOOD_PRICE: 'Update current price',
 
+  DEALS_FOOD_PRICES_CARD_SUBTITLE: (pos1: string) => `weight ${pos1}g`,
+  DEALS_FOOD_PRICES_CARD_LAST_UPDATED: (pos1: string) => `last checked ${pos1}`,
+  DEALS_FOOD_PRICES_CARD_PRICE_PER_KG: (pos1: string) => `${pos1}\nper kg`,
+
   DEALS_GROCERY_DEALS_THEADER_FOODITEM: 'Food Item',
   DEALS_GROCERY_DEALS_THEADER_BRAND: 'Brand',
   DEALS_GROCERY_DEALS_THEADER_STORE: 'Supermarket',

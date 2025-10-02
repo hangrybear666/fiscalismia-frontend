@@ -293,10 +293,9 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
                 </Typography>
               ) : null}
             </Grid>
-
             {/* store */}
             <Grid
-              xs={4}
+              xs={3.5}
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -316,7 +315,6 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
                 />
               ) : null}
             </Grid>
-
             {/* title & subtitle */}
             <Grid
               xs={4}
@@ -342,10 +340,9 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
                 ) : null}
               </Stack>
             </Grid>
-
             {/* price per kg */}
             <Grid
-              xs={4}
+              xs={4.5}
               display="flex"
               justifyContent="flex-start"
               alignItems="center"
@@ -358,16 +355,18 @@ export default function ContentCardFoodPrices(props: ContentCardFoodPrice) {
                     sx={{
                       borderRadius: 0,
                       paddingX: 0,
-                      paddingY: 2,
+                      paddingY: 4,
                       border: `1px solid ${palette.border.light}`,
                       fontSize: 14,
-                      fontWeight: 400
+                      fontWeight: 400,
+                      '& .MuiChip-label': {
+                        whiteSpace: 'pre-wrap'
+                      }
                     }}
                   />
                 </Paper>
               ) : null}
             </Grid>
-
             {/* DETAILS */}
             <Grid
               xs={12}
