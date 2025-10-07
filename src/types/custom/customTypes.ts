@@ -41,6 +41,7 @@ export type CustomJwtToken = JwtPayload & {
 
 /**
  * User Credentials Object used for e.g. Account Creation and INSERT into table public.um_users.
+ * INFO: The userSchema is created in backend based on username
  * @property {string} username
  * @property {string | null} email
  * @property {string} password
@@ -77,11 +78,11 @@ export type RouteInfo = {
 };
 /**
  * id, price and date range for a temporarily discounted food item
- * @table public.food_price_discounts
- * @property {number} id SELECT id FROM public.um_users WHERE username = 'username'
- * @property {number} price setting_key column of um_user_settings
- * @property {Date} startDate setting_value column of um_user_settings
- * @property {Date} endDate setting_value column of um_user_settings
+ * @table food_price_discounts
+ * @property {number} id discount id
+ * @property {number} price discount price
+ * @property {Date} startDate begin date of discount
+ * @property {Date} endDate end date of discount
  */
 export type FoodItemDiscount = {
   id: number;
@@ -94,7 +95,7 @@ export type FoodItemDiscount = {
  * id, price and date range for a temporarily discounted food item
  * @description For DB INSERTION via Frontend manual data entry, rather than TSV bulk Inserts directly handled in the backend.
  * @see https://github.com/hangrybear666/fiscalismia-backend/blob/main/utils/customTypes.ts
- * @table public.food_price_discounts
+ * @table food_price_discounts
  * @property {string} food_item string of a food item
  * @property {string} brand Brand of the food item
  * @property {string} store Store where the food item is purchased
@@ -118,7 +119,7 @@ export type FoodItem = {
 export type TwelveCharacterString = `${string & { length: 12 }}`;
 /**
  * Complex Type for inserting into 3 tables that have relations to each other.
- * @table public.investment_dividends, public.investment_taxes, public.bridge_investment_dividends
+ * @table investment_dividends, investment_taxes, bridge_investment_dividends
  * @property {TwelveCharacterString} isin International Security Identification Number -> 12 character string beginning with country short
  * @property {number} dividendAmount Amount of dividend received
  * @property {Date} dividendDate Date of dividend payment
@@ -142,7 +143,7 @@ export type DividendsRelatedInvestmentsAndTaxes = {
  * Bought investments are stored in investments table, if the execution type is sell, tax information is added for investment_taxes table.
  * @description For DB INSERTION via Frontend manual data entry, rather than TSV bulk Inserts directly handled in the backend.
  * @see https://github.com/hangrybear666/fiscalismia-backend/blob/main/utils/customTypes.ts
- * @table public.investments, public.investment_taxes
+ * @table investments, investment_taxes
  * @property {string} execution_type string containing the type of execution -> 'buy' or 'sell' *
  * @property {string} description Description of the investment
  * @property {TwelveCharacterString} isin DIFFERENT FROM BACKEND WHERE IT IS A STRING - International Security Identification Number -> 12 character string beginning with country short
@@ -173,7 +174,7 @@ export type InvestmentAndTaxes = {
 
 /**
  * Object sent to the server for updating the price and last_update date of a food item entry.
- * @table public.table_food_prices
+ * @table table_food_prices
  * @property {number} price
  * @property {Date} lastUpdate
  */

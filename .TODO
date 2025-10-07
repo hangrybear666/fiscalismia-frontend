@@ -12,10 +12,12 @@
 ## Additional Development
 
 - Persist new added var expenses in db and refresh overview of variable expenses and continue work on MODAL with input validation and so forth
+- ag grid should receive dynamic dark mode according to selected_mode
+- change sort in income monthly budget for dropdown to be asc
 
 ## Do before launching in production
 - reenable snyk static code analysis & dependency analysis and fix blatant security errors
 
 ## Minor Improvements Post Release
-
 - Refactor investmentInputCategories to have key value access instead of hardcoded array indices
+

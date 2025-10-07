@@ -537,7 +537,7 @@ export const deleteFoodItem = async (id: number) => {
 };
 
 /**
- * DELETE request to delete the row with supplied food_prices_dimension_key discount_start_date from public.food_price_discounts
+ * DELETE request to delete the row with supplied food_prices_dimension_key discount_start_date from food_price_discounts
  * against API_BASE_URL/food_item_discount/:food_prices_dimension_key/:discount_start_date
  * @param {string} food_prices_dimension_key
  * @param {string} discount_start_date
