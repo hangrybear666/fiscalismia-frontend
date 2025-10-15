@@ -417,10 +417,11 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   // AFTER allInvestments have been filled on page load
   useEffect(() => {
     setInvestmentColumnDefinitions([
-      { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID },
+      // { field: res.INCOME_INVESTMENTS_DB_COL_NAME_ID, floatingFilter: false },
       {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_EXECUTION_TYPE,
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_TYPE,
+        floatingFilter: false,
         cellRenderer: (p: any) => <CustomBoughtSoldChip value={p.value} />,
         minWidth: 80,
         cellStyle: () => ({
@@ -448,7 +449,8 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_MARKETPLACE,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_MARKETPLACE,
-        floatingFilter: false
+        floatingFilter: false,
+        minWidth: 140
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
@@ -475,11 +477,12 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_TOTAL,
         cellRenderer: SalesProfitMinusTaxes,
         floatingFilter: false,
-        minWidth: 140
+        minWidth: 100
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_EXECUTION_DATE,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
+        floatingFilter: false,
         cellRenderer: DateCellFormatter,
         minWidth: 150
       },
@@ -556,7 +559,8 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_AVG_PPU,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_AVG_PRICE,
         filter: false,
-        valueFormatter: currencyFormatter
+        valueFormatter: currencyFormatter,
+        minWidth: 130
       },
       {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_UNITS,
@@ -580,6 +584,7 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
         field: res.INCOME_INVESTMENTS_DB_COL_NAME_DIVIDEND_DATE,
         headerName: locales().INCOME_INVESTMENTS_COL_HEADER_DATE,
         cellRenderer: DateCellFormatter,
+        floatingFilter: false,
         minWidth: 150
       },
       {
