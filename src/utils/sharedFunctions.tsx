@@ -186,13 +186,19 @@ export function getUniqueEffectiveDates(singleDataSet: any, sort: 'asc' | 'desc'
  * extracts all uniqure effective dates from two result sets from the db
  * @param {*} firstDataset
  * @param {*} secondDataset
+ * @param {'asc' | 'desc'} sort optional override to sort descending
  * @returns DESC sorted array of effective dates in the format 'yyyy-mm-dd'
  */
-export function getCombinedUniqueEffectiveDates(firstDataset: any, secondDataset: any) {
+export function getCombinedUniqueEffectiveDates(firstDataset: any, secondDataset: any, sort: 'asc' | 'desc' = 'asc') {
   if (firstDataset && secondDataset) {
     const firstSet = new Set(firstDataset.map((e: any) => e.effective_date));
     const secondSet = new Set(secondDataset.map((e: any) => e.effective_date));
-    return Array.from(new Set([...firstSet, ...secondSet])).sort((a: any, b: any) => (a > b ? -1 : 1)); // SORT Desc to initialize with current value at index 0
+    const datasetArray = Array.from(new Set([...firstSet, ...secondSet]));
+    if (sort === 'desc') {
+      return datasetArray.sort((a: any, b: any) => (a < b ? -1 : a > b ? 1 : 0)); // SORT Desc to initialize with current value at index 0
+    } else {
+      return datasetArray.sort(); // ascending is default
+    }
   } else {
     return null;
   }

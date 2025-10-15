@@ -20,6 +20,7 @@ import InputInvestmentDividendsModal from '../minor/Modal_InputInvestmentDividen
 import { InvestmentAndTaxes, RouteInfo, TwelveCharacterString } from '../../types/custom/customTypes';
 import { locales } from '../../utils/localeConfiguration';
 import { toast } from 'react-toastify';
+import { themeMaterial } from 'ag-grid-community';
 import ConfirmationDialog from '../minor/Dialog_Confirmation';
 
 interface SellRowBtnProps {
@@ -341,7 +342,9 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       const investmentIds = investments.split(',').map(Number); // Map String Array to Number Array
       const filteredInvestments = allInvestments.filter((e: any) => investmentIds.includes(Number(e.id)));
       return (
-        <>
+        <div
+          data-ag-theme-mode={palette.mode} // applying light or dark mode
+        >
           <Tooltip title="Click to reveal individual positions." placement="left">
             <Chip
               sx={{ borderWidth: 2 }}
@@ -362,30 +365,27 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
                 boxShadow: 24
               }}
             >
-              <div
-                className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK} // applying the grid theme
-              >
-                {allInvestments ? (
-                  <AgGridReact
-                    domLayout="autoHeight"
-                    rowData={filteredInvestments}
-                    columnDefs={aggregateRowsColumnDefinitions}
-                    defaultColDef={{
-                      filter: false,
-                      floatingFilter: false,
-                      flex: 1,
-                      resizable: false,
-                      minWidth: 95,
-                      wrapText: true,
-                      autoHeight: true
-                    }}
-                    pagination={false}
-                  />
-                ) : null}
-              </div>
+              {allInvestments ? (
+                <AgGridReact
+                  theme={themeMaterial} // themeMaterial, themeQuartz, themeAlpine, themeBalham
+                  domLayout="autoHeight"
+                  rowData={filteredInvestments}
+                  columnDefs={aggregateRowsColumnDefinitions}
+                  defaultColDef={{
+                    filter: false,
+                    floatingFilter: false,
+                    flex: 1,
+                    resizable: false,
+                    minWidth: 95,
+                    wrapText: true,
+                    autoHeight: true
+                  }}
+                  pagination={false}
+                />
+              ) : null}
             </Box>
           </Modal>
-        </>
+        </div>
       );
     } else {
       // if no aggregate is present, display nothing
@@ -595,7 +595,9 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
   }, [allInvestments, allDividends]);
 
   return (
-    <>
+    <div
+      data-ag-theme-mode={palette.mode} // applying light or dark mode
+    >
       <Stack>
         <InputInvestmentTaxesModal
           preInitializeInvestmentSaleObj={preInitializeInvestmentSaleObj}
@@ -614,24 +616,21 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(investmentGridRef)}>
         {res.RESET}
       </Button>
-      <div
-        className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK} // applying the grid theme
-      >
-        {allInvestments ? (
-          <AgGridReact
-            // enableCellTextSelection={true} // breaks styling somewhat
-            // ensureDomOrder={true} // necessary for cell text selection
-            ref={investmentGridRef}
-            rowData={investmentRowData}
-            columnDefs={investmentColumnDefinitions}
-            defaultColDef={defaultColDef}
-            domLayout="autoHeight"
-            pagination={true}
-            paginationPageSize={12}
-            paginationPageSizeSelector={[12, 20, 50]}
-          />
-        ) : null}
-      </div>
+      {allInvestments ? (
+        <AgGridReact
+          // enableCellTextSelection={true} // breaks styling somewhat
+          // ensureDomOrder={true} // necessary for cell text selection
+          theme={themeMaterial} // themeMaterial, themeQuartz, themeAlpine, themeBalham
+          ref={investmentGridRef}
+          rowData={investmentRowData}
+          columnDefs={investmentColumnDefinitions}
+          defaultColDef={defaultColDef}
+          domLayout="autoHeight"
+          pagination={true}
+          paginationPageSize={12}
+          paginationPageSizeSelector={[12, 20, 50]}
+        />
+      ) : null}
       {uniqueIsinArray ? (
         <Stack sx={{ mt: 2 }}>
           <InputInvestmentDividendsModal
@@ -644,24 +643,21 @@ export default function Income_Investments(_props: Income_InvestmentsProps) {
       <Button color="error" variant="outlined" onClick={() => resetAgGridToInitialState(dividendGridRef)}>
         {res.RESET}
       </Button>
-      <div
-        className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK} // applying the grid theme
-      >
-        {allInvestments && allDividends ? (
-          <AgGridReact
-            // enableCellTextSelection={true} // breaks styling somewhat
-            // ensureDomOrder={true} // necessary for cell text selection
-            ref={dividendGridRef}
-            rowData={dividendRowData}
-            columnDefs={dividendColumnDefinitions}
-            defaultColDef={defaultColDef}
-            domLayout="autoHeight"
-            pagination={true}
-            paginationPageSize={12}
-            paginationPageSizeSelector={[12, 20, 50]}
-          />
-        ) : null}
-      </div>
-    </>
+      {allInvestments && allDividends ? (
+        <AgGridReact
+          // enableCellTextSelection={true} // breaks styling somewhat
+          // ensureDomOrder={true} // necessary for cell text selection
+          theme={themeMaterial} // themeMaterial, themeQuartz, themeAlpine, themeBalham
+          ref={dividendGridRef}
+          rowData={dividendRowData}
+          columnDefs={dividendColumnDefinitions}
+          defaultColDef={defaultColDef}
+          domLayout="autoHeight"
+          pagination={true}
+          paginationPageSize={12}
+          paginationPageSizeSelector={[12, 20, 50]}
+        />
+      ) : null}
+    </div>
   );
 }

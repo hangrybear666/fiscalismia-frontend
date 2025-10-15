@@ -21,6 +21,7 @@ import { ColDef } from '@ag-grid-community/core';
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import { updateFoodItemPrice, deleteFoodItem } from '../../services/pgConnections';
 import { toast } from 'react-toastify';
+import { themeMaterial } from 'ag-grid-community';
 import {
   DateCellFormatter,
   currencyFormatter,
@@ -353,7 +354,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
       </Stack>
       <div
         style={{ position: 'relative' }}
-        className={palette.mode === 'light' ? res.AG_GRID_STYLE_LIGHT : res.AG_GRID_STYLE_DARK} // applying the grid theme
+        data-ag-theme-mode={palette.mode} // applying light or dark mode
       >
         <Button
           sx={{
@@ -377,6 +378,7 @@ export default function Deals_Overview(_props: Deals_OverviewProps) {
         </Button>
         {foodPricesAndDiscounts ? (
           <AgGridReact
+            theme={themeMaterial} // themeMaterial, themeQuartz, themeAlpine, themeBalham
             ref={foodPricesGridRif}
             rowData={foodPricesRowData}
             columnDefs={foodPricesColumnDefinitions}
