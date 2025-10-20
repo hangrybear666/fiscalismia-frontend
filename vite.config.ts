@@ -25,7 +25,10 @@ export default defineConfig({
     port: FRONTEND_PORT
   },
   build: {
-    outDir: 'dist',
-    sourcemap: true
+    outDir: 'dist',       // Output directory for production build
+    sourcemap: false,     // Disable source maps in production (prevents source code exposure)
+    minify: 'esbuild',    // Fast minification using esbuild (default for Vite)
+    target: 'es2015',     // Browser compatibility target (supports 95%+ of users)
+    cssCodeSplit: true,   // Split CSS into separate files per component (better caching)
   }
 });
